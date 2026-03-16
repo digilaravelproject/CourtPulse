@@ -1,0 +1,203 @@
+@extends('layouts.admin')
+@section('title', 'Add Court')
+@section('page-title', 'Add New Court')
+
+@section('content')
+
+    <div class="mb-4">
+        <a href="{{ route('admin.courts.index') }}"
+            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border border-slate-200
+           rounded-lg hover:border-slate-400 bg-white text-slate-600 transition-all">
+            <i class="bi bi-arrow-left"></i> Back to Courts
+        </a>
+    </div>
+
+    <div class="max-w-2xl">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+
+            {{-- Card Header --}}
+            <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-100">
+                <div
+                    class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-gold text-lg flex-shrink-0">
+                    <i class="bi bi-building-add"></i>
+                </div>
+                <div>
+                    <h2 class="font-display font-bold text-[1.1rem] text-slate-800">Add New Court</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Register a new court or tribunal to the system.</p>
+                </div>
+            </div>
+
+            {{-- Form --}}
+            <form action="{{ route('admin.courts.store') }}" method="POST" class="p-6">
+                @csrf
+
+                @if ($errors->any())
+                    <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div class="flex items-center gap-2 text-red-700 font-semibold text-sm mb-2">
+                            <i class="bi bi-exclamation-circle"></i> Please fix the following errors:
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-red-600 space-y-1">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                    {{-- Court Name --}}
+                    <div class="md:col-span-2">
+                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
+                            Court Name <span class="text-red-400">*</span>
+                        </label>
+                        <input type="text" name="name" value="{{ old('name') }}" required
+                            placeholder="e.g. Bombay High Court"
+                            class="w-full px-3.5 py-2.5 text-sm border rounded-lg transition
+                   focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold
+                   {{ $errors->has('name') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-white' }}">
+                        @error('name')
+                            <p class="mt-1 text-xs text-red-500 flex items-center gap-1">
+                                <i class="bi bi-exclamation-circle"></i> {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+
+                    {{-- Court Type --}}
+                    <div>
+                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
+                            Court Type <span class="text-red-400">*</span>
+                        </label>
+                        <select name="type" required
+                            class="w-full px-3.5 py-2.5 text-sm border rounded-lg transition
+                   focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold
+                   {{ $errors->has('type') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-white' }}">
+                            <option value="">— Select Type —</option>
+                            <option value="supreme" {{ old('type') === 'supreme' ? 'selected' : '' }}>Supreme Court
+                            </option>
+                            <option value="high" {{ old('type') === 'high' ? 'selected' : '' }}>High Court</option>
+                            <option value="district" {{ old('type') === 'district' ? 'selected' : '' }}>District Court
+                            </option>
+                            <option value="session" {{ old('type') === 'session' ? 'selected' : '' }}>Sessions Court
+                            </option>
+                            <option value="civil" {{ old('type') === 'civil' ? 'selected' : '' }}>Civil Court</option>
+                            <option value="criminal" {{ old('type') === 'criminal' ? 'selected' : '' }}>Criminal Court
+                            </option>
+                            <option value="family" {{ old('type') === 'family' ? 'selected' : '' }}>Family Court</option>
+                            <option value="consumer" {{ old('type') === 'consumer' ? 'selected' : '' }}>Consumer Court
+                            </option>
+                            <option value="tribunal" {{ old('type') === 'tribunal' ? 'selected' : '' }}>Tribunal</option>
+                        </select>
+                        @error('type')
+                            <p class="mt-1 text-xs text-red-500 flex items-center gap-1">
+                                <i class="bi bi-exclamation-circle"></i> {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+
+                    {{-- Pincode --}}
+                    <div>
+                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
+                            Pincode
+                        </label>
+                        <input type="text" name="pincode" value="{{ old('pincode') }}" placeholder="6-digit pincode"
+                            maxlength="6"
+                            class="w-full px-3.5 py-2.5 text-sm border rounded-lg transition
+                   focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold
+                   {{ $errors->has('pincode') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-white' }}">
+                        @error('pincode')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- City --}}
+                    <div>
+                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
+                            City <span class="text-red-400">*</span>
+                        </label>
+                        <input type="text" name="city" value="{{ old('city') }}" required placeholder="e.g. Mumbai"
+                            class="w-full px-3.5 py-2.5 text-sm border rounded-lg transition
+                   focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold
+                   {{ $errors->has('city') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-white' }}">
+                        @error('city')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- State --}}
+                    <div>
+                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
+                            State <span class="text-red-400">*</span>
+                        </label>
+                        <input type="text" name="state" value="{{ old('state') }}" required
+                            placeholder="e.g. Maharashtra"
+                            class="w-full px-3.5 py-2.5 text-sm border rounded-lg transition
+                   focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold
+                   {{ $errors->has('state') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-white' }}">
+                        @error('state')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Address --}}
+                    <div class="md:col-span-2">
+                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
+                            Address
+                        </label>
+                        <textarea name="address" rows="2" placeholder="Full court address"
+                            class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-lg bg-white resize-none
+                   focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition">{{ old('address') }}</textarea>
+                    </div>
+
+                    {{-- Phone --}}
+                    <div>
+                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
+                            Phone
+                        </label>
+                        <div class="relative">
+                            <i class="bi bi-telephone absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input type="text" name="phone" value="{{ old('phone') }}"
+                                placeholder="Court phone number"
+                                class="w-full pl-8 pr-3.5 py-2.5 text-sm border border-slate-200 rounded-lg bg-white
+                     focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition">
+                        </div>
+                    </div>
+
+                    {{-- Email --}}
+                    <div>
+                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
+                            Email
+                        </label>
+                        <div class="relative">
+                            <i class="bi bi-envelope absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input type="email" name="email" value="{{ old('email') }}"
+                                placeholder="Court email address"
+                                class="w-full pl-8 pr-3.5 py-2.5 text-sm border rounded-lg bg-white transition
+                     focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold
+                     {{ $errors->has('email') ? 'border-red-400' : 'border-slate-200' }}">
+                            @error('email')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    {{-- Submit Row --}}
+                    <div class="md:col-span-2 flex items-center gap-3 pt-4 border-t border-slate-100 mt-2">
+                        <button type="submit"
+                            class="flex items-center gap-2 px-6 py-2.5 text-sm font-bold
+                   bg-gold hover:bg-gold-h text-navy rounded-lg transition-all shadow-sm shadow-gold/30">
+                            <i class="bi bi-plus-lg"></i> Add Court
+                        </button>
+                        <a href="{{ route('admin.courts.index') }}"
+                            class="px-5 py-2.5 text-sm font-medium border border-slate-200 rounded-lg
+                   hover:border-slate-400 bg-white text-slate-600 transition-all">
+                            Cancel
+                        </a>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+@endsection
