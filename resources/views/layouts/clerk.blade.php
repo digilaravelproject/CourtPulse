@@ -6,7 +6,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>@yield('title','Dashboard') — Court Pulse</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -24,8 +24,8 @@ tailwind.config = {
         "text-muted-light": "#64748B",
       },
       fontFamily: {
-        display: ["Playfair Display", "serif"],
-        sans:    ["Inter", "sans-serif"],
+        display: ["Manrope", "sans-serif"],
+        sans:    ["Manrope", "sans-serif"],
       },
     },
   },
@@ -170,7 +170,7 @@ tailwind.config = {
     </header>
 
     <!-- Page content -->
-    <div class="p-6 md:p-8 max-w-7xl mx-auto w-full space-y-8">
+    <div class="p-6 md:p-8 max-w-[1500px] mx-auto w-full space-y-8">
 
       @if(session('success'))
         <div class="alert-flash alert-success">

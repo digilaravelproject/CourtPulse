@@ -24,17 +24,16 @@
                         },
                     },
                     fontFamily: {
-                        display: ['"Playfair Display"', 'Georgia', 'serif'],
-                        body: ['"DM Sans"', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace'],
+                        display: ['Manrope', 'sans-serif'],
+                        body: ['Manrope', 'sans-serif'],
+                        mono: ['Manrope', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
@@ -46,7 +45,7 @@
         }
 
         body {
-            font-family: 'DM Sans', sans-serif
+            font-family: 'Manrope', sans-serif
         }
 
         /* Sidebar */
@@ -116,7 +115,7 @@
         }
 
         .nav-section {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Manrope', sans-serif;
             font-size: .52rem;
             letter-spacing: 2.5px;
             text-transform: uppercase;

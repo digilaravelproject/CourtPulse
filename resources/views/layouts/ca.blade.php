@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') — Court Pulse CA</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
     <link rel="stylesheet"
@@ -33,7 +33,7 @@
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif;
             background: var(--cream);
             color: var(--ink);
             min-height: 100vh;
@@ -75,14 +75,14 @@
         }
 
         .logo-text {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Manrope', sans-serif;
             font-size: 1.1rem;
             font-weight: 700;
             color: white;
         }
 
         .logo-sub {
-            font-family: 'DM Mono', monospace;
+            font-family: 'Manrope', sans-serif;
             font-size: 0.55rem;
             color: var(--gold);
             letter-spacing: 2px;
@@ -96,7 +96,7 @@
         }
 
         .nav-section-label {
-            font-family: 'DM Mono', monospace;
+            font-family: 'Manrope', sans-serif;
             font-size: 0.56rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -179,7 +179,7 @@
         }
 
         .user-role-sb {
-            font-family: 'DM Mono', monospace;
+            font-family: 'Manrope', sans-serif;
             font-size: 0.58rem;
             color: var(--gold);
             letter-spacing: 1px;
@@ -223,7 +223,7 @@
         }
 
         .topbar-title {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Manrope', sans-serif;
             font-size: 1.15rem;
             font-weight: 700;
         }
@@ -283,7 +283,7 @@
         }
 
         .cp-card-title {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Manrope', sans-serif;
             font-size: 1.05rem;
             font-weight: 700;
         }
@@ -293,7 +293,7 @@
         }
 
         .cp-label {
-            font-family: 'DM Mono', monospace;
+            font-family: 'Manrope', sans-serif;
             font-size: 0.65rem;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -308,7 +308,7 @@
             font-size: 0.87rem;
             width: 100%;
             background: white;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif;
             transition: border-color 0.2s;
         }
 
@@ -325,7 +325,7 @@
             font-size: 0.87rem;
             width: 100%;
             background: white;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif;
         }
 
         .btn-cp-primary {
@@ -366,7 +366,7 @@
         }
 
         .badge-cp {
-            font-family: 'DM Mono', monospace;
+            font-family: 'Manrope', sans-serif;
             font-size: 0.6rem;
             letter-spacing: 1px;
             padding: 3px 9px;

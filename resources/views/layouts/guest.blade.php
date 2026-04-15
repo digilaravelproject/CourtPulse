@@ -8,9 +8,7 @@
     <title>@yield('title', 'Browse') — Court Pulse</title>
 
     {{-- Fonts --}}
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
 
@@ -29,9 +27,9 @@
                         muted: '#7a7068',
                     },
                     fontFamily: {
-                        display: ['Cormorant Garamond', 'serif'],
-                        sans: ['DM Sans', 'sans-serif'],
-                        mono: ['DM Mono', 'monospace'],
+                        display: ['Manrope', 'sans-serif'],
+                        sans: ['Manrope', 'sans-serif'],
+                        mono: ['Manrope', 'sans-serif'],
                     }
                 }
             }
@@ -81,7 +79,7 @@
 
     {{-- ══ TOPNAV ══ --}}
     <nav class="sticky top-0 z-[100] bg-white border-b border-border">
-        <div class="max-w-6xl mx-auto px-4 h-14 flex items-center gap-2">
+        <div class="max-w-[1500px] mx-auto px-4 h-14 flex items-center gap-2">
 
             {{-- Logo --}}
             <a href="{{ route('guest.dashboard') }}"
@@ -191,7 +189,7 @@
     </div>
 
     {{-- ══ MAIN ══ --}}
-    <main class="max-w-6xl mx-auto px-4 py-5 pb-24 md:pb-8">
+    <main class="max-w-[1500px] mx-auto px-4 py-5 pb-24 md:pb-8">
 
         {{-- Flash messages --}}
         @if (session('success'))
@@ -216,7 +214,7 @@
 
     {{-- ══ FOOTER ══ --}}
     <footer class="border-t border-border bg-white mt-10 py-5 hidden md:block">
-        <div class="max-w-6xl mx-auto px-4 flex items-center justify-between flex-wrap gap-2">
+        <div class="max-w-[1500px] mx-auto px-4 flex items-center justify-between flex-wrap gap-2">
             <div class="font-display font-bold text-base flex items-center gap-2">
                 <span class="w-6 h-6 bg-gold rounded flex items-center justify-center text-[0.65rem]">⚖</span>
                 Court Pulse

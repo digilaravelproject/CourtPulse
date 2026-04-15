@@ -8,10 +8,7 @@
     <title>@yield('title', 'Dashboard') — Court Pulse</title>
 
     {{-- Fonts --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
 
@@ -29,9 +26,9 @@
                         'nbg': '#0A1120',
                     },
                     fontFamily: {
-                        display: ['Playfair Display', 'serif'],
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Manrope', 'sans-serif'],
+                        sans: ['Manrope', 'sans-serif'],
+                        mono: ['Manrope', 'sans-serif'],
                     }
                 }
             }

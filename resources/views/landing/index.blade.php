@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Court Pulse — India's Legal Professional Network</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -46,9 +44,10 @@
         body {
             background: var(--navy);
             color: var(--text);
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif;
             overflow-x: hidden;
             line-height: 1.6;
+            font-weight: 400;
         }
 
         /* NAV */
@@ -71,7 +70,7 @@
         }
 
         .nav-inner {
-            max-width: 1200px;
+            max-width: 1500px;
             margin: 0 auto;
             padding: 0 24px;
             display: flex;
@@ -83,7 +82,7 @@
             display: flex;
             align-items: center;
             gap: 9px;
-            font-family: 'Barlow', sans-serif;
+            font-family: 'Manrope', sans-serif;
             font-weight: 800;
             font-size: 1rem;
             color: var(--white);
@@ -154,7 +153,7 @@
             cursor: pointer;
             text-decoration: none;
             transition: all .2s;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif;
         }
 
         .btn-ghost:hover {
@@ -173,7 +172,7 @@
             cursor: pointer;
             text-decoration: none;
             transition: all .2s;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif;
             letter-spacing: .02em;
         }
 
@@ -328,7 +327,7 @@
         }
 
         .hero-inner {
-            max-width: 1200px;
+            max-width: 1500px;
             margin: 0 auto;
             padding: 0 24px;
             position: relative;
@@ -354,14 +353,14 @@
         }
 
         .hero-title {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: clamp(2.8rem, 6vw, 5rem);
-            font-weight: 900;
-            line-height: 1.0;
+            font-family: 'Manrope', sans-serif;
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 400;
+            line-height: 0.95;
             color: var(--white);
             text-transform: uppercase;
-            letter-spacing: -.01em;
-            margin-bottom: 20px;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
         }
 
         .hero-title .accent {
@@ -369,12 +368,13 @@
         }
 
         .hero-desc {
-            font-size: .9rem;
+            font-size: 1.05rem;
             color: var(--text2);
-            max-width: 420px;
-            line-height: 1.8;
-            margin-bottom: 30px;
+            max-width: 480px;
+            line-height: 1.7;
+            margin-bottom: 35px;
             font-weight: 400;
+            letter-spacing: -0.01em;
         }
 
         .hero-btns {
@@ -439,11 +439,12 @@
         }
 
         .hstat-num {
-            font-family: 'Barlow', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
+            font-family: 'Manrope', sans-serif;
+            font-size: 2.22rem;
+            font-weight: 800;
             color: white;
             line-height: 1;
+            letter-spacing: -0.03em;
         }
 
         .hstat-label {
@@ -463,7 +464,7 @@
         }
 
         .qa-inner {
-            max-width: 1200px;
+            max-width: 1500px;
             margin: 0 auto;
             padding: 0 24px;
         }
@@ -476,7 +477,7 @@
         }
 
         .qa-title {
-            font-family: 'Barlow', sans-serif;
+            font-family: 'Manrope', sans-serif;
             font-size: 1rem;
             font-weight: 800;
             color: white;
@@ -556,7 +557,7 @@
 
         /* SHARED */
         .container {
-            max-width: 1200px;
+            max-width: 1500px;
             margin: 0 auto;
             padding: 0 24px;
         }
@@ -571,13 +572,13 @@
         }
 
         .section-head {
-            font-family: 'Barlow', sans-serif;
-            font-size: clamp(1.8rem, 4vw, 2.6rem);
-            font-weight: 900;
+            font-family: 'Manrope', sans-serif;
+            font-size: clamp(2rem, 5vw, 2.85rem);
+            font-weight: 800;
             color: var(--white);
             text-transform: uppercase;
-            letter-spacing: -.01em;
-            line-height: 1.05;
+            letter-spacing: -0.03em;
+            line-height: 1.0;
         }
 
         .head-line {
@@ -676,12 +677,13 @@
         }
 
         .news-feat-title {
-            font-family: 'Barlow', sans-serif;
-            font-size: 1.35rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.5rem;
             font-weight: 800;
             color: white;
-            line-height: 1.2;
-            margin-bottom: 10px;
+            line-height: 1.15;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
         }
 
         .news-feat-desc {
@@ -833,13 +835,13 @@
         }
 
         .svc-name {
-            font-family: 'Barlow', sans-serif;
-            font-size: 1rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.15rem;
             font-weight: 800;
             color: white;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: .02em;
+            letter-spacing: -0.01em;
         }
 
         .svc-desc {
@@ -899,13 +901,13 @@
         }
 
         .support-banner-title {
-            font-family: 'Barlow', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
+            font-family: 'Manrope', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
             color: white;
             text-transform: uppercase;
-            letter-spacing: -.01em;
-            line-height: 1.1;
+            letter-spacing: -0.035em;
+            line-height: 1.0;
         }
 
         .support-banner-desc {
@@ -955,13 +957,13 @@
         }
 
         .access-title {
-            font-family: 'Barlow', sans-serif;
-            font-size: 1.1rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.2rem;
             font-weight: 800;
             color: white;
             text-transform: uppercase;
-            letter-spacing: .02em;
-            margin-bottom: 18px;
+            letter-spacing: -0.01em;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -1135,12 +1137,13 @@
         }
 
         .ed-title {
-            font-family: 'Barlow', sans-serif;
-            font-size: 1.05rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.1rem;
             font-weight: 800;
             color: white;
-            line-height: 1.25;
-            margin-bottom: 8px;
+            line-height: 1.3;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
         }
 
         .ed-excerpt {
@@ -1176,13 +1179,14 @@
         }
 
         .contact-title {
-            font-family: 'Barlow', sans-serif;
-            font-size: 2.4rem;
-            font-weight: 900;
+            font-family: 'Manrope', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
             color: white;
             text-transform: uppercase;
-            letter-spacing: -.01em;
-            margin-bottom: 8px;
+            letter-spacing: -0.04em;
+            margin-bottom: 10px;
+            line-height: 1.0;
         }
 
         .contact-desc {
@@ -1218,12 +1222,12 @@
             background: var(--navy2);
             border: 1px solid var(--border);
             border-radius: 6px;
-            padding: 11px 14px;
+            padding: 12px 14px;
             color: white;
-            font-size: .83rem;
+            font-size: .88rem;
             outline: none;
             transition: border .2s;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif;
         }
 
         .form-input:focus {
@@ -1266,12 +1270,13 @@
         }
 
         .ci-head {
-            font-family: 'Barlow', sans-serif;
-            font-size: 1.3rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.4rem;
             font-weight: 800;
             color: #050812;
             text-transform: uppercase;
-            margin-bottom: 6px;
+            letter-spacing: -0.01em;
+            margin-bottom: 8px;
         }
 
         .ci-subhead {
@@ -1378,12 +1383,12 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-family: 'Barlow', sans-serif;
+            font-family: 'Manrope', sans-serif;
             font-weight: 800;
-            font-size: .88rem;
+            font-size: .95rem;
             color: var(--white);
             text-decoration: none;
-            letter-spacing: .02em;
+            letter-spacing: 0.01em;
             flex-shrink: 0;
         }
 
@@ -1718,8 +1723,8 @@
                     <div class="section-head">Latest Updates</div>
                     <div class="head-line"></div>
                 </div>
-                <a href="#" class="view-all">View All Updates <svg width="14" height="14"
-                        fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <a href="#" class="view-all">View All Updates <svg width="14" height="14" fill="none"
+                        stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg></a>
             </div>
@@ -1727,8 +1732,8 @@
                 <div class="news-featured reveal">
                     <div class="news-feat-img">
                         <span class="news-badge">Institutional Reform</span>
-                        <svg width="60" height="60" fill="none" stroke="rgba(255,255,255,0.04)"
-                            stroke-width="1" viewBox="0 0 24 24">
+                        <svg width="60" height="60" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"
+                            viewBox="0 0 24 24">
                             <path
                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
@@ -1800,8 +1805,8 @@
                     <div class="svc-name">Court Clerks</div>
                     <div class="svc-desc">Full logistical support for filing and case management across all levels of
                         the judiciary.</div>
-                    <a href="#" class="svc-explore">Explore Clerks <svg width="12" height="12"
-                            fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <a href="#" class="svc-explore">Explore Clerks <svg width="12" height="12" fill="none"
+                            stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg></a>
                 </div>
@@ -1813,8 +1818,8 @@
                     <div class="svc-name">IP Clerks</div>
                     <div class="svc-desc">Intellectual property filing, trademark monitoring, and patent search
                         procedures.</div>
-                    <a href="#" class="svc-explore">Explore Clerks <svg width="12" height="12"
-                            fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <a href="#" class="svc-explore">Explore Clerks <svg width="12" height="12" fill="none"
+                            stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg></a>
                 </div>
@@ -1826,8 +1831,8 @@
                     <div class="svc-name">ROC Agents</div>
                     <div class="svc-desc">Seamless Registrar of Companies filings and compliance management for
                         enterprises.</div>
-                    <a href="#" class="svc-explore">Explore Clerks <svg width="12" height="12"
-                            fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <a href="#" class="svc-explore">Explore Clerks <svg width="12" height="12" fill="none"
+                            stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg></a>
                 </div>
@@ -1980,7 +1985,8 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Message</label>
-                        <textarea class="form-input" rows="5" placeholder="How can we assist your practice?" style="resize:none;"></textarea>
+                        <textarea class="form-input" rows="5" placeholder="How can we assist your practice?"
+                            style="resize:none;"></textarea>
                     </div>
                     <button class="btn-send">
                         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -2034,18 +2040,18 @@
                     <div class="ci-socials">
                         <div class="ci-socials-label">Follow Court Pulse</div>
                         <div class="socials-row">
-                            <a href="#" class="social-btn"><svg width="14" height="14"
-                                    fill="currentColor" viewBox="0 0 24 24">
+                            <a href="#" class="social-btn"><svg width="14" height="14" fill="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path
                                         d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                                 </svg></a>
-                            <a href="#" class="social-btn"><svg width="14" height="14"
-                                    fill="currentColor" viewBox="0 0 24 24">
+                            <a href="#" class="social-btn"><svg width="14" height="14" fill="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path
                                         d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                 </svg></a>
-                            <a href="#" class="social-btn"><svg width="14" height="14" fill="none"
-                                    stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <a href="#" class="social-btn"><svg width="14" height="14" fill="none" stroke="currentColor"
+                                    stroke-width="2" viewBox="0 0 24 24">
                                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                                     <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
                                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
