@@ -40,18 +40,19 @@
         </div>
 
         {{-- Pending Approval --}}
-        <div
-            class="bg-white rounded-xl border-l-4 border-gold border-y border-r border-slate-200 shadow-sm p-5 flex items-start justify-between gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all">
+        <div class="bg-white rounded-xl border-y border-r border-slate-200 shadow-sm p-5 flex items-start justify-between gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all"
+            style="border-left: 4px solid #B4B4FE;">
             <div>
                 <div class="font-mono text-[0.58rem] tracking-[1.5px] uppercase text-slate-400 mb-1">Pending Approval</div>
-                <div class="font-display font-bold text-[1.8rem] text-gold leading-tight">
+                <div class="font-display font-bold text-[1.8rem] leading-tight" style="color: #B4B4FE;">
                     {{ $stats['pending_verifications'] }}</div>
                 <div class="flex items-center gap-1.5 mt-1.5 text-amber-500 text-xs font-medium">
                     <i class="bi bi-exclamation-circle"></i> Action Required
                 </div>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
-                <i class="bi bi-hourglass-split text-gold text-lg"></i>
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                style="background: rgba(180,180,254,0.15);">
+                <i class="bi bi-hourglass-split text-lg" style="color: #B4B4FE;"></i>
             </div>
         </div>
 
@@ -80,7 +81,8 @@
             <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
                 <h2 class="font-display font-bold text-[1.05rem] text-slate-800">User Growth Analytics</h2>
                 <select
-                    class="py-1.5 pl-3 pr-7 text-xs border border-slate-200 rounded-lg bg-slate-50 focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold font-mono">
+                    class="py-1.5 pl-3 pr-7 text-xs border border-slate-200 rounded-lg bg-slate-50 font-mono focus:outline-none"
+                    style="focus:ring: 2px; focus:ring-color: rgba(180,180,254,0.30); focus:border-color: #B4B4FE;">
                     <option>Last 30 Days</option>
                     <option>Last Quarter</option>
                     <option>This Year</option>
@@ -148,7 +150,10 @@
                 <p class="text-[0.78rem] text-slate-400 mt-0.5">Review pending profiles and certificates.</p>
             </div>
             <a href="{{ route('admin.users') }}"
-                class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-slate-200 rounded-lg hover:border-gold hover:text-gold bg-white transition-all text-slate-600">
+                class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-slate-200 rounded-lg bg-white transition-all text-slate-600"
+                style="--hover-border: #B4B4FE; --hover-color: #B4B4FE;"
+                onmouseover="this.style.borderColor='#B4B4FE';this.style.color='#B4B4FE';"
+                onmouseout="this.style.borderColor='';this.style.color='';">
                 <i class="bi bi-funnel"></i> View All
             </a>
         </div>
@@ -209,7 +214,8 @@
                                 @if ($u->documents->count())
                                     @foreach ($u->documents->take(1) as $doc)
                                         <a href="{{ Storage::url($doc->file_path) }}" target="_blank"
-                                            class="inline-flex items-center gap-1.5 text-slate-500 hover:text-gold text-[0.8rem] transition-colors">
+                                            class="inline-flex items-center gap-1.5 text-slate-500 text-[0.8rem] transition-colors"
+                                            onmouseover="this.style.color='#B4B4FE';" onmouseout="this.style.color='';">
                                             <i class="bi bi-file-earmark-text"></i>
                                             {{ Str::limit(basename($doc->file_path), 22) }}
                                         </a>
@@ -257,8 +263,9 @@
         @if ($pendingUsers->count() > 0)
             <div class="px-5 py-3.5 border-t border-slate-100 flex items-center justify-between">
                 <span class="text-xs text-slate-400 font-mono">{{ $pendingUsers->count() }} pending requests</span>
-                <a href="{{ route('admin.users') }}?status=pending"
-                    class="text-xs font-medium text-gold hover:text-gold-h transition-colors">
+                <a href="{{ route('admin.users') }}?status=pending" class="text-xs font-medium transition-colors"
+                    style="color: #B4B4FE;" onmouseover="this.style.color='#9898e0';"
+                    onmouseout="this.style.color='#B4B4FE';">
                     View All Pending →
                 </a>
             </div>
@@ -270,7 +277,9 @@
         <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
             <h2 class="font-display font-bold text-[1.05rem] text-slate-800">Pending Documents</h2>
             <a href="{{ route('admin.documents') }}"
-                class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-slate-200 rounded-lg hover:border-gold hover:text-gold bg-white transition-all text-slate-600">
+                class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-slate-200 rounded-lg bg-white transition-all text-slate-600"
+                onmouseover="this.style.borderColor='#B4B4FE';this.style.color='#B4B4FE';"
+                onmouseout="this.style.borderColor='';this.style.color='';">
                 View All <i class="bi bi-arrow-right"></i>
             </a>
         </div>
@@ -297,8 +306,8 @@
                         <tr class="trow">
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-2.5">
-                                    <div
-                                        class="w-9 h-9 rounded-lg bg-ncard text-gold flex items-center justify-center font-bold text-[0.8rem] flex-shrink-0">
+                                    <div class="w-9 h-9 rounded-lg bg-ncard flex items-center justify-center font-bold text-[0.8rem] flex-shrink-0"
+                                        style="color: #B4B4FE;">
                                         {{ strtoupper(substr($doc->user->name, 0, 1)) }}
                                     </div>
                                     <div>
@@ -315,7 +324,8 @@
                             </td>
                             <td class="px-5 py-3.5">
                                 <a href="{{ Storage::url($doc->file_path) }}" target="_blank"
-                                    class="inline-flex items-center gap-1.5 text-slate-500 hover:text-gold text-[0.82rem] transition-colors">
+                                    class="inline-flex items-center gap-1.5 text-slate-500 text-[0.82rem] transition-colors"
+                                    onmouseover="this.style.color='#B4B4FE';" onmouseout="this.style.color='';">
                                     <i class="bi bi-file-earmark-text"></i>
                                     {{ ucwords(str_replace('_', ' ', $doc->document_type)) }}
                                 </a>
@@ -377,7 +387,8 @@
         <div class="p-6 space-y-4">
             <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
                 <div id="v_avatar"
-                    class="w-14 h-14 rounded-xl bg-navy flex items-center justify-center text-gold font-bold text-xl border-2 border-gold/30 flex-shrink-0 font-display">
+                    class="w-14 h-14 rounded-xl bg-navy flex items-center justify-center font-bold text-xl font-display flex-shrink-0"
+                    style="color: #B4B4FE; border: 2px solid rgba(180,180,254,0.30);">
                 </div>
                 <div>
                     <div id="v_name" class="font-bold text-base text-slate-800 font-display"></div>
@@ -389,25 +400,29 @@
                 <div class="bg-slate-50 border border-slate-200 rounded-lg p-3">
                     <div
                         class="flex items-center gap-1.5 font-mono text-[0.57rem] uppercase tracking-wider text-slate-400 mb-1.5">
-                        <i class="bi bi-envelope"></i> Email</div>
+                        <i class="bi bi-envelope"></i> Email
+                    </div>
                     <div id="v_email" class="text-sm font-semibold text-slate-700 break-all"></div>
                 </div>
                 <div class="bg-slate-50 border border-slate-200 rounded-lg p-3">
                     <div
                         class="flex items-center gap-1.5 font-mono text-[0.57rem] uppercase tracking-wider text-slate-400 mb-1.5">
-                        <i class="bi bi-phone"></i> Phone</div>
+                        <i class="bi bi-phone"></i> Phone
+                    </div>
                     <div id="v_phone" class="text-sm font-semibold text-slate-700"></div>
                 </div>
                 <div class="bg-slate-50 border border-slate-200 rounded-lg p-3">
                     <div
                         class="flex items-center gap-1.5 font-mono text-[0.57rem] uppercase tracking-wider text-slate-400 mb-1.5">
-                        <i class="bi bi-calendar3"></i> Registered</div>
+                        <i class="bi bi-calendar3"></i> Registered
+                    </div>
                     <div id="v_date" class="text-sm font-semibold text-slate-700"></div>
                 </div>
                 <div class="bg-slate-50 border border-slate-200 rounded-lg p-3">
                     <div
                         class="flex items-center gap-1.5 font-mono text-[0.57rem] uppercase tracking-wider text-slate-400 mb-1.5">
-                        <i class="bi bi-shield-check"></i> After Verify</div>
+                        <i class="bi bi-shield-check"></i> After Verify
+                    </div>
                     <div class="text-sm font-semibold text-green-600">Status → <strong>Active</strong></div>
                 </div>
             </div>
@@ -503,7 +518,7 @@
             data.forEach(d => {
                 const h = Math.round((d.v / max) * 165);
                 bE.innerHTML += `<div class="flex-1 min-w-[28px] rounded-t-md cursor-pointer relative group transition-opacity hover:opacity-70"
-                        style="height:${h}px;background:linear-gradient(to top,#D4AF37,#F2D06B);">
+                        style="height:${h}px;background:linear-gradient(to top,#B4B4FE,#d4d4ff);">
                      <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-navy text-white text-[0.65rem] px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">${d.l}: ${d.v}</div>
                    </div>`;
                 lE.innerHTML +=
