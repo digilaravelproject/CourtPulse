@@ -13,8 +13,8 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
-            --gold: #D4AF37;
-            --gold-h: #B5952F;
+            --accent: #B4B4FE;
+            --accent-h: #9A9AF8;
             --navy-deep: #0A1120;
             --navy-bg: #0F172A;
             --border-dim: rgba(255, 255, 255, 0.1);
@@ -47,12 +47,12 @@
             border-right: 1px solid var(--border-dim);
         }
 
-        /* Gold cross pattern — identical to landing page */
+        /* Accent cross pattern — identical to landing page */
         .auth-left::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B4B4FE' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             pointer-events: none;
         }
 
@@ -64,7 +64,7 @@
             width: 380px;
             height: 380px;
             border-radius: 50%;
-            background: rgba(212, 175, 55, 0.05);
+            background: rgba(180, 180, 254, 0.05);
             filter: blur(100px);
             pointer-events: none;
         }
@@ -100,7 +100,7 @@
             width: 260px;
             height: 260px;
             border-radius: 50%;
-            border: 1px solid rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(180, 180, 254, 0.08);
             pointer-events: none;
         }
 
@@ -125,12 +125,12 @@
             width: 40px;
             height: 40px;
             border-radius: 9px;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(180, 180, 254, 0.4);
+            background: rgba(180, 180, 254, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--gold);
+            color: var(--accent);
             font-size: 1.1rem;
         }
 
@@ -145,7 +145,7 @@
 
         .left-title .gi {
             font-style: italic;
-            color: var(--gold);
+            color: var(--accent);
         }
 
         .left-desc {
@@ -176,8 +176,8 @@
 
         .role-mini:hover,
         .role-mini.selected {
-            background: rgba(212, 175, 55, 0.12);
-            border-color: rgba(212, 175, 55, 0.38);
+            background: rgba(180, 180, 254, 0.12);
+            border-color: rgba(180, 180, 254, 0.38);
         }
 
         .rm-icon {
@@ -194,7 +194,7 @@
 
         .role-mini:hover .rm-name,
         .role-mini.selected .rm-name {
-            color: var(--gold);
+            color: var(--accent);
         }
 
         .rm-note {
@@ -257,7 +257,7 @@
 
         .role-tab.active {
             background: white;
-            color: #92650a;
+            color: #5B5BE0;
             font-weight: 600;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
         }
@@ -275,9 +275,9 @@
         }
 
         .note-prof {
-            background: rgba(212, 175, 55, 0.08);
-            border-color: rgba(212, 175, 55, 0.25);
-            color: #92650a;
+            background: rgba(180, 180, 254, 0.08);
+            border-color: rgba(180, 180, 254, 0.25);
+            color: #5B5BE0;
         }
 
         .note-guest {
@@ -321,8 +321,8 @@
         .cp-input:focus,
         .cp-select:focus {
             outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(180, 180, 254, 0.1);
             background: white;
         }
 
@@ -339,7 +339,7 @@
 
         .btn-submit {
             width: 100%;
-            background: var(--gold);
+            background: var(--accent);
             color: var(--navy-deep);
             border: none;
             padding: 13px;
@@ -353,25 +353,25 @@
             justify-content: center;
             gap: 8px;
             transition: all 0.25s;
-            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.25);
+            box-shadow: 0 4px 16px rgba(180, 180, 254, 0.25);
             margin-top: 8px;
         }
 
         .btn-submit:hover {
-            background: var(--gold-h);
+            background: var(--accent-h);
             transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
+            box-shadow: 0 8px 24px rgba(180, 180, 254, 0.35);
         }
 
         .auth-link {
-            color: var(--gold);
+            color: var(--accent);
             font-weight: 600;
             text-decoration: none;
             font-size: 0.85rem;
         }
 
         .auth-link:hover {
-            color: var(--gold-h);
+            color: var(--accent-h);
         }
 
         @media(max-width:960px) {
@@ -397,7 +397,6 @@
 <body>
     <div style="display:flex;min-height:100vh;width:100%;">
 
-        <!-- ── LEFT PANEL ─────────────────────────────────────────── -->
         <div class="auth-left">
             <div class="glow-1"></div>
             <div class="glow-2"></div>
@@ -443,7 +442,6 @@
             </div>
         </div>
 
-        <!-- ── RIGHT PANEL ─────────────────────────────────────────── -->
         <div class="auth-right">
             <div class="auth-heading">Create Account</div>
             <div class="auth-sub">Join Court Pulse — India's legal professional network</div>
@@ -454,7 +452,6 @@
                 </div>
             @endif
 
-            <!-- Role Tabs -->
             <div class="role-tabs">
                 <button type="button" class="role-tab" onclick="selectRole('advocate')">⚖ Advocate</button>
                 <button type="button" class="role-tab" onclick="selectRole('clerk')">🗂 Clerk</button>
@@ -466,7 +463,6 @@
                 @csrf
                 <input type="hidden" name="role" id="roleInput" value="{{ old('role', 'advocate') }}">
 
-                <!-- Notes -->
                 <div class="note-box note-prof" id="noteProf">
                     <i class="bi bi-clock-fill" style="flex-shrink:0;margin-top:1px;"></i>
                     <span>Professionals need document upload &amp; admin verification after registration.</span>
@@ -476,7 +472,6 @@
                     <span>Guest accounts are activated instantly — no documents needed!</span>
                 </div>
 
-                <!-- Common Fields -->
                 <div class="row g-3">
                     <div class="col-12">
                         <label class="cp-label">Full Name</label>
@@ -521,7 +516,6 @@
                     </div>
                 </div>
 
-                <!-- Role-specific fields -->
                 <div id="advocateFields" class="mt-3">
                     <label class="cp-label">City / State of Practice</label>
                     <input type="text" name="city" class="cp-input" placeholder="e.g. Mumbai, Maharashtra"
@@ -538,10 +532,9 @@
                         value="{{ old('membership_number_reg') }}">
                 </div>
 
-                <!-- Terms -->
                 <div class="d-flex align-items-start gap-2 mt-3 mb-1">
                     <input type="checkbox" id="terms" name="terms" required
-                        style="margin-top:3px;accent-color:var(--gold);width:15px;height:15px;flex-shrink:0;">
+                        style="margin-top:3px;accent-color:var(--accent);width:15px;height:15px;flex-shrink:0;">
                     <label for="terms" style="font-size:0.8rem;color:#64748B;cursor:pointer;margin:0;">
                         I agree to the <a href="#" class="auth-link">Terms of Use</a>
                         and <a href="#" class="auth-link">Privacy Policy</a>

@@ -13,13 +13,13 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
-            --gold: #D4AF37;
-            --gold-h: #B5952F;
+            --accent: #B4B4FE;
+            --accent-h: #9A9AF8;
             --navy-deep: #0A1120;
             --navy-card: #1E293B;
             --navy-bg: #0F172A;
             --border: rgba(255, 255, 255, 0.1);
-            --border2: rgba(212, 175, 55, 0.3);
+            --border2: rgba(180, 180, 254, 0.3);
             --muted: #94A3B8;
             --text: #F1F5F9;
         }
@@ -50,12 +50,12 @@
             border-right: 1px solid var(--border);
         }
 
-        /* Gold cross pattern same as landing */
+        /* Accent cross pattern same as landing */
         .auth-left::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B4B4FE' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             pointer-events: none;
         }
 
@@ -67,7 +67,7 @@
             width: 380px;
             height: 380px;
             border-radius: 50%;
-            background: rgba(212, 175, 55, 0.05);
+            background: rgba(180, 180, 254, 0.05);
             filter: blur(100px);
             pointer-events: none;
         }
@@ -103,7 +103,7 @@
             width: 280px;
             height: 280px;
             border-radius: 50%;
-            border: 1px solid rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(180, 180, 254, 0.08);
             pointer-events: none;
         }
 
@@ -128,12 +128,12 @@
             width: 40px;
             height: 40px;
             border-radius: 9px;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(180, 180, 254, 0.4);
+            background: rgba(180, 180, 254, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--gold);
+            color: var(--accent);
             font-size: 1.1rem;
         }
 
@@ -146,9 +146,9 @@
             margin-bottom: 18px;
         }
 
-        .left-title .gold-italic {
+        .left-title .accent-italic {
             font-style: italic;
-            color: var(--gold);
+            color: var(--accent);
         }
 
         .left-desc {
@@ -178,9 +178,9 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--gold);
+            background: var(--accent);
             flex-shrink: 0;
-            box-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 0 6px rgba(180, 180, 254, 0.4);
         }
 
         /* ── RIGHT PANEL ─────────────────────────────────── */
@@ -227,9 +227,9 @@
         }
 
         .alert-info {
-            background: rgba(212, 175, 55, 0.08);
-            border-color: rgba(212, 175, 55, 0.25);
-            color: #92650a;
+            background: rgba(180, 180, 254, 0.08);
+            border-color: rgba(180, 180, 254, 0.25);
+            color: #5B5BE0;
         }
 
         /* form */
@@ -257,8 +257,8 @@
 
         .cp-input:focus {
             outline: none;
-            border-color: #D4AF37;
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(180, 180, 254, 0.1);
             background: white;
         }
 
@@ -295,7 +295,7 @@
 
         .btn-submit {
             width: 100%;
-            background: var(--gold);
+            background: var(--accent);
             color: var(--navy-deep);
             border: none;
             padding: 13px;
@@ -309,13 +309,13 @@
             justify-content: center;
             gap: 8px;
             transition: all 0.25s;
-            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.25);
+            box-shadow: 0 4px 16px rgba(180, 180, 254, 0.25);
         }
 
         .btn-submit:hover {
-            background: var(--gold-h);
+            background: var(--accent-h);
             transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
+            box-shadow: 0 8px 24px rgba(180, 180, 254, 0.35);
         }
 
         .divider {
@@ -345,14 +345,14 @@
         }
 
         .auth-link {
-            color: var(--gold);
+            color: var(--accent);
             font-weight: 600;
             text-decoration: none;
             font-size: 0.85rem;
         }
 
         .auth-link:hover {
-            color: var(--gold-h);
+            color: var(--accent-h);
         }
 
         .demo-box {
@@ -384,7 +384,7 @@
 
         .demo-pass {
             font-family: 'JetBrains Mono', monospace;
-            color: var(--gold);
+            color: var(--accent);
             font-size: 0.72rem;
         }
 
@@ -414,7 +414,6 @@
 
     <div style="display:flex;min-height:100vh;width:100%;">
 
-        <!-- ── LEFT PANEL ─────────────────────────────────────────── -->
         <div class="auth-left">
             <div class="left-glow-1"></div>
             <div class="left-glow-2"></div>
@@ -429,7 +428,7 @@
 
                 <h1 class="left-title">
                     India's Legal<br>Professional<br>
-                    <span class="gold-italic">Network.</span>
+                    <span class="accent-italic">Network.</span>
                 </h1>
                 <p class="left-desc">
                     Verified advocates, court clerks, and CAs — all in one trusted platform for India's legal ecosystem.
@@ -452,7 +451,6 @@
             </div>
         </div>
 
-        <!-- ── RIGHT PANEL ────────────────────────────────────────── -->
         <div class="auth-right">
 
             @if (session('info'))
@@ -473,7 +471,6 @@
             <form action="{{ route('login') }}" method="POST">
                 @csrf
 
-                <!-- Email -->
                 <div class="mb-3">
                     <label class="cp-label">Email Address</label>
                     <input type="email" name="email"
@@ -481,7 +478,6 @@
                         value="{{ old('email') }}" required autocomplete="email">
                 </div>
 
-                <!-- Password -->
                 <div class="mb-3">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <label class="cp-label" style="margin-bottom:0;">Password</label>
@@ -497,10 +493,9 @@
                     </div>
                 </div>
 
-                <!-- Remember -->
                 <div class="d-flex align-items-center gap-2 mb-4">
                     <input type="checkbox" name="remember" id="remember"
-                        style="accent-color:var(--gold);width:15px;height:15px;">
+                        style="accent-color:var(--accent);width:15px;height:15px;">
                     <label for="remember" style="font-size:0.82rem;color:#64748B;cursor:pointer;margin:0;">Remember
                         me</label>
                 </div>
@@ -517,7 +512,6 @@
                 <a href="{{ route('register') }}" class="auth-link">Create one free</a>
             </div>
 
-            <!-- Demo credentials -->
             <div class="demo-box">
                 <div class="demo-label">Demo Accounts</div>
                 <div class="demo-row">Admin: <span class="demo-val">admin@courtpulse.com</span></div>

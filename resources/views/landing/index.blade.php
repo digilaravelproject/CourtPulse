@@ -6,26 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Court Pulse — India's Legal Professional Network</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
-            --gold: #D4AF37;
-            --gold-hover: #B5952F;
-            --gold-light: #F2D06B;
-            --navy-deep: #0A1120;
-            --navy-card: #1E293B;
-            --navy-bg: #0F172A;
-            --border-dim: rgba(255, 255, 255, 0.1);
-            --text-dim: #94A3B8;
+            --navy: #050812;
+            --navy2: #080d1a;
+            --navy3: #0b1120;
+            --card: #0e1526;
+            --card2: #111830;
+            --card3: #141c35;
+            --blue: #B4B4FE;
+            --blue2: #9999f0;
+            --blue-glow: rgba(180, 180, 254, 0.3);
+            --blue-light: #d0d0ff;
+            --accent: #B4B4FE;
+            --border: rgba(255, 255, 255, 0.06);
+            --border2: rgba(180, 180, 254, 0.35);
+            --text: #CBD5E1;
+            --text2: #94A3B8;
+            --muted: #4A5568;
+            --white: #F8FAFC;
         }
 
-        * {
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -36,619 +44,1389 @@
         }
 
         body {
-            background: var(--navy-bg);
-            color: #F1F5F9;
-            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* ── GOLD PATTERN OVERLAY ─────────────────────────── */
-        .gold-pattern {
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-
-        .gold-gradient-text {
-            background: linear-gradient(to right, #D4AF37, #F2D06B, #D4AF37);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: transparent;
-        }
-
-        /* ── NAVBAR ───────────────────────────────────────── */
-        .navbar-cp {
+        /* NAV */
+        .nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border-dim);
-            backdrop-filter: blur(8px);
-            background: transparent;
-            transition: all 0.3s;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            background: rgba(5, 8, 18, 0.92);
+            transition: padding .3s, background .3s;
         }
 
-        .navbar-cp.scrolled {
-            background: rgba(10, 17, 32, 0.95);
-            padding: 14px 0;
+        .nav.scrolled {
+            padding: 12px 0;
+            background: rgba(5, 8, 18, .98);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .nav-logo {
             display: flex;
             align-items: center;
+            gap: 9px;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: .02em;
+        }
+
+        .logo-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            background: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .75rem;
+            color: #050812;
+            font-weight: 900;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            font-size: .82rem;
+            font-weight: 500;
+            color: var(--text2);
+            text-decoration: none;
+            transition: color .2s;
+            letter-spacing: .01em;
+            position: relative;
+            padding-bottom: 2px;
+        }
+
+        .nav-links a.active,
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--blue);
+            border-radius: 1px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
             gap: 10px;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-            text-decoration: none;
-        }
-
-        .logo-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            background: var(--navy-deep);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .nav-link-cp {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #CBD5E1 !important;
-            text-decoration: none !important;
-            transition: color 0.2s !important;
-        }
-
-        .nav-link-cp:hover {
-            color: var(--gold) !important;
-        }
-
-        .btn-nav-login {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--gold) !important;
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            padding: 8px 20px;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: all 0.2s;
-            background: transparent;
-        }
-
-        .btn-nav-login:hover {
-            background: rgba(212, 175, 55, 0.1);
-        }
-
-        /* ── HERO ─────────────────────────────────────────── */
-        .hero-section {
-            position: relative;
-            min-height: 90vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--navy-deep);
-            overflow: hidden;
-            padding: 120px 0 80px;
-        }
-
-        .hero-section .gold-pattern {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-        }
-
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            background: linear-gradient(to bottom, rgba(10, 17, 32, 0.8), rgba(10, 17, 32, 0.9), var(--navy-bg));
-        }
-
-        .hero-glow-1 {
-            position: absolute;
-            top: -20%;
-            right: -10%;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            background: rgba(212, 175, 55, 0.05);
-            filter: blur(120px);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .hero-glow-2 {
-            position: absolute;
-            bottom: -10%;
-            left: -10%;
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            background: rgba(30, 41, 59, 0.3);
-            filter: blur(120px);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-dim);
-            backdrop-filter: blur(8px);
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            color: #CBD5E1;
-            margin-bottom: 28px;
-            animation: fadeUp 0.5s ease both;
-        }
-
-        .badge-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--gold);
-            animation: pulse-dot 2s infinite;
-        }
-
-        @keyframes pulse-dot {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.6;
-                transform: scale(1.2);
-            }
-        }
-
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3.5rem, 9vw, 6rem);
-            font-weight: 700;
-            line-height: 1.08;
-            color: white;
-            margin-bottom: 24px;
-            animation: fadeUp 0.5s 0.1s ease both;
-        }
-
-        .hero-desc {
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            font-weight: 300;
-            color: #94A3B8;
-            max-width: 600px;
-            margin: 0 auto 36px;
-            line-height: 1.75;
-            animation: fadeUp 0.5s 0.2s ease both;
-        }
-
-        .hero-btns {
-            animation: fadeUp 0.5s 0.3s ease both;
-        }
-
-        .btn-gold {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 32px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            text-decoration: none;
-            background: var(--gold);
-            color: var(--navy-deep) !important;
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
-            transition: all 0.25s;
-        }
-
-        .btn-gold:hover {
-            background: var(--gold-hover);
-            color: var(--navy-deep) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(212, 175, 55, 0.4);
         }
 
         .btn-ghost {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 32px;
-            border-radius: 4px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            text-decoration: none;
+            padding: 7px 16px;
+            border-radius: 5px;
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--text2);
+            border: 1px solid var(--border);
             background: transparent;
-            color: white !important;
-            border: 1px solid rgba(148, 163, 184, 0.4);
-            transition: all 0.25s;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all .2s;
+            font-family: 'DM Sans', sans-serif;
         }
 
         .btn-ghost:hover {
-            border-color: #94A3B8;
-            color: white !important;
+            color: white;
+            border-color: rgba(255, 255, 255, .2);
         }
 
-        /* ── STATS BAND ───────────────────────────────────── */
-        .stats-band {
-            background: var(--navy-deep);
-            border-top: 1px solid var(--border-dim);
-            border-bottom: 1px solid var(--border-dim);
-            padding: 64px 0;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-num {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 5vw, 3.5rem);
+        .btn-primary {
+            padding: 7px 18px;
+            border-radius: 5px;
+            font-size: .8rem;
             font-weight: 700;
-            color: var(--gold);
-            line-height: 1;
-            margin-bottom: 8px;
+            color: #050812;
+            background: var(--blue);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all .2s;
+            font-family: 'DM Sans', sans-serif;
+            letter-spacing: .02em;
         }
 
-        .stat-label {
-            font-size: 0.75rem;
+        .btn-primary:hover {
+            background: var(--blue2);
+            color: #050812;
+            transform: translateY(-1px);
+        }
+
+        .nav-burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .nav-burger span {
+            width: 22px;
+            height: 2px;
+            background: var(--text2);
+            border-radius: 1px;
+            transition: all .3s;
+        }
+
+        .mob-menu {
+            display: none;
+            flex-direction: column;
+            gap: 0;
+            background: var(--navy2);
+            border-top: 1px solid var(--border);
+            padding: 20px 24px;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+
+        .mob-menu a {
+            padding: 12px 0;
+            font-size: .9rem;
+            color: var(--text2);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
             font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--text-dim);
         }
 
-        .stat-divider {
-            border-right: 1px solid var(--border-dim);
-        }
-
-        @media(max-width:575px) {
-            .stat-divider {
-                border-right: none;
-            }
-        }
-
-        /* ── FEATURES SECTION ────────────────────────────── */
-        .section-features {
-            padding: 96px 0;
-            background: var(--navy-bg);
-        }
-
-        .sec-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.8rem, 4vw, 2.6rem);
-            font-weight: 700;
+        .mob-menu a:hover {
             color: white;
         }
 
-        .gold-divider {
-            width: 80px;
-            height: 4px;
-            border-radius: 999px;
-            background: var(--gold);
-            margin: 16px auto 0;
+        .mob-menu .mob-btns {
+            display: flex;
+            gap: 10px;
+            padding-top: 16px;
         }
 
-        .feat-card {
-            background: var(--navy-card);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 28px;
-            height: 100%;
-            transition: all 0.3s;
+        /* HERO */
+        .hero {
+            background: var(--navy);
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 100px 0 60px;
         }
 
-        .feat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-            border-color: rgba(212, 175, 55, 0.3);
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(180, 180, 254, .03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(180, 180, 254, .03) 1px, transparent 1px);
+            background-size: 60px 60px;
         }
 
-        .feat-icon-wrap {
-            width: 56px;
-            height: 56px;
-            border-radius: 12px;
-            background: rgba(212, 175, 55, 0.1);
+        .hero-col-visual {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            background: linear-gradient(135deg, #0a0f20 0%, #0d1428 60%, #0a0f1e 100%);
+            clip-path: polygon(8% 0, 100% 0, 100% 100%, 0% 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
-            transition: all 0.3s;
         }
 
-        .feat-card:hover .feat-icon-wrap {
-            background: var(--gold);
-            color: var(--navy-deep);
+        .hero-col-art {
+            position: relative;
+            width: 260px;
+            height: 380px;
         }
 
-        .feat-icon-wrap .material-symbols-outlined {
-            font-size: 1.75rem;
-            color: var(--gold);
-            transition: color 0.3s;
+        .col-stack {
+            position: absolute;
+            border-radius: 4px;
+            background: linear-gradient(180deg, #1a2040 0%, #0e1628 100%);
+            border: 1px solid rgba(180, 180, 254, .2);
         }
 
-        .feat-card:hover .feat-icon-wrap .material-symbols-outlined {
-            color: var(--navy-deep);
+        .col-stack:nth-child(1) {
+            width: 140px;
+            height: 300px;
+            left: 60px;
+            top: 40px;
+            transform: perspective(400px) rotateY(-8deg);
+            background: linear-gradient(180deg, #1e2550, #0f1830);
         }
 
-        .feat-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
+        .col-stack:nth-child(2) {
+            width: 120px;
+            height: 260px;
+            left: 90px;
+            top: 60px;
+            transform: perspective(400px) rotateY(-5deg);
+            background: linear-gradient(180deg, #181e42, #0c1225);
+            opacity: .8;
+        }
+
+        .col-stack:nth-child(3) {
+            width: 100px;
+            height: 220px;
+            left: 118px;
+            top: 80px;
+            transform: perspective(400px) rotateY(-2deg);
+            background: linear-gradient(180deg, #141836, #090e1e);
+            opacity: .6;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(180, 180, 254, .12) 0%, transparent 70%);
+            top: -100px;
+            left: -150px;
+            pointer-events: none;
+        }
+
+        .hero-glow2 {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(180, 180, 254, .08) 0%, transparent 70%);
+            bottom: -50px;
+            right: 20%;
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(180, 180, 254, .18);
+            border: 1px solid rgba(180, 180, 254, .4);
+            color: var(--accent);
+            font-size: .65rem;
             font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            padding: 5px 13px;
+            border-radius: 3px;
+            margin-bottom: 22px;
+        }
+
+        .hero-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(2.8rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.0;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: -.01em;
+            margin-bottom: 20px;
+        }
+
+        .hero-title .accent {
+            color: var(--accent);
+        }
+
+        .hero-desc {
+            font-size: .9rem;
+            color: var(--text2);
+            max-width: 420px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .btn-hero-main {
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: .85rem;
+            font-weight: 700;
+            color: #050812;
+            background: var(--blue);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all .25s;
+            letter-spacing: .02em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-hero-main:hover {
+            background: var(--blue2);
+            color: #050812;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--blue-glow);
+        }
+
+        .btn-hero-outline {
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: .85rem;
+            font-weight: 600;
+            color: var(--text2);
+            background: transparent;
+            border: 1px solid var(--border2);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all .25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-hero-outline:hover {
             color: white;
+            border-color: var(--accent);
+            background: rgba(180, 180, 254, .1);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            padding-top: 28px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .hstat-num {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+            line-height: 1;
+        }
+
+        .hstat-label {
+            font-size: .68rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .09em;
+            margin-top: 4px;
+        }
+
+        /* QUICK ACCESS */
+        .quick-access {
+            background: var(--navy2);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 40px 0;
+        }
+
+        .qa-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .qa-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .qa-title {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        .qa-nav-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .qa-nav-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .2s;
+        }
+
+        .qa-nav-btn:hover {
+            border-color: var(--blue);
+            color: var(--accent);
+        }
+
+        .qa-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        .qa-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px 16px;
+            transition: all .25s;
+            cursor: pointer;
+        }
+
+        .qa-item:hover {
+            border-color: var(--border2);
+            background: var(--card2);
+            transform: translateY(-2px);
+        }
+
+        .qa-icon {
             margin-bottom: 10px;
         }
 
-        .feat-desc {
-            font-size: 0.88rem;
-            color: var(--text-dim);
-            line-height: 1.7;
+        .qa-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--accent);
+            fill: none;
+            stroke-width: 1.5;
         }
 
-        /* ── PORTALS SECTION ─────────────────────────────── */
-        .section-portals {
-            padding: 96px 0;
-            background: var(--navy-deep);
-            position: relative;
-            overflow: hidden;
+        .qa-name {
+            font-size: .82rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
         }
 
-        .portals-glow {
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            height: 80%;
-            background: rgba(30, 41, 59, 0.2);
-            filter: blur(150px);
-            border-radius: 50%;
-            pointer-events: none;
+        .qa-desc {
+            font-size: .7rem;
+            color: var(--text2);
+            line-height: 1.5;
         }
 
-        .portal-card {
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--border-dim);
-            border-radius: 12px;
-            padding: 32px;
-            height: 100%;
+        /* SHARED */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section-label {
+            font-size: .63rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .section-head {
+            font-family: 'Barlow', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 900;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: -.01em;
+            line-height: 1.05;
+        }
+
+        .head-line {
+            width: 36px;
+            height: 3px;
+            background: var(--blue);
+            border-radius: 2px;
+            margin-top: 10px;
+        }
+
+        .section-top {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .view-all {
+            font-size: .78rem;
+            color: var(--accent);
             text-decoration: none;
-            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: color .2s;
+        }
+
+        .view-all:hover {
+            color: white;
+        }
+
+        /* UPDATES */
+        .section-updates {
+            padding: 80px 0;
+            background: var(--navy);
+        }
+
+        .updates-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 24px;
+        }
+
+        .news-featured {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all .3s;
+            cursor: pointer;
+        }
+
+        .news-featured:hover {
+            border-color: var(--border2);
+            transform: translateY(-3px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, .4);
+        }
+
+        .news-feat-img {
+            width: 100%;
+            height: 200px;
+            background: var(--card3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .news-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--blue);
+            color: #050812;
+            font-size: .6rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            padding: 4px 9px;
+            border-radius: 3px;
+            text-transform: uppercase;
+        }
+
+        .news-feat-body {
+            padding: 22px;
+        }
+
+        .news-cat {
+            font-size: .63rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-bottom: 9px;
+        }
+
+        .news-feat-title {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .news-feat-desc {
+            font-size: .8rem;
+            color: var(--text2);
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+
+        .news-meta {
+            font-size: .7rem;
+            color: var(--muted);
+        }
+
+        .news-sidebar {
             display: flex;
             flex-direction: column;
-            transition: all 0.3s;
-            position: relative;
+            gap: 12px;
         }
 
-        .portal-card:hover {
-            color: inherit;
-            background: var(--navy-card);
-            border-color: rgba(212, 175, 55, 0.5);
-            transform: translateY(-8px);
-        }
-
-        .portal-icon {
-            width: 48px;
-            height: 48px;
+        .news-mini {
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-            transition: all 0.3s;
-        }
-
-        .portal-icon .material-symbols-outlined {
-            font-size: 1.5rem;
-            transition: color 0.3s;
-        }
-
-        .portal-card:hover .portal-icon {
-            background: var(--gold) !important;
-        }
-
-        .portal-card:hover .portal-icon .material-symbols-outlined {
-            color: var(--navy-deep) !important;
-        }
-
-        .portal-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 8px;
-            transition: color 0.3s;
-        }
-
-        .portal-card:hover .portal-title {
-            color: var(--gold);
-        }
-
-        .portal-desc {
-            font-size: 0.84rem;
-            color: var(--text-dim);
-            flex-grow: 1;
-            margin-bottom: 24px;
-            line-height: 1.6;
-        }
-
-        .portal-cta {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.84rem;
-            font-weight: 500;
-            color: var(--gold);
-            opacity: 0;
-            transform: translateX(-8px);
-            transition: all 0.3s;
-        }
-
-        .portal-card:hover .portal-cta {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* ── HOW IT WORKS ────────────────────────────────── */
-        .section-how {
-            padding: 96px 0;
-            background: var(--navy-bg);
-            border-top: 1px solid var(--border-dim);
-        }
-
-        .how-step {
-            background: var(--navy-card);
-            border: 1px solid var(--border-dim);
-            border-radius: 12px;
-            padding: 28px;
-            height: 100%;
-            transition: all 0.3s;
-            position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: stretch;
+            transition: all .25s;
+            cursor: pointer;
         }
 
-        .how-step:hover {
-            border-color: rgba(212, 175, 55, 0.3);
-            transform: translateY(-4px);
+        .news-mini:hover {
+            border-color: var(--border2);
         }
 
-        .step-num {
-            position: absolute;
-            bottom: -10px;
-            right: 16px;
-            font-family: 'Playfair Display', serif;
-            font-size: 5rem;
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.04);
-            line-height: 1;
-            pointer-events: none;
-        }
-
-        .step-icon-wrap {
-            width: 48px;
-            height: 48px;
-            border-radius: 10px;
+        .news-mini-img {
+            width: 72px;
+            flex-shrink: 0;
+            background: var(--card3);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
-            margin-bottom: 18px;
         }
 
-        .step-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
+        .news-mini-img svg {
+            width: 28px;
+            height: 28px;
+            stroke: rgba(255, 255, 255, 0.06);
+            fill: none;
+            stroke-width: 1.2;
+        }
+
+        .news-mini-body {
+            padding: 12px 14px;
+            flex: 1;
+        }
+
+        .news-mini-cat {
+            font-size: .6rem;
             font-weight: 700;
-            color: white;
-            margin-bottom: 8px;
+            color: var(--accent);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
         }
 
-        .step-desc {
-            font-size: 0.82rem;
-            color: var(--text-dim);
+        .news-mini-title {
+            font-size: .78rem;
+            font-weight: 600;
+            color: white;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .news-mini-date {
+            font-size: .65rem;
+            color: var(--muted);
+        }
+
+        /* SERVICES */
+        .section-services {
+            padding: 80px 0;
+            background: var(--navy2);
+            border-top: 1px solid var(--border);
+        }
+
+        .services-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .services-header .head-line {
+            margin: 10px auto 0;
+        }
+
+        .services-sub {
+            font-size: .85rem;
+            color: var(--text2);
+            margin-top: 12px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .svc-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 28px 22px;
+            transition: all .3s;
+            cursor: pointer;
+        }
+
+        .svc-card:hover {
+            border-color: var(--border2);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, .3);
+        }
+
+        .svc-icon-wrap {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            background: rgba(180, 180, 254, .12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            transition: background .3s;
+        }
+
+        .svc-card:hover .svc-icon-wrap {
+            background: var(--blue);
+        }
+
+        .svc-card:hover .svc-icon-wrap svg {
+            stroke: #050812;
+        }
+
+        .svc-icon-wrap svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--accent);
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .svc-name {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: .02em;
+        }
+
+        .svc-desc {
+            font-size: .77rem;
+            color: var(--text2);
+            line-height: 1.65;
+            margin-bottom: 16px;
+        }
+
+        .svc-explore {
+            font-size: .75rem;
+            color: var(--accent);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            transition: color .2s;
+        }
+
+        .svc-explore:hover {
+            color: white;
+        }
+
+        /* SUPPORT */
+        .section-support {
+            padding: 80px 0;
+            background: var(--navy);
+            border-top: 1px solid var(--border);
+        }
+
+        .support-hero-banner {
+            background: linear-gradient(135deg, var(--card2) 0%, #0c1530 100%);
+            border: 1px solid var(--border2);
+            border-radius: 12px;
+            padding: 32px 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .support-banner-badge {
+            display: inline-block;
+            background: rgba(180, 180, 254, .2);
+            border: 1px solid rgba(180, 180, 254, .4);
+            color: var(--accent);
+            font-size: .6rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+
+        .support-banner-title {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: -.01em;
+            line-height: 1.1;
+        }
+
+        .support-banner-desc {
+            font-size: .82rem;
+            color: var(--text2);
+            margin-top: 8px;
+            max-width: 480px;
             line-height: 1.65;
         }
 
-        /* ── FOOTER ──────────────────────────────────────── */
+        .btn-join {
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: .83rem;
+            font-weight: 700;
+            color: #050812;
+            background: var(--blue);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all .25s;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
+        .btn-join:hover {
+            background: var(--blue2);
+            color: #050812;
+        }
+
+        .access-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .access-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 28px;
+        }
+
+        .access-card.highlighted {
+            background: var(--card2);
+        }
+
+        .access-title {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: .02em;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .access-icon {
+            color: rgba(255, 255, 255, .1);
+        }
+
+        .access-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1;
+        }
+
+        .access-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .access-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            font-size: .8rem;
+            color: var(--text2);
+            line-height: 1.5;
+        }
+
+        .access-list li::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 2px;
+            background: rgba(180, 180, 254, .15) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B4B4FE' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") no-repeat center / 9px;
+            border: 1px solid rgba(180, 180, 254, .4);
+        }
+
+        .btn-access-main {
+            width: 100%;
+            padding: 11px;
+            border-radius: 5px;
+            font-size: .8rem;
+            font-weight: 700;
+            color: #050812;
+            background: var(--blue);
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            transition: all .25s;
+        }
+
+        .btn-access-main:hover {
+            background: var(--blue2);
+        }
+
+        .btn-access-ghost {
+            width: 100%;
+            padding: 11px;
+            border-radius: 5px;
+            font-size: .8rem;
+            font-weight: 700;
+            color: var(--text2);
+            background: transparent;
+            border: 1px solid var(--border2);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            transition: all .25s;
+        }
+
+        .btn-access-ghost:hover {
+            color: white;
+            border-color: var(--accent);
+            background: rgba(180, 180, 254, .1);
+        }
+
+        /* EDITORIAL */
+        .section-editorial {
+            padding: 80px 0;
+            background: var(--navy2);
+            border-top: 1px solid var(--border);
+        }
+
+        .editorial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .ed-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all .3s;
+            cursor: pointer;
+        }
+
+        .ed-card:hover {
+            border-color: var(--border2);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, .4);
+        }
+
+        .ed-img {
+            width: 100%;
+            height: 150px;
+            background: var(--card2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ed-img-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(180, 180, 254, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(180, 180, 254, .04) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .ed-img-icon {
+            position: relative;
+            z-index: 1;
+        }
+
+        .ed-img-icon svg {
+            width: 48px;
+            height: 48px;
+            stroke: rgba(255, 255, 255, 0.05);
+            fill: none;
+            stroke-width: 1;
+        }
+
+        .ed-type-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--card3);
+            border: 1px solid var(--border);
+            color: var(--accent);
+            font-size: .6rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+
+        .ed-body {
+            padding: 20px;
+        }
+
+        .ed-label {
+            font-size: .63rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .ed-title {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.25;
+            margin-bottom: 8px;
+        }
+
+        .ed-excerpt {
+            font-size: .77rem;
+            color: var(--text2);
+            line-height: 1.65;
+            margin-bottom: 12px;
+        }
+
+        .ed-meta {
+            font-size: .66rem;
+            color: var(--muted);
+        }
+
+        /* CONTACT */
+        .section-contact {
+            padding: 80px 0;
+            background: var(--navy);
+            border-top: 1px solid var(--border);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 24px;
+        }
+
+        .contact-form-wrap {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .contact-title {
+            font-family: 'Barlow', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: -.01em;
+            margin-bottom: 8px;
+        }
+
+        .contact-desc {
+            font-size: .85rem;
+            color: var(--text2);
+            margin-bottom: 28px;
+            line-height: 1.7;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            font-size: .73rem;
+            font-weight: 600;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: .07em;
+        }
+
+        .form-input {
+            background: var(--navy2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 11px 14px;
+            color: white;
+            font-size: .83rem;
+            outline: none;
+            transition: border .2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .form-input:focus {
+            border-color: rgba(180, 180, 254, .5);
+            background: var(--navy3);
+        }
+
+        .form-input::placeholder {
+            color: var(--muted);
+        }
+
+        .btn-send {
+            padding: 13px 24px;
+            border-radius: 5px;
+            font-size: .85rem;
+            font-weight: 700;
+            color: #050812;
+            background: var(--blue);
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            transition: all .25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-send:hover {
+            background: var(--blue2);
+            transform: translateY(-1px);
+        }
+
+        .contact-info {
+            background: var(--blue);
+            border-radius: 12px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ci-head {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #050812;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .ci-subhead {
+            font-size: .78rem;
+            color: rgba(5, 8, 18, .65);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .ci-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .ci-icon-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 7px;
+            background: rgba(5, 8, 18, .15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .ci-icon-box svg {
+            width: 16px;
+            height: 16px;
+            stroke: #050812;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .ci-label {
+            font-size: .65rem;
+            color: rgba(5, 8, 18, .6);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: 3px;
+        }
+
+        .ci-val {
+            font-size: .85rem;
+            color: #050812;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .ci-socials {
+            margin-top: auto;
+            padding-top: 22px;
+            border-top: 1px solid rgba(5, 8, 18, .15);
+        }
+
+        .ci-socials-label {
+            font-size: .68rem;
+            color: rgba(5, 8, 18, .55);
+            margin-bottom: 12px;
+        }
+
+        .socials-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .social-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: rgba(5, 8, 18, .15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #050812;
+            text-decoration: none;
+            transition: all .2s;
+        }
+
+        .social-btn:hover {
+            background: rgba(5, 8, 18, .28);
+            color: #050812;
+        }
+
+        /* FOOTER */
         footer {
-            background: var(--navy-deep);
-            border-top: 1px solid var(--border-dim);
-            padding: 64px 0 32px;
-            color: var(--text-dim);
+            background: var(--navy2);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-bar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
         }
 
         .footer-logo {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 12px;
-        }
-
-        .footer-desc {
-            font-size: 0.82rem;
-            line-height: 1.65;
-            max-width: 260px;
-        }
-
-        .footer-head {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 16px;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .footer-links a {
-            font-size: 0.84rem;
-            color: var(--text-dim);
+            font-family: 'Barlow', sans-serif;
+            font-weight: 800;
+            font-size: .88rem;
+            color: var(--white);
             text-decoration: none;
-            transition: color 0.2s;
+            letter-spacing: .02em;
+            flex-shrink: 0;
         }
 
-        .footer-links a:hover {
-            color: var(--gold);
+        .footer-logo .logo-box {
+            width: 26px;
+            height: 26px;
+            border-radius: 5px;
+            font-size: .66rem;
         }
 
-        .footer-bottom {
-            border-top: 1px solid var(--border-dim);
-            margin-top: 48px;
-            padding-top: 24px;
+        .footer-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .footer-nav a {
+            font-size: .74rem;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color .2s;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .footer-nav a:hover {
+            color: var(--white);
         }
 
         .footer-copy {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.3);
+            font-size: .72rem;
+            color: var(--muted);
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        /* ── ANIMATIONS ──────────────────────────────────── */
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(24px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        /* REVEAL */
         .reveal {
             opacity: 0;
-            transform: translateY(28px);
-            transition: all 0.65s ease;
+            transform: translateY(24px);
+            transition: opacity .65s ease, transform .65s ease;
         }
 
         .reveal.visible {
@@ -656,27 +1434,131 @@
             transform: translateY(0);
         }
 
-        .delay-1 {
-            transition-delay: 0.1s;
+        .d1 {
+            transition-delay: .12s;
         }
 
-        .delay-2 {
-            transition-delay: 0.2s;
+        .d2 {
+            transition-delay: .24s;
         }
 
-        .delay-3 {
-            transition-delay: 0.3s;
+        .d3 {
+            transition-delay: .36s;
         }
 
-        /* divider between stats on mobile */
-        @media(max-width:767px) {
-            .stat-item {
-                padding: 16px 0;
-                border-bottom: 1px solid var(--border-dim);
+        /* RESPONSIVE */
+        @media (max-width: 991px) {
+
+            .nav-links,
+            .nav-actions {
+                display: none;
             }
 
-            .stat-item:last-child {
-                border-bottom: none;
+            .nav-burger {
+                display: flex;
+            }
+
+            .mob-menu.open {
+                display: flex;
+            }
+
+            .hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-col-visual {
+                display: none;
+            }
+
+            .updates-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .access-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .editorial-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .qa-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .support-hero-banner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .footer-bar {
+                height: auto;
+                padding: 14px 24px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero {
+                padding: 90px 0 50px;
+            }
+
+            .hero-title {
+                font-size: 2.6rem;
+            }
+
+            .hero-stats {
+                gap: 20px;
+            }
+
+            .hstat-num {
+                font-size: 1.4rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .editorial-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-title {
+                font-size: 1.8rem;
+            }
+
+            .qa-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .footer-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 16px 24px;
+                gap: 8px;
+            }
+
+            .footer-nav {
+                gap: 14px;
             }
         }
     </style>
@@ -684,343 +1566,545 @@
 
 <body>
 
-    <!-- ── NAVBAR ─────────────────────────────────────────────────────── -->
-    <nav class="navbar-cp" id="navbar">
-        <div class="container-xl px-4">
-            <div class="d-flex align-items-center justify-content-between">
-                <a href="/" class="nav-logo">
-                    <div class="logo-circle">
-                        <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo"
-                            style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
-                    </div>
-                    Court Pulse
-                </a>
-                <div class="d-none d-md-flex align-items-center gap-4">
-                    <a href="#features" class="nav-link-cp">Features</a>
-                    <a href="#portals" class="nav-link-cp">Portals</a>
-                    <a href="#how-it-works" class="nav-link-cp">How It Works</a>
-                    <a href="#stats" class="nav-link-cp">Community</a>
-                    <a href="{{ route('login') }}" class="btn-nav-login">Login</a>
-                </div>
-                <div class="d-md-none d-flex gap-2">
-                    <a href="{{ route('login') }}" class="btn-nav-login"
-                        style="padding:6px 14px;font-size:0.8rem;">Login</a>
-                    <a href="{{ route('register') }}" class="btn-gold"
-                        style="padding:6px 14px;font-size:0.8rem;">Register</a>
-                </div>
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">
+                <div class="logo-box">CP</div>
+                Court Pulse
+            </a>
+            <div class="nav-links">
+                <a href="#" class="active">Home</a>
+                <a href="#support">Procedural Support</a>
+                <a href="#updates">News</a>
+                <a href="#services">Service Categories</a>
+                <a href="#editorial">Blogs</a>
+            </div>
+            <div class="nav-actions">
+                <a href="/login" class="btn-ghost">Sign In</a>
+                <a href="/register" class="btn-primary">Join as Professional</a>
+            </div>
+            <div class="nav-burger" id="burger" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="mob-menu" id="mobMenu">
+            <a href="#">Home</a>
+            <a href="#support">Procedural Support</a>
+            <a href="#updates">News</a>
+            <a href="#services">Service Categories</a>
+            <a href="#editorial">Blogs</a>
+            <div class="mob-btns">
+                <a href="/login" class="btn-ghost" style="flex:1;text-align:center;">Sign In</a>
+                <a href="/register" class="btn-primary" style="flex:1;text-align:center;">Join as Pro</a>
             </div>
         </div>
     </nav>
 
-    <!-- ── HERO ───────────────────────────────────────────────────────── -->
-    <header class="hero-section">
-        <div class="gold-pattern" style="position:absolute;inset:0;z-index:0;"></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-glow-1"></div>
-        <div class="hero-glow-2"></div>
-
-        <div class="container-xl px-4 position-relative" style="z-index:1;">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <span class="badge-dot"></span>
-                    The Premier Professional Network
-                </div>
+    <!-- HERO -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-glow2"></div>
+        <div class="hero-col-visual">
+            <div class="hero-col-art">
+                <div class="col-stack"></div>
+                <div class="col-stack"></div>
+                <div class="col-stack"></div>
+            </div>
+        </div>
+        <div class="hero-inner">
+            <div>
+                <div class="hero-badge">The Sovereign Archive</div>
                 <h1 class="hero-title">
-                    Where <br>
-                    <span class="gold-gradient-text fst-italic">Professionals Connect</span>
+                    A Platform That Gives
+                    <span class="accent">Instant Access</span>
+                    To Procedural<br>
+                    Support
                 </h1>
-                <p class="hero-desc">
-                    Court Pulse brings together Advocates, Clerks, Chartered Accountants and citizens — with verified
-                    profiles, transparent feedback, and seamless legal networking across India.
-                </p>
-                <div class="hero-btns d-flex flex-column flex-sm-row align-items-center justify-content-center gap-3">
-                    <a href="{{ route('register') }}" class="btn-gold">
-                        <i class="bi bi-person-plus-fill"></i> Get Started Free
+                <p class="hero-desc">Access high-tier legal protocols, clerk directories, and institutional filing
+                    systems through an elite editorial lens. Curation meets efficiency.</p>
+                <div class="hero-btns">
+                    <a href="#" class="btn-hero-main">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 8v4l3 3" />
+                        </svg>
+                        Start Procedure
                     </a>
-                    <a href="#features" class="btn-ghost">
-                        Learn More <i class="bi bi-arrow-down"></i>
+                    <a href="#support" class="btn-hero-outline">
+                        Explore Clerk Directory
+                        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
                     </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- ── STATS BAND ─────────────────────────────────────────────────── -->
-    <section class="stats-band" id="stats">
-        <div class="container-xl px-4">
-            <div class="row g-0 text-center">
-                <div class="col-6 col-md-3 stat-item stat-divider">
-                    <div class="stat-num">{{ $totalAdvocates ?? '500' }}+</div>
-                    <div class="stat-label">Verified Advocates</div>
+    <!-- QUICK ACCESS -->
+    <section class="quick-access">
+        <div class="qa-inner">
+            <div class="qa-header">
+                <div class="qa-title">Quick Access</div>
+                <div class="qa-nav-btns">
+                    <button class="qa-nav-btn">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                    </button>
+                    <button class="qa-nav-btn">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
                 </div>
-                <div class="col-6 col-md-3 stat-item stat-divider">
-                    <div class="stat-num">{{ $totalClerks ?? '300' }}+</div>
-                    <div class="stat-label">Court Clerks</div>
+            </div>
+            <div class="qa-grid">
+                <div class="qa-item">
+                    <div class="qa-icon"><svg viewBox="0 0 24 24">
+                            <rect x="4" y="2" width="16" height="20" rx="2" />
+                            <path d="M8 6h8M8 10h8M8 14h5" />
+                        </svg></div>
+                    <div class="qa-name">Clerk Filing</div>
+                    <div class="qa-desc">Instant access to court filing protocols and deadlines.</div>
                 </div>
-                <div class="col-6 col-md-3 stat-item stat-divider">
-                    <div class="stat-num">{{ $totalCourts ?? '50' }}+</div>
-                    <div class="stat-label">Courts Listed</div>
+                <div class="qa-item">
+                    <div class="qa-icon"><svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 8v4l3 3" />
+                        </svg></div>
+                    <div class="qa-name">Support Help</div>
+                    <div class="qa-desc">24/7 dedicated support for procedural inquiries.</div>
                 </div>
-                <div class="col-6 col-md-3 stat-item">
-                    <div class="stat-num">24/7</div>
-                    <div class="stat-label">Platform Access</div>
+                <div class="qa-item">
+                    <div class="qa-icon"><svg viewBox="0 0 24 24">
+                            <path
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg></div>
+                    <div class="qa-name">Tribunals</div>
+                    <div class="qa-desc">Detailed breakdown of active tribunal jurisdictions.</div>
+                </div>
+                <div class="qa-item">
+                    <div class="qa-icon"><svg viewBox="0 0 24 24">
+                            <path
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg></div>
+                    <div class="qa-name">Legal Norms</div>
+                    <div class="qa-desc">Archive of sovereign legal standards and ethics.</div>
+                </div>
+                <div class="qa-item">
+                    <div class="qa-icon"><svg viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="M21 21l-4.35-4.35" />
+                        </svg></div>
+                    <div class="qa-name">Search</div>
+                    <div class="qa-desc">Connect agents across all practice areas.</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ── FEATURES ───────────────────────────────────────────────────── -->
-    <section class="section-features" id="features">
-        <div class="container-xl px-4">
-            <div class="text-center mb-5 reveal">
-                <h2 class="sec-title">Elevating Legal Standards</h2>
-                <div class="gold-divider"></div>
+    <!-- UPDATES -->
+    <section class="section-updates" id="updates">
+        <div class="container">
+            <div class="section-top reveal">
+                <div>
+                    <div class="section-head">Latest Updates</div>
+                    <div class="head-line"></div>
+                </div>
+                <a href="#" class="view-all">View All Updates <svg width="14" height="14"
+                        fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg></a>
             </div>
-            <div class="row g-4">
-                <div class="col-md-4 reveal">
-                    <div class="feat-card">
-                        <div class="feat-icon-wrap">
-                            <span class="material-symbols-outlined">verified_user</span>
-                        </div>
-                        <div class="feat-title">For Advocates</div>
-                        <p class="feat-desc">Instantly access a directory of verified, skilled Court Clerks and CAs.
-                            Filter by specialization, court, and city to find the perfect match for your practice.</p>
+            <div class="updates-grid">
+                <div class="news-featured reveal">
+                    <div class="news-feat-img">
+                        <span class="news-badge">Institutional Reform</span>
+                        <svg width="60" height="60" fill="none" stroke="rgba(255,255,255,0.04)"
+                            stroke-width="1" viewBox="0 0 24 24">
+                            <path
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div class="news-feat-body">
+                        <div class="news-cat">Institutional Reform</div>
+                        <div class="news-feat-title">New ROC Filing Amendments for 2024 Corporate Compliance</div>
+                        <div class="news-feat-desc">Detailed analysis of the upcoming regulatory changes affecting
+                            Registrar of Companies filing protocols and timelines.</div>
+                        <div class="news-meta">Nov 15, 2024 &bull; 7 min read</div>
                     </div>
                 </div>
-                <div class="col-md-4 reveal delay-1">
-                    <div class="feat-card">
-                        <div class="feat-icon-wrap">
-                            <span class="material-symbols-outlined">trending_up</span>
+                <div class="news-sidebar">
+                    <div class="news-mini reveal d1">
+                        <div class="news-mini-img"><svg viewBox="0 0 24 24">
+                                <path
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586l5.414 5.414V19a2 2 0 01-2 2z" />
+                            </svg></div>
+                        <div class="news-mini-body">
+                            <div class="news-mini-cat">Court Clerks</div>
+                            <div class="news-mini-title">Digital Signature Integration for District Tribunal Filings
+                            </div>
+                            <div class="news-mini-date">Nov 14, 2024</div>
                         </div>
-                        <div class="feat-title">For Clerks & CAs</div>
-                        <p class="feat-desc">Showcase your verified certifications, receive professional feedback, and
-                            connect with Advocates and legal firms looking for your specific expertise.</p>
                     </div>
-                </div>
-                <div class="col-md-4 reveal delay-2">
-                    <div class="feat-card">
-                        <div class="feat-icon-wrap">
-                            <span class="material-symbols-outlined">lock_open</span>
+                    <div class="news-mini reveal d2">
+                        <div class="news-mini-img"><svg viewBox="0 0 24 24">
+                                <path
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586l5.414 5.414V19a2 2 0 01-2 2z" />
+                            </svg></div>
+                        <div class="news-mini-body">
+                            <div class="news-mini-cat">IP Services</div>
+                            <div class="news-mini-title">New Accelerated Patent Examination Procedure Guidelines</div>
+                            <div class="news-mini-date">Nov 12, 2024</div>
                         </div>
-                        <div class="feat-title">Feedback-Unlock System</div>
-                        <p class="feat-desc">Our unique model rewards engagement — give a star rating to any
-                            professional and their complete contact details are instantly unlocked for you.</p>
+                    </div>
+                    <div class="news-mini reveal d3">
+                        <div class="news-mini-img"><svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 8v4l3 3" />
+                            </svg></div>
+                        <div class="news-mini-body">
+                            <div class="news-mini-cat">Advocate Support</div>
+                            <div class="news-mini-title">Cross-Border Litigation: Mastering Jurisdictional Protocols
+                            </div>
+                            <div class="news-mini-date">Nov 10, 2024</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ── PORTALS ────────────────────────────────────────────────────── -->
-    <section class="section-portals" id="portals">
-        <div class="portals-glow"></div>
-        <div class="container-xl px-4 position-relative" style="z-index:1;">
-            <div class="text-center mb-5 reveal">
-                <h2 class="sec-title">Choose Your Portal</h2>
-                <p class="mt-3"
-                    style="color:var(--text-dim);max-width:480px;margin-left:auto;margin-right:auto;font-size:0.95rem;">
-                    Secure access points tailored for every role in the legal ecosystem.
+    <!-- SERVICE CATEGORIES -->
+    <section class="section-services" id="services">
+        <div class="container">
+            <div class="services-header reveal">
+                <div class="section-label">Procedural Pipelines</div>
+                <div class="section-head">Service Categories</div>
+                <div class="head-line"></div>
+                <p class="services-sub">Specialized procedural pipelines designed for high-stakes legal administration.
                 </p>
             </div>
-            <div class="row g-4">
-                <!-- Advocate -->
-                <div class="col-md-6 col-lg-3 reveal">
-                    <a href="{{ route('register') }}?role=advocate" class="portal-card">
-                        <div class="portal-icon" style="background:rgba(59,130,246,0.2);">
-                            <span class="material-symbols-outlined" style="color:#60A5FA;">gavel</span>
-                        </div>
-                        <div class="portal-title">Advocate</div>
-                        <p class="portal-desc">Manage your verified profile, search Clerks & CAs, upload legal
-                            documents, and build your professional reputation.</p>
-                        <div class="portal-cta">
-                            Login / Register <span class="material-symbols-outlined"
-                                style="font-size:1rem;">arrow_forward</span>
-                        </div>
-                    </a>
+            <div class="services-grid">
+                <div class="svc-card reveal">
+                    <div class="svc-icon-wrap"><svg viewBox="0 0 24 24">
+                            <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3" />
+                        </svg></div>
+                    <div class="svc-name">Court Clerks</div>
+                    <div class="svc-desc">Full logistical support for filing and case management across all levels of
+                        the judiciary.</div>
+                    <a href="#" class="svc-explore">Explore Clerks <svg width="12" height="12"
+                            fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></a>
                 </div>
-                <!-- Clerk -->
-                <div class="col-md-6 col-lg-3 reveal delay-1">
-                    <a href="{{ route('register') }}?role=clerk" class="portal-card">
-                        <div class="portal-icon" style="background:rgba(16,185,129,0.2);">
-                            <span class="material-symbols-outlined" style="color:#34D399;">assignment_ind</span>
-                        </div>
-                        <div class="portal-title">Court Clerk</div>
-                        <p class="portal-desc">Upload court credentials, connect with Advocates and CAs. Submit
-                            compulsory feedback to unlock full contact access.</p>
-                        <div class="portal-cta">
-                            Login / Register <span class="material-symbols-outlined"
-                                style="font-size:1rem;">arrow_forward</span>
-                        </div>
-                    </a>
+                <div class="svc-card reveal d1">
+                    <div class="svc-icon-wrap"><svg viewBox="0 0 24 24">
+                            <path
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg></div>
+                    <div class="svc-name">IP Clerks</div>
+                    <div class="svc-desc">Intellectual property filing, trademark monitoring, and patent search
+                        procedures.</div>
+                    <a href="#" class="svc-explore">Explore Clerks <svg width="12" height="12"
+                            fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></a>
                 </div>
-                <!-- CA -->
-                <div class="col-md-6 col-lg-3 reveal delay-2">
-                    <a href="{{ route('register') }}?role=ca" class="portal-card">
-                        <div class="portal-icon" style="background:rgba(212,175,55,0.15);">
-                            <span class="material-symbols-outlined" style="color:var(--gold);">account_balance</span>
-                        </div>
-                        <div class="portal-title">Chartered Accountant</div>
-                        <p class="portal-desc">ICAI-verified profile, connect with legal professionals, manage
-                            documents, and expand your legal-financial network.</p>
-                        <div class="portal-cta">
-                            Login / Register <span class="material-symbols-outlined"
-                                style="font-size:1rem;">arrow_forward</span>
-                        </div>
-                    </a>
-                </div>
-                <!-- Guest -->
-                <div class="col-md-6 col-lg-3 reveal delay-3">
-                    <a href="{{ route('register') }}?role=guest" class="portal-card">
-                        <div class="portal-icon" style="background:rgba(168,85,247,0.2);">
-                            <span class="material-symbols-outlined" style="color:#C084FC;">person_search</span>
-                        </div>
-                        <div class="portal-title">Guest / Public</div>
-                        <p class="portal-desc">No documents needed. Browse the directory of verified legal
-                            professionals and give feedback to unlock full contact details.</p>
-                        <div class="portal-cta">
-                            Continue <span class="material-symbols-outlined"
-                                style="font-size:1rem;">arrow_forward</span>
-                        </div>
-                    </a>
+                <div class="svc-card reveal d2">
+                    <div class="svc-icon-wrap"><svg viewBox="0 0 24 24">
+                            <path
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg></div>
+                    <div class="svc-name">ROC Agents</div>
+                    <div class="svc-desc">Seamless Registrar of Companies filings and compliance management for
+                        enterprises.</div>
+                    <a href="#" class="svc-explore">Explore Clerks <svg width="12" height="12"
+                            fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ── HOW IT WORKS ───────────────────────────────────────────────── -->
-    <section class="section-how" id="how-it-works">
-        <div class="container-xl px-4">
-            <div class="text-center mb-5 reveal">
-                <h2 class="sec-title">How Court Pulse Works</h2>
-                <div class="gold-divider"></div>
-                <p class="mt-3" style="color:var(--text-dim);font-size:0.92rem;">Four simple steps from registration
-                    to verified network access.</p>
+    <!-- ADVOCATE SUPPORT -->
+    <section class="section-support" id="support">
+        <div class="container">
+            <div class="support-hero-banner reveal">
+                <div>
+                    <div class="support-banner-badge">Advocate Centre</div>
+                    <div class="support-banner-title">Advocate Support Network</div>
+                    <p class="support-banner-desc">Access elite research, case drafting assistance, and jurisdictional
+                        brief summaries tailored for high-profile litigation.</p>
+                </div>
+                <a href="/register" class="btn-join">Join as Advocate</a>
             </div>
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-3 reveal">
-                    <div class="how-step">
-                        <div class="step-num">01</div>
-                        <div class="step-icon-wrap" style="background:rgba(212,175,55,0.12);">📝</div>
-                        <div class="step-title">Register Free</div>
-                        <p class="step-desc">Choose your role — Advocate, Clerk, CA, or Guest. Basic details only.
-                            Takes under 2 minutes.</p>
+            <div class="access-grid">
+                <div class="access-card reveal">
+                    <div class="access-title">
+                        Professional Access
+                        <span class="access-icon">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="2" y="7" width="20" height="14" rx="2" />
+                                <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+                            </svg>
+                        </span>
+                    </div>
+                    <ul class="access-list">
+                        <li>Unlimited procedural archive access</li>
+                        <li>Direct communication with tribunal clerks</li>
+                        <li>Case tracking &amp; deadline alerts</li>
+                    </ul>
+                    <button class="btn-access-main" onclick="window.location='/login'">Sign In as
+                        Professional</button>
+                </div>
+                <div class="access-card highlighted reveal d1">
+                    <div class="access-title">
+                        Guest Access
+                        <span class="access-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </span>
+                    </div>
+                    <ul class="access-list">
+                        <li>Public legal norms directory</li>
+                        <li>Basic procedure manual viewing</li>
+                        <li>Support center consultation</li>
+                    </ul>
+                    <button class="btn-access-ghost">Continue as Guest</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EDITORIAL -->
+    <section class="section-editorial" id="editorial">
+        <div class="container">
+            <div class="section-top reveal" style="margin-bottom:40px;">
+                <div>
+                    <div class="section-label">Editorial Insights</div>
+                    <div class="section-head">The Latest Thinking in Legal Technology and Procedural Efficiency.</div>
+                    <div class="head-line"></div>
+                </div>
+                <a href="#" class="view-all">View All Blogs <svg width="14" height="14" fill="none"
+                        stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg></a>
+            </div>
+            <div class="editorial-grid">
+                <div class="ed-card reveal">
+                    <div class="ed-img">
+                        <div class="ed-img-pattern"></div>
+                        <div class="ed-type-badge">Tech</div>
+                        <span class="ed-img-icon"><svg viewBox="0 0 24 24">
+                                <path
+                                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg></span>
+                    </div>
+                    <div class="ed-body">
+                        <div class="ed-label">Tech</div>
+                        <div class="ed-title">The Future of AI in Tribunal Case Scheduling</div>
+                        <div class="ed-excerpt">How automation is reducing court backlog by optimizing filing timelines
+                            across major metropolitan districts.</div>
+                        <div class="ed-meta">March 2025 &bull; 8 min read</div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3 reveal delay-1">
-                    <div class="how-step">
-                        <div class="step-num">02</div>
-                        <div class="step-icon-wrap" style="background:rgba(26,39,68,0.3);">📂</div>
-                        <div class="step-title">Upload Documents</div>
-                        <p class="step-desc">Submit Bar Council cert, Court ID, ICAI membership, or other role-specific
-                            credentials for review.</p>
+                <div class="ed-card reveal d1">
+                    <div class="ed-img" style="background:var(--card3);">
+                        <div class="ed-img-pattern"></div>
+                        <div class="ed-type-badge">Efficiency</div>
+                        <span class="ed-img-icon"><svg viewBox="0 0 24 24">
+                                <path
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg></span>
+                    </div>
+                    <div class="ed-body">
+                        <div class="ed-label">Efficiency</div>
+                        <div class="ed-title">5 Procedural Hurdles Every Advocate Must Master</div>
+                        <div class="ed-excerpt">Strategic insights into navigating complex ROC filing systems for
+                            early-stage multinational corporations.</div>
+                        <div class="ed-meta">February 2025 &bull; 6 min read</div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3 reveal delay-2">
-                    <div class="how-step">
-                        <div class="step-num">03</div>
-                        <div class="step-icon-wrap" style="background:rgba(74,103,65,0.15);">🛡️</div>
-                        <div class="step-title">Get Verified</div>
-                        <p class="step-desc">Admin reviews every document. Approved profiles receive a Verified badge
-                            visible to the whole network.</p>
+                <div class="ed-card reveal d2">
+                    <div class="ed-img" style="background:#0a0f22;">
+                        <div class="ed-img-pattern"></div>
+                        <div class="ed-type-badge">Insight</div>
+                        <span class="ed-img-icon"><svg viewBox="0 0 24 24">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg></span>
                     </div>
-                </div>
-                <div class="col-md-6 col-lg-3 reveal delay-3">
-                    <div class="how-step">
-                        <div class="step-num">04</div>
-                        <div class="step-icon-wrap" style="background:rgba(139,58,42,0.15);">⚡</div>
-                        <div class="step-title">Connect & Grow</div>
-                        <p class="step-desc">Search professionals, give feedback to unlock contacts, build your legal
-                            network across India.</p>
+                    <div class="ed-body">
+                        <div class="ed-label">Insight</div>
+                        <div class="ed-title">Sovereign Data: Protecting Privileges in the Digital Era</div>
+                        <div class="ed-excerpt">A deep dive into the encryption standards shaping high-stakes digital
+                            legal transactions.</div>
+                        <div class="ed-meta">January 2025 &bull; 10 min read</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ── FOOTER ─────────────────────────────────────────────────────── -->
+    <!-- CONTACT -->
+    <section class="section-contact" id="contact">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-form-wrap reveal">
+                    <div class="contact-title">Contact Us</div>
+                    <p class="contact-desc">Have questions about procedural access or joining our professional network?
+                        Our sovereign support team is standing by.</p>
+                    <div class="form-row">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-input" placeholder="Jonathan Doe">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input" placeholder="jd@firm.legal">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top:16px;">
+                        <label class="form-label">Subject</label>
+                        <input type="text" class="form-input" placeholder="Inquiry about Procedural Support">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-input" rows="5" placeholder="How can we assist your practice?" style="resize:none;"></textarea>
+                    </div>
+                    <button class="btn-send">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                        </svg>
+                        Send Message
+                    </button>
+                </div>
+                <div class="contact-info reveal d1">
+                    <div class="ci-head">Our Archive HQ</div>
+                    <div class="ci-subhead">Reach our team for any procedural access queries or professional network
+                        inquiries.</div>
+                    <div class="ci-item">
+                        <div class="ci-icon-box">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="ci-label">Global Secretariat</div>
+                            <div class="ci-val">22, 2nd floor Garni, Executive Wing<br>Navi Mumbai, 700408, India</div>
+                        </div>
+                    </div>
+                    <div class="ci-item">
+                        <div class="ci-icon-box">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="ci-label">Inquiries</div>
+                            <div class="ci-val">support@courtpulse.com<br>professionals@courtpulse.com</div>
+                        </div>
+                    </div>
+                    <div class="ci-item">
+                        <div class="ci-icon-box">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="ci-label">Direct Line</div>
+                            <div class="ci-val">+919137553823</div>
+                        </div>
+                    </div>
+                    <div class="ci-socials">
+                        <div class="ci-socials-label">Follow Court Pulse</div>
+                        <div class="socials-row">
+                            <a href="#" class="social-btn"><svg width="14" height="14"
+                                    fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                </svg></a>
+                            <a href="#" class="social-btn"><svg width="14" height="14"
+                                    fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                                </svg></a>
+                            <a href="#" class="social-btn"><svg width="14" height="14" fill="none"
+                                    stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                                </svg></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
     <footer>
-        <div class="container-xl px-4">
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-12">
-                    <div class="footer-logo">
-                        <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo"
-                            style="width:32px;height:32px;object-fit:cover;border-radius:50%;">
-                        Court Pulse
-                    </div>
-                    <p class="footer-desc">Empowering the legal community through digital connectivity and verified
-                        professional networks across India.</p>
-                    <div class="d-flex gap-3 mt-4">
-                        <a href="#"
-                            style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-decoration:none;color:var(--text-dim);"
-                            onmouseover="this.style.background='var(--gold)';this.style.color='var(--navy-deep)';"
-                            onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.color='var(--text-dim)';">
-                            <i class="bi bi-twitter-x" style="font-size:0.85rem;"></i>
-                        </a>
-                        <a href="#"
-                            style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-decoration:none;color:var(--text-dim);"
-                            onmouseover="this.style.background='var(--gold)';this.style.color='var(--navy-deep)';"
-                            onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.color='var(--text-dim)';">
-                            <i class="bi bi-envelope" style="font-size:0.85rem;"></i>
-                        </a>
-                        <a href="#"
-                            style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-decoration:none;color:var(--text-dim);"
-                            onmouseover="this.style.background='var(--gold)';this.style.color='var(--navy-deep)';"
-                            onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.color='var(--text-dim)';">
-                            <i class="bi bi-linkedin" style="font-size:0.85rem;"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3 col-lg-2 offset-lg-2">
-                    <div class="footer-head">Platform</div>
-                    <ul class="footer-links">
-                        <li><a href="#features">For Advocates</a></li>
-                        <li><a href="#features">For Clerks</a></li>
-                        <li><a href="#how-it-works">How It Works</a></li>
-                        <li><a href="{{ route('login') }}">Login</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md-3 col-lg-2">
-                    <div class="footer-head">Join As</div>
-                    <ul class="footer-links">
-                        <li><a href="{{ route('register') }}?role=advocate">Advocate</a></li>
-                        <li><a href="{{ route('register') }}?role=clerk">Court Clerk</a></li>
-                        <li><a href="{{ route('register') }}?role=ca">CA</a></li>
-                        <li><a href="{{ route('register') }}?role=guest">Guest</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md-3 col-lg-2">
-                    <div class="footer-head">Legal</div>
-                    <ul class="footer-links">
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Cookie Policy</a></li>
-                        <li><a href="#">Contact Admin</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-                <div class="footer-copy">© {{ date('Y') }} Court Pulse. All rights reserved.</div>
-                <div class="footer-copy">Designed for Legal Excellence.</div>
-            </div>
+        <div class="footer-bar">
+            <a href="#" class="footer-logo">
+                <div class="logo-box">CP</div>
+                Court Pulse
+            </a>
+            <ul class="footer-nav">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+            <div class="footer-copy">&copy; 2024 Digi Enquests</div>
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Navbar scroll
         window.addEventListener('scroll', () => {
-            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
         });
 
-        // Scroll reveal
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
+        function toggleMenu() {
+            document.getElementById('mobMenu').classList.toggle('open');
+        }
+
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) e.target.classList.add('visible');
             });
         }, {
-            threshold: 0.12
+            threshold: 0.08
         });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+        const navLinks = document.querySelectorAll('.nav-links a');
+        window.addEventListener('scroll', () => {
+            const sections = ['updates', 'services', 'support', 'editorial', 'contact'];
+            let current = '';
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && window.scrollY >= el.offsetTop - 140) current = id;
+            });
+            navLinks.forEach(a => {
+                const href = a.getAttribute('href');
+                a.classList.toggle('active', href === '#' + current || (current === '' && href === '#'));
+            });
+        });
     </script>
 </body>
 

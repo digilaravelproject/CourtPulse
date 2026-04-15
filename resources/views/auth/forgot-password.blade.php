@@ -13,8 +13,8 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
-            --gold: #D4AF37;
-            --gold-h: #B5952F;
+            --accent: #B4B4FE;
+            --accent-h: #9A9AF8;
             --navy-deep: #0A1120;
             --navy-bg: #0F172A;
             --border: rgba(255, 255, 255, 0.1);
@@ -51,7 +51,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B4B4FE' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             pointer-events: none;
         }
 
@@ -62,7 +62,7 @@
             width: 380px;
             height: 380px;
             border-radius: 50%;
-            background: rgba(212, 175, 55, 0.05);
+            background: rgba(180, 180, 254, 0.05);
             filter: blur(100px);
             pointer-events: none;
         }
@@ -97,7 +97,7 @@
             width: 280px;
             height: 280px;
             border-radius: 50%;
-            border: 1px solid rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(180, 180, 254, 0.08);
             pointer-events: none;
         }
 
@@ -122,12 +122,12 @@
             width: 40px;
             height: 40px;
             border-radius: 9px;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(180, 180, 254, 0.4);
+            background: rgba(180, 180, 254, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--gold);
+            color: var(--accent);
             font-size: 1.1rem;
         }
 
@@ -140,9 +140,9 @@
             margin-bottom: 18px;
         }
 
-        .gold-italic {
+        .accent-italic {
             font-style: italic;
-            color: var(--gold);
+            color: var(--accent);
         }
 
         .left-desc {
@@ -172,9 +172,9 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--gold);
+            background: var(--accent);
             flex-shrink: 0;
-            box-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 0 6px rgba(180, 180, 254, 0.4);
         }
 
         .auth-right {
@@ -250,8 +250,8 @@
 
         .cp-input:focus {
             outline: none;
-            border-color: #D4AF37;
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(180, 180, 254, 0.1);
             background: white;
         }
 
@@ -266,8 +266,8 @@
         }
 
         .info-box {
-            background: rgba(212, 175, 55, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            background: rgba(180, 180, 254, 0.05);
+            border: 1px solid rgba(180, 180, 254, 0.2);
             border-radius: 8px;
             padding: 12px 14px;
             display: flex;
@@ -283,12 +283,12 @@
         }
 
         .info-box-text strong {
-            color: #92650a;
+            color: #5B5BE0;
         }
 
         .btn-submit {
             width: 100%;
-            background: var(--gold);
+            background: var(--accent);
             color: var(--navy-deep);
             border: none;
             padding: 13px;
@@ -302,24 +302,24 @@
             justify-content: center;
             gap: 8px;
             transition: all 0.25s;
-            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.25);
+            box-shadow: 0 4px 16px rgba(180, 180, 254, 0.25);
         }
 
         .btn-submit:hover {
-            background: var(--gold-h);
+            background: var(--accent-h);
             transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
+            box-shadow: 0 8px 24px rgba(180, 180, 254, 0.35);
         }
 
         .auth-link {
-            color: var(--gold);
+            color: var(--accent);
             font-weight: 600;
             text-decoration: none;
             font-size: 0.85rem;
         }
 
         .auth-link:hover {
-            color: var(--gold-h);
+            color: var(--accent-h);
         }
 
         @media(max-width:900px) {
@@ -346,7 +346,6 @@
 <body>
     <div style="display:flex;min-height:100vh;width:100%;">
 
-        <!-- LEFT -->
         <div class="auth-left">
             <div class="left-glow-1"></div>
             <div class="left-glow-2"></div>
@@ -356,7 +355,7 @@
                 <a href="{{ route('home') }}" class="left-logo">
                     <div class="logo-badge">⚖</div> Court Pulse
                 </a>
-                <h1 class="left-title">Recover Your<br><span class="gold-italic">Account.</span></h1>
+                <h1 class="left-title">Recover Your<br><span class="accent-italic">Account.</span></h1>
                 <p class="left-desc">Enter your registered email and we'll send a secure reset link. Valid for 60
                     minutes.</p>
                 <div class="role-list">
@@ -376,7 +375,6 @@
             </div>
         </div>
 
-        <!-- RIGHT -->
         <div class="auth-right">
 
             @if (session('status'))
@@ -397,7 +395,7 @@
             <div class="auth-sub">Enter your email address and we'll send you a link to reset your password.</div>
 
             <div class="info-box">
-                <i class="bi bi-lightbulb" style="color:#D4AF37;font-size:16px;flex-shrink:0;margin-top:1px"></i>
+                <i class="bi bi-lightbulb" style="color:var(--accent);font-size:16px;flex-shrink:0;margin-top:1px"></i>
                 <div class="info-box-text">
                     Check your <strong>spam / junk folder</strong> if you don't receive the email within a few minutes.
                 </div>

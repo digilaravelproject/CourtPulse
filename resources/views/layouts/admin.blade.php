@@ -22,11 +22,11 @@
             theme: {
                 extend: {
                     colors: {
-                        gold: '#D4AF37',
-                        'gold-h': '#B5952F',
-                        navy: '#0A1120',
-                        'ncard': '#1E293B',
-                        'nbg': '#0F172A',
+                        brand: '#B4B4FE',
+                        'brand-h': '#9898e0',
+                        navy: '#060B16',
+                        'ncard': '#0D1526',
+                        'nbg': '#0A1120',
                     },
                     fontFamily: {
                         display: ['Playfair Display', 'serif'],
@@ -44,6 +44,14 @@
     <style>
         :root {
             --sw: 256px;
+            --brand: #B4B4FE;
+            --brand-h: #9898e0;
+            --brand-dim: rgba(180, 180, 254, 0.09);
+            --brand-border: rgba(180, 180, 254, 0.22);
+            --brand-muted: rgba(180, 180, 254, 0.65);
+            --brand-pat: rgba(180, 180, 254, 0.03);
+            --sb-bg: #060B16;
+            --sb-border: rgba(100, 110, 180, 0.10);
         }
 
         /* scrollbar */
@@ -61,16 +69,16 @@
             border-radius: 4px
         }
 
-        /* gold pattern */
+        /* brand pattern */
         .gpat {
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4AF37' fill-opacity='0.045'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23B4B4FE' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")
         }
 
         /* active link bar */
         .nav-active {
             position: relative;
-            background: rgba(212, 175, 55, .10);
-            color: #D4AF37 !important
+            background: rgba(180, 180, 254, .09);
+            color: #B4B4FE !important
         }
 
         .nav-active::before {
@@ -80,7 +88,7 @@
             top: 0;
             bottom: 0;
             width: 3px;
-            background: #D4AF37;
+            background: #B4B4FE;
             border-radius: 0 2px 2px 0
         }
 
@@ -157,6 +165,18 @@
         [x-cloak] {
             display: none !important;
         }
+
+        /* Topbar bell hover uses brand */
+        .bell-btn:hover {
+            border-color: var(--brand) !important;
+            color: var(--brand) !important;
+        }
+
+        /* Sidebar nav hover */
+        .nav-item-default:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.80) !important;
+        }
     </style>
     @stack('styles')
 </head>
@@ -173,19 +193,22 @@
      SIDEBAR
 ════════════════════════════════════════ --}}
     <aside id="sidebar"
-        class="gpat fixed inset-y-0 left-0 w-64 bg-navy flex flex-col z-[199]
-         border-r border-white/[0.06] transition-transform duration-300
-         -translate-x-full lg:translate-x-0">
+        class="gpat fixed inset-y-0 left-0 w-64 flex flex-col z-[199]
+         border-r transition-transform duration-300
+         -translate-x-full lg:translate-x-0"
+        style="background: var(--sb-bg); border-color: var(--sb-border);">
 
         {{-- Logo --}}
-        <div class="flex items-center gap-3 px-5 py-[21px] border-b border-white/[0.06] flex-shrink-0">
-            <div
-                class="w-9 h-9 rounded-[9px] border border-gold/40 bg-gold/10 overflow-hidden flex items-center justify-center flex-shrink-0">
+        <div class="flex items-center gap-3 px-5 py-[21px] flex-shrink-0"
+            style="border-bottom: 1px solid var(--sb-border);">
+            <div class="w-9 h-9 rounded-[9px] overflow-hidden flex items-center justify-center flex-shrink-0"
+                style="border: 1px solid var(--brand-border); background: var(--brand-dim);">
                 <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo" class="w-full h-full object-cover">
             </div>
             <div>
                 <div class="font-display text-[1.1rem] font-bold text-white leading-tight">Court Pulse</div>
-                <div class="font-mono text-[0.52rem] text-gold/80 tracking-[2.5px] uppercase">Admin Panel</div>
+                <div class="font-mono text-[0.52rem] uppercase tracking-[2.5px]" style="color: var(--brand-muted);">
+                    Admin Panel</div>
             </div>
         </div>
 
@@ -196,9 +219,9 @@
                 function navLink($route, $icon, $label, $badge = null)
                 {
                     $active = request()->routeIs($route . '*');
-                    $cls = $active ? 'nav-active' : 'text-white/55 hover:bg-white/[0.04] hover:text-white/80';
+                    $cls = $active ? 'nav-active' : 'nav-item-default text-white/45';
                     $b = $badge
-                        ? "<span class='ml-auto bg-gold text-navy text-[0.54rem] font-bold px-1.5 py-0.5 rounded-full font-mono'>{$badge}</span>"
+                        ? "<span class='ml-auto text-[0.54rem] font-bold px-1.5 py-0.5 rounded-full font-mono' style='background:#B4B4FE; color:#060B16;'>{$badge}</span>"
                         : '';
                     return "<a href='" .
                         route($route) .
@@ -208,16 +231,18 @@
                 }
             @endphp
 
-            <div class="px-5 pt-3 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase text-white/20">Main</div>
+            <div class="px-5 pt-3 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase"
+                style="color: rgba(255,255,255,0.20);">Main</div>
             {!! navLink('admin.dashboard', 'bi-grid-3x3-gap', 'Dashboard') !!}
 
-            <div class="px-5 pt-4 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase text-white/20">User Management
-            </div>
+            <div class="px-5 pt-4 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase"
+                style="color: rgba(255,255,255,0.20);">User Management</div>
             {!! navLink('admin.advocates', 'bi-person-badge', 'Advocates') !!}
             {!! navLink('admin.clerks', 'bi-folder2-open', 'Clerks') !!}
             {!! navLink('admin.users', 'bi-people', 'All Users', $pendingCount ?? 0 > 0 ? $pendingCount ?? 0 : null) !!}
 
-            <div class="px-5 pt-4 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase text-white/20">Content</div>
+            <div class="px-5 pt-4 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase"
+                style="color: rgba(255,255,255,0.20);">Content</div>
             {!! navLink('admin.documents', 'bi-file-earmark-check', 'Documents') !!}
             {!! navLink('admin.courts.index', 'bi-building', 'Courts') !!}
             {!! navLink('admin.feedback', 'bi-star', 'Feedback') !!}
@@ -231,8 +256,8 @@
                     ->exists();
             @endphp
             @if ($isSuperAdmin)
-                <div class="px-5 pt-4 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase text-white/20">Super Admin
-                </div>
+                <div class="px-5 pt-4 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase"
+                    style="color: rgba(255,255,255,0.20);">Super Admin</div>
                 {!! navLink('super.roles', 'bi-shield-lock', 'Roles') !!}
                 {!! navLink('super.permissions', 'bi-key', 'Permissions') !!}
                 {!! navLink('super.activity', 'bi-clock-history', 'Activity Logs') !!}
@@ -241,16 +266,15 @@
         </nav>
 
         {{-- Footer --}}
-        <div class="flex-shrink-0 px-5 py-4 border-t border-white/[0.06]">
+        <div class="flex-shrink-0 px-5 py-4" style="border-top: 1px solid var(--sb-border);">
             <div class="flex items-center gap-3">
-                <div
-                    class="w-[34px] h-[34px] rounded-[8px] bg-ncard border border-gold/25
-                  flex items-center justify-center text-gold font-bold text-[0.82rem] flex-shrink-0">
+                <div class="w-[34px] h-[34px] rounded-[8px] flex items-center justify-center font-bold text-[0.82rem] flex-shrink-0"
+                    style="background: #0D1526; border: 1px solid var(--brand-border); color: var(--brand);">
                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                 </div>
                 <div class="overflow-hidden flex-1 min-w-0">
                     <div class="text-[0.82rem] font-semibold text-white truncate">{{ auth()->user()->name }}</div>
-                    <div class="font-mono text-[0.55rem] text-gold/80 uppercase tracking-wide">
+                    <div class="font-mono text-[0.55rem] uppercase tracking-wide" style="color: var(--brand-muted);">
                         {{ auth()->user()->role }}</div>
                 </div>
                 <form action="{{ route('logout') }}" method="POST">
@@ -275,8 +299,8 @@
         </button>
 
         <div class="flex items-center gap-2">
-            <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo"
-                class="w-7 h-7 rounded-full object-cover border border-gold/40">
+            <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo" class="w-7 h-7 rounded-full object-cover"
+                style="border: 1px solid var(--brand-border);">
             <span class="font-display font-bold text-[1.1rem] text-slate-800 truncate">@yield('page-title', 'Dashboard')</span>
         </div>
 
@@ -287,13 +311,13 @@
             @endphp
 
             <a href="{{ route('admin.documents') }}"
-                class="relative w-9 h-9 rounded-lg border border-slate-200 bg-white
-              flex items-center justify-center text-slate-500
-              hover:border-gold hover:text-gold transition-all">
+                class="bell-btn relative w-9 h-9 rounded-lg border border-slate-200 bg-white
+              flex items-center justify-center text-slate-500 transition-all">
                 <i class="bi bi-file-earmark-check text-[1rem]"></i>
                 @if ($di > 0)
                     <span
-                        class="absolute -top-1.5 -right-1.5 min-w-[17px] h-[17px] bg-gold rounded-full text-navy text-[0.5rem] font-bold flex items-center justify-center font-mono border-2 border-white px-0.5">{{ $di }}</span>
+                        class="absolute -top-1.5 -right-1.5 min-w-[17px] h-[17px] rounded-full text-[0.5rem] font-bold flex items-center justify-center font-mono border-2 border-white px-0.5"
+                        style="background: var(--brand); color: #060B16;">{{ $di }}</span>
                 @endif
             </a>
 
@@ -308,9 +332,8 @@
                 @endif
             </a>
 
-            <div
-                class="w-9 h-9 rounded-lg bg-ncard border border-gold/25
-                flex items-center justify-center text-gold font-bold text-[0.82rem]">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-[0.82rem]"
+                style="background: #0D1526; border: 1px solid var(--brand-border); color: var(--brand);">
                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
             </div>
         </div>
