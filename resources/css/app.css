@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -7,7 +7,7 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
-    --font-manrope: 'Manrope', sans-serif;
-    --font-syne: 'Manrope', sans-serif;
+    --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    --font-manrope: "Manrope", sans-serif;
+    --font-syne: "Manrope", sans-serif;
 }
