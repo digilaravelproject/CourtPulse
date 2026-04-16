@@ -39,6 +39,12 @@ class CheckAccountStatus
                 Auth::logout();
                 return redirect()->route('login')->withErrors(['email' => 'Your account has been rejected by the admin.']);
             }
+
+            // Redirect active users away from under-process if they refresh it
+            if ($user->status === 'active' && $request->route()?->getName() === 'under-process') {
+                $dashboard = in_array($user->role, ['admin', 'super_admin']) ? 'admin.dashboard' : $user->role . '.dashboard';
+                return redirect()->route($dashboard);
+            }
         }
 
         return $next($request);

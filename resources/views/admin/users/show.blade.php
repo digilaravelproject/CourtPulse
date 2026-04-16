@@ -106,7 +106,7 @@
                     @if ($user->status === 'pending')
                         <div class="mt-5 pt-4 border-t border-slate-100 flex gap-3">
                             <button
-                                onclick="openVerify({{ $user->id }},'{{ addslashes($user->name) }}','{{ $user->role }}','{{ $user->email }}','{{ $user->phone ?? '' }}','{{ $user->created_at->format('d M Y') }}','{{ $user->city ?? '' }}')"
+                                onclick="openVerify({{ $user->id }},'{{ addslashes($user->name) }}','{{ $user->role }}','{{ $user->email }}','{{ $user->phone ?? '' }}','{{ $user->created_at->format('d M Y') }}','{{ $user->city ?? '' }}', {{ $user->documents->where('status', 'pending')->count() }})"
                                 class="flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-bold
                    bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all shadow-sm shadow-green-200">
                                 <i class="bi bi-check-circle"></i> Verify
@@ -145,15 +145,17 @@
                                 <th class="px-4 py-3 text-right font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="awaitingTableBody">
                             @forelse($user->documents->where('status', 'pending') as $doc)
                                 <tr class="trow" data-docid="{{ $doc->id }}">
                                     <td class="font-medium text-slate-700">
                                         {{ ucwords(str_replace('_', ' ', $doc->document_type)) }}</td>
                                     <td>
-                                        <button onclick="openDocViewer('{{ Storage::url($doc->file_path) }}', '{{ ucwords(str_replace('_', ' ', $doc->document_type)) }}')"
-                                            class="inline-flex items-center gap-1.5 text-gold hover:text-gold-h text-[0.82rem] font-medium transition-colors">
-                                            <i class="bi bi-eye"></i> View PDF/Image
+                                        <button
+                                            onclick="openDocViewer('{{ addslashes(Storage::url($doc->file_path)) }}', '{{ addslashes(ucwords(str_replace('_', ' ', $doc->document_type))) }}')"
+                                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200
+                                         hover:border-gold hover:text-gold transition-all text-slate-600 text-[0.7rem] font-bold">
+                                            <i class="bi bi-eye"></i> View
                                         </button>
                                     </td>
                                     <td class="text-center">
@@ -164,14 +166,12 @@
                                     <td>
                                         <div class="flex items-center gap-1.5 justify-end">
                                             <button
-                                                onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Approved!','ok')"
-                                                data-body='{"status":"approved"}'
+                                                onclick="reviewDoc({{ $doc->id }}, 'approved', this)"
                                                 class="flex items-center gap-1 px-3 h-8 rounded-lg bg-green-500 hover:bg-green-600 text-white text-xs font-bold transition-all">
                                                 <i class="bi bi-check-lg"></i> Approve
                                             </button>
                                             <button
-                                                onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Rejected.','err')"
-                                                data-body='{"status":"rejected","rejection_reason":"Document not valid"}'
+                                                onclick="reviewDoc({{ $doc->id }}, 'rejected', this)"
                                                 class="flex items-center gap-1 px-3 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition-all">
                                                 <i class="bi bi-x-lg"></i> Reject
                                             </button>
@@ -200,14 +200,14 @@
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
-                        <tbody class="divide-y divide-slate-100">
+                        <tbody id="verifiedTableBody" class="divide-y divide-slate-100">
                             @forelse($user->documents->whereIn('status', ['approved', 'rejected']) as $doc)
                                 <tr class="trow bg-slate-50/30">
                                     <td class="px-4 py-3 font-medium text-slate-500 w-1/3 text-[0.8rem]">
                                         {{ ucwords(str_replace('_', ' ', $doc->document_type)) }}
                                     </td>
                                     <td class="px-4 py-3">
-                                        <button onclick="openDocViewer('{{ Storage::url($doc->file_path) }}', '{{ ucwords(str_replace('_', ' ', $doc->document_type)) }}')"
+                                        <button onclick="openDocViewer('{{ addslashes(Storage::url($doc->file_path)) }}', '{{ addslashes(ucwords(str_replace('_', ' ', $doc->document_type))) }}')"
                                             class="text-slate-400 hover:text-gold text-[0.75rem] flex items-center gap-1">
                                             <i class="bi bi-file-earmark"></i> Re-view
                                         </button>
@@ -313,6 +313,85 @@
                 document.getElementById('docFrame').src = '';
                 document.getElementById('docImage').src = '';
             }, 300);
+        }
+
+        function reviewDoc(id, status, btn) {
+            const reason = status === 'rejected' ? 'Document not valid' : '';
+            btn.disabled = true;
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i>';
+
+            fetch(`/admin/documents/${id}/review`, {
+                    method: 'PATCH',
+                    headers: {
+                        'X-CSRF-TOKEN': CSRF,
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        status,
+                        rejection_reason: reason
+                    })
+                })
+                .then(r => r.json())
+                .then(d => {
+                    if (d.success !== false) {
+                        showToast(status === 'approved' ? 'Approved!' : 'Rejected.', status === 'approved' ? 'ok' : 'err');
+                        
+                        const row = btn.closest('tr');
+                        const docType = row.cells[0].innerText;
+                        const viewBtn = row.querySelector('button[onclick^="openDocViewer"]');
+                        const viewOnclick = viewBtn ? viewBtn.getAttribute('onclick') : '';
+
+                        // Create new row for Verified table
+                        const newRow = document.createElement('tr');
+                        newRow.className = 'trow bg-slate-50/30';
+                        newRow.innerHTML = `
+                        <td class="px-4 py-3 font-medium text-slate-500 w-1/3 text-[0.8rem]">
+                            ${docType}
+                        </td>
+                        <td class="px-4 py-3">
+                            <button onclick="${viewOnclick}"
+                                class="text-slate-400 hover:text-gold text-[0.75rem] flex items-center gap-1">
+                                <i class="bi bi-file-earmark"></i> Re-view
+                            </button>
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            ${status === 'approved' ? `
+                                <span class="text-green-600 font-bold text-[0.65rem] uppercase tracking-widest inline-flex items-center gap-1">
+                                    <i class="bi bi-check-circle"></i> Verified
+                                </span>` : `
+                                <div class="flex flex-col items-end">
+                                    <span class="text-red-500 font-bold text-[0.65rem] uppercase tracking-widest">Rejected</span>
+                                    <span class="text-[0.6rem] text-slate-400">${reason}</span>
+                                </div>`}
+                        </td>`;
+
+                        const verifiedBody = document.getElementById('verifiedTableBody');
+                        if (verifiedBody.querySelector('td[colspan="3"]')) {
+                            verifiedBody.innerHTML = '';
+                        }
+                        verifiedBody.appendChild(newRow);
+
+                        // Remove from pending
+                        row.remove();
+
+                        // If pending empty, show helper
+                        const pendingBody = document.getElementById('awaitingTableBody');
+                        if (pendingBody.children.length === 0) {
+                            pendingBody.innerHTML = '<tr><td colspan="4" class="py-10 text-center text-slate-400 text-sm italic">All documents reviewed or nothing pending.</td></tr>';
+                        }
+                    } else {
+                        showToast(d.message || 'Error', 'err');
+                        btn.disabled = false;
+                        btn.innerHTML = orig;
+                    }
+                })
+                .catch(() => {
+                    showToast('Request failed', 'err');
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                });
         }
 
         // After verify on show page, redirect back

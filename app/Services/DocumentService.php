@@ -70,6 +70,20 @@ class DocumentService
      */
     public function review(Document $document, string $status, ?string $reason = null): Document
     {
-        return $this->repo->review($document, $status, $reason);
+        $doc = $this->repo->review($document, $status, $reason);
+
+        // If this was an approval, check if we can activate the user
+        if ($status === 'approved') {
+            $user = $doc->user;
+            
+            // Check if all their documents are now approved
+            $pendingCount = $user->documents()->where('status', 'pending')->count();
+            
+            if ($pendingCount === 0 && $user->status === 'pending') {
+                $user->update(['status' => 'active']);
+            }
+        }
+
+        return $doc;
     }
 }

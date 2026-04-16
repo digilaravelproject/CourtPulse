@@ -60,6 +60,9 @@ class AdminRepository
 
     public function verifyUser(User $user): void
     {
+        // Automatically approve all pending documents when user is verified
+        $user->documents()->where('status', 'pending')->update(['status' => 'approved']);
+        
         $user->update(['status' => 'active']);
     }
 

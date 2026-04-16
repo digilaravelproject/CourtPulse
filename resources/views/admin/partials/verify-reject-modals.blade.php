@@ -40,10 +40,10 @@
                 </div>
             @endforeach
         </div>
-        <div
+        <div id="v_pending_warning"
             class="flex items-start gap-3 px-4 py-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 text-xs leading-relaxed">
             <i class="bi bi-info-circle-fill flex-shrink-0 mt-0.5"></i>
-            Once verified, this user gets full dashboard access and appears in the professional directory.
+            <div>Once verified, this user gets full dashboard access and appears in the professional directory.</div>
         </div>
     </div>
     <div class="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50/80 rounded-b-2xl">

@@ -120,15 +120,29 @@
             <span class="spinner-grow spinner-grow-sm"></span> Verification In Progress
         </div>
 
-        <div class="d-block">
+        <div class="d-flex flex-column align-items-center gap-3">
+            <button onclick="location.reload()" class="btn btn-primary px-5 py-2.5 rounded-pill border-0 shadow-lg" style="background: var(--accent); color: var(--navy-deep); font-weight: 700;">
+                <i class="bi bi-arrow-clockwise me-2"></i> Refresh Status
+            </button>
+
             <form action="{{ route('logout') }}" method="POST" class="d-inline">
                 @csrf
-                <button type="submit" class="btn-logout border-0 bg-transparent mt-4">
+                <button type="submit" class="btn-logout border-0 bg-transparent">
                     <i class="bi bi-box-arrow-left me-2"></i> Log Out
                 </button>
             </form>
         </div>
     </div>
+
+    <script>
+        // If they are active and somehow landed here, redirect them
+        const status = "{{ auth()->user()->status }}";
+        const role = "{{ auth()->user()->role }}";
+        if (status === 'active') {
+             const dashboard = (role === 'admin' || role === 'super_admin') ? '/admin/dashboard' : `/${role}/dashboard`;
+             window.location.href = dashboard;
+        }
+    </script>
 
 </body>
 </html>
