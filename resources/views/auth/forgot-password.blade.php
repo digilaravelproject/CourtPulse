@@ -5,21 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password — Court Pulse</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+
     <style>
         :root {
-            --accent: #B4B4FE;
-            --accent-h: #9A9AF8;
-            --navy-deep: #0A1120;
-            --navy-bg: #0F172A;
-            --border: rgba(255, 255, 255, 0.1);
-            --muted: #94A3B8;
-            --text: #F1F5F9;
+            /* Brand Colors from Landing Page */
+            --navy: #050812;
+            --navy2: #080d1a;
+            --navy3: #0b1120;
+            --card: #0e1526;
+            --card2: #111830;
+            --blue: #B4B4FE;
+            --blue2: #9999f0;
+            --blue-glow: rgba(180, 180, 254, 0.3);
+            --border: rgba(255, 255, 255, 0.06);
+            --border2: rgba(180, 180, 254, 0.35);
+            --text: #CBD5E1;
+            --text2: #94A3B8;
+            --muted: #4A5568;
+            --white: #F8FAFC;
         }
 
         * {
@@ -29,15 +38,18 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--navy-bg);
+            font-family: 'Manrope', sans-serif;
+            background: var(--navy);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
+            overflow-x: hidden;
         }
 
+        /* ── LEFT PANEL ─────────────────────────────────── */
         .auth-left {
             flex: 1;
-            background: var(--navy-deep);
+            background: var(--navy);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -47,23 +59,27 @@
             border-right: 1px solid var(--border);
         }
 
+        /* Accent cross pattern */
         .auth-left::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B4B4FE' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-image:
+                linear-gradient(rgba(180, 180, 254, .03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(180, 180, 254, .03) 1px, transparent 1px);
+            background-size: 60px 60px;
             pointer-events: none;
         }
 
+        /* Glow blobs */
         .left-glow-1 {
             position: absolute;
             top: -15%;
             right: -15%;
-            width: 380px;
-            height: 380px;
+            width: 450px;
+            height: 450px;
             border-radius: 50%;
-            background: rgba(180, 180, 254, 0.05);
-            filter: blur(100px);
+            background: radial-gradient(circle, rgba(180, 180, 254, .08) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -71,11 +87,10 @@
             position: absolute;
             bottom: -20%;
             left: -10%;
-            width: 300px;
-            height: 300px;
+            width: 400px;
+            height: 400px;
             border-radius: 50%;
-            background: rgba(30, 41, 59, 0.4);
-            filter: blur(80px);
+            background: radial-gradient(circle, rgba(180, 180, 254, .05) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -104,225 +119,245 @@
         .left-content {
             position: relative;
             z-index: 1;
+            max-width: 500px;
         }
 
-        .left-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
+        /* Logo styling */
+        .nav-logo {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--white);
             text-decoration: none;
+            letter-spacing: .02em;
             margin-bottom: 56px;
+            display: inline-flex;
         }
 
-        .logo-badge {
-            width: 40px;
-            height: 40px;
-            border-radius: 9px;
-            border: 1px solid rgba(180, 180, 254, 0.4);
-            background: rgba(180, 180, 254, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-            font-size: 1.1rem;
+        .nav-logo img {
+            border-radius: 6px;
         }
 
         .left-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 3.5vw, 2.8rem);
-            font-weight: 700;
-            color: white;
-            line-height: 1.12;
-            margin-bottom: 18px;
+            font-family: 'Manrope', sans-serif;
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.05;
+            margin-bottom: 20px;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
         }
 
         .accent-italic {
-            font-style: italic;
-            color: var(--accent);
+            color: var(--blue);
         }
 
         .left-desc {
-            font-size: 0.92rem;
-            color: rgba(255, 255, 255, 0.45);
-            line-height: 1.75;
-            max-width: 360px;
-            font-weight: 300;
-            margin-bottom: 40px;
+            font-size: 0.95rem;
+            color: var(--text2);
+            line-height: 1.7;
+            max-width: 400px;
+            font-weight: 400;
+            margin-bottom: 44px;
         }
 
-        .role-list {
+        .rule-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 14px;
         }
 
-        .role-item {
+        .rule-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 0.82rem;
-            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+            color: var(--text2);
+            font-weight: 500;
         }
 
-        .role-dot {
-            width: 6px;
-            height: 6px;
+        .rule-dot {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            background: var(--accent);
+            background: var(--blue);
             flex-shrink: 0;
-            box-shadow: 0 0 6px rgba(180, 180, 254, 0.4);
+            box-shadow: 0 0 8px rgba(180, 180, 254, 0.4);
         }
 
+        /* ── RIGHT PANEL (Dark Mode Native) ─────────────────────────────────── */
         .auth-right {
-            width: 440px;
-            background: white;
+            width: 480px;
+            background: var(--navy2);
             display: flex;
             flex-direction: column;
             justify-content: center;
             padding: 56px 48px;
             flex-shrink: 0;
+            overflow-y: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Mobile only logo */
+        .mobile-logo {
+            display: none;
+            margin-bottom: 30px;
         }
 
         .auth-heading {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.9rem;
-            font-weight: 700;
-            color: #0F172A;
-            margin-bottom: 6px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
         }
 
         .auth-sub {
-            font-size: 0.86rem;
-            color: #64748B;
-            margin-bottom: 28px;
+            font-size: 0.85rem;
+            color: var(--text2);
+            margin-bottom: 32px;
             line-height: 1.6;
         }
 
+        /* alerts */
         .alert-cp {
             border-radius: 8px;
-            padding: 11px 14px;
+            padding: 12px 16px;
             font-size: 0.82rem;
+            font-weight: 500;
             display: flex;
             align-items: flex-start;
-            gap: 8px;
-            margin-bottom: 20px;
+            gap: 10px;
+            margin-bottom: 24px;
             border: 1px solid;
             line-height: 1.5;
         }
 
         .alert-error {
-            background: rgba(239, 68, 68, 0.06);
-            border-color: rgba(239, 68, 68, 0.2);
-            color: #dc2626;
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
         }
 
         .alert-success {
-            background: rgba(34, 197, 94, 0.06);
-            border-color: rgba(34, 197, 94, 0.25);
-            color: #16a34a;
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: #4ade80;
         }
 
+        /* form */
         .cp-label {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.63rem;
-            letter-spacing: 1.2px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text2);
             text-transform: uppercase;
-            color: #64748B;
+            letter-spacing: 0.08em;
             display: block;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
         }
 
         .cp-input {
             width: 100%;
-            border: 1px solid #E2E8F0;
-            border-radius: 7px;
-            padding: 11px 14px;
-            font-size: 0.875rem;
-            font-family: 'Inter', sans-serif;
-            color: #0F172A;
-            background: #FAFAFA;
-            transition: all 0.2s;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 0.88rem;
+            color: var(--white);
+            transition: all 0.25s;
+            font-family: 'Manrope', sans-serif;
         }
 
         .cp-input:focus {
             outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(180, 180, 254, 0.1);
-            background: white;
+            border-color: var(--border2);
+            background: var(--card2);
+            box-shadow: 0 0 0 3px rgba(180, 180, 254, 0.08);
+        }
+
+        .cp-input::placeholder {
+            color: var(--muted);
         }
 
         .cp-input.is-invalid {
             border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
         }
 
         .invalid-msg {
-            font-size: 0.78rem;
-            color: #ef4444;
-            margin-top: 5px;
+            font-size: 0.72rem;
+            color: #fca5a5;
+            margin-top: 6px;
         }
 
+        /* Info box */
         .info-box {
             background: rgba(180, 180, 254, 0.05);
-            border: 1px solid rgba(180, 180, 254, 0.2);
+            border: 1px solid rgba(180, 180, 254, 0.15);
             border-radius: 8px;
-            padding: 12px 14px;
+            padding: 14px 16px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: flex-start;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         .info-box-text {
             font-size: 0.8rem;
-            color: #64748B;
+            color: var(--text2);
             line-height: 1.6;
+            font-weight: 500;
         }
 
         .info-box-text strong {
-            color: #5B5BE0;
+            color: var(--blue);
         }
 
         .btn-submit {
             width: 100%;
-            background: var(--accent);
-            color: var(--navy-deep);
+            background: var(--blue);
+            color: #050812;
             border: none;
-            padding: 13px;
+            padding: 14px;
             border-radius: 8px;
-            font-size: 0.92rem;
-            font-weight: 700;
+            font-size: 0.85rem;
+            font-weight: 800;
             cursor: pointer;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Manrope', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
             transition: all 0.25s;
-            box-shadow: 0 4px 16px rgba(180, 180, 254, 0.25);
+            margin-top: 10px;
         }
 
         .btn-submit:hover {
-            background: var(--accent-h);
-            transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(180, 180, 254, 0.35);
+            background: var(--blue2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--blue-glow);
         }
 
         .auth-link {
-            color: var(--accent);
+            color: var(--blue);
             font-weight: 600;
             text-decoration: none;
             font-size: 0.85rem;
+            transition: color 0.2s;
         }
 
         .auth-link:hover {
-            color: var(--accent-h);
+            color: var(--white);
         }
 
-        @media(max-width:900px) {
+        /* responsive */
+        @media(max-width:991px) {
             .auth-left {
                 display: none;
             }
@@ -330,14 +365,26 @@
             .auth-right {
                 width: 100%;
                 min-height: 100vh;
-                padding: 40px 28px;
+                padding: 40px 32px;
                 justify-content: center;
+                background: var(--navy);
+            }
+
+            /* Center mobile logo */
+            .mobile-logo {
+                display: flex;
+                align-self: center;
+                margin-bottom: 30px;
             }
         }
 
         @media(max-width:480px) {
             .auth-right {
-                padding: 32px 20px;
+                padding: 32px 24px;
+            }
+
+            .auth-heading {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -352,30 +399,41 @@
             <div class="left-ring-1"></div>
             <div class="left-ring-2"></div>
             <div class="left-content">
-                <a href="{{ route('home') }}" class="left-logo">
-                    <div class="logo-badge">⚖</div> Court Pulse
+
+                <a href="{{ route('home') }}" class="nav-logo align-items-center">
+                    <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo"
+                        style="height:40px; width:auto; margin-right:8px;">
+                    Court Pulse
                 </a>
+
                 <h1 class="left-title">Recover Your<br><span class="accent-italic">Account.</span></h1>
                 <p class="left-desc">Enter your registered email and we'll send a secure reset link. Valid for 60
                     minutes.</p>
-                <div class="role-list">
-                    <div class="role-item">
-                        <div class="role-dot"></div> Secure link sent instantly to your inbox
+
+                <div class="rule-list">
+                    <div class="rule-item">
+                        <div class="rule-dot"></div> Secure link sent instantly to your inbox
                     </div>
-                    <div class="role-item">
-                        <div class="role-dot"></div> Link expires in 60 minutes
+                    <div class="rule-item">
+                        <div class="rule-dot"></div> Link expires in 60 minutes
                     </div>
-                    <div class="role-item">
-                        <div class="role-dot"></div> Your password stays safe until you reset
+                    <div class="rule-item">
+                        <div class="rule-dot"></div> Your password stays safe until you reset
                     </div>
-                    <div class="role-item">
-                        <div class="role-dot"></div> Court Pulse never asks for your password
+                    <div class="rule-item">
+                        <div class="rule-dot"></div> Court Pulse never asks for your password
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="auth-right">
+
+            <a href="{{ route('home') }}" class="nav-logo mobile-logo align-items-center">
+                <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo"
+                    style="height:34px; width:auto; margin-right:8px;">
+                Court Pulse
+            </a>
 
             @if (session('status'))
                 <div class="alert-cp alert-success">
@@ -386,7 +444,7 @@
 
             @if ($errors->any())
                 <div class="alert-cp alert-error">
-                    <i class="bi bi-exclamation-circle-fill" style="flex-shrink:0;margin-top:1px"></i>
+                    <i class="bi bi-exclamation-triangle-fill" style="flex-shrink:0;margin-top:1px"></i>
                     <span>{{ $errors->first() }}</span>
                 </div>
             @endif
@@ -395,7 +453,8 @@
             <div class="auth-sub">Enter your email address and we'll send you a link to reset your password.</div>
 
             <div class="info-box">
-                <i class="bi bi-lightbulb" style="color:var(--accent);font-size:16px;flex-shrink:0;margin-top:1px"></i>
+                <i class="bi bi-lightbulb-fill"
+                    style="color:var(--blue);font-size:18px;flex-shrink:0;margin-top:1px"></i>
                 <div class="info-box-text">
                     Check your <strong>spam / junk folder</strong> if you don't receive the email within a few minutes.
                 </div>
@@ -406,20 +465,20 @@
                 <div class="mb-4">
                     <label class="cp-label">Email Address</label>
                     <input type="email" name="email" value="{{ old('email') }}" required autofocus
-                        placeholder="you@example.com" class="cp-input {{ $errors->has('email') ? 'is-invalid' : '' }}">
+                        placeholder="you@firm.legal" class="cp-input {{ $errors->has('email') ? 'is-invalid' : '' }}">
                     @error('email')
                         <div class="invalid-msg"><i class="bi bi-exclamation-circle"></i> {{ $message }}</div>
                     @enderror
                 </div>
 
                 <button type="submit" class="btn-submit mb-4">
-                    <i class="bi bi-send"></i> Send Reset Link
+                    <i class="bi bi-send-fill" style="font-size: 0.95rem;"></i> Send Reset Link
                 </button>
 
-                <div class="text-center">
-                    <span style="font-size:0.85rem;color:#64748B;">Remember your password? </span>
+                <div class="text-center mt-3">
+                    <span style="font-size:0.85rem;color:var(--muted);font-weight:500;">Remember your password? </span>
                     <a href="{{ route('login') }}" class="auth-link">
-                        <i class="bi bi-arrow-left" style="font-size:0.75rem;"></i> Back to Login
+                        Back to Login
                     </a>
                 </div>
             </form>

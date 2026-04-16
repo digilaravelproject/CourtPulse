@@ -5,20 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register — Court Pulse</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+
     <style>
         :root {
-            --accent: #B4B4FE;
-            --accent-h: #9A9AF8;
-            --navy-deep: #0A1120;
-            --navy-bg: #0F172A;
-            --border-dim: rgba(255, 255, 255, 0.1);
-            --muted: #94A3B8;
+            /* Brand Colors from Landing Page */
+            --navy: #050812;
+            --navy2: #080d1a;
+            --navy3: #0b1120;
+            --card: #0e1526;
+            --card2: #111830;
+            --blue: #B4B4FE;
+            --blue2: #9999f0;
+            --blue-glow: rgba(180, 180, 254, 0.3);
+            --border: rgba(255, 255, 255, 0.06);
+            --border2: rgba(180, 180, 254, 0.35);
+            --text: #CBD5E1;
+            --text2: #94A3B8;
+            --muted: #4A5568;
+            --white: #F8FAFC;
         }
 
         * {
@@ -28,44 +38,48 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--navy-bg);
+            font-family: 'Manrope', sans-serif;
+            background: var(--navy);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
+            overflow-x: hidden;
         }
 
         /* ── LEFT PANEL ──────────────────────────────────── */
         .auth-left {
             flex: 1;
-            background: var(--navy-deep);
+            background: var(--navy);
             display: flex;
             flex-direction: column;
             justify-content: center;
             padding: 64px;
             position: relative;
             overflow: hidden;
-            border-right: 1px solid var(--border-dim);
+            border-right: 1px solid var(--border);
         }
 
-        /* Accent cross pattern — identical to landing page */
+        /* Accent cross pattern */
         .auth-left::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B4B4FE' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-image:
+                linear-gradient(rgba(180, 180, 254, .03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(180, 180, 254, .03) 1px, transparent 1px);
+            background-size: 60px 60px;
             pointer-events: none;
         }
 
-        /* Glow blobs — same as landing hero */
+        /* Glow blobs */
         .glow-1 {
             position: absolute;
             top: -15%;
             right: -15%;
-            width: 380px;
-            height: 380px;
+            width: 450px;
+            height: 450px;
             border-radius: 50%;
-            background: rgba(180, 180, 254, 0.05);
-            filter: blur(100px);
+            background: radial-gradient(circle, rgba(180, 180, 254, .08) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -73,308 +87,336 @@
             position: absolute;
             bottom: -20%;
             left: -10%;
-            width: 300px;
-            height: 300px;
+            width: 400px;
+            height: 400px;
             border-radius: 50%;
-            background: rgba(30, 41, 59, 0.4);
-            filter: blur(80px);
-            pointer-events: none;
-        }
-
-        /* Decorative rings */
-        .ring-1 {
-            position: absolute;
-            top: -80px;
-            right: -80px;
-            width: 340px;
-            height: 340px;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            pointer-events: none;
-        }
-
-        .ring-2 {
-            position: absolute;
-            bottom: -100px;
-            left: -60px;
-            width: 260px;
-            height: 260px;
-            border-radius: 50%;
-            border: 1px solid rgba(180, 180, 254, 0.08);
+            background: radial-gradient(circle, rgba(180, 180, 254, .05) 0%, transparent 70%);
             pointer-events: none;
         }
 
         .left-inner {
             position: relative;
             z-index: 1;
+            max-width: 500px;
         }
 
-        .left-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
+        /* Logo styling */
+        .nav-logo {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--white);
             text-decoration: none;
+            letter-spacing: .02em;
             margin-bottom: 48px;
+            display: inline-flex;
         }
 
-        .logo-badge {
-            width: 40px;
-            height: 40px;
-            border-radius: 9px;
-            border: 1px solid rgba(180, 180, 254, 0.4);
-            background: rgba(180, 180, 254, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-            font-size: 1.1rem;
+        .nav-logo img {
+            border-radius: 6px;
         }
 
         .left-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.9rem, 3vw, 2.6rem);
-            font-weight: 700;
-            color: white;
-            line-height: 1.12;
+            font-family: 'Manrope', sans-serif;
+            font-size: clamp(2.2rem, 3.5vw, 3rem);
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.05;
             margin-bottom: 16px;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
         }
 
         .left-title .gi {
-            font-style: italic;
-            color: var(--accent);
+            color: var(--blue);
         }
 
         .left-desc {
-            font-size: 0.88rem;
-            color: rgba(255, 255, 255, 0.42);
-            line-height: 1.78;
-            max-width: 340px;
-            font-weight: 300;
-            margin-bottom: 36px;
+            font-size: 0.95rem;
+            color: var(--text2);
+            line-height: 1.7;
+            max-width: 400px;
+            font-weight: 400;
+            margin-bottom: 40px;
         }
 
         /* 2×2 role mini cards on left */
         .role-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            gap: 10px;
         }
 
         .role-mini {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 9px;
-            padding: 13px 14px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.25s;
             user-select: none;
         }
 
         .role-mini:hover,
         .role-mini.selected {
-            background: rgba(180, 180, 254, 0.12);
-            border-color: rgba(180, 180, 254, 0.38);
+            background: var(--card2);
+            border-color: var(--border2);
+            transform: translateY(-2px);
         }
 
         .rm-icon {
-            font-size: 1.2rem;
-            margin-bottom: 5px;
+            font-size: 1.3rem;
+            margin-bottom: 6px;
         }
 
         .rm-name {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
             transition: color 0.2s;
+            letter-spacing: .02em;
         }
 
         .role-mini:hover .rm-name,
         .role-mini.selected .rm-name {
-            color: var(--accent);
+            color: var(--blue);
         }
 
         .rm-note {
-            font-size: 0.65rem;
-            color: rgba(255, 255, 255, 0.28);
-            margin-top: 2px;
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-top: 3px;
         }
 
-        /* ── RIGHT PANEL ──────────────────────────────────── */
+        /* ── RIGHT PANEL (Dark Mode Native) ──────────────────────────────────── */
         .auth-right {
-            width: 500px;
+            width: 540px;
             flex-shrink: 0;
-            background: white;
+            background: var(--navy2);
             display: flex;
             flex-direction: column;
             justify-content: center;
             padding: 48px 44px;
             overflow-y: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Mobile only logo */
+        .mobile-logo {
+            display: none;
+            margin-bottom: 30px;
         }
 
         .auth-heading {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.85rem;
-            font-weight: 700;
-            color: #0F172A;
-            margin-bottom: 4px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
         }
 
         .auth-sub {
             font-size: 0.85rem;
-            color: #64748B;
-            margin-bottom: 24px;
+            color: var(--text2);
+            margin-bottom: 28px;
         }
 
-        /* Role tabs */
+        /* Role tabs (Dark Theme) */
         .role-tabs {
             display: flex;
-            gap: 4px;
-            background: #F8FAFC;
-            border-radius: 8px;
-            padding: 4px;
-            margin-bottom: 20px;
-            border: 1px solid #E2E8F0;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 6px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
         }
 
         .role-tab {
             flex: 1;
-            padding: 8px 6px;
+            padding: 10px 6px;
             border: none;
             background: transparent;
-            color: #64748B;
+            color: var(--text2);
             border-radius: 6px;
-            font-size: 0.76rem;
-            font-weight: 500;
+            font-size: 0.8rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Manrope', sans-serif;
             text-align: center;
+            letter-spacing: 0.02em;
         }
 
         .role-tab.active {
-            background: white;
-            color: #5B5BE0;
-            font-weight: 600;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+            background: var(--blue);
+            color: var(--navy);
+            font-weight: 800;
+            box-shadow: 0 2px 8px var(--blue-glow);
         }
 
         /* Notes */
         .note-box {
             border-radius: 8px;
-            padding: 11px 13px;
-            font-size: 0.77rem;
+            padding: 12px 14px;
+            font-size: 0.8rem;
             display: flex;
             align-items: flex-start;
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 10px;
+            margin-bottom: 20px;
             border: 1px solid;
+            font-weight: 500;
         }
 
         .note-prof {
             background: rgba(180, 180, 254, 0.08);
             border-color: rgba(180, 180, 254, 0.25);
-            color: #5B5BE0;
+            color: var(--blue);
         }
 
         .note-guest {
             background: rgba(34, 197, 94, 0.06);
             border-color: rgba(34, 197, 94, 0.2);
-            color: #16a34a;
+            color: #4ade80;
         }
 
         .note-error {
-            background: rgba(239, 68, 68, 0.06);
-            border-color: rgba(239, 68, 68, 0.2);
-            color: #dc2626;
-            font-size: 0.8rem;
-            align-items: center;
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
         }
 
         /* Form */
         .cp-label {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.62rem;
-            letter-spacing: 1.2px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text2);
             text-transform: uppercase;
-            color: #64748B;
+            letter-spacing: 0.08em;
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .cp-input,
         .cp-select {
             width: 100%;
-            border: 1px solid #E2E8F0;
-            border-radius: 7px;
-            padding: 10px 13px;
-            font-size: 0.875rem;
-            font-family: 'Inter', sans-serif;
-            color: #0F172A;
-            background: #FAFAFA;
-            transition: all 0.2s;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.88rem;
+            color: var(--white);
+            transition: all 0.25s;
+            font-family: 'Manrope', sans-serif;
         }
 
         .cp-input:focus,
         .cp-select:focus {
             outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(180, 180, 254, 0.1);
-            background: white;
+            border-color: var(--border2);
+            background: var(--card2);
+            box-shadow: 0 0 0 3px rgba(180, 180, 254, 0.08);
+        }
+
+        .cp-input::placeholder {
+            color: var(--muted);
         }
 
         .cp-input.is-invalid {
             border-color: #ef4444;
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
+            background: rgba(239, 68, 68, 0.05);
         }
 
         .error-msg {
             font-size: 0.72rem;
-            color: #ef4444;
-            margin-top: 4px;
+            color: #fca5a5;
+            margin-top: 6px;
         }
 
         .btn-submit {
             width: 100%;
-            background: var(--accent);
-            color: var(--navy-deep);
+            background: var(--blue);
+            color: #050812;
             border: none;
-            padding: 13px;
+            padding: 14px;
             border-radius: 8px;
-            font-size: 0.92rem;
-            font-weight: 700;
+            font-size: 0.85rem;
+            font-weight: 800;
             cursor: pointer;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Manrope', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
             transition: all 0.25s;
-            box-shadow: 0 4px 16px rgba(180, 180, 254, 0.25);
-            margin-top: 8px;
+            margin-top: 12px;
         }
 
         .btn-submit:hover {
-            background: var(--accent-h);
-            transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(180, 180, 254, 0.35);
+            background: var(--blue2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--blue-glow);
         }
 
         .auth-link {
-            color: var(--accent);
+            color: var(--blue);
             font-weight: 600;
             text-decoration: none;
             font-size: 0.85rem;
+            transition: color 0.2s;
         }
 
         .auth-link:hover {
-            color: var(--accent-h);
+            color: var(--white);
         }
 
-        @media(max-width:960px) {
+        /* Checkbox styling */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 12px;
+            margin-bottom: 8px;
+        }
+
+        .custom-checkbox {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--border2);
+            border-radius: 4px;
+            background: var(--card);
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .custom-checkbox:checked {
+            background: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .custom-checkbox:checked::after {
+            content: '';
+            width: 4px;
+            height: 9px;
+            border: solid #050812;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg) translateY(-1px);
+        }
+
+        /* responsive */
+        @media(max-width:991px) {
             .auth-left {
                 display: none;
             }
@@ -382,13 +424,26 @@
             .auth-right {
                 width: 100%;
                 min-height: 100vh;
-                padding: 36px 24px;
+                padding: 40px 32px;
+                justify-content: center;
+                background: var(--navy);
+            }
+
+            /* Center mobile logo */
+            .mobile-logo {
+                display: flex;
+                align-self: center;
+                margin-bottom: 30px;
             }
         }
 
         @media(max-width:480px) {
             .auth-right {
-                padding: 28px 16px;
+                padding: 32px 20px;
+            }
+
+            .auth-heading {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -400,12 +455,11 @@
         <div class="auth-left">
             <div class="glow-1"></div>
             <div class="glow-2"></div>
-            <div class="ring-1"></div>
-            <div class="ring-2"></div>
 
             <div class="left-inner">
-                <a href="{{ route('home') }}" class="left-logo">
-                    <div class="logo-badge">⚖</div>
+                <a href="{{ route('home') }}" class="nav-logo align-items-center">
+                    <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo"
+                        style="height:40px; width:auto; margin-right:8px;">
                     Court Pulse
                 </a>
 
@@ -443,12 +497,20 @@
         </div>
 
         <div class="auth-right">
+
+            <a href="{{ route('home') }}" class="nav-logo mobile-logo align-items-center">
+                <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo"
+                    style="height:34px; width:auto; margin-right:8px;">
+                Court Pulse
+            </a>
+
             <div class="auth-heading">Create Account</div>
             <div class="auth-sub">Join Court Pulse — India's legal professional network</div>
 
             @if ($errors->any())
                 <div class="note-box note-error">
-                    <i class="bi bi-exclamation-circle-fill"></i> {{ $errors->first() }}
+                    <i class="bi bi-exclamation-triangle-fill mt-1"></i>
+                    <span>{{ $errors->first() }}</span>
                 </div>
             @endif
 
@@ -464,11 +526,11 @@
                 <input type="hidden" name="role" id="roleInput" value="{{ old('role', 'advocate') }}">
 
                 <div class="note-box note-prof" id="noteProf">
-                    <i class="bi bi-clock-fill" style="flex-shrink:0;margin-top:1px;"></i>
-                    <span>Professionals need document upload &amp; admin verification after registration.</span>
+                    <i class="bi bi-shield-lock-fill mt-1"></i>
+                    <span>Professionals require document upload &amp; admin verification after registration.</span>
                 </div>
                 <div class="note-box note-guest d-none" id="noteGuest">
-                    <i class="bi bi-check-circle-fill" style="flex-shrink:0;margin-top:1px;"></i>
+                    <i class="bi bi-check-circle-fill mt-1"></i>
                     <span>Guest accounts are activated instantly — no documents needed!</span>
                 </div>
 
@@ -532,22 +594,22 @@
                         value="{{ old('membership_number_reg') }}">
                 </div>
 
-                <div class="d-flex align-items-start gap-2 mt-3 mb-1">
-                    <input type="checkbox" id="terms" name="terms" required
-                        style="margin-top:3px;accent-color:var(--accent);width:15px;height:15px;flex-shrink:0;">
-                    <label for="terms" style="font-size:0.8rem;color:#64748B;cursor:pointer;margin:0;">
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="terms" name="terms" class="custom-checkbox" required>
+                    <label for="terms"
+                        style="font-size:0.8rem;color:var(--text2);cursor:pointer;margin:0;font-weight:500;">
                         I agree to the <a href="#" class="auth-link">Terms of Use</a>
                         and <a href="#" class="auth-link">Privacy Policy</a>
                     </label>
                 </div>
 
                 <button type="submit" class="btn-submit">
-                    <i class="bi bi-person-plus-fill"></i> Create Account
+                    Create Account <i class="bi bi-arrow-right"></i>
                 </button>
             </form>
 
-            <div class="text-center mt-3">
-                <span style="font-size:0.85rem;color:#64748B;">Already have an account? </span>
+            <div class="text-center mt-4">
+                <span style="font-size:0.85rem;color:var(--muted);font-weight:500;">Already have an account? </span>
                 <a href="{{ route('login') }}" class="auth-link">Sign in</a>
             </div>
         </div>
