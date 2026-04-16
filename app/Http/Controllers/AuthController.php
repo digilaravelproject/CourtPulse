@@ -23,7 +23,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users',
             'phone'    => 'required|digits:10',
@@ -32,15 +32,15 @@ class AuthController extends Controller
         ]);
 
         $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'phone'    => $request->phone,
-            'password' => Hash::make($request->password),
-            'role'     => $request->role,
-            'status'   => $request->role === 'guest' ? 'active' : 'pending',
+            'name'     => $data['name'],
+            'email'    => $data['email'],
+            'phone'    => $data['phone'],
+            'password' => Hash::make($data['password']),
+            'role'     => $data['role'],
+            'status'   => $data['role'] === 'guest' ? 'active' : 'pending',
         ]);
 
-        $user->assignRole($request->role);
+        $user->assignRole($data['role']);
 
         // ✅ Welcome Email bhejne ka code yahan add kiya
         Mail::to($user->email)->send(new WelcomeEmail($user));
@@ -48,7 +48,7 @@ class AuthController extends Controller
         // Login the user to maintain session for Step 2
         Auth::login($user);
 
-        if ($request->role === 'guest') {
+        if ($data['role'] === 'guest') {
             return redirect()->route('guest.dashboard');
         }
 

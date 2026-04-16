@@ -8,12 +8,15 @@ use App\Models\Document;
 use App\Models\ConnectionRequest;
 use App\Http\Controllers\FeedbackController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class ClerkController extends Controller
 {
     public function dashboard()
     {
-        $user    = auth()->user();
+        /** @var \App\Models\User $user */
+        $user    = Auth::user();
         $profile = $user->clerkProfile;
 
         $documentsStatus = [
@@ -44,35 +47,63 @@ class ClerkController extends Controller
 
     public function profile()
     {
-        $user    = auth()->user();
+        /** @var \App\Models\User $user */
+        $user    = Auth::user();
         $profile = $user->clerkProfile ?? new ClerkProfile();
         return view('clerk.profile', compact('user', 'profile'));
     }
 
     public function updateProfile(Request $request)
     {
+        if ($request->boolean('change_password')) {
+            $request->validate([
+                'current_password' => 'required',
+                'password'         => 'required|string|min:8|confirmed',
+            ]);
+
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+
+            if (!Hash::check($request->current_password, $user->password)) {
+                return back()->withErrors(['current_password' => 'Current password does not match.']);
+            }
+
+            $user->update(['password' => Hash::make($request->password)]);
+            return back()->with('success', 'Password updated successfully!');
+        }
+
         $request->validate([
             'clerk_id_number'  => 'required|string|max:100',
+            'employee_id'      => 'nullable|string|max:100',
             'court_name'       => 'required|string|max:255',
             'court_city'       => 'required|string|max:100',
             'court_state'      => 'required|string|max:100',
             'department'       => 'nullable|string|max:200',
+            'designation'      => 'nullable|string|max:100',
             'experience_years' => 'nullable|integer|min:0|max:50',
             'bio'              => 'nullable|string|max:2000',
+            'phone'            => 'nullable|string|max:20',
+            'city'             => 'nullable|string|max:100',
         ]);
 
-        $user = auth()->user();
+        $user = Auth::user();
 
-        $user->update(['city' => $request->court_city, 'state' => $request->court_state]);
+        $user->update([
+            'phone' => $request->phone,
+            'city'  => $request->city,
+            'state' => $request->court_state
+        ]);
 
         ClerkProfile::updateOrCreate(
             ['user_id' => $user->id],
             [
                 'clerk_id_number'  => $request->clerk_id_number,
+                'employee_id'      => $request->employee_id,
                 'court_name'       => $request->court_name,
                 'court_city'       => $request->court_city,
                 'court_state'      => $request->court_state,
                 'department'       => $request->department,
+                'designation'      => $request->designation,
                 'experience_years' => $request->experience_years ?? 0,
                 'bio'              => $request->bio,
             ]
@@ -83,21 +114,21 @@ class ClerkController extends Controller
 
     public function documents()
     {
-        $documents = Document::where('user_id', auth()->id())->latest()->get();
+        $documents = Document::where('user_id', Auth::id())->latest()->get();
         return view('clerk.documents', compact('documents'));
     }
 
     public function feedback()
     {
         $advocates   = User::where('role', 'advocate')->where('status', 'active')->get();
-        $myFeedbacks = auth()->user()->feedbacksGiven()->with('receiver')->latest()->get();
+        $myFeedbacks = Auth::user()->feedbacksGiven()->with('receiver')->latest()->get();
         return view('clerk.feedback', compact('advocates', 'myFeedbacks'));
     }
 
     public function viewAdvocates(Request $request)
     {
-        $hasFeedback = FeedbackController::clerkHasFeedback(auth()->id());
-        $authId      = auth()->id();
+        $authId      = Auth::id();
+        $hasFeedback = FeedbackController::clerkHasFeedback($authId);
 
         $advocates = User::with('advocateProfile')
             ->where('role', 'advocate')
@@ -122,7 +153,7 @@ class ClerkController extends Controller
     {
         abort_unless($user->role === 'advocate' && $user->status === 'active', 404);
 
-        $authId           = auth()->id();
+        $authId           = Auth::id();
         $hasFeedback      = FeedbackController::clerkHasFeedback($authId);
         $connectionStatus = ConnectionRequest::getStatus($authId, $user->id);
         $connectionReq    = ConnectionRequest::where(function ($q) use ($authId, $user) {
@@ -183,9 +214,9 @@ class ClerkController extends Controller
             ->latest()->paginate(12);
 
         // ✅ Frontend ke liye Connection Status aur Request ID fetch karna
-        $authId = auth()->id();
+        $authId = Auth::id();
         $guests->getCollection()->transform(function ($user) use ($authId) {
-            $req = \App\Models\ConnectionRequest::where(function ($q) use ($authId, $user) {
+            $req = ConnectionRequest::where(function ($q) use ($authId, $user) {
                 $q->where('sender_id', $authId)->where('receiver_id', $user->id);
             })->orWhere(function ($q) use ($authId, $user) {
                 $q->where('sender_id', $user->id)->where('receiver_id', $authId);
@@ -216,10 +247,11 @@ class ClerkController extends Controller
     {
         abort_unless($user->role === 'guest' && $user->status === 'active', 404);
 
-        $me = auth()->user();
+        /** @var \App\Models\User $me */
+        $me = Auth::user();
 
         // ✅ Single user ke liye connection status
-        $connectionStatus = \App\Models\ConnectionRequest::getStatus($me->id, $user->id);
+        $connectionStatus = ConnectionRequest::getStatus($me->id, $user->id);
 
         $feedbacks = $user->feedbacksReceived()->with('giver')->latest()->get();
         $avgRating = $feedbacks->avg('rating');
