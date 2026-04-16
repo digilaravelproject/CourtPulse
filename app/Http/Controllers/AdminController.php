@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Document;
 use App\Services\AdminService;
+use App\Mail\UserVerifiedEmail; // ✅ Naya Mailable Import
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail; // ✅ Mail Facade Import
 
 class AdminController extends Controller
 {
@@ -36,16 +38,22 @@ class AdminController extends Controller
 
     public function verifyUser(Request $request, User $user)
     {
+        // Pehle service se user ko verify kiya
         $this->service->verifyUser($user);
+
+        // ✅ Phir user ko Verification success ka email bheja
+        Mail::to($user->email)->send(new UserVerifiedEmail($user));
+
         if ($request->ajax()) {
-            return response()->json(['success' => true, 'message' => "{$user->name} verified!"]);
+            return response()->json(['success' => true, 'message' => "{$user->name} verified! Confirmation email sent."]);
         }
-        return back()->with('success', "{$user->name} verified successfully!");
+        return back()->with('success', "{$user->name} verified successfully! Confirmation email sent.");
     }
 
     public function rejectUser(Request $request, User $user)
     {
         $this->service->rejectUser($user);
+
         if ($request->ajax()) {
             return response()->json(['success' => true, 'message' => "{$user->name} rejected."]);
         }
