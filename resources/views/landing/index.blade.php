@@ -1369,7 +1369,7 @@
         }
 
         .footer-bar {
-            max-width: 1200px;
+            max-width: 1500px;
             margin: 0 auto;
             padding: 0 24px;
             height: 56px;
