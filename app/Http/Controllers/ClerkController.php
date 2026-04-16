@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\ClerkProfile;
 use App\Models\Document;
+use App\Models\ConnectionRequest;
 use App\Http\Controllers\FeedbackController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class ClerkController extends Controller
 {
@@ -25,13 +25,10 @@ class ClerkController extends Controller
 
         $hasFeedback = FeedbackController::clerkHasFeedback($user->id);
 
-        // Use Spatie role() scope
-        $interestedAdvocates = User::role('advocate')
+        $interestedAdvocates = User::with('advocateProfile')
+            ->where('role', 'advocate')
             ->where('status', 'active')
-            ->with('advocateProfile')
-            ->latest()
-            ->take(5)
-            ->get();
+            ->latest()->take(5)->get();
 
         $avgRating = $user->feedbacksReceived()->avg('rating');
 
@@ -54,59 +51,34 @@ class ClerkController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $user = auth()->user();
-
-        // Password change sub-form
-        if ($request->boolean('change_password')) {
-            $request->validate([
-                'current_password' => 'required',
-                'password'         => 'required|min:8|confirmed',
-            ]);
-
-            if (! Hash::check($request->current_password, $user->password)) {
-                return back()->withErrors(['current_password' => 'Current password is incorrect.']);
-            }
-
-            $user->update(['password' => Hash::make($request->password)]);
-            return back()->with('success', 'Password updated successfully!');
-        }
-
         $request->validate([
             'clerk_id_number'  => 'required|string|max:100',
             'court_name'       => 'required|string|max:255',
             'court_city'       => 'required|string|max:100',
             'court_state'      => 'required|string|max:100',
             'department'       => 'nullable|string|max:200',
-            'designation'      => 'nullable|string|max:200',
             'experience_years' => 'nullable|integer|min:0|max:50',
             'bio'              => 'nullable|string|max:2000',
-            'phone'            => 'nullable|string|max:20',
-            'city'             => 'nullable|string|max:100',
         ]);
 
-        $user->update([
-            'phone' => $request->phone,
-            'city'  => $request->city ?? $request->court_city,
-            'state' => $request->court_state,
-        ]);
+        $user = auth()->user();
+
+        $user->update(['city' => $request->court_city, 'state' => $request->court_state]);
 
         ClerkProfile::updateOrCreate(
             ['user_id' => $user->id],
             [
                 'clerk_id_number'  => $request->clerk_id_number,
-                'employee_id'      => $request->employee_id,
                 'court_name'       => $request->court_name,
                 'court_city'       => $request->court_city,
                 'court_state'      => $request->court_state,
                 'department'       => $request->department,
-                'designation'      => $request->designation,
                 'experience_years' => $request->experience_years ?? 0,
                 'bio'              => $request->bio,
             ]
         );
 
-        return redirect()->route('clerk.profile')
-            ->with('success', 'Profile updated successfully!');
+        return redirect()->route('clerk.profile')->with('success', 'Profile updated successfully!');
     }
 
     public function documents()
@@ -117,8 +89,7 @@ class ClerkController extends Controller
 
     public function feedback()
     {
-        // Use Spatie role() scope
-        $advocates   = User::role('advocate')->where('status', 'active')->get();
+        $advocates   = User::where('role', 'advocate')->where('status', 'active')->get();
         $myFeedbacks = auth()->user()->feedbacksGiven()->with('receiver')->latest()->get();
         return view('clerk.feedback', compact('advocates', 'myFeedbacks'));
     }
@@ -126,37 +97,55 @@ class ClerkController extends Controller
     public function viewAdvocates(Request $request)
     {
         $hasFeedback = FeedbackController::clerkHasFeedback(auth()->id());
+        $authId      = auth()->id();
 
-        // Use Spatie role() scope
-        $advocates = User::role('advocate')
+        $advocates = User::with('advocateProfile')
+            ->where('role', 'advocate')
             ->where('status', 'active')
-            ->with('advocateProfile')
-            ->when(
-                $request->search,
-                fn($q) => $q->where('name', 'like', '%' . $request->search . '%')
-            )
+            ->when($request->search, fn($q) => $q->where('name', 'like', '%' . $request->search . '%'))
             ->when($request->high_court, function ($q) use ($request) {
-                $q->whereHas(
-                    'advocateProfile',
-                    fn($aq) => $aq->where('high_court', 'like', '%' . $request->high_court . '%')
-                );
+                $q->whereHas('advocateProfile', fn($aq) => $aq->where('high_court', 'like', '%' . $request->high_court . '%'));
             })
-            ->when(
-                $request->city,
-                fn($q) => $q->where('city', 'like', '%' . $request->city . '%')
-            )
+            ->when($request->city, fn($q) => $q->where('city', 'like', '%' . $request->city . '%'))
             ->paginate(12);
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view(
-                    'clerk.partials.advocate-list',
-                    compact('advocates', 'hasFeedback')
-                )->render()
+                'html' => view('clerk.partials.advocate-list', compact('advocates', 'hasFeedback', 'authId'))->render()
             ]);
         }
 
-        return view('clerk.advocates', compact('advocates', 'hasFeedback'));
+        return view('clerk.advocates', compact('advocates', 'hasFeedback', 'authId'));
+    }
+
+    public function showAdvocate(User $user)
+    {
+        abort_unless($user->role === 'advocate' && $user->status === 'active', 404);
+
+        $authId           = auth()->id();
+        $hasFeedback      = FeedbackController::clerkHasFeedback($authId);
+        $connectionStatus = ConnectionRequest::getStatus($authId, $user->id);
+        $connectionReq    = ConnectionRequest::where(function ($q) use ($authId, $user) {
+            $q->where('sender_id', $authId)->where('receiver_id', $user->id);
+        })->orWhere(function ($q) use ($authId, $user) {
+            $q->where('sender_id', $user->id)->where('receiver_id', $authId);
+        })->first();
+
+        $connected = ($connectionStatus === 'connected');
+        $profile   = $user->advocateProfile;
+        $feedbacks = $user->feedbacksReceived()->with('giver')->latest()->take(5)->get();
+        $avgRating = $user->feedbacksReceived()->avg('rating');
+
+        return view('clerk.advocate-profile', compact(
+            'user',
+            'profile',
+            'hasFeedback',
+            'connectionStatus',
+            'connectionReq',
+            'connected',
+            'feedbacks',
+            'avgRating'
+        ));
     }
 
     public function browseGuests(Request $request)
@@ -165,8 +154,7 @@ class ClerkController extends Controller
             ->where('status', 'active')
             ->when($request->search, fn($q) => $q->where('name', 'like', '%' . $request->search . '%'))
             ->when($request->city,   fn($q) => $q->where('city',  'like', '%' . $request->city . '%'))
-            ->latest()
-            ->paginate(12);
+            ->latest()->paginate(12);
 
         if ($request->ajax() || $request->has('ajax')) {
             return response()->json($guests);

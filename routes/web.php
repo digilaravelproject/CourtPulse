@@ -11,6 +11,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\CourtController;
+use App\Http\Controllers\ConnectionController;
 use App\Models\User;
 use App\Models\Court;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/feedback',           [FeedbackController::class, 'showPage'])->name('feedback');
     Route::post('/feedback',          [FeedbackController::class, 'store'])->name('feedback.store');
     Route::get('/user/{user}/detail', [FeedbackController::class, 'userDetail'])->name('user.detail');
+
+
+    // Connection Routes — NEW
+    Route::post('/connections/send',                          [ConnectionController::class, 'send'])->name('connections.send');
+    Route::patch('/connections/{connectionRequest}/accept',   [ConnectionController::class, 'accept'])->name('connections.accept');
+    Route::patch('/connections/{connectionRequest}/reject',   [ConnectionController::class, 'reject'])->name('connections.reject');
+    Route::get('/connections',                                [ConnectionController::class, 'myConnections'])->name('connections.index');
 });
 
 // ─── GUEST ROUTES ─────────────────────────────────────────────────────────────
@@ -64,6 +72,7 @@ Route::middleware(['auth', 'role:advocate'])
         Route::get('/documents',         [DocumentController::class, 'myDocuments'])->name('documents');
         Route::post('/documents/upload', [DocumentController::class, 'upload'])->name('documents.upload');
         Route::get('/search-clerks',     [AdvocateController::class, 'searchClerks'])->name('search.clerks');
+        Route::get('/clerks/{user}',     [AdvocateController::class, 'viewClerkProfile'])->name('clerk.profile');
         Route::get('/guests',            [AdvocateController::class, 'browseGuests'])->name('guests');
         Route::get('/guests/{user}',     [AdvocateController::class, 'viewGuestProfile'])->name('guest.profile');
     });
@@ -77,6 +86,7 @@ Route::middleware(['auth', 'role:clerk'])
         Route::get('/documents',         [DocumentController::class, 'myDocuments'])->name('documents');
         Route::post('/documents/upload', [DocumentController::class, 'upload'])->name('documents.upload');
         Route::get('/advocates',         [ClerkController::class, 'viewAdvocates'])->name('advocates');
+        Route::get('/advocates/{user}',  [ClerkController::class, 'showAdvocate'])->name('advocate.profile');
         Route::get('/guests',            [ClerkController::class, 'browseGuests'])->name('guests');
         Route::get('/guests/{user}',     [ClerkController::class, 'viewGuestProfile'])->name('guest.profile');
     });

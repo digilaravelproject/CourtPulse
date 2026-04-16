@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\AdvocateProfile;
 use App\Models\Document;
+use App\Models\ConnectionRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -68,10 +69,7 @@ class AdvocateController extends Controller
             'city'               => 'nullable|string|max:100',
         ]);
 
-        $user->update([
-            'phone' => $request->phone,
-            'city'  => $request->city,
-        ]);
+        $user->update(['phone' => $request->phone, 'city' => $request->city]);
 
         AdvocateProfile::updateOrCreate(
             ['user_id' => $user->id],
@@ -84,8 +82,7 @@ class AdvocateController extends Controller
             ]
         );
 
-        return redirect()->route('advocate.profile')
-            ->with('success', 'Profile updated successfully!');
+        return redirect()->route('advocate.profile')->with('success', 'Profile updated successfully!');
     }
 
     public function browseGuests(Request $request)
@@ -116,34 +113,56 @@ class AdvocateController extends Controller
         return view('advocate.guest-profile', compact('user', 'gaveFeedback', 'feedbacks', 'avgRating', 'me'));
     }
 
+    // ── Search Clerks ─────────────────────────────────────────────────────
     public function searchClerks(Request $request)
     {
-        // Use Spatie role() scope
+        $authId = auth()->id();
+
         $clerks = User::role('clerk')
             ->where('status', 'active')
             ->with('clerkProfile')
-            ->when(
-                $request->search,
-                fn($q) => $q->where('name', 'like', '%' . $request->search . '%')
-            )
-            ->when($request->court,  function ($q) use ($request) {
-                $q->whereHas(
-                    'clerkProfile',
-                    fn($cq) => $cq->where('court_name', 'like', '%' . $request->court . '%')
-                );
+            ->when($request->search, fn($q) => $q->where('name', 'like', '%' . $request->search . '%'))
+            ->when($request->court, function ($q) use ($request) {
+                $q->whereHas('clerkProfile', fn($cq) => $cq->where('court_name', 'like', '%' . $request->court . '%'));
             })
-            ->when(
-                $request->city,
-                fn($q) => $q->where('city', 'like', '%' . $request->city . '%')
-            )
+            ->when($request->city, function ($q) use ($request) {
+                $q->whereHas('clerkProfile', fn($cq) => $cq->where('court_city', 'like', '%' . $request->city . '%'));
+            })
             ->paginate(12);
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('advocate.partials.clerk-list', compact('clerks'))->render()
+                'html' => view('advocate.partials.clerk-list', compact('clerks', 'authId'))->render()
             ]);
         }
 
-        return view('advocate.search-clerks', compact('clerks'));
+        return view('advocate.search-clerks', compact('clerks', 'authId'));
+    }
+
+    // ── View Single Clerk Profile ─────────────────────────────────────────
+    public function viewClerkProfile(User $user)
+    {
+        abort_unless($user->hasRole('clerk') && $user->status === 'active', 404);
+
+        $authId           = auth()->id();
+        $connectionStatus = ConnectionRequest::getStatus($authId, $user->id);
+        $connectionReq    = ConnectionRequest::where(function ($q) use ($authId, $user) {
+            $q->where('sender_id', $authId)->where('receiver_id', $user->id);
+        })->orWhere(function ($q) use ($authId, $user) {
+            $q->where('sender_id', $user->id)->where('receiver_id', $authId);
+        })->first();
+
+        $connected = ($connectionStatus === 'connected');
+        $feedbacks = $user->feedbacksReceived()->with('giver')->latest()->take(5)->get();
+        $avgRating = $user->feedbacksReceived()->avg('rating');
+
+        return view('advocate.clerk-profile', compact(
+            'user',
+            'connectionStatus',
+            'connectionReq',
+            'connected',
+            'feedbacks',
+            'avgRating'
+        ));
     }
 }

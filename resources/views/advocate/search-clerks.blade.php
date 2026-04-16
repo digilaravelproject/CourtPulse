@@ -6,26 +6,32 @@
 
     <div x-data="{
         f: {
-            search: '{{ request('search') }}',
-            court_city: '{{ request('court_city') }}',
-            court_name: '{{ request('court_name') }}'
+            search: '{{ request('search', '') }}',
+            city: '{{ request('city', '') }}',
+            court: '{{ request('court', '') }}'
         },
         loading: false,
         doSearch() {
             this.loading = true;
             const qs = new URLSearchParams(this.f).toString();
+
             fetch('{{ route('advocate.search.clerks') }}?' + qs, {
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
                 })
                 .then(r => r.json())
                 .then(d => {
-                    document.getElementById('clerksGrid').innerHTML = d.html;
+                    if (d.html) {
+                        document.getElementById('clerksGrid').innerHTML = d.html;
+                    }
                     this.loading = false;
                 })
                 .catch(() => { this.loading = false; });
         },
         reset() {
-            this.f = { search: '', court_city: '', court_name: '' };
+            this.f = { search: '', city: '', court: '' };
             this.doSearch();
         }
     }">
@@ -39,9 +45,10 @@
                         Name</label>
                     <div class="relative">
                         <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <input type="text" x-model="f.search" @keydown.enter="doSearch()" placeholder="Search by name..."
+                        <input type="text" x-model="f.search" @keydown.enter.prevent="doSearch()"
+                            placeholder="Search by name..."
                             class="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 text-sm
-                   focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 transition">
+                                   focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 transition">
                     </div>
                 </div>
 
@@ -50,10 +57,10 @@
                         City</label>
                     <div class="relative">
                         <i class="bi bi-geo-alt absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <input type="text" x-model="f.court_city" @keydown.enter="doSearch()"
+                        <input type="text" x-model="f.city" @keydown.enter.prevent="doSearch()"
                             placeholder="e.g. Mumbai, Delhi..."
                             class="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 text-sm
-                   focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 transition">
+                                   focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 transition">
                     </div>
                 </div>
 
@@ -62,31 +69,32 @@
                         Name</label>
                     <div class="relative">
                         <i class="bi bi-building absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <input type="text" x-model="f.court_name" @keydown.enter="doSearch()"
+                        <input type="text" x-model="f.court" @keydown.enter.prevent="doSearch()"
                             placeholder="e.g. High Court..."
                             class="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 text-sm
-                   focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 transition">
+                                   focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 transition">
                     </div>
                 </div>
             </div>
 
             <div class="flex items-center gap-3">
-                <button @click="doSearch()"
+                <button type="button" @click="doSearch()"
                     class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all"
                     style="background:#D4AF37;color:#060C18" onmouseover="this.style.background='#B5952F'"
                     onmouseout="this.style.background='#D4AF37'">
                     <span x-show="!loading"><i class="bi bi-search mr-1"></i> Search</span>
                     <span x-show="loading" x-cloak><i class="bi bi-arrow-repeat spin"></i> Searching…</span>
                 </button>
-                <button @click="reset()"
+                <button type="button" @click="reset()"
                     class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 text-slate-500 hover:border-slate-400 hover:text-slate-700 transition-all bg-white">
                     <i class="bi bi-x-lg"></i> Clear
                 </button>
             </div>
         </div>
 
-        {{-- Results --}}
+        {{-- Results Area --}}
         <div id="clerksGrid">
+            {{-- Ye partial file initial load par aur AJAX request dono time use hogi --}}
             @include('advocate.partials.clerk-list', ['clerks' => $clerks])
         </div>
 

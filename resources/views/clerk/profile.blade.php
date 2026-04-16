@@ -11,6 +11,24 @@
         </div>
     </div>
 
+    {{-- Alerts (Success / Validation Errors) --}}
+    @if (session('success'))
+        <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 text-sm rounded-xl">
+            <span class="font-semibold">Success:</span> {{ session('success') }}
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded-xl">
+            <span class="font-semibold block mb-1">Please fix the following errors:</span>
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {{-- LEFT: Forms --}}
@@ -54,11 +72,18 @@
                         <p class="text-xs font-semibold text-text-muted-light uppercase tracking-wider mb-4">Clerk Details
                         </p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                            <div>
+                            {{-- <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Clerk ID Number *</label>
                                 <input type="text" name="clerk_id_number"
                                     value="{{ old('clerk_id_number', optional($profile)->clerk_id_number) }}"
                                     placeholder="e.g. CLK/MH/001"
+                                    class="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition">
+                            </div> --}}
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Clerk ID Number</label>
+                                <input type="text" name="clerk_id_number"
+                                    value="{{ old('clerk_id_number', optional($profile)->clerk_id_number ?? 'CLK-' . auth()->user()->id) }}"
+                                    placeholder="e.g. CLK-{{ auth()->user()->id }}"
                                     class="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition">
                             </div>
                             <div>
