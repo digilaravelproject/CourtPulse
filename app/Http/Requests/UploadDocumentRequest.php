@@ -3,13 +3,14 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UploadDocumentRequest extends FormRequest
 {
     public function authorize(): bool
     {
         // Any authenticated user with a role can upload
-        return auth()->check();
+        return Auth::check();
     }
 
     public function rules(): array

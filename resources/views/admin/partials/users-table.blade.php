@@ -87,17 +87,11 @@
                             <i class="bi bi-eye"></i>
                         </a>
                         @if ($u->status === 'pending')
-                            <button
-                                onclick="openVerify({{ $u->id }},'{{ addslashes($u->name) }}','{{ $u->role }}','{{ $u->email }}','{{ $u->phone ?? '' }}','{{ $u->created_at->format('d M Y') }}','{{ $u->city ?? '' }}')"
-                                class="flex items-center gap-1 px-3 h-8 rounded-lg bg-green-500 hover:bg-green-600
-                     text-white text-xs font-bold transition-all shadow-sm shadow-green-200/60">
-                                <i class="bi bi-check-lg"></i> Verify
-                            </button>
-                            <button onclick="openReject({{ $u->id }},'{{ addslashes($u->name) }}')"
-                                class="flex items-center gap-1 px-3 h-8 rounded-lg bg-red-500 hover:bg-red-600
-                     text-white text-xs font-bold transition-all shadow-sm shadow-red-200/60">
-                                <i class="bi bi-x-lg"></i> Reject
-                            </button>
+                            <a href="{{ route('admin.users.show', $u) }}"
+                                class="flex items-center gap-1.5 px-3 h-8 rounded-lg bg-amber-500 hover:bg-amber-600
+                         text-white text-xs font-bold transition-all shadow-sm shadow-amber-200/60">
+                                <i class="bi bi-shield-check"></i> Review
+                            </a>
                         @endif
                     </div>
                 </td>

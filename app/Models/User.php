@@ -17,6 +17,8 @@ class User extends Authenticatable
         'phone',
         'role',
         'status',
+        'registration_step',
+        'is_reviewed',
         'profile_photo',
         'address',
         'city',

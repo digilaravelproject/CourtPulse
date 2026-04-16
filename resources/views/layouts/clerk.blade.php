@@ -68,6 +68,15 @@ tailwind.config = {
     </div>
 
     <!-- Nav -->
+    @if (auth()->user()->status === 'pending')
+      <div class="mx-4 mt-2 mb-4 rounded-xl px-3 py-2.5 flex gap-2 items-start bg-amber-50 border border-amber-200">
+        <span class="material-icons-round text-amber-600 text-lg">pending_actions</span>
+        <p class="text-[0.7rem] leading-snug text-amber-800 font-medium">
+          Account pending verification. Ensure all documents are uploaded.
+        </p>
+      </div>
+    @endif
+
     <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
       <p class="px-4 text-xs font-semibold text-text-muted-light uppercase tracking-wider mb-2">Menu</p>
 

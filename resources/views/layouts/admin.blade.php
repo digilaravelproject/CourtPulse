@@ -234,8 +234,8 @@
 
             <div class="px-5 pt-4 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase"
                 style="color: rgba(255,255,255,0.20);">User Management</div>
-            {!! navLink('admin.advocates', 'bi-person-badge', 'Advocates') !!}
-            {!! navLink('admin.clerks', 'bi-folder2-open', 'Clerks') !!}
+            {!! navLink('admin.advocates', 'bi-person-badge', 'Advocates', $pendingAdvocatesCount ?? 0 > 0 ? $pendingAdvocatesCount ?? 0 : null) !!}
+            {!! navLink('admin.clerks', 'bi-folder2-open', 'Clerks', $pendingClerksCount ?? 0 > 0 ? $pendingClerksCount ?? 0 : null) !!}
             {!! navLink('admin.users', 'bi-people', 'All Users', $pendingCount ?? 0 > 0 ? $pendingCount ?? 0 : null) !!}
 
             <div class="px-5 pt-4 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase"

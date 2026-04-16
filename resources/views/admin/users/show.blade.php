@@ -123,91 +123,111 @@
         </div>
 
         {{-- ── RIGHT: Documents ───────────────────────────────── --}}
-        <div class="lg:col-span-2">
+        <div class="lg:col-span-2 space-y-5">
+            {{-- Awaiting Review --}}
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-                    <h2 class="font-display font-bold text-[1rem] text-slate-800">Uploaded Documents</h2>
-                    <span class="font-mono text-[0.65rem] text-slate-400">{{ $user->documents->count() }} total</span>
+                <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-amber-50/30">
+                    <div class="flex items-center gap-2">
+                        <i class="bi bi-clock-history text-amber-500"></i>
+                        <h2 class="font-display font-bold text-[1rem] text-slate-800">Awaiting Review</h2>
+                    </div>
+                    <span class="font-mono text-[0.6rem] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">
+                        {{ $user->documents->where('status', 'pending')->count() }} Required
+                    </span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="bg-slate-50 border-b border-slate-200">
-                                <th
-                                    class="px-4 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">
-                                    Type</th>
-                                <th
-                                    class="px-4 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">
-                                    File</th>
-                                <th
-                                    class="px-4 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">
-                                    Status</th>
-                                <th
-                                    class="px-4 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400 hidden md:table-cell">
-                                    Uploaded</th>
-                                <th
-                                    class="px-4 py-3 text-right font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">
-                                    Action</th>
+                                <th class="px-4 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">Type</th>
+                                <th class="px-4 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">File</th>
+                                <th class="px-4 py-3 text-center font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">Status</th>
+                                <th class="px-4 py-3 text-right font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($user->documents as $doc)
+                            @forelse($user->documents->where('status', 'pending') as $doc)
                                 <tr class="trow" data-docid="{{ $doc->id }}">
                                     <td class="font-medium text-slate-700">
                                         {{ ucwords(str_replace('_', ' ', $doc->document_type)) }}</td>
                                     <td>
-                                        <a href="{{ Storage::url($doc->file_path) }}" target="_blank"
+                                        <button onclick="openDocViewer('{{ Storage::url($doc->file_path) }}', '{{ ucwords(str_replace('_', ' ', $doc->document_type)) }}')"
                                             class="inline-flex items-center gap-1.5 text-gold hover:text-gold-h text-[0.82rem] font-medium transition-colors">
-                                            <i class="bi bi-file-earmark-arrow-down"></i> View
-                                        </a>
+                                            <i class="bi bi-eye"></i> View PDF/Image
+                                        </button>
                                     </td>
-                                    <td>
-                                        @if ($doc->status === 'approved')
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-green-100 text-green-700 font-mono text-[0.6rem] uppercase tracking-wide font-semibold"><span
-                                                    class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>Approved</span>
-                                        @elseif($doc->status === 'pending')
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-100 text-amber-700 font-mono text-[0.6rem] uppercase tracking-wide font-semibold"><span
-                                                    class="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block"></span>Pending</span>
-                                        @else
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-red-100 text-red-600 font-mono text-[0.6rem] uppercase tracking-wide font-semibold"><span
-                                                    class="w-1.5 h-1.5 rounded-full bg-red-500 inline-block"></span>Rejected</span>
-                                        @endif
+                                    <td class="text-center">
+                                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-100 text-amber-700 font-mono text-[0.55rem] uppercase tracking-wide font-bold">
+                                            Pending
+                                        </span>
                                     </td>
-                                    <td class="text-slate-400 text-[0.75rem] hidden md:table-cell">
-                                        {{ $doc->created_at->format('d M Y') }}</td>
                                     <td>
                                         <div class="flex items-center gap-1.5 justify-end">
-                                            @if ($doc->status === 'pending')
-                                                <button
-                                                    onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Document approved!','ok')"
-                                                    data-body='{"status":"approved"}'
-                                                    class="flex items-center gap-1 px-3 h-8 rounded-lg bg-green-500 hover:bg-green-600 text-white text-xs font-bold transition-all">
-                                                    <i class="bi bi-check-lg"></i>
-                                                </button>
-                                                <button
-                                                    onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Document rejected.','err')"
-                                                    data-body='{"status":"rejected","rejection_reason":"Document not valid"}'
-                                                    class="flex items-center gap-1 px-3 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition-all">
-                                                    <i class="bi bi-x-lg"></i>
-                                                </button>
-                                            @elseif($doc->status === 'rejected')
-                                                <span
-                                                    class="text-[0.72rem] text-red-500 max-w-[140px]">{{ $doc->rejection_reason }}</span>
-                                            @else
-                                                <span class="text-[0.72rem] text-green-600 font-medium">✓ Verified</span>
-                                            @endif
+                                            <button
+                                                onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Approved!','ok')"
+                                                data-body='{"status":"approved"}'
+                                                class="flex items-center gap-1 px-3 h-8 rounded-lg bg-green-500 hover:bg-green-600 text-white text-xs font-bold transition-all">
+                                                <i class="bi bi-check-lg"></i> Approve
+                                            </button>
+                                            <button
+                                                onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Rejected.','err')"
+                                                data-body='{"status":"rejected","rejection_reason":"Document not valid"}'
+                                                class="flex items-center gap-1 px-3 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition-all">
+                                                <i class="bi bi-x-lg"></i> Reject
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="py-12 text-center text-slate-400 text-sm">
-                                        <i class="bi bi-file-earmark text-2xl block mb-2 text-slate-300"></i>
-                                        No documents uploaded yet.
+                                    <td colspan="4" class="py-10 text-center text-slate-400 text-sm italic">
+                                        All documents reviewed or nothing pending.
                                     </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {{-- Verified Documents --}}
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden opacity-80 hover:opacity-100 transition-opacity">
+                <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                    <div class="flex items-center gap-2 text-slate-600">
+                        <i class="bi bi-shield-check text-green-500"></i>
+                        <h2 class="font-display font-medium text-[0.95rem]">Verified Documents</h2>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <tbody class="divide-y divide-slate-100">
+                            @forelse($user->documents->whereIn('status', ['approved', 'rejected']) as $doc)
+                                <tr class="trow bg-slate-50/30">
+                                    <td class="px-4 py-3 font-medium text-slate-500 w-1/3 text-[0.8rem]">
+                                        {{ ucwords(str_replace('_', ' ', $doc->document_type)) }}
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <button onclick="openDocViewer('{{ Storage::url($doc->file_path) }}', '{{ ucwords(str_replace('_', ' ', $doc->document_type)) }}')"
+                                            class="text-slate-400 hover:text-gold text-[0.75rem] flex items-center gap-1">
+                                            <i class="bi bi-file-earmark"></i> Re-view
+                                        </button>
+                                    </td>
+                                    <td class="px-4 py-3 text-right">
+                                        @if ($doc->status === 'approved')
+                                            <span class="text-green-600 font-bold text-[0.65rem] uppercase tracking-widest inline-flex items-center gap-1">
+                                                <i class="bi bi-check-circle"></i> Verified
+                                            </span>
+                                        @else
+                                            <div class="flex flex-col items-end">
+                                                <span class="text-red-500 font-bold text-[0.65rem] uppercase tracking-widest">Rejected</span>
+                                                <span class="text-[0.6rem] text-slate-400">{{ $doc->rejection_reason }}</span>
+                                            </div>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="py-8 text-center text-slate-400 text-sm">No documents verified yet.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -217,12 +237,84 @@
         </div>
     </div>
 
+    {{-- Document Viewer Modal --}}
+    <div id="docViewer" class="hidden fixed inset-0 z-[1000] items-center justify-center p-4">
+        <div onclick="closeDocViewer()" class="absolute inset-0 bg-navy/80 backdrop-blur-sm"></div>
+        <div id="docBox" class="bg-white rounded-2xl w-full max-w-5xl h-[85vh] relative flex flex-col overflow-hidden shadow-2xl transition-all duration-300 transform scale-95 opacity-0">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
+                <div>
+                    <h3 class="font-display font-bold text-slate-800" id="docModelTitle">Document Review</h3>
+                    <p class="text-[0.65rem] text-slate-400 font-mono uppercase tracking-wider mt-0.5">Confidential User Data</p>
+                </div>
+                <button onclick="closeDocViewer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="flex-1 bg-slate-50 overflow-hidden relative">
+                <iframe id="docFrame" class="w-full h-full border-0" src=""></iframe>
+                <div id="docImageWrap" class="hidden w-full h-full overflow-auto items-center justify-center p-4">
+                    <img id="docImage" src="" class="max-w-full shadow-lg rounded-lg">
+                </div>
+            </div>
+            <div class="px-6 py-3 border-t bg-slate-50 flex justify-between items-center">
+                <span class="text-[0.7rem] text-slate-400">Tip: Scroll inside the viewer to see the full document.</span>
+                <button onclick="closeDocViewer()" class="px-5 py-1.5 bg-slate-800 text-white rounded-lg text-sm font-bold">Close</button>
+            </div>
+        </div>
+    </div>
+
     @include('admin.partials.verify-reject-modals')
 
 @endsection
+
 @push('scripts')
     <script>
         @include('admin.partials.modal-script')
+
+        // Document Viewer Logic
+        function openDocViewer(url, title) {
+            const modal = document.getElementById('docViewer');
+            const box = document.getElementById('docBox');
+            const frame = document.getElementById('docFrame');
+            const imgWrap = document.getElementById('docImageWrap');
+            const img = document.getElementById('docImage');
+            const titleEl = document.getElementById('docModelTitle');
+
+            titleEl.innerText = title;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            const isImg = url.match(/\.(jpeg|jpg|gif|png|webp)$/i);
+
+            if (isImg) {
+                frame.classList.add('hidden');
+                imgWrap.classList.remove('hidden');
+                imgWrap.classList.add('flex');
+                img.src = url;
+            } else {
+                imgWrap.classList.remove('flex');
+                imgWrap.classList.add('hidden');
+                frame.classList.remove('hidden');
+                frame.src = url;
+            }
+
+            setTimeout(() => {
+                box.classList.remove('scale-95', 'opacity-0');
+            }, 50);
+        }
+
+        function closeDocViewer() {
+            const modal = document.getElementById('docViewer');
+            const box = document.getElementById('docBox');
+            box.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.getElementById('docFrame').src = '';
+                document.getElementById('docImage').src = '';
+            }, 300);
+        }
+
         // After verify on show page, redirect back
         function doVerify() {
             const btn = document.getElementById('vConfirmBtn');

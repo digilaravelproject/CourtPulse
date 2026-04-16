@@ -459,6 +459,15 @@
                 <div class="logo-sub">CA Panel</div>
             </div>
         </div>
+        @if (auth()->user()->status === 'pending')
+            <div class="mx-3 mt-2 mb-4 rounded-3 px-3 py-2 flex gap-2 align-items-start"
+                style="background:rgba(200,135,42,0.08);border:1px solid rgba(200,135,42,0.2)">
+                <i class="bi bi-clock-history shrink-0 mt-1" style="color:var(--amber);font-size:.9rem"></i>
+                <p class="mb-0" style="color:var(--amber);font-size:.7rem;line-height:1.3;font-weight:600">
+                    Account pending verification. Upload required documents.
+                </p>
+            </div>
+        @endif
         <nav class="sidebar-nav">
             <div class="nav-section-label">My Space</div>
             <a href="{{ route('ca.dashboard') }}"

@@ -45,13 +45,15 @@ class AuthController extends Controller
         // ✅ Welcome Email bhejne ka code yahan add kiya
         Mail::to($user->email)->send(new WelcomeEmail($user));
 
+        // Login the user to maintain session for Step 2
+        Auth::login($user);
+
         if ($request->role === 'guest') {
-            Auth::login($user);
             return redirect()->route('guest.dashboard');
         }
 
-        return redirect()->route('login')
-            ->with('info', 'Registration successful! Please wait for admin verification. Check your email for details.');
+        // Professionals redirect to Step 2
+        return redirect()->route('register.step2');
     }
 
     public function login(Request $request)
@@ -69,9 +71,16 @@ class AuthController extends Controller
                 return back()->withErrors(['email' => 'Your account has been rejected.']);
             }
 
-            if ($user->status === 'pending' && !in_array($user->role, ['guest'])) {
-                Auth::logout();
-                return back()->withErrors(['email' => 'Your account is pending verification.']);
+            if ($user->status === 'pending') {
+                if ($user->registration_step < 2 && in_array($user->role, ['advocate', 'clerk', 'ca'])) {
+                    return redirect()->route('register.step2');
+                }
+                
+                if ($user->registration_step >= 2) {
+                    return redirect()->route('under-process');
+                }
+
+                return $this->redirectByRole($user->role);
             }
 
             return $this->redirectByRole($user->role);
@@ -89,6 +98,47 @@ class AuthController extends Controller
             'ca'                   => redirect()->route('ca.dashboard'),
             default                => redirect()->route('guest.dashboard'),
         };
+    }
+
+    public function showStep2()
+    {
+        $user = Auth::user();
+
+        // Non-professional roles (admin, super_admin, guest) don't need Step 2
+        if ($user->isAdmin() || $user->role === 'guest') {
+            return $this->redirectByRole($user->role);
+        }
+
+        // If already completed, redirect to dashboard
+        if ($user->registration_step >= 2) {
+            return $this->redirectByRole($user->role);
+        }
+
+        $requirements = config('requirements.documents.' . $user->role, []);
+        $documents = $user->documents;
+
+        $uploadedTypes = $documents->pluck('document_type')->toArray();
+        $allUploaded = true;
+        foreach ($requirements as $key => $req) {
+            if (($req['required'] ?? false) && !in_array($key, $uploadedTypes)) {
+                $allUploaded = false;
+                break;
+            }
+        }
+
+        return view('auth.register-step2', compact('user', 'requirements', 'documents', 'allUploaded'));
+    }
+
+    public function storeStep2(Request $request)
+    {
+        $user = Auth::user();
+        $user->update([
+            'registration_step' => 2,
+            'status' => 'pending'
+        ]);
+
+        return redirect()->route($user->role . '.dashboard')
+            ->with('success', 'Application submitted! Admin will verify your documents shortly.');
     }
 
     public function logout(Request $request)

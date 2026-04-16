@@ -32,7 +32,15 @@ Route::middleware('guest')->group(function () {
     Route::get('/register',  [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/register/step-2', [AuthController::class, 'showStep2'])->name('register.step2');
+    Route::post('/register/step-2', [AuthController::class, 'storeStep2'])->name('register.step2.store');
+});
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/under-process', function () {
+    return view('auth.under-process');
+})->name('under-process')->middleware('auth');
 // ─── PASSWORD RESET (Laravel Built-in) ───────────────────────────────────────
 Route::middleware('guest')->group(function () {
     Route::get('/forgot-password',        [App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])->name('password.request');

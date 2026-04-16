@@ -18,14 +18,15 @@ class AdminRepository
             'total_clerks'          => User::where('role', 'clerk')->count(),
             'total_cas'             => User::where('role', 'ca')->count(),
             'total_guests'          => User::where('role', 'guest')->count(),
-            'pending_verifications' => User::where('status', 'pending')->count(),
+            'pending_verifications' => User::where('status', 'pending')->where('registration_step', '>=', 2)->count(),
+            'in_registration'      => User::where('status', 'pending')->where('registration_step', 1)->count(),
             'pending_documents'     => Document::where('status', 'pending')->count(),
         ];
     }
 
     public function getPendingCount(): int
     {
-        return User::where('status', 'pending')->count();
+        return User::where('status', 'pending')->where('registration_step', '>=', 2)->count();
     }
 
     public function getPendingDocsCount(): int
