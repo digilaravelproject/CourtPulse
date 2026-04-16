@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Court;
 use App\Models\AdvocateProfile;
 use App\Models\ClerkProfile;
+use App\Models\ConnectionRequest;
 use Illuminate\Http\Request;
 
 class GuestController extends Controller
@@ -53,6 +54,13 @@ class GuestController extends Controller
             ->latest()
             ->paginate(12);
 
+        // Fetching connection status dynamically for Vue/Alpine
+        $authId = auth()->id();
+        $advocates->getCollection()->transform(function ($user) use ($authId) {
+            $user->connection_status = ConnectionRequest::getStatus($authId, $user->id);
+            return $user;
+        });
+
         // AJAX request — JSON return karo
         if ($request->ajax() || $request->has('ajax')) {
             return response()->json($advocates);
@@ -81,6 +89,13 @@ class GuestController extends Controller
             })
             ->latest()
             ->paginate(12);
+
+        // Fetching connection status dynamically for Vue/Alpine
+        $authId = auth()->id();
+        $clerks->getCollection()->transform(function ($user) use ($authId) {
+            $user->connection_status = ConnectionRequest::getStatus($authId, $user->id);
+            return $user;
+        });
 
         // AJAX request — JSON return karo
         if ($request->ajax() || $request->has('ajax')) {

@@ -58,9 +58,9 @@
         </div>
 
         {{-- Grid --}}
-        <div x-show="!loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div x-show="!loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <template x-for="guest in guests" :key="guest.id">
-                <div class="rounded-2xl p-4 transition-all hover:scale-[1.01]"
+                <div class="rounded-2xl p-4 transition-all hover:scale-[1.01] flex flex-col h-full"
                     style="background:#1a2744;border:1px solid rgba(255,255,255,.07)">
 
                     {{-- Avatar + Name --}}
@@ -81,7 +81,7 @@
                     </div>
 
                     {{-- Details --}}
-                    <div class="space-y-1.5 mb-4">
+                    <div class="space-y-1.5 mb-5">
                         <div class="flex items-center gap-2 text-xs" style="color:rgba(255,255,255,.4)">
                             <i class="bi bi-envelope flex-shrink-0" style="color:#D4AF37"></i>
                             <span class="truncate" x-text="guest.email"></span>
@@ -97,14 +97,53 @@
                         </div>
                     </div>
 
-                    {{-- View Profile Button --}}
-                    <a :href="`{{ url('advocate/guests') }}/${guest.id}`"
-                        class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold no-underline transition-all"
-                        style="background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.25);color:#D4AF37"
-                        onmouseover="this.style.background='rgba(212,175,55,.2)'"
-                        onmouseout="this.style.background='rgba(212,175,55,.1)'">
-                        <i class="bi bi-person-lines-fill"></i> View Profile
-                    </a>
+                    {{-- Action Buttons --}}
+                    <div class="mt-auto pt-3 border-t" style="border-color:rgba(255,255,255,.05)">
+                        <div class="flex items-center gap-2">
+                            <a :href="`{{ url('advocate/guests') }}/${guest.id}`"
+                                class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold no-underline transition-all"
+                                style="background:rgba(212,175,55,.05);border:1px solid rgba(212,175,55,.2);color:#D4AF37"
+                                onmouseover="this.style.background='rgba(212,175,55,.1)'"
+                                onmouseout="this.style.background='rgba(212,175,55,.05)'">
+                                <i class="bi bi-person-lines-fill"></i> View
+                            </a>
+
+                            {{-- Connection States --}}
+                            <template x-if="guest.connection_status === 'none'">
+                                <button @click="sendConnection(guest.id)"
+                                    class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all"
+                                    style="background:#D4AF37;color:#0e0e0f" onmouseover="this.style.background='#B5952F'"
+                                    onmouseout="this.style.background='#D4AF37'">
+                                    <i class="bi bi-person-plus-fill"></i> Connect
+                                </button>
+                            </template>
+
+                            <template x-if="guest.connection_status === 'sent'">
+                                <button disabled
+                                    class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all"
+                                    style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);cursor:not-allowed">
+                                    <i class="bi bi-clock-history"></i> Pending
+                                </button>
+                            </template>
+
+                            {{-- ✅ ACCEPT BUTTON ADDED HERE --}}
+                            <template x-if="guest.connection_status === 'received'">
+                                <button @click="acceptConnection(guest)"
+                                    class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-lg hover:opacity-90"
+                                    style="background:#10b981;color:#ffffff;border:1px solid #059669;">
+                                    <i class="bi bi-check-circle-fill"></i> Accept
+                                </button>
+                            </template>
+
+                            <template x-if="guest.connection_status === 'connected'">
+                                <button disabled
+                                    class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all"
+                                    style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:#4ade80;cursor:default">
+                                    <i class="bi bi-check-circle-fill"></i> Connected
+                                </button>
+                            </template>
+                        </div>
+                    </div>
                 </div>
             </template>
 
@@ -213,6 +252,54 @@
                             console.error(e);
                         } finally {
                             this.loading = false;
+                        }
+                    },
+
+                    // ✅ Send Connect Request
+                    async sendConnection(userId) {
+                        try {
+                            const res = await fetch(`{{ route('connections.send') }}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    receiver_id: userId
+                                })
+                            });
+                            if (res.ok) {
+                                const guest = this.guests.find(g => g.id === userId);
+                                if (guest) guest.connection_status = 'sent';
+                            }
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    },
+
+                    // ✅ Accept Received Request
+                    async acceptConnection(guest) {
+                        if (!guest.connection_req_id) {
+                            // Agar cache/purana data hai aur ID missing hai, to uski profile par bhej do
+                            window.location.href = `{{ url('advocate/guests') }}/${guest.id}`;
+                            return;
+                        }
+
+                        try {
+                            const res = await fetch(`/connections/${guest.connection_req_id}/accept`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                }
+                            });
+                            if (res.ok) {
+                                guest.connection_status = 'connected';
+                            }
+                        } catch (e) {
+                            console.error(e);
                         }
                     }
                 }

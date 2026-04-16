@@ -148,6 +148,32 @@ class ClerkController extends Controller
         ));
     }
 
+    // public function browseGuests(Request $request)
+    // {
+    //     $guests = User::where('role', 'guest')
+    //         ->where('status', 'active')
+    //         ->when($request->search, fn($q) => $q->where('name', 'like', '%' . $request->search . '%'))
+    //         ->when($request->city,   fn($q) => $q->where('city',  'like', '%' . $request->city . '%'))
+    //         ->latest()->paginate(12);
+
+    //     if ($request->ajax() || $request->has('ajax')) {
+    //         return response()->json($guests);
+    //     }
+
+    //     return view('clerk.guests', compact('guests'));
+    // }
+
+    // public function viewGuestProfile(User $user)
+    // {
+    //     abort_unless($user->role === 'guest' && $user->status === 'active', 404);
+
+    //     $me        = auth()->user();
+    //     $feedbacks = $user->feedbacksReceived()->with('giver')->latest()->get();
+    //     $avgRating = $feedbacks->avg('rating');
+
+    //     return view('clerk.guest-profile', compact('user', 'feedbacks', 'avgRating', 'me'));
+    // }
+
     public function browseGuests(Request $request)
     {
         $guests = User::where('role', 'guest')
@@ -155,6 +181,29 @@ class ClerkController extends Controller
             ->when($request->search, fn($q) => $q->where('name', 'like', '%' . $request->search . '%'))
             ->when($request->city,   fn($q) => $q->where('city',  'like', '%' . $request->city . '%'))
             ->latest()->paginate(12);
+
+        // ✅ Frontend ke liye Connection Status aur Request ID fetch karna
+        $authId = auth()->id();
+        $guests->getCollection()->transform(function ($user) use ($authId) {
+            $req = \App\Models\ConnectionRequest::where(function ($q) use ($authId, $user) {
+                $q->where('sender_id', $authId)->where('receiver_id', $user->id);
+            })->orWhere(function ($q) use ($authId, $user) {
+                $q->where('sender_id', $user->id)->where('receiver_id', $authId);
+            })->first();
+
+            if (!$req) {
+                $user->connection_status = 'none';
+                $user->connection_req_id = null;
+            } else {
+                $user->connection_req_id = $req->id;
+                if ($req->status === 'accepted') {
+                    $user->connection_status = 'connected';
+                } else {
+                    $user->connection_status = ($req->sender_id === $authId) ? 'sent' : 'received';
+                }
+            }
+            return $user;
+        });
 
         if ($request->ajax() || $request->has('ajax')) {
             return response()->json($guests);
@@ -167,10 +216,14 @@ class ClerkController extends Controller
     {
         abort_unless($user->role === 'guest' && $user->status === 'active', 404);
 
-        $me        = auth()->user();
+        $me = auth()->user();
+
+        // ✅ Single user ke liye connection status
+        $connectionStatus = \App\Models\ConnectionRequest::getStatus($me->id, $user->id);
+
         $feedbacks = $user->feedbacksReceived()->with('giver')->latest()->get();
         $avgRating = $feedbacks->avg('rating');
 
-        return view('clerk.guest-profile', compact('user', 'feedbacks', 'avgRating', 'me'));
+        return view('clerk.guest-profile', compact('user', 'feedbacks', 'avgRating', 'me', 'connectionStatus'));
     }
 }

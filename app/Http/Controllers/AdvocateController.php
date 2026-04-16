@@ -85,32 +85,80 @@ class AdvocateController extends Controller
         return redirect()->route('advocate.profile')->with('success', 'Profile updated successfully!');
     }
 
+    // public function browseGuests(Request $request)
+    // {
+    //     $guests = User::where('role', 'guest')
+    //         ->where('status', 'active')
+    //         ->when($request->search, fn($q) => $q->where('name', 'like', '%' . $request->search . '%'))
+    //         ->when($request->city,   fn($q) => $q->where('city',  'like', '%' . $request->city . '%'))
+    //         ->latest()
+    //         ->paginate(12);
+
+    //     if ($request->ajax() || $request->has('ajax')) {
+    //         return response()->json($guests);
+    //     }
+
+    //     return view('advocate.guests', compact('guests'));
+    // }
+
+    // public function viewGuestProfile(User $user)
+    // {
+    //     abort_unless($user->role === 'guest' && $user->status === 'active', 404);
+
+    //     $me           = auth()->user();
+    //     $gaveFeedback = \App\Models\Feedback::where('given_by', $me->id)->where('given_to', $user->id)->exists();
+    //     $feedbacks    = $user->feedbacksReceived()->with('giver')->latest()->get();
+    //     $avgRating    = $feedbacks->avg('rating');
+
+    //     return view('advocate.guest-profile', compact('user', 'gaveFeedback', 'feedbacks', 'avgRating', 'me'));
+    // }
+
+    // 1. Browse Guests List Update
     public function browseGuests(Request $request)
     {
-        $guests = User::where('role', 'guest')
+        $guests = \App\Models\User::where('role', 'guest')
             ->where('status', 'active')
             ->when($request->search, fn($q) => $q->where('name', 'like', '%' . $request->search . '%'))
             ->when($request->city,   fn($q) => $q->where('city',  'like', '%' . $request->city . '%'))
             ->latest()
             ->paginate(12);
 
+        // ✅ Har guest ka connection status nikal rahe hain
+        $authId = auth()->id();
+        $guests->getCollection()->transform(function ($user) use ($authId) {
+            $user->connection_status = \App\Models\ConnectionRequest::getStatus($authId, $user->id);
+            return $user;
+        });
+
         if ($request->ajax() || $request->has('ajax')) {
             return response()->json($guests);
         }
 
-        return view('advocate.guests', compact('guests'));
+        // View file advocate.guests ya clerk.guests ho sakti hai (jo bhi aapke controller me ho)
+        $viewFolder = auth()->user()->role === 'advocate' ? 'advocate' : 'clerk';
+        return view("{$viewFolder}.guests", compact('guests'));
     }
 
-    public function viewGuestProfile(User $user)
+    // 2. Single Guest Profile Update
+    public function viewGuestProfile(\App\Models\User $user)
     {
         abort_unless($user->role === 'guest' && $user->status === 'active', 404);
 
-        $me           = auth()->user();
-        $gaveFeedback = \App\Models\Feedback::where('given_by', $me->id)->where('given_to', $user->id)->exists();
-        $feedbacks    = $user->feedbacksReceived()->with('giver')->latest()->get();
-        $avgRating    = $feedbacks->avg('rating');
+        $me = auth()->user();
 
-        return view('advocate.guest-profile', compact('user', 'gaveFeedback', 'feedbacks', 'avgRating', 'me'));
+        // ✅ Single user ke liye connection status
+        $connectionStatus = \App\Models\ConnectionRequest::getStatus($me->id, $user->id);
+
+        $feedbacks = $user->feedbacksReceived()->with('giver')->latest()->get();
+        $avgRating = $feedbacks->avg('rating');
+
+        // Agar AdvocateController hai toh 'gaveFeedback' bhi bhejte hain (jesa aapne rakha tha)
+        if ($me->role === 'advocate') {
+            $gaveFeedback = \App\Models\Feedback::where('given_by', $me->id)->where('given_to', $user->id)->exists();
+            return view('advocate.guest-profile', compact('user', 'gaveFeedback', 'feedbacks', 'avgRating', 'me', 'connectionStatus'));
+        }
+
+        return view('clerk.guest-profile', compact('user', 'feedbacks', 'avgRating', 'me', 'connectionStatus'));
     }
 
     // ── Search Clerks ─────────────────────────────────────────────────────

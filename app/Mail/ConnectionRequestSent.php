@@ -25,7 +25,7 @@ class ConnectionRequestSent extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->sender->name . ' ne aapko connection request bheja hai — Court Pulse',
+            subject: $this->sender->name . ' has sent you a connection request — Court Pulse',
         );
     }
 

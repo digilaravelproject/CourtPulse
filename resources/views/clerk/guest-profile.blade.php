@@ -340,6 +340,59 @@
                 </div>
             </div>
 
+            {{-- ✅ Connect Action Box (NEW) --}}
+            @php
+                $reqId = 'null';
+                if (in_array($connectionStatus, ['received', 'sent', 'connected'])) {
+                    $existingReq = \App\Models\ConnectionRequest::where(function ($q) use ($user) {
+                        $q->where('sender_id', auth()->id())->where('receiver_id', $user->id);
+                    })
+                        ->orWhere(function ($q) use ($user) {
+                            $q->where('sender_id', $user->id)->where('receiver_id', auth()->id());
+                        })
+                        ->first();
+                    if ($existingReq) {
+                        $reqId = $existingReq->id;
+                    }
+                }
+            @endphp
+
+            <div x-data="profileConnection('{{ $connectionStatus }}', {{ $user->id }}, {{ $reqId }})" class="info-card p-5">
+                <div class="info-card-header !px-0 !pt-0 !border-b-0 mb-3"><i class="bi bi-diagram-3"></i> Network Status
+                </div>
+
+                <template x-if="status === 'none'">
+                    <button @click="sendReq()"
+                        class="w-full py-3 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2"
+                        style="background:#D4AF37;color:#0e0e0f" onmouseover="this.style.background='#B5952F'"
+                        onmouseout="this.style.background='#D4AF37'">
+                        <i class="bi bi-person-plus-fill text-lg"></i> Connect
+                    </button>
+                </template>
+
+                <template x-if="status === 'sent'">
+                    <button disabled
+                        class="w-full py-3 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2 bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed">
+                        <i class="bi bi-clock-history text-lg"></i> Request Sent
+                    </button>
+                </template>
+
+                <template x-if="status === 'received'">
+                    <button @click="acceptReq()"
+                        class="w-full py-3 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2 shadow-lg hover:opacity-90"
+                        style="background:#10b981;color:#ffffff">
+                        <i class="bi bi-check-circle-fill text-lg"></i> Accept Request
+                    </button>
+                </template>
+
+                <template x-if="status === 'connected'">
+                    <button disabled
+                        class="w-full py-3 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2 bg-green-50 border border-green-200 text-green-600 cursor-default">
+                        <i class="bi bi-patch-check-fill text-lg"></i> You are Connected
+                    </button>
+                </template>
+            </div>
+
             {{-- Rating breakdown --}}
             @if ($feedbacks->count() > 0)
                 @php
@@ -443,5 +496,52 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            function profileConnection(initialStatus, userId, reqId) {
+                return {
+                    status: initialStatus,
+                    requestId: reqId,
+
+                    async sendReq() {
+                        try {
+                            const res = await fetch(`{{ route('connections.send') }}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    receiver_id: userId
+                                })
+                            });
+                            if (res.ok) this.status = 'sent';
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    },
+
+                    async acceptReq() {
+                        if (!this.requestId) return;
+                        try {
+                            const res = await fetch(`/connections/${this.requestId}/accept`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                }
+                            });
+                            if (res.ok) this.status = 'connected';
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    }
+                }
+            }
+        </script>
+    @endpush
 
 @endsection

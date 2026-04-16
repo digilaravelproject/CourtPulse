@@ -25,7 +25,7 @@ class ConnectionRequestAccepted extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->acceptor->name . ' ne aapki connection request accept kar li — Court Pulse',
+            subject: $this->acceptor->name . ' has accepted your connection request — Court Pulse',
         );
     }
 

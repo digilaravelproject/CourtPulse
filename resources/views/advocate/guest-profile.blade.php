@@ -345,6 +345,69 @@
                 </div>
             </div>
 
+            {{-- Connect Action Box (UPDATED with Accept Logic) --}}
+            @php
+                // Request ki ID fetch kar rahe hain taaki accept route sahi se hit ho sake
+                $reqId = 'null';
+                if (in_array($connectionStatus, ['received', 'sent', 'connected'])) {
+                    $existingReq = \App\Models\ConnectionRequest::where(function ($q) use ($user) {
+                        $q->where('sender_id', auth()->id())->where('receiver_id', $user->id);
+                    })
+                        ->orWhere(function ($q) use ($user) {
+                            $q->where('sender_id', $user->id)->where('receiver_id', auth()->id());
+                        })
+                        ->first();
+
+                    if ($existingReq) {
+                        $reqId = $existingReq->id;
+                    }
+                }
+            @endphp
+
+            <div x-data="profileConnection('{{ $connectionStatus }}', {{ $user->id }}, {{ $reqId }})" class="rounded-2xl p-5"
+                style="background:#1a2744;border:1px solid rgba(255,255,255,.07)">
+                <div class="font-mono text-[.55rem] tracking-[.18em] uppercase mb-4 flex items-center gap-2"
+                    style="color:rgba(212,175,55,.5)">
+                    <i class="bi bi-diagram-3"></i> Network
+                </div>
+
+                {{-- No connection --}}
+                <template x-if="status === 'none'">
+                    <button @click="sendReq()"
+                        class="w-full py-3 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2"
+                        style="background:#D4AF37;color:#0e0e0f">
+                        <i class="bi bi-person-plus-fill text-lg"></i> Connect
+                    </button>
+                </template>
+
+                {{-- We sent request (Pending) --}}
+                <template x-if="status === 'sent'">
+                    <button disabled
+                        class="w-full py-3 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2"
+                        style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);cursor:not-allowed">
+                        <i class="bi bi-clock-history text-lg"></i> Request Sent
+                    </button>
+                </template>
+
+                {{-- They sent us a request (We must Accept) --}}
+                <template x-if="status === 'received'">
+                    <button @click="acceptReq()"
+                        class="w-full py-3 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2 shadow-lg hover:opacity-90"
+                        style="background:#10b981;color:#ffffff">
+                        <i class="bi bi-check-circle-fill text-lg"></i> Accept Request
+                    </button>
+                </template>
+
+                {{-- Already connected --}}
+                <template x-if="status === 'connected'">
+                    <button disabled
+                        class="w-full py-3 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2"
+                        style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:#4ade80;cursor:default">
+                        <i class="bi bi-patch-check-fill text-lg"></i> You are Connected
+                    </button>
+                </template>
+            </div>
+
             {{-- Rating breakdown --}}
             @if ($feedbacks->count() > 0)
                 <div class="rounded-2xl p-5" style="background:#1a2744;border:1px solid rgba(255,255,255,.07)">
@@ -471,5 +534,54 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            function profileConnection(initialStatus, userId, reqId) {
+                return {
+                    status: initialStatus,
+                    requestId: reqId,
+
+                    // Send Request
+                    async sendReq() {
+                        try {
+                            const res = await fetch(`{{ route('connections.send') }}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    receiver_id: userId
+                                })
+                            });
+                            if (res.ok) this.status = 'sent';
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    },
+
+                    // Accept Request (NEW)
+                    async acceptReq() {
+                        if (!this.requestId) return; // ID ke bina accept nahi ho sakta
+                        try {
+                            const res = await fetch(`/connections/${this.requestId}/accept`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                }
+                            });
+                            if (res.ok) this.status = 'connected';
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    }
+                }
+            }
+        </script>
+    @endpush
 
 @endsection

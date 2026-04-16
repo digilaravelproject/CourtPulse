@@ -59,7 +59,8 @@
         <div x-show="!loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <template x-for="guest in guests" :key="guest.id">
                 <div
-                    class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-primary/30 transition-all">
+                    class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-primary/30 transition-all flex flex-col h-full">
+
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg flex-shrink-0 text-white"
                             style="background:linear-gradient(135deg,#D4AF37,#B5952F)"
@@ -91,13 +92,45 @@
                         </div>
                     </div>
 
-                    <a :href="`{{ url('clerk/guests') }}/${guest.id}`"
-                        class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold no-underline transition-all border"
-                        style="border-color:#D4AF37;color:#B5952F;background:rgba(212,175,55,.06)"
-                        onmouseover="this.style.background='rgba(212,175,55,.15)'"
-                        onmouseout="this.style.background='rgba(212,175,55,.06)'">
-                        <i class="bi bi-person-lines-fill"></i> View Profile
-                    </a>
+                    {{-- Action Buttons --}}
+                    <div class="mt-auto pt-4 border-t border-gray-100 flex gap-2">
+                        <a :href="`{{ url('clerk/guests') }}/${guest.id}`"
+                            class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold no-underline transition-all border border-gray-200 text-gray-600 hover:bg-gray-50">
+                            <i class="bi bi-person-lines-fill"></i> View
+                        </a>
+
+                        <template x-if="guest.connection_status === 'none'">
+                            <button @click="sendConnection(guest.id)"
+                                class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all"
+                                style="background:#D4AF37;color:#0e0e0f" onmouseover="this.style.background='#B5952F'"
+                                onmouseout="this.style.background='#D4AF37'">
+                                <i class="bi bi-person-plus-fill"></i> Connect
+                            </button>
+                        </template>
+
+                        <template x-if="guest.connection_status === 'sent'">
+                            <button disabled
+                                class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed">
+                                <i class="bi bi-clock-history"></i> Pending
+                            </button>
+                        </template>
+
+                        <template x-if="guest.connection_status === 'received'">
+                            <button @click="acceptConnection(guest)"
+                                class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-lg hover:opacity-90"
+                                style="background:#10b981;color:#ffffff;border:1px solid #059669;">
+                                <i class="bi bi-check-circle-fill"></i> Accept
+                            </button>
+                        </template>
+
+                        <template x-if="guest.connection_status === 'connected'">
+                            <button disabled
+                                class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all bg-green-50 text-green-600 border border-green-200 cursor-default">
+                                <i class="bi bi-patch-check-fill"></i> Connected
+                            </button>
+                        </template>
+                    </div>
+
                 </div>
             </template>
 
@@ -223,6 +256,52 @@
                             console.error(e);
                         } finally {
                             this.loading = false;
+                        }
+                    },
+
+                    // ✅ Send Connect Request
+                    async sendConnection(userId) {
+                        try {
+                            const res = await fetch(`{{ route('connections.send') }}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    receiver_id: userId
+                                })
+                            });
+                            if (res.ok) {
+                                const guest = this.guests.find(g => g.id === userId);
+                                if (guest) guest.connection_status = 'sent';
+                            }
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    },
+
+                    // ✅ Accept Received Request
+                    async acceptConnection(guest) {
+                        if (!guest.connection_req_id) {
+                            window.location.href = `{{ url('clerk/guests') }}/${guest.id}`;
+                            return;
+                        }
+                        try {
+                            const res = await fetch(`/connections/${guest.connection_req_id}/accept`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                }
+                            });
+                            if (res.ok) {
+                                guest.connection_status = 'connected';
+                            }
+                        } catch (e) {
+                            console.error(e);
                         }
                     }
                 }
