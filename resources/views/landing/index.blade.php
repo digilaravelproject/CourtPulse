@@ -2076,7 +2076,7 @@
                 <li><a href="#contact">Contact Us</a></li>
                 <li><a href="#">Careers</a></li>
             </ul>
-            <div class="footer-copy">&copy; 2024 Digi Enquests</div>
+            <div class="footer-copy">&copy; 2024 Digi Emporior</div>
         </div>
     </footer>
 
