@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Mail\WelcomeEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -40,13 +42,16 @@ class AuthController extends Controller
 
         $user->assignRole($request->role);
 
+        // ✅ Welcome Email bhejne ka code yahan add kiya
+        Mail::to($user->email)->send(new WelcomeEmail($user));
+
         if ($request->role === 'guest') {
             Auth::login($user);
             return redirect()->route('guest.dashboard');
         }
 
         return redirect()->route('login')
-            ->with('info', 'Registration successful! Please wait for admin verification.');
+            ->with('info', 'Registration successful! Please wait for admin verification. Check your email for details.');
     }
 
     public function login(Request $request)
