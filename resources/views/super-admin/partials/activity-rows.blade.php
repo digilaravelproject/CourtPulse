@@ -1,108 +1,59 @@
-@forelse($recentUsers as $user)
-    <tr class="trow border-b border-slate-50 hover:bg-slate-50/50 transition-colors" data-user-id="{{ $user->id }}">
-
-        {{-- User --}}
-        <td class="px-5 py-3.5">
+@foreach ($recentUsers as $user)
+    <tr class="hover:bg-slate-50/50 transition-colors border-b border-slate-100 last:border-0" data-user-id="{{ $user->id }}">
+        <td class="px-5 py-4">
             <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg font-display font-bold text-xs flex items-center justify-center flex-shrink-0 text-white"
-                    style="background:linear-gradient(135deg,#D4AF37,#B5952F)">
-                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center font-bold text-slate-500 text-xs">
+                    {{ strtoupper(substr($user->name, 0, 2)) }}
                 </div>
-                <div class="min-w-0">
-                    <div class="font-semibold text-sm text-slate-800 truncate max-w-[140px]">{{ $user->name }}</div>
-                    <div class="font-mono text-xs text-slate-400 md:hidden truncate">{{ $user->email }}</div>
+                <div>
+                    <p class="text-sm font-bold text-slate-800 leading-none">{{ $user->name }}</p>
+                    <p class="text-[0.65rem] text-slate-400 mt-1">ID: #{{ $user->id }}</p>
                 </div>
             </div>
         </td>
-
-        {{-- Role --}}
-        <td class="px-5 py-3.5">
-            @php
-                $roleStyles = [
-                    'super_admin' => 'bg-purple-50 text-purple-700 border-purple-200',
-                    'admin' => 'bg-amber-50  text-amber-700  border-amber-200',
-                    'advocate' => 'bg-blue-50   text-blue-700   border-blue-200',
-                    'clerk' => 'bg-green-50  text-green-700  border-green-200',
-                    'ca' => 'bg-orange-50 text-orange-700 border-orange-200',
-                    'guest' => 'bg-slate-50  text-slate-600  border-slate-200',
-                ];
-                $spatieRole = $user->roles->first()?->name ?? ($user->role ?? 'guest');
-                $rs = $roleStyles[$spatieRole] ?? 'bg-slate-50 text-slate-600 border-slate-200';
-            @endphp
-            <span
-                class="role-badge font-mono text-[0.65rem] px-2.5 py-1 rounded-full border font-semibold capitalize {{ $rs }}">
-                {{ str_replace('_', ' ', $spatieRole) }}
+        <td class="px-5 py-4">
+            <span class="role-badge bg-blue-50 text-blue-700 text-[0.6rem] px-2.5 py-1 rounded-full uppercase font-bold tracking-wider">
+                {{ str_replace('_', ' ', $user->role) }}
             </span>
         </td>
-
-        {{-- Email --}}
-        <td class="px-5 py-3.5 hidden md:table-cell">
-            <span class="font-mono text-xs text-slate-500">{{ $user->email }}</span>
-        </td>
-
-        {{-- Status --}}
-        <td class="px-5 py-3.5">
-            @if ($user->status === 'active')
-                <span
-                    class="inline-flex items-center gap-1.5 font-mono text-[0.65rem] bg-green-50 text-green-700 border border-green-200 px-2.5 py-1 rounded-full font-semibold">
-                    <span class="dot bg-green-500"></span> Active
-                </span>
-            @elseif($user->status === 'pending')
-                <span
-                    class="inline-flex items-center gap-1.5 font-mono text-[0.65rem] bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-full font-semibold">
-                    <span class="dot bg-amber-500"></span> Pending
-                </span>
-            @else
-                <span
-                    class="inline-flex items-center gap-1.5 font-mono text-[0.65rem] bg-red-50 text-red-700 border border-red-200 px-2.5 py-1 rounded-full font-semibold">
-                    <span class="dot bg-red-500"></span> Rejected
-                </span>
+        <td class="px-5 py-4 hidden md:table-cell">
+            <p class="text-xs text-slate-600 font-medium">{{ $user->email }}</p>
+            @if($user->phone)
+                <p class="text-[0.65rem] text-slate-400 mt-0.5">{{ $user->phone }}</p>
             @endif
         </td>
-
-        {{-- Joined --}}
-        <td class="px-5 py-3.5 hidden lg:table-cell">
-            <div class="text-xs text-slate-500">{{ $user->created_at->format('d M Y') }}</div>
-            <div class="font-mono text-[0.6rem] text-slate-400">{{ $user->created_at->diffForHumans() }}</div>
+        <td class="px-5 py-4">
+            @if($user->status === 'active')
+                <div class="flex items-center gap-1.5 text-green-600 font-bold text-[0.65rem] uppercase">
+                    <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Active
+                </div>
+            @elseif($user->status === 'pending')
+                <div class="flex items-center gap-1.5 text-amber-500 font-bold text-[0.65rem] uppercase">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Pending
+                </div>
+            @else
+                <div class="flex items-center gap-1.5 text-red-500 font-bold text-[0.65rem] uppercase">
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                </div>
+            @endif
         </td>
-
-        {{-- Actions --}}
-        <td class="px-5 py-3.5">
+        <td class="px-5 py-4 hidden lg:table-cell">
+            <p class="text-[0.65rem] text-slate-500">{{ $user->created_at->format('M d, Y') }}</p>
+            <p class="text-[0.6rem] text-slate-300 mt-0.5">{{ $user->created_at->format('H:i A') }}</p>
+        </td>
+        <td class="px-5 py-4">
             <div class="flex items-center gap-2">
-                <a href="{{ route('admin.users.show', $user) }}"
-                    class="w-8 h-8 rounded-lg border border-slate-200 bg-white hover:border-gold/50 hover:text-gold
-                flex items-center justify-center text-slate-400 transition-all text-sm"
-                    title="View User">
-                    <i class="bi bi-eye"></i>
-                </a>
-                <button
-                    onclick="openAssignRoleModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $spatieRole }}')"
-                    class="w-8 h-8 rounded-lg border border-slate-200 bg-white hover:border-blue-300 hover:text-blue-500
-                     flex items-center justify-center text-slate-400 transition-all text-sm"
-                    title="Assign Role">
+                <button onclick="openAssignRoleModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->role }}')"
+                        class="p-2 rounded-lg bg-slate-50 text-slate-500 hover:bg-gold/10 hover:text-gold transition-all" title="Assign Role">
                     <i class="bi bi-person-gear"></i>
                 </button>
-                @if ($user->status === 'pending')
-                    <button
-                        onclick="ajaxAction('{{ route('admin.users.verify', $user) }}', 'PATCH', this, '{{ $user->name }} verified!')"
-                        class="w-8 h-8 rounded-lg border border-green-200 bg-white hover:bg-green-50 hover:text-green-600
-                     flex items-center justify-center text-green-400 transition-all text-sm"
-                        title="Verify">
-                        <i class="bi bi-check2"></i>
-                    </button>
+                @if($user->id !== auth()->id() && !$user->hasRole('super_admin'))
+                <button onclick="confirmDestroy({{ $user->id }}, '{{ addslashes($user->name) }}')"
+                        class="p-2 rounded-lg bg-slate-50 text-slate-500 hover:bg-red-50 hover:text-red-500 transition-all" title="Delete User">
+                    <i class="bi bi-trash3"></i>
+                </button>
                 @endif
             </div>
         </td>
-
     </tr>
-@empty
-    <tr>
-        <td colspan="6" class="px-5 py-16 text-center">
-            <div class="flex flex-col items-center gap-3">
-                <i class="bi bi-inbox text-4xl text-slate-200"></i>
-                <p class="text-sm font-medium text-slate-400">No users found</p>
-                <p class="text-xs text-slate-300">Try adjusting your filters</p>
-            </div>
-        </td>
-    </tr>
-@endforelse
+@endforeach

@@ -5,183 +5,98 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        // Reset cached roles and permissions
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Define all permissions
+        // Create Permissions
         $permissions = [
-            // User management
-            'view users',
-            'create users',
-            'edit users',
-            'delete users',
-            'verify users',
-            'reject users',
-
-            // Advocate
-            'view advocates',
-            'create advocate profile',
-            'edit advocate profile',
-            'delete advocate profile',
-            'search advocates',
-
-            // Clerk
-            'view clerks',
-            'create clerk profile',
-            'edit clerk profile',
-            'delete clerk profile',
-            'search clerks',
-
-            // CA
-            'view cas',
-            'create ca profile',
-            'edit ca profile',
-            'delete ca profile',
-            'search cas',
-
-            // Documents
-            'upload documents',
-            'view own documents',
-            'view all documents',
-            'approve documents',
-            'reject documents',
-
-            // Courts
-            'view courts',
-            'create courts',
-            'edit courts',
-            'delete courts',
-
-            // Feedback
-            'give feedback',
-            'view feedback',
-            'view all feedback',
-            'delete feedback',
-
-            // Dashboard
+            'manage users',
+            'manage roles',
+            'manage settings',
             'view admin dashboard',
+            'view superadmin dashboard',
             'view advocate dashboard',
             'view clerk dashboard',
-            'view guest dashboard',
             'view ca dashboard',
-
-            // Roles & Permissions (Super Admin only)
-            'manage roles',
-            'manage permissions',
-            'assign roles',
+            'view guest dashboard',
+            'upload documents',
+            'delete documents',
+            'review documents',
+            'manage courts',
+            'send connection requests',
+            'accept connection requests',
+            'view profiles',
+            'post feedback',
+            'manage feedback',
         ];
 
-        foreach ($permissions as $perm) {
-            Permission::firstOrCreate(['name' => $perm]);
+        foreach ($permissions as $permission) {
+            Permission::findOrCreate($permission);
         }
 
-        // Create Roles and assign permissions
-        $superAdmin = Role::firstOrCreate(['name' => 'super_admin']);
-        $superAdmin->givePermissionTo(Permission::all());
+        // Create Roles and Assign Permissions
 
-        $admin = Role::firstOrCreate(['name' => 'admin']);
-        $admin->givePermissionTo([
-            'view users',
-            'edit users',
-            'verify users',
-            'reject users',
-            'view advocates',
-            'view clerks',
-            'view cas',
-            'view all documents',
-            'approve documents',
-            'reject documents',
-            'view courts',
-            'create courts',
-            'edit courts',
-            'view all feedback',
-            'delete feedback',
+        // Super Admin
+        $superAdminRole = Role::findOrCreate('super_admin');
+        $superAdminRole->givePermissionTo(Permission::all());
+
+        // Admin
+        $adminRole = Role::findOrCreate('admin');
+        $adminRole->givePermissionTo([
+            'manage users',
             'view admin dashboard',
+            'upload documents',
+            'review documents',
+            'manage courts',
+            'view profiles',
+            'manage feedback',
         ]);
 
-        $advocate = Role::firstOrCreate(['name' => 'advocate']);
-        $advocate->givePermissionTo([
-            'create advocate profile',
-            'edit advocate profile',
-            'upload documents',
-            'view own documents',
-            'search clerks',
-            'view clerks',
-            'give feedback',
-            'view feedback',
+        // Advocate
+        $advocateRole = Role::findOrCreate('advocate');
+        $advocateRole->givePermissionTo([
             'view advocate dashboard',
-            'view courts',
+            'upload documents',
+            'send connection requests',
+            'accept connection requests',
+            'view profiles',
+            'post feedback',
         ]);
 
-        $clerk = Role::firstOrCreate(['name' => 'clerk']);
-        $clerk->givePermissionTo([
-            'create clerk profile',
-            'edit clerk profile',
-            'upload documents',
-            'view own documents',
-            'view advocates',
-            'search advocates',
-            'give feedback',
-            'view feedback',
+        // Clerk
+        $clerkRole = Role::findOrCreate('clerk');
+        $clerkRole->givePermissionTo([
             'view clerk dashboard',
-            'view courts',
-        ]);
-
-        $ca = Role::firstOrCreate(['name' => 'ca']);
-        $ca->givePermissionTo([
-            'create ca profile',
-            'edit ca profile',
             'upload documents',
-            'view own documents',
-            'view advocates',
-            'search advocates',
-            'give feedback',
-            'view feedback',
+            'accept connection requests',
+            'view profiles',
+            'post feedback',
+        ]);
+
+        // CA
+        $caRole = Role::findOrCreate('ca');
+        $caRole->givePermissionTo([
             'view ca dashboard',
-            'view courts',
+            'upload documents',
+            'view profiles',
+            'post feedback',
         ]);
 
-        $guest = Role::firstOrCreate(['name' => 'guest']);
-        $guest->givePermissionTo([
-            'view advocates',
-            'search advocates',
-            'view clerks',
-            'search clerks',
-            'give feedback',
+        // Guest
+        $guestRole = Role::findOrCreate('guest');
+        $guestRole->givePermissionTo([
             'view guest dashboard',
-            'view courts',
+            'view profiles',
+            'post feedback',
         ]);
-
-        // Create Super Admin user
-        $superAdminUser = User::firstOrCreate(
-            ['email' => 'superadmin@courtpulse.com'],
-            [
-                'name' => 'Super Admin',
-                'password' => Hash::make('Admin@12345'),
-                'role' => 'super_admin',
-                'status' => 'active',
-            ]
-        );
-        $superAdminUser->assignRole('super_admin');
-
-        // Create Admin user
-        $adminUser = User::firstOrCreate(
-            ['email' => 'admin@courtpulse.com'],
-            [
-                'name' => 'Court Admin',
-                'password' => Hash::make('Admin@12345'),
-                'role' => 'admin',
-                'status' => 'active',
-            ]
-        );
-        $adminUser->assignRole('admin');
-
-        $this->command->info('Roles, Permissions & Default Users created!');
     }
 }

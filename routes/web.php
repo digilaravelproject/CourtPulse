@@ -1,46 +1,72 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdvocateController;
-use App\Http\Controllers\ClerkController;
-use App\Http\Controllers\CaController;
-use App\Http\Controllers\GuestController;
-use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\RolePermissionController;
-use App\Http\Controllers\SuperAdminController;
-use App\Http\Controllers\CourtController;
-use App\Http\Controllers\ConnectionController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\SuperAdminController;
+use App\Http\Controllers\Admin\RolePermissionController;
+use App\Http\Controllers\Admin\CourtController as AdminCourtController;
+use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
+use App\Http\Controllers\User\AdvocateController;
+use App\Http\Controllers\User\ClerkController;
+use App\Http\Controllers\User\CaController;
+use App\Http\Controllers\User\GuestController;
+use App\Http\Controllers\User\DocumentController as UserDocumentController;
+use App\Http\Controllers\User\FeedbackController as UserFeedbackController;
+use App\Http\Controllers\User\ConnectionController;
+use App\Http\Controllers\DashboardController;
 use App\Models\User;
 use App\Models\Court;
-use Illuminate\Support\Facades\Route;
+
+// ─── DASHBOARD REDIRECT ───────────────────────────────────────────────────────
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard')
+    ->middleware('auth');
 
 // ─── LANDING PAGE ─────────────────────────────────────────────────────────────
 Route::get('/', function () {
-    return view('landing.index', [
-        'totalAdvocates' => User::role('advocate')->where('status', 'active')->count(),
-        'totalClerks'    => User::role('clerk')->where('status', 'active')->count(),
-        'totalCourts'    => Court::where('is_active', true)->count(),
-    ]);
+    return view('welcome');
 })->name('home');
+
+Route::get('/begin-find', [App\Http\Controllers\SearchController::class, 'index'])->name('find');
+Route::get('/blogs', [PageController::class, 'blogs'])->name('blogs');
+Route::get('/latest-updates', [PageController::class, 'updates'])->name('updates');
+Route::get('/contact-us', [PageController::class, 'contact'])->name('contact');
+Route::get('/careers', [PageController::class, 'careers'])->name('careers');
 
 // ─── AUTH ROUTES ──────────────────────────────────────────────────────────────
 Route::middleware('guest')->group(function () {
-    Route::get('/login',     [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login',    [AuthController::class, 'login']);
-    Route::get('/register',  [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/login',             [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login/send-otp',   [AuthController::class, 'sendLoginOtp'])->name('login.send-otp');
+    Route::get('/login/verify',      [AuthController::class, 'showLoginVerify'])->name('login.verify');
+    Route::post('/login/verify',     [AuthController::class, 'verifyLoginOtp'])->name('login.verify.submit');
+
+    Route::get('/register',          [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register/step-1',  [AuthController::class, 'registerStep1'])->name('register.step1');
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/register/step-2', [AuthController::class, 'showStep2'])->name('register.step2');
-    Route::post('/register/step-2', [AuthController::class, 'storeStep2'])->name('register.step2.store');
+    // Registration Multi-step Flow (Post-registration login)
+    Route::get('/otp-verify',        [AuthController::class, 'showOtpVerify'])->name('otp.verify');
+    Route::post('/otp-verify',       [AuthController::class, 'verifyOtp'])->name('otp.verify.submit');
+    Route::post('/otp-resend',       [AuthController::class, 'resendOtp'])->name('otp.resend');
+
+    Route::get('/register/role',     [AuthController::class, 'showRoleSelection'])->name('register.role');
+    Route::post('/register/role',    [AuthController::class, 'storeRoleSelection'])->name('register.role.store');
+
+    Route::get('/register/details',  [AuthController::class, 'showDetailsForm'])->name('register.details');
+    Route::post('/register/details', [AuthController::class, 'storeDetails'])->name('register.details.store');
+    
+    Route::get('/register/documents', [AuthController::class, 'showDocumentsForm'])->name('register.documents');
+    Route::post('/register/upload-doc', [AuthController::class, 'uploadDoc'])->name('register.upload-doc');
+    Route::post('/register/complete', [AuthController::class, 'completeRegistration'])->name('register.complete');
 });
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/under-process', function () {
     return view('auth.under-process');
 })->name('under-process')->middleware('auth');
+
 // ─── PASSWORD RESET (Laravel Built-in) ───────────────────────────────────────
 Route::middleware('guest')->group(function () {
     Route::get('/forgot-password',        [App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])->name('password.request');
@@ -51,9 +77,9 @@ Route::middleware('guest')->group(function () {
 
 // ─── SHARED ROUTES (all authenticated users) ──────────────────────────────────
 Route::middleware('auth')->group(function () {
-    Route::get('/feedback',           [FeedbackController::class, 'showPage'])->name('feedback');
-    Route::post('/feedback',          [FeedbackController::class, 'store'])->name('feedback.store');
-    Route::get('/user/{user}/detail', [FeedbackController::class, 'userDetail'])->name('user.detail');
+    Route::get('/feedback',           [UserFeedbackController::class, 'showPage'])->name('feedback');
+    Route::post('/feedback',          [UserFeedbackController::class, 'store'])->name('feedback.store');
+    Route::get('/user/{user}/detail', [UserFeedbackController::class, 'userDetail'])->name('user.detail');
 
 
     // Connection Routes — NEW
@@ -67,8 +93,10 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:guest|advocate|clerk|ca|admin|super_admin'])
     ->prefix('guest')->name('guest.')->group(function () {
         Route::get('/dashboard', [GuestController::class, 'dashboard'])->name('dashboard');
-        Route::get('/advocates', [GuestController::class, 'advocates'])->name('advocates');
-        Route::get('/clerks',    [GuestController::class, 'clerks'])->name('clerks');
+        Route::get('/advocates',         [GuestController::class, 'advocates'])->name('advocates');
+        Route::get('/advocates/{user}',  [GuestController::class, 'showAdvocate'])->name('advocate.detail');
+        Route::get('/clerks',            [GuestController::class, 'clerks'])->name('clerks');
+        Route::get('/clerks/{user}',     [GuestController::class, 'showClerk'])->name('clerk.detail');
     });
 
 // ─── ADVOCATE ROUTES ──────────────────────────────────────────────────────────
@@ -77,8 +105,8 @@ Route::middleware(['auth', 'role:advocate'])
         Route::get('/dashboard',         [AdvocateController::class, 'dashboard'])->name('dashboard');
         Route::get('/profile',           [AdvocateController::class, 'profile'])->name('profile');
         Route::post('/profile',          [AdvocateController::class, 'updateProfile'])->name('profile.update');
-        Route::get('/documents',         [DocumentController::class, 'myDocuments'])->name('documents');
-        Route::post('/documents/upload', [DocumentController::class, 'upload'])->name('documents.upload');
+        Route::get('/documents',         [UserDocumentController::class, 'myDocuments'])->name('documents');
+        Route::post('/documents/upload', [UserDocumentController::class, 'upload'])->name('documents.upload');
         Route::get('/search-clerks',     [AdvocateController::class, 'searchClerks'])->name('search.clerks');
         Route::get('/clerks/{user}',     [AdvocateController::class, 'viewClerkProfile'])->name('clerk.profile');
         Route::get('/guests',            [AdvocateController::class, 'browseGuests'])->name('guests');
@@ -91,8 +119,8 @@ Route::middleware(['auth', 'role:clerk'])
         Route::get('/dashboard',         [ClerkController::class, 'dashboard'])->name('dashboard');
         Route::get('/profile',           [ClerkController::class, 'profile'])->name('profile');
         Route::post('/profile',          [ClerkController::class, 'updateProfile'])->name('profile.update');
-        Route::get('/documents',         [DocumentController::class, 'myDocuments'])->name('documents');
-        Route::post('/documents/upload', [DocumentController::class, 'upload'])->name('documents.upload');
+        Route::get('/documents',         [UserDocumentController::class, 'myDocuments'])->name('documents');
+        Route::post('/documents/upload', [UserDocumentController::class, 'upload'])->name('documents.upload');
         Route::get('/advocates',         [ClerkController::class, 'viewAdvocates'])->name('advocates');
         Route::get('/advocates/{user}',  [ClerkController::class, 'showAdvocate'])->name('advocate.profile');
         Route::get('/guests',            [ClerkController::class, 'browseGuests'])->name('guests');
@@ -105,8 +133,8 @@ Route::middleware(['auth', 'role:ca'])
         Route::get('/dashboard',         [CaController::class, 'dashboard'])->name('dashboard');
         Route::get('/profile',           [CaController::class, 'profile'])->name('profile');
         Route::post('/profile',          [CaController::class, 'updateProfile'])->name('profile.update');
-        Route::get('/documents',         [DocumentController::class, 'myDocuments'])->name('documents');
-        Route::post('/documents/upload', [DocumentController::class, 'upload'])->name('documents.upload');
+        Route::get('/documents',         [UserDocumentController::class, 'myDocuments'])->name('documents');
+        Route::post('/documents/upload', [UserDocumentController::class, 'upload'])->name('documents.upload');
         Route::get('/search-advocates',  [CaController::class, 'searchAdvocates'])->name('search.advocates');
     });
 
@@ -128,14 +156,14 @@ Route::middleware(['auth', 'role:admin|super_admin'])
 
         // Documents
         Route::get('/documents',                     [AdminController::class, 'documents'])->name('documents');
-        Route::patch('/documents/{document}/review', [DocumentController::class, 'review'])->name('documents.review');
+        Route::patch('/documents/{document}/review', [AdminDocumentController::class, 'review'])->name('documents.review');
 
         // Courts
-        Route::resource('courts', CourtController::class);
+        Route::resource('courts', AdminCourtController::class);
 
         // Feedback — name 'admin.feedback' hai (shared 'feedback' se conflict avoid karne ke liye)
         Route::get('/feedback',               [AdminController::class, 'feedback'])->name('feedback');
-        Route::delete('/feedback/{feedback}', [FeedbackController::class, 'destroy'])->name('feedback.destroy');
+        Route::delete('/feedback/{feedback}', [UserFeedbackController::class, 'destroy'])->name('feedback.destroy');
     });
 
 // ─── SUPER ADMIN ROUTES ───────────────────────────────────────────────────────
@@ -161,6 +189,13 @@ Route::middleware(['auth', 'role:super_admin'])
         Route::get('/users/{user}/permissions',   [RolePermissionController::class, 'userPermissions'])->name('users.permissions');
         Route::post('/users/{user}/permissions',  [RolePermissionController::class, 'updateUserPermissions'])->name('users.permissions.update');
 
+        // User Management
+        Route::get('/users',                 [SuperAdminController::class, 'allUsers'])->name('users');
+        Route::delete('/users/{user}/delete', [SuperAdminController::class, 'deleteUser'])->name('users.delete');
+
         // Activity logs
         Route::get('/activity-logs', [SuperAdminController::class, 'activityLogs'])->name('activity');
+        
+        // Super Admin Dashboard also shows Admin things if needed, but for now we use separate controllers.
+        Route::get('/dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
     });

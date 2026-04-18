@@ -63,7 +63,7 @@
                     class="bg-white border border-border rounded-xl p-4 hover:border-gold hover:shadow-md transition-all flex flex-col h-full">
 
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0"
                             style="background:rgba(212,175,55,.10);border:1.5px solid rgba(212,175,55,.2)">⚖️</div>
                         <div class="flex-1 min-w-0">
                             <div class="font-display font-bold text-base truncate" x-text="adv.name"></div>
@@ -71,19 +71,19 @@
                             </div>
                         </div>
                         <span
-                            class="font-mono text-[0.57rem] tracking-wide px-2 py-0.5 rounded bg-green-100 text-green-700 uppercase font-bold flex-shrink-0">Verified</span>
+                            class="font-mono text-[0.57rem] tracking-wide px-2 py-0.5 rounded bg-green-100 text-green-700 uppercase font-bold shrink-0">Verified</span>
                     </div>
 
                     <div class="flex items-center gap-1.5 text-xs text-muted mb-1.5">
-                        <i class="bi bi-building flex-shrink-0" style="color:#D4AF37"></i>
+                        <i class="bi bi-building shrink-0" style="color:#D4AF37"></i>
                         <span class="truncate" x-text="adv.advocate_profile?.high_court || '—'"></span>
                     </div>
                     <div class="flex items-center gap-1.5 text-xs text-muted mb-1.5">
-                        <i class="bi bi-geo-alt flex-shrink-0" style="color:#D4AF37"></i>
+                        <i class="bi bi-geo-alt shrink-0" style="color:#D4AF37"></i>
                         <span x-text="adv.city || '—'"></span>
                     </div>
                     <div class="flex items-center gap-1.5 text-xs text-muted mb-3">
-                        <i class="bi bi-clock-history flex-shrink-0" style="color:#D4AF37"></i>
+                        <i class="bi bi-clock-history shrink-0" style="color:#D4AF37"></i>
                         <span x-text="(adv.advocate_profile?.experience_years || 0) + ' yrs experience'"></span>
                     </div>
 
@@ -101,7 +101,7 @@
                     <div class="mt-auto flex flex-col gap-2 pt-3 border-t border-border">
                         <div class="flex items-center gap-2 w-full">
                             {{-- View Details --}}
-                            <a :href="`/user/${adv.id}/detail`"
+                            <a :href="`/guest/advocates/${adv.id}`"
                                 class="flex-1 text-center py-2 rounded-lg text-xs font-bold border border-border text-muted hover:border-gold hover:text-gold-h transition-all">
                                 View Details
                             </a>

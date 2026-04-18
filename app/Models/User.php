@@ -23,7 +23,16 @@ class User extends Authenticatable
         'address',
         'city',
         'state',
-        'pincode'
+        'pincode',
+        'otp',
+        'otp_expires_at',
+        'phone_verified_at',
+        'user_group',
+        'sub_role',
+        'experience_years',
+        'capabilities',
+        'license_number',
+        'past_employers'
     ];
 
     protected $hidden = ['password', 'remember_token'];

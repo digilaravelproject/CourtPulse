@@ -62,7 +62,7 @@
                     class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-primary/30 transition-all flex flex-col h-full">
 
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg flex-shrink-0 text-white"
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg shrink-0 text-white"
                             style="background:linear-gradient(135deg,#D4AF37,#B5952F)"
                             x-text="guest.name.charAt(0).toUpperCase()"></div>
                         <div class="flex-1 min-w-0">
@@ -78,15 +78,15 @@
 
                     <div class="space-y-2 mb-4">
                         <div class="flex items-center gap-2 text-sm text-text-muted-light">
-                            <i class="bi bi-envelope text-primary text-xs flex-shrink-0"></i>
+                            <i class="bi bi-envelope text-primary text-xs shrink-0"></i>
                             <span class="truncate" x-text="guest.email"></span>
                         </div>
                         <div class="flex items-center gap-2 text-sm text-text-muted-light" x-show="guest.city">
-                            <i class="bi bi-geo-alt text-primary text-xs flex-shrink-0"></i>
+                            <i class="bi bi-geo-alt text-primary text-xs shrink-0"></i>
                             <span x-text="guest.city"></span>
                         </div>
                         <div class="flex items-center gap-2 text-sm text-text-muted-light">
-                            <i class="bi bi-calendar3 text-primary text-xs flex-shrink-0"></i>
+                            <i class="bi bi-calendar3 text-primary text-xs shrink-0"></i>
                             <span
                                 x-text="'Joined ' + new Date(guest.created_at).toLocaleDateString('en-IN',{month:'short',year:'numeric'})"></span>
                         </div>

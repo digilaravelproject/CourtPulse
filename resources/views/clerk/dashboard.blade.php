@@ -4,7 +4,7 @@
 @section('content')
 
     @php
-        $hasFeedback = \App\Http\Controllers\FeedbackController::clerkHasFeedback(auth()->id());
+        $hasFeedback = \App\Http\Controllers\User\FeedbackController::clerkHasFeedback(auth()->id());
         $firstName = explode(' ', $user->name)[0];
         $approvedDocs = $documentsStatus['approved'];
         $pendingDocs = $documentsStatus['pending'];
@@ -26,12 +26,10 @@
             <div
                 class="flex items-center gap-2 bg-surface-light px-4 py-2 rounded-full border border-gray-200 shadow-sm w-fit">
                 <span class="relative flex h-3 w-3">
-                    <span
-                        class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75
-                     {{ $user->status === 'active' ? 'bg-green-400' : 'bg-amber-400' }}"></span>
-                    <span
-                        class="relative inline-flex rounded-full h-3 w-3
-                     {{ $user->status === 'active' ? 'bg-green-500' : 'bg-amber-500' }}"></span>
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75
+                         {{ $user->status === 'active' ? 'bg-green-400' : 'bg-amber-400' }}"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3
+                         {{ $user->status === 'active' ? 'bg-green-500' : 'bg-amber-500' }}"></span>
                 </span>
                 <span class="text-sm font-medium text-gray-700">
                     {{ $user->status === 'active' ? 'Profile Visible' : 'Pending Verification' }}
@@ -63,14 +61,13 @@
                             Your profile is complete! 🎉
                         @endif
                     </p>
-                    <a href="{{ route('clerk.documents') }}"
-                        class="inline-block text-sm bg-gray-900 text-white px-4 py-2 rounded-lg font-medium
-                  hover:bg-gray-800 transition-colors">
+                    <a href="{{ route('clerk.documents') }}" class="inline-block text-sm bg-gray-900 text-white px-4 py-2 rounded-lg font-medium
+                      hover:bg-gray-800 transition-colors">
                         Complete Profile
                     </a>
                 </div>
                 <div class="hidden md:block w-px h-24 bg-gray-200 mx-4"></div>
-                <div class="flex gap-8 md:w-auto w-full justify-around md:justify-start flex-shrink-0">
+                <div class="flex gap-8 md:w-auto w-full justify-around md:justify-start shrink-0">
                     <div class="text-center">
                         <p class="text-3xl font-display font-bold text-gray-900">{{ $approvedDocs }}</p>
                         <p class="text-xs font-medium text-text-muted-light uppercase tracking-wide mt-1">Docs Approved</p>
@@ -101,7 +98,7 @@
                 <div
                     class="bg-surface-light rounded-2xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition-shadow group">
                     <div class="flex items-start gap-4 mb-4">
-                        <div class="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 font-display font-bold text-2xl text-white shadow-sm"
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 font-display font-bold text-2xl text-white shadow-sm"
                             style="background:linear-gradient(135deg,#D4AF37,#B5952F)">
                             {{ strtoupper(substr($adv->name, 0, 1)) }}
                         </div>
@@ -147,9 +144,8 @@
                                 🔒 Locked
                             </button>
                         @endif
-                        <a href="{{ route('user.detail', $adv) }}"
-                            class="flex-1 text-center bg-white border border-gray-200 hover:border-gray-300
-                  text-gray-700 text-sm font-medium py-2.5 px-4 rounded-lg transition-colors">
+                        <a href="{{ route('user.detail', $adv) }}" class="flex-1 text-center bg-white border border-gray-200 hover:border-gray-300
+                          text-gray-700 text-sm font-medium py-2.5 px-4 rounded-lg transition-colors">
                             View Details
                         </a>
                     </div>
@@ -180,7 +176,7 @@
                 @if ($user->status === 'active')
                     <div class="flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
                         <div
-                            class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                            class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
                             <span class="material-icons-round text-lg">verified</span>
                         </div>
                         <div>
@@ -195,7 +191,7 @@
                 @if (!$hasFeedback)
                     <div class="flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
                         <div
-                            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary-dark flex-shrink-0">
+                            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary-dark shrink-0">
                             <span class="material-icons-round text-lg">star_rate</span>
                         </div>
                         <div>
@@ -208,7 +204,7 @@
                 @else
                     <div class="flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
                         <div
-                            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary-dark flex-shrink-0">
+                            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary-dark shrink-0">
                             <span class="material-icons-round text-lg">visibility</span>
                         </div>
                         <div>
@@ -222,7 +218,7 @@
                 @if ($pendingDocs > 0)
                     <div class="flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
                         <div
-                            class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 flex-shrink-0">
+                            class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0">
                             <span class="material-icons-round text-lg">warning</span>
                         </div>
                         <div>
@@ -247,9 +243,8 @@
         <div class="bg-surface-light rounded-2xl p-6 border border-gray-200 shadow-sm">
             <h3 class="font-display font-bold text-xl text-gray-900 mb-4">Quick Actions</h3>
             <div class="space-y-3">
-                <a href="{{ route('clerk.documents') }}"
-                    class="w-full flex items-center justify-between p-3 rounded-xl border border-gray-200
-                hover:border-primary hover:bg-gray-50 transition-all group">
+                <a href="{{ route('clerk.documents') }}" class="w-full flex items-center justify-between p-3 rounded-xl border border-gray-200
+                    hover:border-primary hover:bg-gray-50 transition-all group">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-purple-100 rounded-lg text-purple-600">
                             <span class="material-icons-round text-lg">upload_file</span>
@@ -259,9 +254,8 @@
                     <span
                         class="material-icons-round text-gray-400 group-hover:text-primary transition-colors">chevron_right</span>
                 </a>
-                <a href="{{ route('clerk.profile') }}"
-                    class="w-full flex items-center justify-between p-3 rounded-xl border border-gray-200
-                hover:border-primary hover:bg-gray-50 transition-all group">
+                <a href="{{ route('clerk.profile') }}" class="w-full flex items-center justify-between p-3 rounded-xl border border-gray-200
+                    hover:border-primary hover:bg-gray-50 transition-all group">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-blue-100 rounded-lg text-blue-600">
                             <span class="material-icons-round text-lg">edit</span>
@@ -271,9 +265,8 @@
                     <span
                         class="material-icons-round text-gray-400 group-hover:text-primary transition-colors">chevron_right</span>
                 </a>
-                <a href="{{ route('feedback') }}"
-                    class="w-full flex items-center justify-between p-3 rounded-xl border border-gray-200
-                hover:border-primary hover:bg-gray-50 transition-all group">
+                <a href="{{ route('feedback') }}" class="w-full flex items-center justify-between p-3 rounded-xl border border-gray-200
+                    hover:border-primary hover:bg-gray-50 transition-all group">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-green-100 rounded-lg text-green-600">
                             <span class="material-icons-round text-lg">contact_support</span>

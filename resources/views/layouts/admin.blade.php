@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') — Court Pulse</title>
+    <title>@yield('title', 'Dashboard') — DockIt</title>
 
     {{-- Fonts --}}
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
@@ -178,7 +178,7 @@
     @stack('styles')
 </head>
 
-<body class="bg-slate-100 font-sans min-h-screen">
+<body class="bg-slate-100 font-sans min-h-screen" style="font-weight: 400;">
 
     {{-- ── TOAST BOX ────────────────────────────────────────── --}}
     <div id="toastBox" class="fixed top-16 right-4 z-[9999] flex flex-col gap-2 w-72 pointer-events-none"></div>
@@ -187,23 +187,21 @@
     <div id="sbOverlay" onclick="closeSb()" class="hidden fixed inset-0 bg-navy/60 backdrop-blur-sm z-[198]"></div>
 
     {{-- ════════════════════════════════════════
-     SIDEBAR
-════════════════════════════════════════ --}}
-    <aside id="sidebar"
-        class="gpat fixed inset-y-0 left-0 w-64 flex flex-col z-[199]
+    SIDEBAR
+    ════════════════════════════════════════ --}}
+    <aside id="sidebar" class="gpat fixed inset-y-0 left-0 w-64 flex flex-col z-[199]
          border-r transition-transform duration-300
-         -translate-x-full lg:translate-x-0"
-        style="background: var(--sb-bg); border-color: var(--sb-border);">
+         -translate-x-full lg:translate-x-0" style="background: var(--sb-bg); border-color: var(--sb-border);">
 
         {{-- Logo --}}
         <div class="flex items-center gap-3 px-5 py-[21px] flex-shrink-0"
             style="border-bottom: 1px solid var(--sb-border);">
             <div class="w-9 h-9 rounded-[9px] overflow-hidden flex items-center justify-center flex-shrink-0"
                 style="border: 1px solid var(--brand-border); background: var(--brand-dim);">
-                <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo" class="w-full h-full object-cover">
+                <img src="{{ asset('images/logo.jpeg') }}" alt="DockIt Logo" class="w-full h-full object-cover">
             </div>
             <div>
-                <div class="font-display text-[1.1rem] font-bold text-white leading-tight">Court Pulse</div>
+                <div class="font-display text-[1.1rem] font-bold text-white leading-tight">DockIt</div>
                 <div class="font-mono text-[0.52rem] uppercase tracking-[2.5px]" style="color: var(--brand-muted);">
                     Admin Panel</div>
             </div>
@@ -223,8 +221,8 @@
                     return "<a href='" .
                         route($route) .
                         "' class='flex items-center gap-3 px-5 py-2.5 text-[0.84rem] font-medium transition-all {$cls}'>
-                  <i class='bi {$icon} w-[18px] flex-shrink-0'></i> {$label} {$b}
-                </a>";
+                                  <i class='bi {$icon} w-[18px] flex-shrink-0'></i> {$label} {$b}
+                                </a>";
                 }
             @endphp
 
@@ -272,7 +270,8 @@
                 <div class="overflow-hidden flex-1 min-w-0">
                     <div class="text-[0.82rem] font-semibold text-white truncate">{{ auth()->user()->name }}</div>
                     <div class="font-mono text-[0.55rem] uppercase tracking-wide" style="color: var(--brand-muted);">
-                        {{ auth()->user()->role }}</div>
+                        {{ auth()->user()->role }}
+                    </div>
                 </div>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
@@ -285,10 +284,9 @@
     </aside>
 
     {{-- ════════════════════════════════════════
-     TOPBAR
-════════════════════════════════════════ --}}
-    <header
-        class="fixed top-0 left-0 lg:left-64 right-0 h-[58px] bg-white
+    TOPBAR
+    ════════════════════════════════════════ --}}
+    <header class="fixed top-0 left-0 lg:left-64 right-0 h-[58px] bg-white
                border-b border-slate-200 flex items-center px-5 gap-4 z-[100]">
 
         <button onclick="toggleSb()" class="lg:hidden text-slate-500 text-xl mr-1">
@@ -296,9 +294,10 @@
         </button>
 
         <div class="flex items-center gap-2">
-            <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo" class="w-7 h-7 rounded-full object-cover"
+            <img src="{{ asset('images/logo.jpeg') }}" alt="DockIt Logo" class="w-7 h-7 rounded-full object-cover"
                 style="border: 1px solid var(--brand-border);">
-            <span class="font-display font-bold text-[1.1rem] text-slate-800 truncate">@yield('page-title', 'Dashboard')</span>
+            <span
+                class="font-display font-bold text-[1.1rem] text-slate-800 truncate">@yield('page-title', 'Dashboard')</span>
         </div>
 
         <div class="ml-auto flex items-center gap-2">
@@ -307,8 +306,7 @@
                 $ui = (int) ($pendingCount ?? 0);
             @endphp
 
-            <a href="{{ route('admin.documents') }}"
-                class="bell-btn relative w-9 h-9 rounded-lg border border-slate-200 bg-white
+            <a href="{{ route('admin.documents') }}" class="bell-btn relative w-9 h-9 rounded-lg border border-slate-200 bg-white
               flex items-center justify-center text-slate-500 transition-all">
                 <i class="bi bi-file-earmark-check text-[1rem]"></i>
                 @if ($di > 0)
@@ -318,8 +316,7 @@
                 @endif
             </a>
 
-            <a href="{{ route('admin.users') }}?status=pending"
-                class="relative w-9 h-9 rounded-lg border border-slate-200 bg-white
+            <a href="{{ route('admin.users') }}?status=pending" class="relative w-9 h-9 rounded-lg border border-slate-200 bg-white
               flex items-center justify-center text-slate-500
               hover:border-red-400 hover:text-red-500 transition-all">
                 <i class="bi bi-bell text-[1rem]"></i>
@@ -337,18 +334,17 @@
     </header>
 
     {{-- ════════════════════════════════════════
-     MAIN
-════════════════════════════════════════ --}}
+    MAIN
+    ════════════════════════════════════════ --}}
     <main class="lg:ml-64 pt-[58px] min-h-screen">
         <div class="p-5 lg:p-6">
 
             {{-- Flash --}}
             @foreach (['success' => 'green', 'error' => 'red', 'info' => 'amber'] as $key => $color)
                 @if (session($key))
-                    <div
-                        class="flex items-center gap-3 mb-4 px-4 py-3 rounded-xl
-                bg-{{ $color }}-50 border border-{{ $color }}-200
-                text-{{ $color }}-700 text-sm font-medium">
+                    <div class="flex items-center gap-3 mb-4 px-4 py-3 rounded-xl
+                        bg-{{ $color }}-50 border border-{{ $color }}-200
+                        text-{{ $color }}-700 text-sm font-medium">
                         <i
                             class="bi bi-{{ $color === 'green' ? 'check-circle-fill' : ($color === 'red' ? 'exclamation-circle-fill' : 'info-circle-fill') }}"></i>
                         {{ session($key) }}
@@ -383,7 +379,7 @@
             el.className = `t-slide pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl
                   border shadow-lg text-sm font-medium
                   ${isOk ? 'bg-white border-green-200 text-green-700' : 'bg-white border-red-200 text-red-600'}`;
-            el.innerHTML = `<i class="bi ${isOk?'bi-check-circle-fill text-green-500':'bi-exclamation-circle-fill text-red-500'}"></i>
+            el.innerHTML = `<i class="bi ${isOk ? 'bi-check-circle-fill text-green-500' : 'bi-exclamation-circle-fill text-red-500'}"></i>
                   <span class="flex-1">${msg}</span>`;
             box.appendChild(el);
             setTimeout(() => {
@@ -400,14 +396,14 @@
             btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i>';
             const body = btn.dataset.body || null;
             fetch(url, {
-                    method,
-                    headers: {
-                        'X-CSRF-TOKEN': CSRF,
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: body
-                })
+                method,
+                headers: {
+                    'X-CSRF-TOKEN': CSRF,
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: body
+            })
                 .then(r => r.json())
                 .then(d => {
                     if (d.success !== false) {

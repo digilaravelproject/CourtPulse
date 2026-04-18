@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Court Pulse — India's Legal Professional Network</title>
+    <title>DockIt — India's Legal Professional Network</title>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
@@ -48,6 +48,44 @@
             overflow-x: hidden;
             line-height: 1.6;
             font-weight: 400;
+        }
+
+        /* MARQUEE */
+        .marquee-wrap {
+            background: var(--blue);
+            padding: 8px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            z-index: 1001;
+            margin-top: 75px; /* Offset for fixed nav */
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 40s linear infinite;
+            padding-left: 100%;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #050812;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+        .marquee-item {
+            display: inline-block;
+            padding: 0 40px;
+        }
+
+        .marquee-item::after {
+            content: "•";
+            margin-left: 40px;
+            opacity: 0.5;
         }
 
         /* NAV */
@@ -1571,13 +1609,24 @@
 
 <body>
 
+    <!-- MARQUEE DATA -->
+    <div class="marquee-wrap">
+        <div class="marquee-content">
+            <span class="marquee-item">SUPREME COURT: NEW JUDGMENTS RELEASED</span>
+            <span class="marquee-item">HIGH COURT: PROCEDURAL UPDATES FOR 2026</span>
+            <span class="marquee-item">TRIBUNAL UPDATES: FILING DEADLINES EXTENDED</span>
+            <span class="marquee-item">DockIt: EMPOWERING LEGAL PROFESSIONALS</span>
+            <span class="marquee-item">DELHI HIGH COURT: NEW ROSTER NOTIFIED</span>
+        </div>
+    </div>
+
     <!-- NAV -->
     <nav class="nav" id="nav">
         <div class="nav-inner">
             <a href="#" class="nav-logo d-flex align-items-center">
                 <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo"
                     style="height:40px; width:auto; margin-right:8px;">
-                Court Pulse
+                DockIt
             </a>
             <div class="nav-links">
                 <a href="#" class="active">Home</a>

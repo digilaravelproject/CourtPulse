@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') — Court Pulse</title>
+    <title>@yield('title', 'Dashboard') — DockIt</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -32,9 +32,7 @@
             }
         }
     </script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -45,7 +43,8 @@
         }
 
         body {
-            font-family: 'Manrope', sans-serif
+            font-family: 'Manrope', sans-serif;
+            font-weight: 400;
         }
 
         /* Sidebar */
@@ -237,7 +236,7 @@
                 alt="CP" class="w-9 h-9 rounded-xl object-cover flex-shrink-0"
                 style="box-shadow:0 0 0 2px rgba(180,180,254,.3)">
             <div>
-                <div class="font-display font-bold text-white leading-tight" style="font-size:1.02rem">Court Pulse</div>
+                <div class="font-display font-medium text-white leading-tight" style="font-size:1.02rem">DockIt</div>
                 <div class="font-mono uppercase tracking-[2.5px]" style="font-size:.48rem;color:rgba(180,180,254,.55)">
                     Advocate Portal</div>
             </div>
@@ -273,7 +272,7 @@
                 class="nav-link {{ request()->routeIs('advocate.documents*') ? 'active' : '' }}">
                 <span class="nav-icon"><i class="bi bi-folder2-open"></i></span>
                 <span>My Documents</span>
-                @php $pendingDocs = auth()->user()->documents()->where('status','pending')->count(); @endphp
+                @php $pendingDocs = auth()->user()->documents()->where('status', 'pending')->count(); @endphp
                 @if ($pendingDocs > 0)
                     <span class="ml-auto text-[.58rem] font-mono font-bold px-1.5 py-0.5 rounded-full"
                         style="background:rgba(180,180,254,.2);color:#B4B4FE">{{ $pendingDocs }}</span>
@@ -335,12 +334,10 @@
 
     </aside>
 
-    <header id="topbar"
-        class="fixed top-0 right-0 h-14 bg-white border-b border-slate-200 z-20
+    <header id="topbar" class="fixed top-0 right-0 h-14 bg-white border-b border-slate-200 z-20
               flex items-center px-5 gap-3 shadow-sm">
 
-        <button onclick="toggleSb()"
-            class="lg:hidden w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center
+        <button onclick="toggleSb()" class="lg:hidden w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center
            text-slate-500 hover:text-slate-800 text-lg bg-white">
             <i class="bi bi-list"></i>
         </button>

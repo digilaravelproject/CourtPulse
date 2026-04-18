@@ -5,11 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') — Court Pulse</title>
+    <title>@yield('title', 'Dashboard') — DockIt</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -163,23 +161,23 @@
     @stack('styles')
 </head>
 
-<body class="bg-slate-100 font-sans min-h-screen">
+<body class="bg-slate-100 font-sans min-h-screen" style="font-weight: 400;">
 
-    <div id="toastBox" class="fixed top-16 right-4 z-[9999] flex flex-col gap-2 w-72 pointer-events-none"></div>
-    <div id="sbOverlay" onclick="closeSb()" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-[198]"></div>
+    <div id="toastBox" class="fixed top-16 right-4 z-9999 flex flex-col gap-2 w-72 pointer-events-none"></div>
+    <div id="sbOverlay" onclick="closeSb()" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-198"></div>
 
     {{-- ═══ SIDEBAR — SUPER ADMIN ═══ --}}
     <aside id="sidebar"
-        class="gpat fixed inset-y-0 left-0 w-64 flex flex-col z-[199] border-r border-white/[0.06] transition-transform duration-300 -translate-x-full lg:translate-x-0"
+        class="gpat fixed inset-y-0 left-0 w-64 flex flex-col z-199 border-r border-white/6 transition-transform duration-300 -translate-x-full lg:translate-x-0"
         style="background:#060C18">
 
         {{-- Logo --}}
-        <div class="flex items-center gap-3 px-5 py-[21px] border-b border-white/[0.06] flex-shrink-0">
+        <div class="flex items-center gap-3 px-5 py-[21px] border-b border-white/6 shrink-0">
             <div
                 class="w-9 h-9 rounded-[9px] border border-gold/40 bg-gold/10 flex items-center justify-center text-gold text-lg">
                 ⚖</div>
             <div>
-                <div class="font-display text-[1.1rem] font-bold text-white leading-tight">Court Pulse</div>
+                <div class="font-display text-[1.1rem] font-bold text-white leading-tight">DockIt</div>
                 <div class="font-mono text-[0.52rem] tracking-[2.5px] uppercase" style="color:#a855f7">Super Admin</div>
             </div>
         </div>
@@ -197,7 +195,7 @@
                             : '';
                         return "<a href='" .
                             route($route) .
-                            "' class='flex items-center gap-3 px-5 py-2.5 text-[0.84rem] font-medium transition-all {$cls}'><i class='bi {$icon} w-[18px] flex-shrink-0'></i> {$label} {$b}</a>";
+                            "' class='flex items-center gap-3 px-5 py-2.5 text-[0.84rem] font-medium transition-all {$cls}'><i class='bi {$icon} w-[18px] shrink-0'></i> {$label} {$b}</a>";
                     }
                 }
                 if (!function_exists('superNavLink')) {
@@ -209,7 +207,7 @@
                             : 'text-white/55 hover:bg-purple-500/[0.06] hover:text-purple-300';
                         return "<a href='" .
                             route($route) .
-                            "' class='flex items-center gap-3 px-5 py-2.5 text-[0.84rem] font-medium transition-all {$cls}'><i class='bi {$icon} w-[18px] flex-shrink-0'></i> {$label}</a>";
+                            "' class='flex items-center gap-3 px-5 py-2.5 text-[0.84rem] font-medium transition-all {$cls}'><i class='bi {$icon} w-[18px] shrink-0'></i> {$label}</a>";
                     }
                 }
             @endphp
@@ -240,9 +238,9 @@
         </nav>
 
         {{-- Footer --}}
-        <div class="flex-shrink-0 px-5 py-4 border-t border-white/[0.06]">
+        <div class="shrink-0 px-5 py-4 border-t border-white/6">
             <div class="flex items-center gap-3">
-                <div class="w-[34px] h-[34px] rounded-[8px] border flex items-center justify-center font-bold text-[0.82rem] flex-shrink-0"
+                <div class="w-[34px] h-[34px] rounded-[8px] border flex items-center justify-center font-bold text-[0.82rem] shrink-0"
                     style="background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.3);color:#c084fc">
                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                 </div>
@@ -263,9 +261,10 @@
 
     {{-- ═══ TOPBAR ═══ --}}
     <header
-        class="fixed top-0 left-0 lg:left-64 right-0 h-[58px] bg-white border-b border-slate-200 flex items-center px-5 gap-4 z-[100]">
+        class="fixed top-0 left-0 lg:left-64 right-0 h-[58px] bg-white border-b border-slate-200 flex items-center px-5 gap-4 z-100">
         <button onclick="toggleSb()" class="lg:hidden text-slate-500 text-xl mr-1"><i class="bi bi-list"></i></button>
-        <span class="font-display font-bold text-[1.1rem] text-slate-800 truncate">@yield('page-title', 'Dashboard')</span>
+        <span
+            class="font-display font-bold text-[1.1rem] text-slate-800 truncate">@yield('page-title', 'Dashboard')</span>
         <div class="ml-auto flex items-center gap-2">
             @php
                 $di = (int) ($pendingDocsCount ?? 0);
@@ -330,9 +329,9 @@
             const box = document.getElementById('toastBox');
             const el = document.createElement('div');
             el.className =
-                `t-slide pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border shadow-lg text-sm font-medium ${isOk?'bg-white border-green-200 text-green-700':'bg-white border-red-200 text-red-600'}`;
+                `t-slide pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border shadow-lg text-sm font-medium ${isOk ? 'bg-white border-green-200 text-green-700' : 'bg-white border-red-200 text-red-600'}`;
             el.innerHTML =
-                `<i class="bi ${isOk?'bi-check-circle-fill text-green-500':'bi-exclamation-circle-fill text-red-500'}"></i><span class="flex-1">${msg}</span>`;
+                `<i class="bi ${isOk ? 'bi-check-circle-fill text-green-500' : 'bi-exclamation-circle-fill text-red-500'}"></i><span class="flex-1">${msg}</span>`;
             box.appendChild(el);
             setTimeout(() => {
                 el.style.transition = 'opacity .3s';

@@ -18,7 +18,7 @@
                     <i class="bi bi-graph-up-arrow"></i> +12% this month
                 </div>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+            <div class="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
                 <i class="bi bi-person-badge text-blue-500 text-lg"></i>
             </div>
         </div>
@@ -34,7 +34,7 @@
                     <i class="bi bi-graph-up-arrow"></i> +5% this month
                 </div>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
+            <div class="w-11 h-11 rounded-xl bg-purple-100 flex items-center justify-center shrink-0">
                 <i class="bi bi-folder2-open text-purple-500 text-lg"></i>
             </div>
         </div>
@@ -50,7 +50,7 @@
                     <i class="bi bi-exclamation-circle"></i> Action Required
                 </div>
             </div>
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
                 style="background: rgba(180,180,254,0.15);">
                 <i class="bi bi-hourglass-split text-lg" style="color: #B4B4FE;"></i>
             </div>
@@ -67,7 +67,7 @@
                     <i class="bi bi-file-earmark-check"></i> Awaiting review
                 </div>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center flex-shrink-0">
+            <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
                 <i class="bi bi-file-earmark-text text-red-500 text-lg"></i>
             </div>
         </div>
@@ -111,7 +111,7 @@
                     @endphp
                     <div class="flex items-start gap-3 px-5 py-3.5 border-b border-slate-50 last:border-0">
                         <div
-                            class="w-9 h-9 rounded-xl {{ $ac[0] }} {{ $ac[1] }} flex items-center justify-center font-bold text-[0.72rem] flex-shrink-0">
+                            class="w-9 h-9 rounded-xl {{ $ac[0] }} {{ $ac[1] }} flex items-center justify-center font-bold text-[0.72rem] shrink-0">
                             {{ strtoupper(substr($u->name, 0, 2)) }}
                         </div>
                         <div class="flex-1 min-w-0">
@@ -129,10 +129,10 @@
                         </div>
                         @if ($u->status === 'active')
                             <span
-                                class="flex-shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded bg-green-100 text-green-700 font-mono text-[0.55rem] uppercase tracking-wide font-semibold">Active</span>
+                                class="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded bg-green-100 text-green-700 font-mono text-[0.55rem] uppercase tracking-wide font-semibold">Active</span>
                         @else
                             <span
-                                class="flex-shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-mono text-[0.55rem] uppercase tracking-wide font-semibold">Pending</span>
+                                class="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-mono text-[0.55rem] uppercase tracking-wide font-semibold">Pending</span>
                         @endif
                     </div>
                 @empty
@@ -198,7 +198,7 @@
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-2.5">
                                     <div
-                                        class="w-10 h-10 rounded-full {{ $rc[0] }} {{ $rc[1] }} flex items-center justify-center font-bold text-[0.78rem] flex-shrink-0">
+                                        class="w-10 h-10 rounded-full {{ $rc[0] }} {{ $rc[1] }} flex items-center justify-center font-bold text-[0.78rem] shrink-0">
                                         {{ strtoupper(substr($u->name, 0, 2)) }}
                                     </div>
                                     <div>
@@ -306,7 +306,7 @@
                         <tr class="trow">
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-2.5">
-                                    <div class="w-9 h-9 rounded-lg bg-ncard flex items-center justify-center font-bold text-[0.8rem] flex-shrink-0"
+                                    <div class="w-9 h-9 rounded-lg bg-ncard flex items-center justify-center font-bold text-[0.8rem] shrink-0"
                                         style="color: #B4B4FE;">
                                         {{ strtoupper(substr($doc->user->name, 0, 1)) }}
                                     </div>
@@ -364,16 +364,16 @@
     </div>
 
     {{-- ══ MODALS ═══════════════════════════════════════════════════ --}}
-    <div id="vOverlay" onclick="closeModal()" class="hidden fixed inset-0 bg-navy/60 backdrop-blur-sm z-[1000]"></div>
+    <div id="vOverlay" onclick="closeModal()" class="hidden fixed inset-0 bg-navy/60 backdrop-blur-sm z-1000"></div>
 
     {{-- Verify Modal --}}
     <div id="vModal"
         class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-         w-[min(500px,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl z-[1001]">
+         w-[min(500px,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl z-1001">
         <div
-            class="flex items-center gap-4 px-6 py-5 border-b border-slate-100 rounded-t-2xl bg-gradient-to-br from-green-50 to-white">
+            class="flex items-center gap-4 px-6 py-5 border-b border-slate-100 rounded-t-2xl bg-linear-to-br from-green-50 to-white">
             <div
-                class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-green-600 text-2xl flex-shrink-0">
+                class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-green-600 text-2xl shrink-0">
                 <i class="bi bi-person-check-fill"></i>
             </div>
             <div class="flex-1">
@@ -387,7 +387,7 @@
         <div class="p-6 space-y-4">
             <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
                 <div id="v_avatar"
-                    class="w-14 h-14 rounded-xl bg-navy flex items-center justify-center font-bold text-xl font-display flex-shrink-0"
+                    class="w-14 h-14 rounded-xl bg-navy flex items-center justify-center font-bold text-xl font-display shrink-0"
                     style="color: #B4B4FE; border: 2px solid rgba(180,180,254,0.30);">
                 </div>
                 <div>
@@ -428,7 +428,7 @@
             </div>
             <div
                 class="flex items-start gap-3 px-4 py-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 text-xs leading-relaxed">
-                <i class="bi bi-info-circle-fill flex-shrink-0 mt-0.5"></i>
+                <i class="bi bi-info-circle-fill shrink-0 mt-0.5"></i>
                 Once verified, this user gets full dashboard access and will appear in the professional directory.
             </div>
         </div>
@@ -445,11 +445,11 @@
     {{-- Reject Modal --}}
     <div id="rModal"
         class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-         w-[min(440px,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl z-[1001]">
+         w-[min(440px,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl z-1001">
         <div
-            class="flex items-center gap-4 px-6 py-5 border-b border-slate-100 rounded-t-2xl bg-gradient-to-br from-red-50 to-white">
+            class="flex items-center gap-4 px-6 py-5 border-b border-slate-100 rounded-t-2xl bg-linear-to-br from-red-50 to-white">
             <div
-                class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-red-500 text-2xl flex-shrink-0">
+                class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-red-500 text-2xl shrink-0">
                 <i class="bi bi-person-x-fill"></i>
             </div>
             <div class="flex-1">
@@ -462,7 +462,7 @@
         <div class="p-6">
             <div
                 class="flex items-start gap-3 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-xs leading-relaxed">
-                <i class="bi bi-exclamation-triangle-fill flex-shrink-0 mt-0.5"></i>
+                <i class="bi bi-exclamation-triangle-fill shrink-0 mt-0.5"></i>
                 This marks the user as <strong>Rejected</strong>. They won't be able to access role features.
             </div>
         </div>

@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.super-admin')
 @section('title', 'Activity Logs')
 @section('page-title', 'Activity Logs')
 
@@ -26,15 +26,13 @@
             <div class="sm:col-span-2 relative">
                 <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
                 <input type="text" x-model="filters.search" @input.debounce.400ms="fetchLogs()"
-                    placeholder="Search by name or email..."
-                    class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm
-                    focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition">
+                    placeholder="Search by name or email..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm
+                        focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition">
             </div>
 
             {{-- Role filter --}}
-            <select x-model="filters.role" @change="fetchLogs()"
-                class="px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white
-                   focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition cursor-pointer">
+            <select x-model="filters.role" @change="fetchLogs()" class="px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white
+                       focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition cursor-pointer">
                 <option value="">All Roles</option>
                 <option value="super_admin">Super Admin</option>
                 <option value="admin">Admin</option>
@@ -45,9 +43,8 @@
             </select>
 
             {{-- Status filter --}}
-            <select x-model="filters.status" @change="fetchLogs()"
-                class="px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white
-                   focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition cursor-pointer">
+            <select x-model="filters.status" @change="fetchLogs()" class="px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white
+                       focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition cursor-pointer">
                 <option value="">All Statuses</option>
                 <option value="active">Active</option>
                 <option value="pending">Pending</option>
@@ -156,9 +153,8 @@
                 <div class="mb-4">
                     <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Select
                         Role</label>
-                    <select name="role" id="assignRoleSelect"
-                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-sm
-                       focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition">
+                    <select name="role" id="assignRoleSelect" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-sm
+                           focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition">
                         <option value="advocate">Advocate</option>
                         <option value="clerk">Clerk</option>
                         <option value="ca">CA</option>
@@ -203,11 +199,11 @@
                         const qs = new URLSearchParams(this.filters).toString();
 
                         fetch(`{{ route('super.activity') }}?${qs}`, {
-                                headers: {
-                                    'X-Requested-With': 'XMLHttpRequest',
-                                    'X-CSRF-TOKEN': CSRF,
-                                },
-                            })
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRF-TOKEN': CSRF,
+                            },
+                        })
                             .then(r => r.json())
                             .then(d => {
                                 if (d.html !== undefined) {
@@ -248,16 +244,16 @@
                 btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> Assigning...';
 
                 fetch(`/super-admin/assign-role/${_assignUserId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': CSRF,
-                            'X-Requested-With': 'XMLHttpRequest',
-                        },
-                        body: JSON.stringify({
-                            role
-                        }),
-                    })
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': CSRF,
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify({
+                        role
+                    }),
+                })
                     .then(r => r.json())
                     .then(d => {
                         if (d.success !== false) {

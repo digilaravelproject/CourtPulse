@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot Password — Court Pulse</title>
+    <title>Forgot Password — DockIt</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
     <link rel="stylesheet"
@@ -39,6 +39,7 @@
 
         body {
             font-family: 'Manrope', sans-serif;
+            font-weight: 400;
             background: var(--navy);
             color: var(--text);
             min-height: 100vh;
@@ -145,7 +146,7 @@
             color: var(--white);
             line-height: 1.05;
             margin-bottom: 20px;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.02em;
             text-transform: uppercase;
         }
 
@@ -401,9 +402,9 @@
             <div class="left-content">
 
                 <a href="{{ route('home') }}" class="nav-logo align-items-center">
-                    <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo"
+                    <img src="{{ asset('images/logo.jpeg') }}" alt="DockIt Logo"
                         style="height:40px; width:auto; margin-right:8px;">
-                    Court Pulse
+                    DockIt
                 </a>
 
                 <h1 class="left-title">Recover Your<br><span class="accent-italic">Account.</span></h1>
@@ -421,7 +422,7 @@
                         <div class="rule-dot"></div> Your password stays safe until you reset
                     </div>
                     <div class="rule-item">
-                        <div class="rule-dot"></div> Court Pulse never asks for your password
+                        <div class="rule-dot"></div> DockIt never asks for your password
                     </div>
                 </div>
             </div>
@@ -430,9 +431,9 @@
         <div class="auth-right">
 
             <a href="{{ route('home') }}" class="nav-logo mobile-logo align-items-center">
-                <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo"
+                <img src="{{ asset('images/logo.jpeg') }}" alt="DockIt Logo"
                     style="height:34px; width:auto; margin-right:8px;">
-                Court Pulse
+                DockIt
             </a>
 
             @if (session('status'))

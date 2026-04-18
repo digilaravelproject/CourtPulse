@@ -19,9 +19,9 @@ class CheckAccountStatus
         if (Auth::check()) {
             $user = Auth::user();
 
-            // If professional user has finished Step 2 but is still pending approval
+            // If professional user has finished all steps but is still pending approval
             if (in_array($user->role, ['advocate', 'clerk', 'ca']) && 
-                $user->registration_step >= 2 && 
+                $user->registration_step === 3 && 
                 $user->status === 'pending') {
                 
                 $allowedRoutes = [
