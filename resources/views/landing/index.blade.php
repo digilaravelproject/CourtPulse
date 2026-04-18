@@ -58,7 +58,8 @@
             white-space: nowrap;
             position: relative;
             z-index: 1001;
-            margin-top: 75px; /* Offset for fixed nav */
+            margin-top: 75px;
+            /* Offset for fixed nav */
         }
 
         .marquee-content {
@@ -73,8 +74,13 @@
         }
 
         @keyframes marquee {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-100%, 0); }
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(-100%, 0);
+            }
         }
 
         .marquee-item {
