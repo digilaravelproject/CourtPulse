@@ -45,7 +45,16 @@ class AuthService
     {
         $user = User::where('email', $email)->first();
 
-        if ($user && $user->otp === $otp && Carbon::now()->lt($user->otp_expires_at)) {
+        if (!$user) {
+            throw new \Exception('User not found.');
+        }
+
+        // --- MASTER OTP FOR TESTING ---
+        // To disable this, remove ($otp === '123456' || ...)
+        $isMasterOtp = ($otp === '123456');
+        $isMailOtp = ($user->otp === $otp && Carbon::now()->lt($user->otp_expires_at));
+
+        if ($isMasterOtp || $isMailOtp) {
             $user->update(['otp' => null, 'otp_expires_at' => null]);
             Auth::login($user);
             return $user;
@@ -86,7 +95,9 @@ class AuthService
      */
     public function verifyRegistrationOtp(User $user, string $otp)
     {
-        if ($user->otp === $otp && Carbon::now()->lt($user->otp_expires_at)) {
+        // --- MASTER OTP FOR TESTING ---
+        // To disable this, remove ($otp === '123456' || ...)
+        if ($otp === '123456' || ($user->otp === $otp && Carbon::now()->lt($user->otp_expires_at))) {
             $user->update([
                 'otp'               => null,
                 'otp_expires_at'    => null,
