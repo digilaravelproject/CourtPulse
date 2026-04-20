@@ -50,8 +50,9 @@ class AuthService
         }
 
         // --- MASTER OTP FOR TESTING ---
-        // To disable this, remove ($otp === '123456' || ...)
-        $isMasterOtp = ($otp === '123456');
+        // Configured in .env as MASTER_OTP
+        $masterOtp = config('auth.master_otp');
+        $isMasterOtp = ($masterOtp && $otp === (string)$masterOtp);
         $isMailOtp = ($user->otp === $otp && Carbon::now()->lt($user->otp_expires_at));
 
         if ($isMasterOtp || $isMailOtp) {
@@ -96,8 +97,10 @@ class AuthService
     public function verifyRegistrationOtp(User $user, string $otp)
     {
         // --- MASTER OTP FOR TESTING ---
-        // To disable this, remove ($otp === '123456' || ...)
-        if ($otp === '123456' || ($user->otp === $otp && Carbon::now()->lt($user->otp_expires_at))) {
+        $masterOtp = config('auth.master_otp');
+        $isMasterOtp = ($masterOtp && $otp === (string)$masterOtp);
+
+        if ($isMasterOtp || ($user->otp === $otp && Carbon::now()->lt($user->otp_expires_at))) {
             $user->update([
                 'otp'               => null,
                 'otp_expires_at'    => null,
