@@ -59,14 +59,14 @@
                     <div class="flex items-center gap-1.5 justify-end">
                         @if ($doc->status === 'pending')
                             <button
-                                onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Document approved!','ok')"
+                                onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Document Approved!','ok')"
                                 data-body='{"status":"approved"}'
                                 class="flex items-center gap-1 px-3 h-8 rounded-lg bg-green-500 hover:bg-green-600 text-white text-xs font-bold transition-all">
                                 <i class="bi bi-check-lg"></i>
                             </button>
                             <button
-                                onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Document rejected.','err')"
-                                data-body='{"status":"rejected","rejection_reason":"Document not valid"}'
+                                onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Document Rejected.','err')"
+                                data-body='{"status":"rejected","rejection_reason":"Invalid document"}'
                                 class="flex items-center gap-1 px-3 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition-all">
                                 <i class="bi bi-x-lg"></i>
                             </button>

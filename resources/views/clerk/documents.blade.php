@@ -9,7 +9,7 @@
             'court_id_card' => ['label' => 'Court ID Card', 'icon' => 'badge'],
             'clerk_appointment_letter' => ['label' => 'Appointment Letter', 'icon' => 'description'],
             'service_certificate' => ['label' => 'Service Certificate', 'icon' => 'workspace_premium'],
-            'aadhar_card' => ['label' => 'Aadhar Card', 'icon' => 'credit_card'],
+            'aadhar_card' => ['label' => 'Aadhaar Card', 'icon' => 'credit_card'],
             'pan_card' => ['label' => 'PAN Card', 'icon' => 'account_balance_wallet'],
         ];
         $uploadedTypes = $documents->pluck('document_type')->toArray();

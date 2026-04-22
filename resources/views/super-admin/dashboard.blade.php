@@ -8,7 +8,7 @@
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition-all hover:shadow-md">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-slate-500 font-medium text-sm">Total Registerations</h3>
+                    <h3 class="text-slate-500 font-medium text-sm">Total Registrations</h3>
                     <p class="text-3xl font-bold text-slate-800 mt-1">{{ number_format($stats['total_users']) }}</p>
                 </div>
                 <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl">

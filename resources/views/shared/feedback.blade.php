@@ -68,7 +68,7 @@
                             </div>
 
                             {{-- User Select per Role --}}
-                            {{-- Single hidden input — JS se populate hoga --}}
+                            {{-- Single hidden input — Populated via JS --}}
                             <input type="hidden" name="receiver_id" id="receiverIdInput" value="">
 
                             @foreach ($targets as $targetRole => $users)
@@ -277,7 +277,7 @@
             const receiverInput = document.getElementById('receiverIdInput');
 
             function syncReceiver() {
-                // Active visible select ki value hidden input mein daalo
+                // Assign the active select's value to the hidden input
                 const activeSection = document.querySelector('.role-section:not(.hidden)');
                 if (activeSection) {
                     const sel = activeSection.querySelector('select.role-select');
@@ -285,23 +285,23 @@
                 }
             }
 
-            // Har select change pe sync karo
+            // Sync the receiver whenever the selection changes
             document.querySelectorAll('select.role-select').forEach(sel => {
                 sel.addEventListener('change', syncReceiver);
             });
 
-            // Form submit pe validate karo
+            // Validate the form on submission
             document.getElementById('feedbackForm').addEventListener('submit', function(e) {
                 syncReceiver();
                 if (!receiverInput.value) {
                     e.preventDefault();
-                    alert('Kripya pehle ek user select karein.');
+                    alert('Please select a user first.');
                     return false;
                 }
                 const rating = document.querySelector('input[name="rating"]:checked');
                 if (!rating) {
                     e.preventDefault();
-                    alert('Kripya rating zaroor dein.');
+                    alert('Please provide a rating.');
                     return false;
                 }
             });
@@ -326,12 +326,12 @@
                     if (active) {
                         active.classList.remove('hidden');
                     }
-                    // Tab switch ke baad receiver sync karo
+                    // Sync the receiver after switching tabs
                     syncReceiver();
                 });
             });
 
-            // Page load pe initial sync
+            // Perform initial synchronization on page load
             syncReceiver();
 
             // ── Star Rating ──

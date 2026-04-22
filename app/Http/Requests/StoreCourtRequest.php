@@ -3,12 +3,13 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreCourtRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return auth()->check() && auth()->user()->hasAnyRole(['admin', 'super_admin']);
+        return Auth::check() && Auth::user()->hasAnyRole(['admin', 'super_admin']);
     }
 
     public function rules(): array
@@ -33,7 +34,7 @@ class StoreCourtRequest extends FormRequest
             'type.in'        => 'Selected court type is invalid.',
             'city.required'  => 'City is required.',
             'state.required' => 'State is required.',
-            'pincode.digits' => 'Pincode must be exactly 6 digits.',
+            'pincode.digits' => 'PIN Code must be exactly 6 digits.',
             'email.email'    => 'Please enter a valid email address.',
         ];
     }

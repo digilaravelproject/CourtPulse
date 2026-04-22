@@ -46,7 +46,7 @@
                 <select x-model="f.status" @change="load()"
                     class="py-2 pl-3 pr-8 text-sm border border-slate-200 rounded-lg bg-slate-50
                focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition">
-                    <option value="">All Status</option>
+                    <option value="">All Statuses</option>
                     <option value="active">Active</option>
                     <option value="pending">Pending</option>
                     <option value="rejected">Rejected</option>
@@ -83,19 +83,19 @@
      VERIFY MODAL
 ═══════════════════════════════════════════ --}}
     <div id="vOverlay" onclick="closeModal()"
-        class="hidden fixed inset-0 bg-navy/60 backdrop-blur-sm z-[1000] transition-opacity"></div>
+        class="hidden fixed inset-0 bg-navy/60 backdrop-blur-sm z-1000 transition-opacity"></div>
 
     <div id="vModal"
         class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-         w-[min(500px,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl z-[1001]">
+         w-[min(500px,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl z-1001">
 
         {{-- Header --}}
         <div
             class="flex items-center gap-4 px-6 py-5 border-b border-slate-100
-              rounded-t-2xl bg-gradient-to-br from-green-50 to-white">
+              rounded-t-2xl bg-linear-to-br from-green-50 to-white">
             <div
                 class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center
-                text-green-600 text-2xl flex-shrink-0">
+                text-green-600 text-2xl shrink-0">
                 <i class="bi bi-person-check-fill"></i>
             </div>
             <div class="flex-1">
@@ -114,7 +114,7 @@
             <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
                 <div id="v_avatar"
                     class="w-14 h-14 rounded-xl bg-navy flex items-center justify-center
-               text-gold font-bold text-lg border-2 border-gold/30 flex-shrink-0
+               text-gold font-bold text-lg border-2 border-gold/30 shrink-0
                font-display">
                 </div>
                 <div>
@@ -142,8 +142,8 @@
             <div
                 class="flex items-start gap-3 px-4 py-3 bg-amber-50 border border-amber-200
                 rounded-lg text-amber-700 text-xs leading-relaxed">
-                <i class="bi bi-info-circle-fill flex-shrink-0 mt-0.5"></i>
-                Once verified, this user gets full dashboard access and will appear in the professional directory.
+                <i class="bi bi-info-circle-fill shrink-0 mt-0.5"></i>
+                Once verified, this user gets full dashboard access and will appear in the Professional Directory.
             </div>
         </div>
 
@@ -169,14 +169,14 @@
 ═══════════════════════════════════════════ --}}
     <div id="rModal"
         class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-         w-[min(440px,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl z-[1001]">
+         w-[min(440px,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl z-1001">
 
         <div
             class="flex items-center gap-4 px-6 py-5 border-b border-slate-100
-              rounded-t-2xl bg-gradient-to-br from-red-50 to-white">
+              rounded-t-2xl bg-linear-to-br from-red-50 to-white">
             <div
                 class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center
-                text-red-500 text-2xl flex-shrink-0">
+                text-red-500 text-2xl shrink-0">
                 <i class="bi bi-person-x-fill"></i>
             </div>
             <div class="flex-1">
@@ -193,8 +193,8 @@
             <div
                 class="flex items-start gap-3 px-4 py-3 bg-red-50 border border-red-200
                 rounded-lg text-red-700 text-xs leading-relaxed">
-                <i class="bi bi-exclamation-triangle-fill flex-shrink-0 mt-0.5"></i>
-                This marks the user as <strong>Rejected</strong>. They won't be able to access role features until
+                <i class="bi bi-exclamation-triangle-fill shrink-0 mt-0.5"></i>
+                This marks the user as <strong>Rejected</strong>. They won't be able to access role-specific features until
                 re-verified.
             </div>
         </div>
@@ -247,7 +247,7 @@
                         })
                         .catch(() => {
                             this.loading = false;
-                            showToast('Filter failed', 'err');
+                            showToast('Filter Failed', 'err');
                         });
                 },
                 reset() {
@@ -344,7 +344,7 @@
                 .then(() => {
                     const name = _uname;
                     closeModal();
-                    showToast(`${name} verified successfully!`, 'ok');
+                    showToast(`${name} Verified Successfully!`, 'ok');
                     document.querySelectorAll(`tr[data-uid="${_uid||0}"]`).forEach(r => r.remove());
                     // fallback: remove by scanning text
                     document.querySelectorAll('#users-tbl tbody tr').forEach(r => {
@@ -354,7 +354,7 @@
                 .catch(() => {
                     btn.disabled = false;
                     btn.innerHTML = '<i class="bi bi-check-lg"></i> Confirm Verify';
-                    showToast('Error!', 'err');
+                    showToast('Verification Failed', 'err');
                 });
         }
 
@@ -374,12 +374,12 @@
                 .then(() => {
                     const name = _uname;
                     closeModal();
-                    showToast(`${name} rejected.`, 'err');
+                    showToast(`${name} Rejected.`, 'err');
                 })
                 .catch(() => {
                     btn.disabled = false;
                     btn.innerHTML = '<i class="bi bi-x-lg"></i> Confirm Reject';
-                    showToast('Error!', 'err');
+                    showToast('Rejection Failed', 'err');
                 });
         }
     </script>

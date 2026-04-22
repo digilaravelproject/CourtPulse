@@ -19,7 +19,7 @@
                 <label class="font-mono text-[0.56rem] tracking-[1.5px] uppercase text-slate-400">Status</label>
                 <select x-model="f.status" @change="load()"
                     class="py-2 pl-3 pr-8 text-sm border border-slate-200 rounded-lg bg-slate-50 focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition">
-                    <option value="">All Status</option>
+                    <option value="">All Statuses</option>
                     <option value="pending">Pending</option>
                     <option value="approved">Approved</option>
                     <option value="rejected">Rejected</option>
@@ -33,7 +33,7 @@
                     <option value="bar_council_certificate">Bar Council Cert</option>
                     <option value="enrollment_certificate">Enrollment Cert</option>
                     <option value="degree_certificate">Degree Cert</option>
-                    <option value="aadhar_card">Aadhar Card</option>
+                    <option value="aadhar_card">Aadhaar Card</option>
                     <option value="pan_card">PAN Card</option>
                     <option value="practice_certificate">Practice Cert</option>
                     <option value="court_id_card">Court ID Card</option>
@@ -87,7 +87,7 @@
                         })
                         .catch(() => {
                             this.loading = false;
-                            showToast('Filter failed', 'err');
+                            showToast('Filter Failed', 'err');
                         });
                 },
                 reset() {

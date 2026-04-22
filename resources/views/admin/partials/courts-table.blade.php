@@ -38,18 +38,20 @@
 
                 {{-- Type badge --}}
                 <td class="px-4 py-3.5 hidden sm:table-cell">
-                    <span
-                        class="inline-flex items-center text-[0.62rem] font-semibold px-2.5 py-1
-                     rounded-md font-mono uppercase tracking-wide
-          @if ($court->type === 'supreme') bg-red-100 text-red-700
-          @elseif($court->type === 'high')     bg-purple-100 text-purple-700
-          @elseif($court->type === 'district') bg-blue-100 text-blue-700
-          @elseif($court->type === 'session')  bg-indigo-100 text-indigo-700
-          @elseif($court->type === 'civil')    bg-sky-100 text-sky-700
-          @elseif($court->type === 'criminal') bg-orange-100 text-orange-700
-          @elseif($court->type === 'family')   bg-pink-100 text-pink-700
-          @elseif($court->type === 'consumer') bg-teal-100 text-teal-700
-          @else bg-amber-100 text-amber-700 @endif">
+                    @php
+                        $badgeColors = [
+                            'supreme' => 'bg-red-100 text-red-700',
+                            'high' => 'bg-purple-100 text-purple-700',
+                            'district' => 'bg-blue-100 text-blue-700',
+                            'session' => 'bg-indigo-100 text-indigo-700',
+                            'civil' => 'bg-sky-100 text-sky-700',
+                            'criminal' => 'bg-orange-100 text-orange-700',
+                            'family' => 'bg-pink-100 text-pink-700',
+                            'consumer' => 'bg-teal-100 text-teal-700',
+                        ];
+                        $colorClass = $badgeColors[$court->type] ?? 'bg-amber-100 text-amber-700';
+                    @endphp
+                    <span class="inline-flex items-center text-[0.62rem] font-semibold px-2.5 py-1 rounded-md font-mono uppercase tracking-wide {{ $colorClass }}">
                         {{ $court->type_label }}
                     </span>
                 </td>

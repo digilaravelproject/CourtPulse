@@ -60,11 +60,11 @@
         <div
             class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex items-start justify-between gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all">
             <div>
-                <div class="font-mono text-[0.58rem] tracking-[1.5px] uppercase text-slate-400 mb-1">Pending Docs</div>
+                <div class="font-mono text-[0.58rem] tracking-[1.5px] uppercase text-slate-400 mb-1">Pending Documents</div>
                 <div class="font-display font-bold text-[1.8rem] text-red-500 leading-tight">
                     {{ $stats['pending_documents'] }}</div>
                 <div class="flex items-center gap-1.5 mt-1.5 text-slate-400 text-xs font-medium">
-                    <i class="bi bi-file-earmark-check"></i> Awaiting review
+                    <i class="bi bi-file-earmark-check"></i> Awaiting Review
                 </div>
             </div>
             <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
@@ -343,7 +343,7 @@
                                     </button>
                                     <button
                                         onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Document rejected.','err')"
-                                        data-body='{"status":"rejected","rejection_reason":"Documents not valid"}'
+                                        data-body='{"status":"rejected","rejection_reason":"Invalid documents"}'
                                         class="w-8 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition-all text-sm"
                                         title="Reject">
                                         <i class="bi bi-x-lg"></i>
@@ -421,7 +421,7 @@
                 <div class="bg-slate-50 border border-slate-200 rounded-lg p-3">
                     <div
                         class="flex items-center gap-1.5 font-mono text-[0.57rem] uppercase tracking-wider text-slate-400 mb-1.5">
-                        <i class="bi bi-shield-check"></i> After Verify
+                        <i class="bi bi-shield-check"></i> Post-Verification
                     </div>
                     <div class="text-sm font-semibold text-green-600">Status → <strong>Active</strong></div>
                 </div>
@@ -463,7 +463,7 @@
             <div
                 class="flex items-start gap-3 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-xs leading-relaxed">
                 <i class="bi bi-exclamation-triangle-fill shrink-0 mt-0.5"></i>
-                This marks the user as <strong>Rejected</strong>. They won't be able to access role features.
+                This marks the user as <strong>Rejected</strong>. They will not be able to access role-specific features.
             </div>
         </div>
         <div class="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50/80 rounded-b-2xl">
@@ -600,7 +600,7 @@
                 .then(r => r.json()).then(() => {
                     const n = _uname;
                     closeModal();
-                    showToast(`${n} verified successfully!`, 'ok');
+                    showToast(`${n} Verified Successfully!`, 'ok');
                     document.querySelectorAll(`[data-uid="${_uid}"]`).forEach(r => {
                         r.style.transition = 'opacity .3s';
                         r.style.opacity = '0';

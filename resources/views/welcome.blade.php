@@ -5,7 +5,8 @@
     <!-- HERO SECTION -->
     <header class="relative pt-32 pb-20 overflow-hidden bg-navy group/hero">
         <!-- Premium Hero Background -->
-        <div class="absolute inset-0 opacity-20 pointer-events-none scale-105 group-hover/hero:scale-110 transition-transform duration-[10000ms] ease-linear">
+        <div
+            class="absolute inset-0 opacity-20 pointer-events-none scale-105 group-hover/hero:scale-110 transition-transform duration-[10000ms] ease-linear">
             <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=1500"
                 class="w-full h-full object-cover grayscale brightness-[0.3]" alt="Legal Tech Background">
         </div>
@@ -28,7 +29,8 @@
             </h2>
 
             <div class="flex items-center justify-center gap-4 mb-16 reveal stagger-1 visible">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" class="float">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5"
+                    class="float">
                     <path d="M7 17L17 7M7 7H17V17" />
                 </svg>
                 <h3 class="text-lg md:text-xl font-bold text-[#B4B4FE] uppercase tracking-[0.25em]">
@@ -43,21 +45,21 @@
 
                 <div class="marquee-container" style="background: transparent;">
                     <div class="marquee-content" style="animation: marquee 40s linear infinite;">
-                        <span class="marquee-item text-[#B4B4FE]! text-[1.1rem]! font-black! tracking-normal!">Every Dt.
-                            covered. Every court handled.</span>
+                        <span class="marquee-item text-[#B4B4FE]! text-[1.1rem]! font-black! tracking-normal!">Every District
+                            covered. Every Court handled.</span>
                         <span class="marquee-item text-white! text-[1.1rem]! font-black! tracking-normal!">Delegate court
-                            Appearances & routine filings to verified professionals</span>
+                            appearances & routine filings to verified professionals</span>
                         <span class="marquee-item text-[#B4B4FE]! text-[1.1rem]! font-black! tracking-normal!">Connect with
-                            verified filing professionals accross Tribunals & ROC offices.</span>
+                            verified filing professionals across Tribunals & ROC offices.</span>
                         <span class="marquee-item text-white! text-[1.1rem]! font-black! tracking-normal!">Ideas move fast.
                             Your filings should too.</span>
                         <!-- Duplicate for seamless scroll -->
-                        <span class="marquee-item text-[#B4B4FE]! text-[1.1rem]! font-black! tracking-normal!">Every Dt.
-                            covered. Every court handled.</span>
+                        <span class="marquee-item text-[#B4B4FE]! text-[1.1rem]! font-black! tracking-normal!">Every District
+                            covered. Every Court handled.</span>
                         <span class="marquee-item text-white! text-[1.1rem]! font-black! tracking-normal!">Delegate court
-                            Appearances & routine filings to verified professionals</span>
+                            appearances & routine filings to verified professionals</span>
                         <span class="marquee-item text-[#B4B4FE]! text-[1.1rem]! font-black! tracking-normal!">Connect with
-                            verified filing professionals accross Tribunals & ROC offices.</span>
+                            verified filing professionals across Tribunals & ROC offices.</span>
                         <span class="marquee-item text-white! text-[1.1rem]! font-black! tracking-normal!">Ideas move fast.
                             Your filings should too.</span>
                     </div>
@@ -85,9 +87,8 @@
                                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-black text-white uppercase mb-4 tracking-tight">Register & verify</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Create your profile as an Adv, IP Agent, CA, or CS or
-                        clerk</p>
+                    <h3 class="text-xl font-black text-white uppercase mb-4 tracking-tight">Register & Verify</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Create your profile as an Advocate, IP Agent, CA, CS, or Clerk</p>
                 </div>
 
                 <!-- Card 2 -->
@@ -101,8 +102,8 @@
                         </svg>
                     </div>
                     <h3 class="text-xl font-black text-white uppercase mb-4 tracking-tight">Filter & Connect</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Search by City, court, Domain of Practice, Years of
-                        Experience, or Task Type. See Past feedback before you reach out.</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">Search by City, Court, Domain of Practice, Years of
+                        Experience, or Task Type. See past feedback before you reach out.</p>
                 </div>
 
                 <!-- Card 3 -->
@@ -116,8 +117,8 @@
                         </svg>
                     </div>
                     <h3 class="text-xl font-black text-white uppercase mb-4 tracking-tight">Delegate & Track</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Assign Tasks - Appearance, Adjournments, filing VP,
-                        Track a court live and Get WA updates when job is done.</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">Assign tasks — Appearances, Adjournments, filing VP (Vakalatnama),
+                        track a Court live, and get WhatsApp updates when the job is done.</p>
                 </div>
 
                 <!-- Card 4 -->
@@ -139,8 +140,9 @@
     <!-- Latest Updates & Maps Section -->
     <section class="py-32 bg-navy" id="updates">
         <div class="max-w-[1500px] mx-auto px-6">
-            <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter max-w-4xl leading-[1.1] mb-20 reveal-left">
-                Court Latest Updates. Know the update before you arrive. <span class="text-blue">/ walk in Ready</span>
+            <h2
+                class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter max-w-4xl leading-[1.1] mb-20 reveal-left">
+                Latest Court Updates. Know the status before you arrive. <span class="text-blue">/ Walk-in Ready</span>
             </h2>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 pt-16 border-t border-white/5">
@@ -167,11 +169,11 @@
                 <div class="bg-card2 p-12 rounded-2xl border border-white/5 relative overflow-hidden group">
                     <div class="absolute inset-x-0 top-0 h-1 bg-blue/20"></div>
                     <div class="space-y-6">
-                        <span class="text-blue text-xs font-black uppercase tracking-[0.3em]">latest Updates / News</span>
-                        <h3 class="text-3xl font-black text-white uppercase leading-tight">Every Notice. Every circular.
-                            One place.</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed">Live Court Notice Tribunal Circulars and
-                            Procedural updates - Curated daily</p>
+                        <span class="text-blue text-xs font-black uppercase tracking-[0.3em]">Latest Updates / News</span>
+                        <h3 class="text-3xl font-black text-white uppercase leading-tight">Every Notice. Every Circular.
+                            One Place.</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">Live Court Notices, Tribunal Circulars, and
+                            procedural updates — curated daily</p>
                         <a href="#"
                             class="btn-ghost inline-flex items-center gap-4 mt-8 border-white/10 uppercase tracking-widest">
                             Find Notices & Circulars
@@ -183,7 +185,7 @@
             <!-- WA Signup -->
             <div
                 class="mt-16 flex flex-col md:flex-row items-center justify-between gap-8 bg-blue p-8 rounded-lg shadow-2xl shadow-blue-glow reveal">
-                <span class="text-navy font-black text-lg md:text-xl uppercase tracking-tighter">-> Sing up for WA
+                <span class="text-navy font-black text-lg md:text-xl uppercase tracking-tighter">-> Sign up for WhatsApp
                     updates.</span>
                 <div class="flex w-full md:w-auto">
                     <input type="text" placeholder="Enter Mobile Number"
@@ -199,7 +201,7 @@
     <section class="py-32 bg-navy2" id="contact">
         <div class="max-w-[1500px] mx-auto px-6">
             <div class="mb-16 reveal">
-                <h2 class="section-head text-white uppercase tracking-tighter text-4xl mb-4">Contact us</h2>
+                <h2 class="section-head text-white uppercase tracking-tighter text-4xl mb-4">Contact Us</h2>
                 <div class="head-line"></div>
             </div>
 
@@ -229,8 +231,8 @@
                     <div>
                         <h3 class="text-xs font-black text-blue uppercase tracking-[0.3em] mb-4">Inquiries</h3>
                         <div class="space-y-6">
-                            <p class="text-3xl font-black text-white uppercase tracking-tighter leading-tight">Inquiries :
-                                2 Mail IDs to be Made.</p>
+                            <p class="text-3xl font-black text-white uppercase tracking-tighter leading-tight">Inquiries:
+                                2 Email IDs to be provided.</p>
                             <p class="text-slate-500 text-sm max-w-md leading-relaxed">Our support channel is monitored
                                 24/7 for critical procedural inquiries and professional onboarding assistance.</p>
                         </div>

@@ -10,7 +10,7 @@
             'bar_council_certificate' => ['label' => 'Bar Council Certificate', 'icon' => 'bi-patch-check'],
             'enrollment_certificate' => ['label' => 'Enrollment Certificate', 'icon' => 'bi-journal-check'],
             'degree_certificate' => ['label' => 'LLB / LLM Degree', 'icon' => 'bi-mortarboard'],
-            'aadhar_card' => ['label' => 'Aadhar Card', 'icon' => 'bi-credit-card-2-front'],
+            'aadhar_card' => ['label' => 'Aadhaar Card', 'icon' => 'bi-credit-card-2-front'],
             'pan_card' => ['label' => 'PAN Card', 'icon' => 'bi-card-text'],
             'practice_certificate' => ['label' => 'Practice Certificate (Sanad)', 'icon' => 'bi-award'],
         ];

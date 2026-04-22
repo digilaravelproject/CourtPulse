@@ -29,7 +29,7 @@
         </div>
 
         <button type="submit" class="w-full bg-accent hover:bg-accent/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-accent/20 transition-all flex items-center justify-center gap-2 group">
-            Send Login code
+            Send Login Code
             <i class="bi bi-arrow-right transition-transform group-hover:translate-x-1"></i>
         </button>
     </form>

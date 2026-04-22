@@ -20,35 +20,28 @@
     <div class="max-w-2xl">
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
 
+            @php
+                $badgeColors = [
+                    'supreme' => ['bg' => 'bg-red-100', 'text' => 'text-red-600', 'label' => 'text-red-700'],
+                    'high' => ['bg' => 'bg-purple-100', 'text' => 'text-purple-600', 'label' => 'text-purple-700'],
+                    'district' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-600', 'label' => 'text-blue-700'],
+                    'session' => ['bg' => 'bg-indigo-100', 'text' => 'text-indigo-600', 'label' => 'text-indigo-700'],
+                    'civil' => ['bg' => 'bg-sky-100', 'text' => 'text-sky-600', 'label' => 'text-sky-700'],
+                    'criminal' => ['bg' => 'bg-orange-100', 'text' => 'text-orange-600', 'label' => 'text-orange-700'],
+                    'family' => ['bg' => 'bg-pink-100', 'text' => 'text-pink-600', 'label' => 'text-pink-700'],
+                    'consumer' => ['bg' => 'bg-teal-100', 'text' => 'text-teal-600', 'label' => 'text-teal-700'],
+                ];
+                $colors = $badgeColors[$court->type] ?? ['bg' => 'bg-amber-100', 'text' => 'text-amber-600', 'label' => 'text-amber-700'];
+            @endphp
+
             {{-- Header --}}
             <div class="px-6 py-5 border-b border-slate-100 flex items-center gap-4">
-                <div
-                    class="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0
-        @if ($court->type === 'supreme') bg-red-100 text-red-600
-        @elseif($court->type === 'high')     bg-purple-100 text-purple-600
-        @elseif($court->type === 'district') bg-blue-100 text-blue-600
-        @elseif($court->type === 'session')  bg-indigo-100 text-indigo-600
-        @elseif($court->type === 'civil')    bg-sky-100 text-sky-600
-        @elseif($court->type === 'criminal') bg-orange-100 text-orange-600
-        @elseif($court->type === 'family')   bg-pink-100 text-pink-600
-        @elseif($court->type === 'consumer') bg-teal-100 text-teal-600
-        @else bg-amber-100 text-amber-600 @endif">
+                <div class="w-14 h-14 rounded-xl flex items-center justify-center text-2xl shrink-0 {{ $colors['bg'] }} {{ $colors['text'] }}">
                     <i class="bi bi-building"></i>
                 </div>
                 <div class="flex-1">
                     <h2 class="font-display font-bold text-lg text-slate-800">{{ $court->name }}</h2>
-                    <span
-                        class="inline-flex items-center text-[0.62rem] font-semibold px-2.5 py-1 mt-1
-                     rounded-md font-mono uppercase tracking-wide
-          @if ($court->type === 'supreme') bg-red-100 text-red-700
-          @elseif($court->type === 'high')     bg-purple-100 text-purple-700
-          @elseif($court->type === 'district') bg-blue-100 text-blue-700
-          @elseif($court->type === 'session')  bg-indigo-100 text-indigo-700
-          @elseif($court->type === 'civil')    bg-sky-100 text-sky-700
-          @elseif($court->type === 'criminal') bg-orange-100 text-orange-700
-          @elseif($court->type === 'family')   bg-pink-100 text-pink-700
-          @elseif($court->type === 'consumer') bg-teal-100 text-teal-700
-          @else bg-amber-100 text-amber-700 @endif">
+                    <span class="inline-flex items-center text-[0.62rem] font-semibold px-2.5 py-1 mt-1 rounded-md font-mono uppercase tracking-wide {{ $colors['bg'] }} {{ $colors['label'] }}">
                         {{ $court->type_label }}
                     </span>
                 </div>
@@ -90,7 +83,7 @@
                     <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
                         <div
                             class="font-mono text-[0.57rem] uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1.5">
-                            <i class="bi bi-hash"></i> Pincode
+                            <i class="bi bi-hash"></i> PIN Code
                         </div>
                         <div class="text-sm font-semibold text-slate-700">{{ $court->pincode }}</div>
                     </div>

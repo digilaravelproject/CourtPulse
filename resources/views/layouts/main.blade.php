@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,9 +10,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
-    
+
     <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
 
     <!-- Styling -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -59,7 +61,7 @@
             background: rgba(5, 8, 18, 0.92);
             transition: all 0.3s ease;
         }
-        
+
         .nav.scrolled {
             padding: 12px 0;
             background: rgba(5, 8, 18, 0.98);
@@ -145,8 +147,13 @@
         }
 
         @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
         .marquee-item {
@@ -182,15 +189,34 @@
             transform: translateX(0);
         }
 
-        .stagger-1 { transition-delay: 0.1s; }
-        .stagger-2 { transition-delay: 0.2s; }
-        .stagger-3 { transition-delay: 0.3s; }
-        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-1 {
+            transition-delay: 0.1s;
+        }
+
+        .stagger-2 {
+            transition-delay: 0.2s;
+        }
+
+        .stagger-3 {
+            transition-delay: 0.3s;
+        }
+
+        .stagger-4 {
+            transition-delay: 0.4s;
+        }
 
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
 
         .float {
@@ -207,6 +233,7 @@
         }
     </style>
 </head>
+
 <body class="antialiased">
     <!-- 1. Header (Navbar) -->
     <nav class="nav" id="navbar">
@@ -218,13 +245,21 @@
 
             <!-- Desktop Nav -->
             <div class="hidden lg:flex items-center gap-8">
-                <a href="{{ url('/') }}" class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">Home</a>
-                <a href="#how-it-works" class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">How it works</a>
-                <a href="{{ route('find') }}" class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">begin</a>
-                <a href="{{ route('blogs') }}" class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">Blogs</a>
-                <a href="{{ route('updates') }}" class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">latest Update</a>
-                <a href="#contact" class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">contact us</a>
-                <a href="{{ route('careers') }}" class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">careers</a>
+                <a href="{{ url('/') }}"
+                    class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">Home</a>
+                <a href="#how-it-works"
+                    class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">How
+                    it works</a>
+                <a href="{{ route('find') }}"
+                    class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">Begin</a>
+                <a href="{{ route('blogs') }}"
+                    class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">Blogs</a>
+                <a href="{{ route('updates') }}"
+                    class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">Latest Updates</a>
+                <a href="#contact"
+                    class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">Contact Us</a>
+                <a href="{{ route('careers') }}"
+                    class="text-[0.65rem] font-black text-slate-400 hover:text-white transition no-underline tracking-[0.2em] uppercase">Careers</a>
             </div>
 
             <div class="flex items-center gap-4">
@@ -236,7 +271,9 @@
                     </form>
                 @else
                     <a href="{{ route('login') }}" class="btn-ghost uppercase">Login</a>
-                    <a href="{{ route('register') }}" class="btn-primary" style="background: var(--blue); color: var(--navy); border-radius: 4px; padding: 10px 18px; font-size: 0.65rem;">JOIN AS PROFESSIONAL</a>
+                    <a href="{{ route('register') }}" class="btn-primary"
+                        style="background: var(--blue); color: var(--navy); border-radius: 4px; padding: 10px 18px; font-size: 0.65rem;">JOIN
+                        AS PROFESSIONAL</a>
                 @endauth
             </div>
         </div>
@@ -257,24 +294,32 @@
                         <span class="text-xl font-bold text-slate-400 uppercase tracking-[0.3em]">Menu</span>
                     </div>
                     <p class="text-slate-500 text-lg max-w-xl leading-relaxed">
-                        A platform that gives instant access to procedural support - clerks, filling agents, on-ground help accross courts and tribunals in India.
+                        A platform that gives instant access to procedural support - clerks, filing agents, on-ground
+                        help across courts and tribunals in India.
                     </p>
                 </div>
-                
+
                 <div class="grid grid-cols-2 gap-8">
                     <div>
-                        <h4 class="text-white text-[0.6rem] font-black uppercase tracking-[0.25em] mb-6 opacity-40">Sections</h4>
+                        <h4 class="text-white text-[0.6rem] font-black uppercase tracking-[0.25em] mb-6 opacity-40">
+                            Sections</h4>
                         <ul class="space-y-4 list-none p-0 text-slate-500 text-sm font-bold uppercase tracking-widest">
-                            <li><a href="{{ url('/') }}" class="hover:text-[#B4B4FE] transition no-underline">Home</a></li>
-                            <li><a href="#how-it-works" class="hover:text-[#B4B4FE] transition no-underline">How it works</a></li>
-                            <li><a href="{{ route('find') }}" class="hover:text-[#B4B4FE] transition no-underline">Begin</a></li>
+                            <li><a href="{{ url('/') }}" class="hover:text-[#B4B4FE] transition no-underline">Home</a>
+                            </li>
+                            <li><a href="#how-it-works" class="hover:text-[#B4B4FE] transition no-underline">How it
+                                    works</a></li>
+                            <li><a href="{{ route('find') }}"
+                                    class="hover:text-[#B4B4FE] transition no-underline">Begin</a></li>
                         </ul>
                     </div>
                     <div>
-                        <h4 class="text-white text-[0.6rem] font-black uppercase tracking-[0.25em] mb-6 opacity-40">Updates</h4>
+                        <h4 class="text-white text-[0.6rem] font-black uppercase tracking-[0.25em] mb-6 opacity-40">
+                            Updates</h4>
                         <ul class="space-y-4 list-none p-0 text-slate-500 text-sm font-bold uppercase tracking-widest">
-                            <li><a href="{{ route('updates') }}" class="hover:text-[#B4B4FE] transition no-underline">Updates</a></li>
-                            <li><a href="{{ route('blogs') }}" class="hover:text-[#B4B4FE] transition no-underline">Blogs</a></li>
+                            <li><a href="{{ route('updates') }}"
+                                    class="hover:text-[#B4B4FE] transition no-underline">Updates</a></li>
+                            <li><a href="{{ route('blogs') }}"
+                                    class="hover:text-[#B4B4FE] transition no-underline">Blogs</a></li>
                             <li><a href="#contact" class="hover:text-[#B4B4FE] transition no-underline">Contact</a></li>
                         </ul>
                     </div>
@@ -285,15 +330,27 @@
             <div class="border-y border-white/5 py-4 overflow-hidden bg-white/2">
                 <div class="marquee-container" style="background: transparent;">
                     <div class="marquee-content" style="animation: marquee 20s linear infinite;">
-                        <span class="mx-12 text-[0.65rem] font-black text-[#B4B4FE] uppercase tracking-[0.4em] italic">NEWS</span>
-                        <span class="mx-12 text-[0.65rem] font-black text-white px-2 py-1 border border-white/10 uppercase tracking-[0.4em]">Court / Tribunal Updates</span>
-                        <span class="mx-12 text-[0.65rem] font-black text-[#B4B4FE] uppercase tracking-[0.4em] italic">NEWS</span>
-                        <span class="mx-12 text-[0.65rem] font-black text-white px-2 py-1 border border-white/10 uppercase tracking-[0.4em]">Court / Tribunal Updates</span>
+                        <span
+                            class="mx-12 text-[0.65rem] font-black text-[#B4B4FE] uppercase tracking-[0.4em] italic">NEWS</span>
+                        <span
+                            class="mx-12 text-[0.65rem] font-black text-white px-2 py-1 border border-white/10 uppercase tracking-[0.4em]">Court
+                            / Tribunal Updates</span>
+                        <span
+                            class="mx-12 text-[0.65rem] font-black text-[#B4B4FE] uppercase tracking-[0.4em] italic">NEWS</span>
+                        <span
+                            class="mx-12 text-[0.65rem] font-black text-white px-2 py-1 border border-white/10 uppercase tracking-[0.4em]">Court
+                            / Tribunal Updates</span>
                         <!-- Duplicate for seamless scroll -->
-                        <span class="mx-12 text-[0.65rem] font-black text-[#B4B4FE] uppercase tracking-[0.4em] italic">NEWS</span>
-                        <span class="mx-12 text-[0.65rem] font-black text-white px-2 py-1 border border-white/10 uppercase tracking-[0.4em]">Court / Tribunal Updates</span>
-                        <span class="mx-12 text-[0.65rem] font-black text-[#B4B4FE] uppercase tracking-[0.4em] italic">NEWS</span>
-                        <span class="mx-12 text-[0.65rem] font-black text-white px-2 py-1 border border-white/10 uppercase tracking-[0.4em]">Court / Tribunal Updates</span>
+                        <span
+                            class="mx-12 text-[0.65rem] font-black text-[#B4B4FE] uppercase tracking-[0.4em] italic">NEWS</span>
+                        <span
+                            class="mx-12 text-[0.65rem] font-black text-white px-2 py-1 border border-white/10 uppercase tracking-[0.4em]">Court
+                            / Tribunal Updates</span>
+                        <span
+                            class="mx-12 text-[0.65rem] font-black text-[#B4B4FE] uppercase tracking-[0.4em] italic">NEWS</span>
+                        <span
+                            class="mx-12 text-[0.65rem] font-black text-white px-2 py-1 border border-white/10 uppercase tracking-[0.4em]">Court
+                            / Tribunal Updates</span>
                     </div>
                 </div>
             </div>
@@ -301,8 +358,10 @@
             <!-- Find & Login Lists (Point 7) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 py-12 border-b border-white/5">
                 <div>
-                    <h4 class="text-white text-[0.6rem] font-black uppercase tracking-[0.25em] mb-6 opacity-40">Find</h4>
-                    <div class="flex flex-wrap gap-x-8 gap-y-4 text-slate-500 text-[0.65rem] font-black uppercase tracking-widest">
+                    <h4 class="text-white text-[0.6rem] font-black uppercase tracking-[0.25em] mb-6 opacity-40">Find
+                    </h4>
+                    <div
+                        class="flex flex-wrap gap-x-8 gap-y-4 text-slate-500 text-[0.65rem] font-black uppercase tracking-widest">
                         <a href="#" class="hover:text-[#B4B4FE] transition no-underline">Court Clerks</a>
                         <span class="opacity-20">|</span>
                         <a href="#" class="hover:text-[#B4B4FE] transition no-underline">IP Clerks</a>
@@ -313,9 +372,11 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="text-white text-[0.6rem] font-black uppercase tracking-[0.25em] mb-6 opacity-40">Login</h4>
-                    <div class="flex flex-wrap gap-x-8 gap-y-4 text-slate-500 text-[0.65rem] font-black uppercase tracking-widest">
-                        <a href="#" class="hover:text-[#B4B4FE] transition no-underline">Proffessionals</a>
+                    <h4 class="text-white text-[0.6rem] font-black uppercase tracking-[0.25em] mb-6 opacity-40">Login
+                    </h4>
+                    <div
+                        class="flex flex-wrap gap-x-8 gap-y-4 text-slate-500 text-[0.65rem] font-black uppercase tracking-widest">
+                        <a href="#" class="hover:text-[#B4B4FE] transition no-underline">Professionals</a>
                         <span class="opacity-20">|</span>
                         <a href="#" class="hover:text-[#B4B4FE] transition no-underline">Guest</a>
                         <span class="opacity-20">|</span>
@@ -325,7 +386,8 @@
             </div>
 
             <div class="py-12 flex flex-col md:flex-row justify-between items-center gap-6">
-                <span class="text-slate-600 text-[0.6rem] font-bold uppercase tracking-[0.3em]">&copy; {{ date('Y') }} DOCKIT NETWORK. EVERY SECOND COVERED.</span>
+                <span class="text-slate-600 text-[0.6rem] font-bold uppercase tracking-[0.3em]">&copy; {{ date('Y') }}
+                    DOCKIT NETWORK. EVERY SECOND COVERED.</span>
                 <div class="flex gap-8 text-slate-500 text-sm">
                     <a href="#" class="hover:text-white transition"><i class="bi bi-linkedin"></i></a>
                     <a href="#" class="hover:text-white transition"><i class="bi bi-twitter-x"></i></a>
@@ -357,7 +419,7 @@
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     // Once visible, we can stop observing to save resources
-                    // observer.unobserve(entry.target); 
+                    // observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
@@ -365,4 +427,5 @@
         document.querySelectorAll('.reveal, .reveal-left').forEach(el => observer.observe(el));
     </script>
 </body>
+
 </html>

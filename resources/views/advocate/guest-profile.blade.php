@@ -238,7 +238,7 @@
             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
 
                 {{-- Avatar --}}
-                <div class="gp-avatar-ring flex-shrink-0">
+                <div class="gp-avatar-ring shrink-0">
                     <div class="gp-avatar-inner">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
                 </div>
 
@@ -273,7 +273,7 @@
                 </div>
 
                 {{-- Stats --}}
-                <div class="flex gap-3 flex-shrink-0">
+                <div class="flex gap-3 shrink-0">
                     <div class="gp-stat">
                         <div class="gp-stat-val">{{ $avgRating ? number_format($avgRating, 1) : '—' }}</div>
                         <div class="gp-stat-lbl">Rating</div>
@@ -347,7 +347,7 @@
 
             {{-- Connect Action Box (UPDATED with Accept Logic) --}}
             @php
-                // Request ki ID fetch kar rahe hain taaki accept route sahi se hit ho sake
+                // Fetching the request ID to ensure the accept route is correctly targeted.
                 $reqId = 'null';
                 if (in_array($connectionStatus, ['received', 'sent', 'connected'])) {
                     $existingReq = \App\Models\ConnectionRequest::where(function ($q) use ($user) {
@@ -427,7 +427,7 @@
                             $pct = $total ? round(($cnt / $total) * 100) : 0;
                         @endphp
                         <div class="flex items-center gap-3 mb-2.5">
-                            <div class="flex items-center gap-1 w-14 flex-shrink-0">
+                            <div class="flex items-center gap-1 w-14 shrink-0">
                                 <span class="font-mono text-xs"
                                     style="color:rgba(255,255,255,.5)">{{ $star }}</span>
                                 <i class="bi bi-star-fill text-xs" style="color:#D4AF37"></i>
@@ -435,7 +435,7 @@
                             <div class="rating-bar-track">
                                 <div class="rating-bar-fill" style="width:{{ $pct }}%"></div>
                             </div>
-                            <span class="font-mono text-xs w-8 text-right flex-shrink-0"
+                            <span class="font-mono text-xs w-8 text-right shrink-0"
                                 style="color:rgba(212,175,55,.6)">{{ $cnt }}</span>
                         </div>
                     @endfor
@@ -445,7 +445,7 @@
             {{-- Note --}}
             <div class="rounded-2xl p-4" style="background:rgba(212,175,55,.04);border:1px solid rgba(212,175,55,.12)">
                 <div class="flex gap-3">
-                    <i class="bi bi-shield-check mt-0.5 flex-shrink-0" style="color:#D4AF37"></i>
+                    <i class="bi bi-shield-check mt-0.5 shrink-0" style="color:#D4AF37"></i>
                     <p class="text-xs leading-relaxed" style="color:#b8a87a">
                         Guest users browse advocates & clerks on Court Pulse. They give feedback to unlock contact details.
                     </p>
@@ -484,7 +484,7 @@
                     <div class="review-card mb-3">
                         <div class="flex items-start justify-between gap-3 mb-3">
                             <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0"
+                                <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm shrink-0"
                                     style="background:linear-gradient(135deg,rgba(212,175,55,.15),rgba(212,175,55,.05));border:1px solid rgba(212,175,55,.2);color:#D4AF37">
                                     {{ $fb->is_anonymous ? '?' : strtoupper(substr($fb->giver->name ?? 'A', 0, 1)) }}
                                 </div>
@@ -502,7 +502,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+                            <div class="flex flex-col items-end gap-1.5 shrink-0">
                                 <div class="star-row">
                                     @for ($i = 1; $i <= 5; $i++)
                                         <i class="bi bi-star{{ $i <= $fb->rating ? '-fill' : '' }}"
@@ -564,7 +564,7 @@
 
                     // Accept Request (NEW)
                     async acceptReq() {
-                        if (!this.requestId) return; // ID ke bina accept nahi ho sakta
+                        if (!this.requestId) return; // Cannot accept without a valid request ID
                         try {
                             const res = await fetch(`/connections/${this.requestId}/accept`, {
                                 method: 'PATCH',

@@ -61,7 +61,7 @@
                         })
                         .catch(() => {
                             this.loading = false;
-                            showToast('Filter failed', 'err');
+                            showToast('Filter Failed', 'err');
                         });
                 },
                 reset() {

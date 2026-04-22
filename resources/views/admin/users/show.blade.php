@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('title', $user->name)
-@section('page-title', 'User Detail')
+@section('page-title', 'User Details')
 
 @section('content')
 
@@ -41,7 +41,7 @@
                     {{-- Avatar + Name --}}
                     <div class="flex items-center gap-4 pb-4 mb-4 border-b border-slate-100">
                         <div
-                            class="w-14 h-14 rounded-xl bg-navy border-2 border-gold/30 flex items-center justify-center text-gold font-bold text-xl font-display flex-shrink-0">
+                            class="w-14 h-14 rounded-xl bg-navy border-2 border-gold/30 flex items-center justify-center text-gold font-bold text-xl font-display shrink-0">
                             {{ strtoupper(substr($user->name, 0, 1)) }}
                         </div>
                         <div>
@@ -55,7 +55,7 @@
                     @foreach (['Email' => $user->email, 'Phone' => $user->phone ?? '—', 'City' => $user->city ?? '—', 'State' => $user->state ?? '—', 'Joined' => $user->created_at->format('d M Y')] as $lbl => $val)
                         <div
                             class="flex justify-between items-start py-2.5 border-b border-slate-100 last:border-0 text-sm gap-3">
-                            <span class="text-slate-400 flex-shrink-0">{{ $lbl }}</span>
+                            <span class="text-slate-400 shrink-0">{{ $lbl }}</span>
                             <span class="font-medium text-slate-700 text-right break-all">{{ $val }}</span>
                         </div>
                     @endforeach
@@ -68,7 +68,7 @@
                             @foreach (['Bar Council No.' => $user->advocateProfile->bar_council_number ?? '—', 'High Court' => $user->advocateProfile->high_court ?? '—', 'Experience' => ($user->advocateProfile->experience_years ?? 0) . ' yrs'] as $l => $v)
                                 <div
                                     class="flex justify-between py-2 text-sm border-b border-slate-100 last:border-0 gap-3">
-                                    <span class="text-slate-400 flex-shrink-0">{{ $l }}</span><span
+                                    <span class="text-slate-400 shrink-0">{{ $l }}</span><span
                                         class="font-medium text-slate-700">{{ $v }}</span>
                                 </div>
                             @endforeach
@@ -82,7 +82,7 @@
                             @foreach (['Clerk ID' => $user->clerkProfile->clerk_id_number ?? '—', 'Court' => $user->clerkProfile->court_name ?? '—', 'Dept' => $user->clerkProfile->department ?? '—'] as $l => $v)
                                 <div
                                     class="flex justify-between py-2 text-sm border-b border-slate-100 last:border-0 gap-3">
-                                    <span class="text-slate-400 flex-shrink-0">{{ $l }}</span><span
+                                    <span class="text-slate-400 shrink-0">{{ $l }}</span><span
                                         class="font-medium text-slate-700">{{ $v }}</span>
                                 </div>
                             @endforeach
@@ -95,7 +95,7 @@
                             @foreach (['Membership No.' => $user->caProfile->membership_number ?? '—', 'ICAI Region' => $user->caProfile->icai_region ?? '—'] as $l => $v)
                                 <div
                                     class="flex justify-between py-2 text-sm border-b border-slate-100 last:border-0 gap-3">
-                                    <span class="text-slate-400 flex-shrink-0">{{ $l }}</span><span
+                                    <span class="text-slate-400 shrink-0">{{ $l }}</span><span
                                         class="font-medium text-slate-700">{{ $v }}</span>
                                 </div>
                             @endforeach
@@ -238,7 +238,7 @@
     </div>
 
     {{-- Document Viewer Modal --}}
-    <div id="docViewer" class="hidden fixed inset-0 z-[1000] items-center justify-center p-4">
+    <div id="docViewer" class="hidden fixed inset-0 z-1000 items-center justify-center p-4">
         <div onclick="closeDocViewer()" class="absolute inset-0 bg-navy/80 backdrop-blur-sm"></div>
         <div id="docBox" class="bg-white rounded-2xl w-full max-w-5xl h-[85vh] relative flex flex-col overflow-hidden shadow-2xl transition-all duration-300 transform scale-95 opacity-0">
             <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
@@ -316,7 +316,7 @@
         }
 
         function reviewDoc(id, status, btn) {
-            const reason = status === 'rejected' ? 'Document not valid' : '';
+            const reason = status === 'rejected' ? 'Invalid document' : '';
             btn.disabled = true;
             const orig = btn.innerHTML;
             btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i>';
@@ -336,7 +336,7 @@
                 .then(r => r.json())
                 .then(d => {
                     if (d.success !== false) {
-                        showToast(status === 'approved' ? 'Approved!' : 'Rejected.', status === 'approved' ? 'ok' : 'err');
+                        showToast(status === 'approved' ? 'Document Approved!' : 'Document Rejected.', status === 'approved' ? 'ok' : 'err');
                         
                         const row = btn.closest('tr');
                         const docType = row.cells[0].innerText;
@@ -388,7 +388,7 @@
                     }
                 })
                 .catch(() => {
-                    showToast('Request failed', 'err');
+                    showToast('Request Failed', 'err');
                     btn.disabled = false;
                     btn.innerHTML = orig;
                 });
@@ -408,13 +408,13 @@
                     }
                 })
                 .then(r => r.json()).then(() => {
-                    showToast('Verified!', 'ok');
+                    showToast('User Verified Successfully!', 'ok');
                     setTimeout(() => location.reload(), 1200);
                 })
                 .catch(() => {
                     btn.disabled = false;
                     btn.innerHTML = '<i class="bi bi-check-lg"></i> Confirm Verify';
-                    showToast('Error!', 'err');
+                    showToast('Verification Failed', 'err');
                 });
         }
 
@@ -431,13 +431,13 @@
                     }
                 })
                 .then(r => r.json()).then(() => {
-                    showToast('Rejected.', 'err');
+                    showToast('User Rejected.', 'err');
                     setTimeout(() => location.reload(), 1200);
                 })
                 .catch(() => {
                     btn.disabled = false;
                     btn.innerHTML = '<i class="bi bi-x-lg"></i> Confirm Reject';
-                    showToast('Error!', 'err');
+                    showToast('Rejection Failed', 'err');
                 });
         }
     </script>

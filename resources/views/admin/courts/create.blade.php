@@ -18,7 +18,7 @@
             {{-- Card Header --}}
             <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-100">
                 <div
-                    class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-gold text-lg flex-shrink-0">
+                    class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-gold text-lg shrink-0">
                     <i class="bi bi-building-add"></i>
                 </div>
                 <div>
@@ -98,9 +98,9 @@
                     {{-- Pincode --}}
                     <div>
                         <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
-                            Pincode
+                            PIN Code
                         </label>
-                        <input type="text" name="pincode" value="{{ old('pincode') }}" placeholder="6-digit pincode"
+                        <input type="text" name="pincode" value="{{ old('pincode') }}" placeholder="6-digit PIN Code"
                             maxlength="6"
                             class="w-full px-3.5 py-2.5 text-sm border rounded-lg transition
                    focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold
@@ -144,7 +144,7 @@
                         <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
                             Address
                         </label>
-                        <textarea name="address" rows="2" placeholder="Full court address"
+                        <textarea name="address" rows="2" placeholder="Full Court address"
                             class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-lg bg-white resize-none
                    focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition">{{ old('address') }}</textarea>
                     </div>

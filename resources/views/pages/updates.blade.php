@@ -10,7 +10,7 @@
             <h1 class="text-7xl font-black text-white leading-[0.9] uppercase tracking-tighter mb-8">
                 COURT <br> <span class="text-[#B4B4FE]">INTELLIGENCE.</span>
             </h1>
-            <p class="text-xl text-slate-500 leading-relaxed">Daily feed of registry circulars, cauelists, and administrative notices from across Indian courts.</p>
+            <p class="text-xl text-slate-500 leading-relaxed">Daily feed of registry circulars, causelists, and administrative notices from across Indian courts.</p>
         </div>
 
         <div class="space-y-4 max-w-5xl">

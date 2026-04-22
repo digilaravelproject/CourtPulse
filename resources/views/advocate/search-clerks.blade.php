@@ -94,7 +94,7 @@
 
         {{-- Results Area --}}
         <div id="clerksGrid">
-            {{-- Ye partial file initial load par aur AJAX request dono time use hogi --}}
+            {{-- This partial file is used for both initial load and AJAX requests --}}
             @include('advocate.partials.clerk-list', ['clerks' => $clerks])
         </div>
 

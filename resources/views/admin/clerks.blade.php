@@ -17,7 +17,7 @@
                 .then(d => { document.getElementById('clerk-tbl').innerHTML = d.html;
                     this.loading = false; })
                 .catch(() => { this.loading = false;
-                    showToast('Filter failed', 'err'); });
+                    showToast('Filter Failed', 'err'); });
         },
         reset() { this.f = { search: '', status: '' };
             this.load(); }
@@ -38,7 +38,7 @@
                 <select x-model="f.status" @change="load()"
                     class="py-2 pl-3 pr-8 text-sm border border-slate-200 rounded-lg bg-slate-50
                focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition">
-                    <option value="">All Status</option>
+                    <option value="">All Statuses</option>
                     <option value="active">Active</option>
                     <option value="pending">Pending</option>
                     <option value="rejected">Rejected</option>
@@ -145,7 +145,7 @@
                 .then(r => r.json()).then(() => {
                     const n = _uname;
                     closeModal();
-                    showToast(`${n} verified!`, 'ok');
+                    showToast(`${n} Verified!`, 'ok');
                     document.querySelectorAll(`[data-uid="${_uid}"]`).forEach(r => {
                         r.style.transition = 'opacity .3s';
                         r.style.opacity = '0';
@@ -173,7 +173,7 @@
                 .then(r => r.json()).then(() => {
                     const n = _uname;
                     closeModal();
-                    showToast(`${n} rejected.`, 'err');
+                    showToast(`${n} Rejected.`, 'err');
                     document.querySelectorAll(`[data-uid="${_uid}"]`).forEach(r => {
                         r.style.transition = 'opacity .3s';
                         r.style.opacity = '0';
