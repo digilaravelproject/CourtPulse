@@ -79,22 +79,29 @@ class AuthController extends Controller
     public function postRegisterStep1(Request $request)
     {
         $validated = $request->validate([
-            'user_group' => 'required|in:professional,support',
-            'sub_role'   => 'required|string'
+            'user_group' => 'required|in:professional,support,guest',
+            'sub_role'   => 'nullable|string|in:advocate_practicing,advocate_non_practicing,ca_cs,agent,court_clerk,ip_clerk'
         ]);
 
-        $role = 'guest';
-        if ($validated['user_group'] === 'professional') {
-            $role = $validated['sub_role']; // advocate, ca, etc.
+        if ($validated['user_group'] === 'guest') {
+            $role = 'guest';
+            $sub_role = null;
         } else {
-            $role = ($validated['sub_role'] === 'advocate_support') ? 'advocate' : 'clerk';
+            $role = ($validated['sub_role'] === 'advocate_practicing' || $validated['sub_role'] === 'advocate_non_practicing') 
+                ? 'advocate' 
+                : $validated['sub_role'];
+            $sub_role = $validated['sub_role'];
         }
 
         session([
             'reg_user_group' => $validated['user_group'],
-            'reg_sub_role'   => $validated['sub_role'],
+            'reg_sub_role'   => $sub_role,
             'reg_role'       => $role,
         ]);
+
+        if ($validated['user_group'] === 'guest') {
+            return redirect()->route('register.step2');
+        }
 
         return redirect()->route('register.step2');
     }
@@ -124,6 +131,16 @@ class AuthController extends Controller
             'reg_password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
         ]);
 
+        // If Guest, we can finish here or go to OTP
+        if (session('reg_user_group') === 'guest') {
+            try {
+                $user = $this->authService->registerFinal([]); // Empty details for guest
+                return redirect()->route('register.otp');
+            } catch (\Exception $e) {
+                return back()->withErrors(['general' => $e->getMessage()]);
+            }
+        }
+
         return redirect()->route('register.step3');
     }
 
@@ -133,6 +150,8 @@ class AuthController extends Controller
     public function showRegisterStep3()
     {
         if (!session('reg_name')) return redirect()->route('register.step2');
+        if (session('reg_user_group') === 'guest') return redirect()->route('register.otp');
+
         $courts = Court::query()->where('is_active', '=', true)->get();
         $user_group = session('reg_user_group');
         return view('auth.register.step3', compact('courts', 'user_group'));
@@ -194,11 +213,15 @@ class AuthController extends Controller
             'super_admin' => redirect()->route('super.dashboard'),
             'admin'       => redirect()->route('admin.dashboard'),
             'advocate'    => redirect()->route('advocate.dashboard'),
-            'clerk'       => redirect()->route('clerk.dashboard'),
-            'ca'          => redirect()->route('ca.dashboard'),
+            'ca_cs'       => redirect()->route('professional.dashboard'),
+            'agent'       => redirect()->route('professional.dashboard'),
+            'court_clerk' => redirect()->route('support.dashboard'),
+            'ip_clerk'    => redirect()->route('support.dashboard'),
+            'guest'       => redirect()->route('guest.dashboard'),
             default       => redirect()->route('dashboard'),
         };
     }
+
 
     public function logout(Request $request)
     {

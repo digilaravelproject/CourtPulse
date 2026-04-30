@@ -25,8 +25,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'view admin dashboard',
             'view superadmin dashboard',
             'view advocate dashboard',
-            'view clerk dashboard',
-            'view ca dashboard',
+            'view support dashboard',
+            'view professional dashboard',
             'view guest dashboard',
             'upload documents',
             'delete documents',
@@ -43,15 +43,13 @@ class RolesAndPermissionsSeeder extends Seeder
             Permission::findOrCreate($permission);
         }
 
-        // Create Roles and Assign Permissions
+        // --- Roles ---
 
         // Super Admin
-        $superAdminRole = Role::findOrCreate('super_admin');
-        $superAdminRole->givePermissionTo(Permission::all());
+        Role::findOrCreate('super_admin')->givePermissionTo(Permission::all());
 
         // Admin
-        $adminRole = Role::findOrCreate('admin');
-        $adminRole->givePermissionTo([
+        Role::findOrCreate('admin')->givePermissionTo([
             'manage users',
             'view admin dashboard',
             'upload documents',
@@ -61,42 +59,34 @@ class RolesAndPermissionsSeeder extends Seeder
             'manage feedback',
         ]);
 
-        // Advocate
-        $advocateRole = Role::findOrCreate('advocate');
-        $advocateRole->givePermissionTo([
-            'view advocate dashboard',
+        // Guest
+        Role::findOrCreate('guest')->givePermissionTo([
+            'view guest dashboard',
+            'view profiles',
+            'post feedback',
+        ]);
+
+        // --- Support Group ---
+        $supportPermissions = [
+            'view support dashboard',
+            'upload documents',
+            'view profiles',
+            'post feedback',
+        ];
+        Role::findOrCreate('court_clerk')->givePermissionTo($supportPermissions);
+        Role::findOrCreate('ip_clerk')->givePermissionTo($supportPermissions);
+
+        // --- Professionals Group ---
+        $professionalPermissions = [
+            'view professional dashboard',
             'upload documents',
             'send connection requests',
             'accept connection requests',
             'view profiles',
             'post feedback',
-        ]);
-
-        // Clerk
-        $clerkRole = Role::findOrCreate('clerk');
-        $clerkRole->givePermissionTo([
-            'view clerk dashboard',
-            'upload documents',
-            'accept connection requests',
-            'view profiles',
-            'post feedback',
-        ]);
-
-        // CA
-        $caRole = Role::findOrCreate('ca');
-        $caRole->givePermissionTo([
-            'view ca dashboard',
-            'upload documents',
-            'view profiles',
-            'post feedback',
-        ]);
-
-        // Guest
-        $guestRole = Role::findOrCreate('guest');
-        $guestRole->givePermissionTo([
-            'view guest dashboard',
-            'view profiles',
-            'post feedback',
-        ]);
+        ];
+        Role::findOrCreate('advocate')->givePermissionTo($professionalPermissions);
+        Role::findOrCreate('ca_cs')->givePermissionTo($professionalPermissions);
+        Role::findOrCreate('agent')->givePermissionTo($professionalPermissions);
     }
 }

@@ -14,11 +14,11 @@ class FeedbackController extends Controller
     private function allowedTargetRoles(string $myRole): array
     {
         return match ($myRole) {
-            'advocate' => ['clerk', 'ca'],
-            'clerk'    => ['advocate', 'ca'],
-            'ca'       => ['advocate', 'clerk'],
-            'guest'    => ['advocate', 'clerk'],
-            default    => [],
+            'advocate'                      => ['court_clerk', 'ip_clerk', 'ca_cs', 'agent'],
+            'court_clerk', 'ip_clerk'       => ['advocate', 'ca_cs', 'agent'],
+            'ca_cs', 'agent'                => ['advocate', 'court_clerk', 'ip_clerk'],
+            'guest'                         => ['advocate', 'court_clerk', 'ip_clerk'],
+            default                         => [],
         };
     }
 
@@ -29,15 +29,15 @@ class FeedbackController extends Controller
             $role        = $user->role;
             $targetRoles = $this->allowedTargetRoles($role);
 
-            $targets = User::whereIn('role', $targetRoles)
-                ->where('status', 'active')
+            $targets = User::query()->whereIn('role', $targetRoles, 'and', false)
+                ->where('status', '=', 'active')
                 ->get()
                 ->groupBy('role');
 
-            $givenTo = Feedback::where('given_by', $user->id)->pluck('given_to')->toArray();
+            $givenTo = Feedback::query()->where('given_by', '=', $user->id)->pluck('given_to')->toArray();
 
-            $myFeedbacks = Feedback::where('given_by', $user->id)->with('receiver')->latest()->get();
-            $received    = Feedback::where('given_to', $user->id)->with('giver')->latest()->get();
+            $myFeedbacks = Feedback::query()->where('given_by', '=', $user->id)->with('receiver')->latest()->get();
+            $received    = Feedback::query()->where('given_to', '=', $user->id)->with('giver')->latest()->get();
 
             return view('shared.feedback', compact('user', 'role', 'targets', 'givenTo', 'myFeedbacks', 'received'));
         } catch (\Exception $e) {
@@ -57,7 +57,7 @@ class FeedbackController extends Controller
             ]);
 
             $me     = Auth::user();
-            $target = User::findOrFail($request->receiver_id);
+            $target = User::query()->findOrFail($request->receiver_id);
 
             if ($target->id === $me->id) {
                 return back()->with('error', 'You cannot give feedback to yourself.');
@@ -68,18 +68,18 @@ class FeedbackController extends Controller
                 return back()->with('error', "You cannot give feedback to a {$target->role}.");
             }
 
-            $exists = Feedback::where('given_by', $me->id)->where('given_to', $target->id)->exists();
+            $exists = Feedback::query()->where('given_by', '=', $me->id)->where('given_to', '=', $target->id)->exists();
             if ($exists) {
                 return back()->with('error', 'You have already given feedback to this user.');
             }
 
-            Feedback::create([
+            Feedback::query()->create([
                 'given_by'      => $me->id,
                 'given_to'      => $target->id,
                 'role_type'     => $target->role,
                 'rating'        => $request->rating,
                 'comment'       => $request->comment,
-                'is_compulsory' => ($me->role === 'clerk'),
+                'is_compulsory' => in_array($me->role, ['court_clerk', 'ip_clerk']),
                 'is_anonymous'  => $request->boolean('is_anonymous'),
             ]);
 
@@ -100,16 +100,16 @@ class FeedbackController extends Controller
                 abort(403);
             }
 
-            $gaveFeedback = Feedback::where('given_by', $me->id)->where('given_to', $user->id)->exists();
+            $gaveFeedback = Feedback::query()->where('given_by', '=', $me->id)->where('given_to', '=', $user->id)->exists();
 
             $profile = match ($user->role) {
-                'advocate' => $user->advocateProfile,
-                'clerk'    => $user->clerkProfile,
-                'ca'       => $user->caProfile,
-                default    => null,
+                'advocate'                => $user->advocateProfile,
+                'court_clerk', 'ip_clerk' => $user->clerkProfile,
+                'ca_cs', 'agent'          => $user->caProfile,
+                default                   => null,
             };
 
-            $feedbacksReceived = Feedback::where('given_to', $user->id)->with('giver')->latest()->get();
+            $feedbacksReceived = Feedback::query()->where('given_to', '=', $user->id)->with('giver')->latest()->get();
             $avgRating         = $feedbacksReceived->avg('rating');
 
             return view('shared.user-detail', compact(
@@ -132,7 +132,7 @@ class FeedbackController extends Controller
             if ($feedback->given_by !== Auth::id() && !Auth::user()->hasRole('admin')) {
                 abort(403);
             }
-            $feedback->delete();
+            Feedback::query()->where('id', '=', $feedback->id)->delete();
             return back()->with('success', 'Feedback deleted successfully.');
         } catch (\Exception $e) {
             Log::error('Feedback Delete Error: ' . $e->getMessage());
@@ -140,8 +140,11 @@ class FeedbackController extends Controller
         }
     }
 
+    /**
+     * Check if a support user (clerk) has submitted feedback.
+     */
     public static function clerkHasFeedback(int $clerkId): bool
     {
-        return Feedback::where('given_by', $clerkId)->exists();
+        return Feedback::query()->where('given_by', '=', $clerkId)->exists();
     }
 }

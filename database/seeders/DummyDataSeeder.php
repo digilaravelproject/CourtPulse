@@ -8,35 +8,32 @@ use App\Models\AdvocateProfile;
 use App\Models\ClerkProfile;
 use App\Models\CaProfile;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class DummyDataSeeder extends Seeder
 {
     public function run(): void
     {
         // Cleanup existing dummy users to allow for fresh re-runs
-        User::where('email', 'like', '%@example.com')->delete();
+        User::query()->where('email', 'like', '%@example.com')->delete();
 
         // Ensure roles exist
-        $allRoles = ['super_admin', 'admin', 'advocate', 'clerk', 'guest', 'ca', 'cs', 'ip_attorney'];
+        $allRoles = ['super_admin', 'admin', 'advocate', 'ca_cs', 'agent', 'court_clerk', 'ip_clerk', 'guest'];
         foreach ($allRoles as $roleName) {
             \Spatie\Permission\Models\Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
         }
 
         // Define Professionals
         $professionals = [
-            ['role' => 'advocate', 'sub_role' => null],
-            ['role' => 'ca', 'sub_role' => null],
-            ['role' => 'cs', 'sub_role' => null],
-            ['role' => 'ip_attorney', 'sub_role' => null],
+            ['role' => 'advocate', 'sub_role' => 'advocate_practicing'],
+            ['role' => 'advocate', 'sub_role' => 'advocate_non_practicing'],
+            ['role' => 'ca_cs', 'sub_role' => 'ca_cs'],
+            ['role' => 'agent', 'sub_role' => 'agent'],
         ];
 
         // Define Support
         $support = [
-            ['role' => 'clerk', 'sub_role' => 'court_clerk'],
-            ['role' => 'clerk', 'sub_role' => 'ip_clerk'],
-            ['role' => 'clerk', 'sub_role' => 'roc_clerk'],
-            ['role' => 'advocate', 'sub_role' => 'advocate_support'],
+            ['role' => 'court_clerk', 'sub_role' => 'court_clerk'],
+            ['role' => 'ip_clerk', 'sub_role' => 'ip_clerk'],
         ];
 
         $cities = ['Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad'];
@@ -121,7 +118,7 @@ class DummyDataSeeder extends Seeder
                         'court_state' => $states[$cityIndex],
                     ]);
                 } elseif ($s['sub_role'] === 'advocate_support') {
-                     AdvocateProfile::create([
+                    AdvocateProfile::create([
                         'user_id' => $user->id,
                         'bar_council_number' => 'TEMP/' . rand(1000, 9999),
                         'enrollment_number' => 'ENR-T' . rand(1000, 9999),

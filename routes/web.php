@@ -10,8 +10,8 @@ use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\Admin\CourtController as AdminCourtController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\User\AdvocateController;
-use App\Http\Controllers\User\ClerkController;
-use App\Http\Controllers\User\CaController;
+use App\Http\Controllers\User\SupportController;
+use App\Http\Controllers\User\ProfessionalController;
 use App\Http\Controllers\User\GuestController;
 use App\Http\Controllers\User\DocumentController as UserDocumentController;
 use App\Http\Controllers\User\FeedbackController as UserFeedbackController;
@@ -94,19 +94,19 @@ Route::middleware(['auth', 'account.status'])->group(function () {
         Route::get('/search-clerks',     [AdvocateController::class, 'searchClerks'])->name('search.clerks');
     });
 
-    // Clerk
-    Route::middleware(['role:clerk'])->prefix('clerk')->name('clerk.')->group(function () {
-        Route::get('/dashboard',         [ClerkController::class, 'dashboard'])->name('dashboard');
-        Route::get('/profile',           [ClerkController::class, 'profile'])->name('profile');
-        Route::post('/profile',          [ClerkController::class, 'updateProfile'])->name('profile.update');
-        Route::get('/advocates',         [ClerkController::class, 'viewAdvocates'])->name('advocates');
+    // Professionals (CA/CS, Agent)
+    Route::middleware(['role:ca_cs|agent'])->prefix('professional')->name('professional.')->group(function () {
+        Route::get('/dashboard',         [ProfessionalController::class, 'dashboard'])->name('dashboard');
+        Route::get('/profile',           [ProfessionalController::class, 'profile'])->name('profile');
+        Route::post('/profile',          [ProfessionalController::class, 'updateProfile'])->name('profile.update');
     });
 
-    // CA
-    Route::middleware(['role:ca'])->prefix('ca')->name('ca.')->group(function () {
-        Route::get('/dashboard',         [CaController::class, 'dashboard'])->name('dashboard');
-        Route::get('/profile',           [CaController::class, 'profile'])->name('profile');
-        Route::post('/profile',          [CaController::class, 'updateProfile'])->name('profile.update');
+    // Support (Court Clerk, IP Clerk)
+    Route::middleware(['role:court_clerk|ip_clerk'])->prefix('support')->name('support.')->group(function () {
+        Route::get('/dashboard',         [SupportController::class, 'dashboard'])->name('dashboard');
+        Route::get('/profile',           [SupportController::class, 'profile'])->name('profile');
+        Route::post('/profile',          [SupportController::class, 'updateProfile'])->name('profile.update');
+        Route::get('/advocates',         [SupportController::class, 'viewAdvocates'])->name('advocates');
     });
 
     // Guest

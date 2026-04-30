@@ -14,9 +14,9 @@ class AdminManagementController extends Controller
     /**
      * Display a listing of users for verification.
      */
-    public function usersIndex(Request $request)
+    public function usersIndex(Request $request): \Illuminate\View\View
     {
-        $status = $request->query('status', 'pending');
+        $status = (string) $request->query('status', 'pending');
         $users = User::query()
             ->where('status', '=', $status)
             ->whereNotIn('role', ['super_admin', 'admin'])
@@ -29,7 +29,7 @@ class AdminManagementController extends Controller
     /**
      * Toggle user verification status.
      */
-    public function verifyUser(Request $request, User $user)
+    public function verifyUser(Request $request, User $user): \Illuminate\Http\JsonResponse
     {
         try {
             $newStatus = $user->status === 'active' ? 'pending' : 'active';
@@ -49,7 +49,7 @@ class AdminManagementController extends Controller
     /**
      * Display a listing of courts.
      */
-    public function courtsIndex()
+    public function courtsIndex(): \Illuminate\View\View
     {
         $courts = Court::query()->orderBy('name', 'asc')->paginate(20);
         return view('admin.management.courts', compact('courts'));
@@ -58,7 +58,7 @@ class AdminManagementController extends Controller
     /**
      * Store a newly created court.
      */
-    public function storeCourt(Request $request)
+    public function storeCourt(Request $request): \Illuminate\Http\RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -69,9 +69,9 @@ class AdminManagementController extends Controller
         ]);
 
         try {
-            Court::create(array_merge($validated, [
+            Court::query()->create(array_merge($validated, [
                 'is_active' => true,
-                'created_by' => \Illuminate\Support\Facades\Auth::id()
+                'created_by' => (int) \Illuminate\Support\Facades\Auth::id()
             ]));
 
             return back()->with('success', 'Court added successfully.');
@@ -84,7 +84,7 @@ class AdminManagementController extends Controller
     /**
      * Update the specified court.
      */
-    public function updateCourt(Request $request, Court $court)
+    public function updateCourt(Request $request, Court $court): \Illuminate\Http\RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -107,7 +107,7 @@ class AdminManagementController extends Controller
     /**
      * Display navigation menu management.
      */
-    public function menusIndex()
+    public function menusIndex(): \Illuminate\View\View
     {
         $menus = NavigationMenu::query()->orderBy('order', 'asc')->get();
         return view('admin.management.menus', compact('menus'));
@@ -116,7 +116,7 @@ class AdminManagementController extends Controller
     /**
      * Update navigation menu settings.
      */
-    public function updateMenu(Request $request, NavigationMenu $menu)
+    public function updateMenu(Request $request, NavigationMenu $menu): \Illuminate\Http\RedirectResponse
     {
         $validated = $request->validate([
             'label' => 'required|string|max:255',

@@ -14,37 +14,39 @@ class AdminRepository
     public function getDashboardStats(): array
     {
         return [
-            'total_advocates'       => User::where('role', 'advocate')->count(),
-            'total_clerks'          => User::where('role', 'clerk')->count(),
-            'total_cas'             => User::where('role', 'ca')->count(),
-            'total_guests'          => User::where('role', 'guest')->count(),
-            'pending_verifications' => User::where('status', 'pending')->where('registration_step', '>=', 2)->count(),
-            'in_registration'      => User::where('status', 'pending')->where('registration_step', 1)->count(),
-            'pending_documents'     => Document::where('status', 'pending')->count(),
+            'total_advocates'       => User::query()->where('role', '=', 'advocate')->count(),
+            'total_court_clerks'    => User::query()->where('role', '=', 'court_clerk')->count(),
+            'total_ip_clerks'       => User::query()->where('role', '=', 'ip_clerk')->count(),
+            'total_ca_cs'           => User::query()->where('role', '=', 'ca_cs')->count(),
+            'total_agents'          => User::query()->where('role', '=', 'agent')->count(),
+            'total_guests'          => User::query()->where('role', '=', 'guest')->count(),
+            'pending_verifications' => User::query()->where('status', '=', 'pending')->where('registration_step', '>=', 2)->count(),
+            'in_registration'      => User::query()->where('status', '=', 'pending')->where('registration_step', '=', 1)->count(),
+            'pending_documents'     => Document::query()->where('status', '=', 'pending')->count(),
         ];
     }
 
     public function getPendingCount(): int
     {
-        return User::where('status', 'pending')->where('registration_step', '>=', 2)->count();
+        return User::query()->where('status', '=', 'pending')->where('registration_step', '>=', 2)->count();
     }
 
     public function getPendingDocsCount(): int
     {
-        return Document::where('status', 'pending')->count();
+        return Document::query()->where('status', '=', 'pending')->count();
     }
 
     // ── USERS ────────────────────────────────────────────────
     public function getRecentUsers(int $limit = 10)
     {
-        return User::with('documents')->latest()->take($limit)->get();
+        return User::query()->with('documents')->latest()->take($limit)->get();
     }
 
     public function getFilteredUsers(Request $request, int $perPage = 20)
     {
-        return User::with(['advocateProfile', 'clerkProfile', 'caProfile'])
-            ->when($request->role,   fn($q) => $q->where('role', $request->role))
-            ->when($request->status, fn($q) => $q->where('status', $request->status))
+        return User::query()->with(['advocateProfile', 'clerkProfile', 'caProfile'])
+            ->when($request->role,   fn($q) => $q->where('role', '=', $request->role))
+            ->when($request->status, fn($q) => $q->where('status', '=', $request->status))
             ->when($request->search, fn($q) => $q->where(function ($sq) use ($request) {
                 $sq->where('name',  'like', '%' . $request->search . '%')
                     ->orWhere('email', 'like', '%' . $request->search . '%');
@@ -61,7 +63,7 @@ class AdminRepository
     public function verifyUser(User $user): void
     {
         // Automatically approve all pending documents when user is verified
-        $user->documents()->where('status', 'pending')->update(['status' => 'approved']);
+        $user->documents()->where('status', '=', 'pending')->update(['status' => 'approved']);
         
         $user->update(['status' => 'active']);
     }
@@ -74,20 +76,20 @@ class AdminRepository
     // ── ADVOCATES ────────────────────────────────────────────
     public function getFilteredAdvocates(Request $request, int $perPage = 20)
     {
-        return User::with('advocateProfile')
-            ->where('role', 'advocate')
-            ->when($request->status, fn($q) => $q->where('status', $request->status))
+        return User::query()->with('advocateProfile')
+            ->where('role', '=', 'advocate')
+            ->when($request->status, fn($q) => $q->where('status', '=', $request->status))
             ->when($request->search, fn($q) => $q->where('name', 'like', '%' . $request->search . '%'))
             ->latest()
             ->paginate($perPage);
     }
 
     // ── CLERKS ───────────────────────────────────────────────
-    public function getFilteredClerks(Request $request, int $perPage = 20)
+    public function getFilteredSupport(Request $request, int $perPage = 20)
     {
-        return User::with('clerkProfile')
-            ->where('role', 'clerk')
-            ->when($request->status, fn($q) => $q->where('status', $request->status))
+        return User::query()->with('clerkProfile')
+            ->whereIn('role', ['court_clerk', 'ip_clerk'])
+            ->when($request->status, fn($q) => $q->where('status', '=', $request->status))
             ->when($request->search, fn($q) => $q->where('name', 'like', '%' . $request->search . '%'))
             ->latest()
             ->paginate($perPage);
@@ -96,8 +98,8 @@ class AdminRepository
     // ── DOCUMENTS ────────────────────────────────────────────
     public function getPendingDocuments(int $limit = 10)
     {
-        return Document::with('user')
-            ->where('status', 'pending')
+        return Document::query()->with('user')
+            ->where('status', '=', 'pending')
             ->latest()
             ->take($limit)
             ->get();
@@ -105,9 +107,9 @@ class AdminRepository
 
     public function getFilteredDocuments(Request $request, int $perPage = 20)
     {
-        return Document::with('user')
-            ->when($request->status,        fn($q) => $q->where('status', $request->status))
-            ->when($request->document_type, fn($q) => $q->where('document_type', $request->document_type))
+        return Document::query()->with('user')
+            ->when($request->status,        fn($q) => $q->where('status', '=', $request->status))
+            ->when($request->document_type, fn($q) => $q->where('document_type', '=', $request->document_type))
             ->when($request->search,        fn($q) => $q->whereHas(
                 'user',
                 fn($uq) =>
@@ -128,9 +130,9 @@ class AdminRepository
     // ── FEEDBACK ─────────────────────────────────────────────
     public function getFilteredFeedback(Request $request, int $perPage = 20)
     {
-        return Feedback::with(['giver', 'receiver'])
-            ->when($request->rating,    fn($q) => $q->where('rating', $request->rating))
-            ->when($request->role_type, fn($q) => $q->where('role_type', $request->role_type))
+        return Feedback::query()->with(['giver', 'receiver'])
+            ->when($request->rating,    fn($q) => $q->where('rating', '=', $request->rating))
+            ->when($request->role_type, fn($q) => $q->where('role_type', '=', $request->role_type))
             ->latest()
             ->paginate($perPage);
     }

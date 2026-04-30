@@ -17,6 +17,9 @@ class UserService
 {
     /**
      * Get Dashboard data based on role.
+     * 
+     * @param User $user
+     * @return array
      */
     public function getDashboardData(User $user)
     {
@@ -24,22 +27,21 @@ class UserService
         $data = [
             'user' => $user,
             'documentsStatus' => [
-                'total' => Document::where('user_id', $user->id)->count(),
-                'approved' => Document::where('user_id', $user->id)->where('status', 'approved')->count(),
-                'pending' => Document::where('user_id', $user->id)->where('status', 'pending')->count(),
-                'rejected' => Document::where('user_id', $user->id)->where('status', 'rejected')->count(),
+                'total' => Document::query()->where('user_id', '=', $user->id)->count(),
+                'approved' => Document::query()->where('user_id', '=', $user->id)->where('status', '=', 'approved')->count(),
+                'pending' => Document::query()->where('user_id', '=', $user->id)->where('status', '=', 'pending')->count(),
+                'rejected' => Document::query()->where('user_id', '=', $user->id)->where('status', '=', 'rejected')->count(),
             ],
             'feedbacksReceived' => $user->feedbacksReceived()->latest()->take(5)->get(),
-            'avgRating' => $user->feedbacksReceived()->avg('rating'),
+            'avgRating' => (float) $user->feedbacksReceived()->avg('rating'),
         ];
 
-        if ($role === 'advocate') {
-            $data['profile'] = $user->advocateProfile;
-        } elseif ($role === 'clerk') {
-            $data['profile'] = $user->clerkProfile;
-        } elseif ($role === 'ca') {
-            $data['profile'] = $user->caProfile;
-        }
+        $data['profile'] = match ($role) {
+            'advocate'                => $user->advocateProfile,
+            'court_clerk', 'ip_clerk' => $user->clerkProfile,
+            'ca_cs', 'agent'          => $user->caProfile,
+            default                   => null,
+        };
 
         return $data;
     }
@@ -51,16 +53,16 @@ class UserService
     {
         return DB::transaction(function () use ($user, $data) {
             if (!empty($data['password'])) {
-                $user->update(['password' => Hash::make($data['password'])]);
+                User::query()->where('id', '=', $user->id)->update(['password' => Hash::make($data['password'])]);
             }
 
-            $user->update([
-                'city' => $data['city'],
-                'address' => $data['office_address'],
-                'phone' => $data['office_phone'],
+            User::query()->where('id', '=', $user->id)->update([
+                'city' => $data['city'] ?? $user->city,
+                'address' => $data['office_address'] ?? $user->address,
+                'phone' => $data['office_phone'] ?? $user->phone,
             ]);
 
-            AdvocateProfile::updateOrCreate(
+            AdvocateProfile::query()->updateOrCreate(
                 ['user_id' => $user->id],
                 [
                     'bar_council_number' => $data['bar_council_number'],
@@ -87,22 +89,21 @@ class UserService
     {
         return DB::transaction(function () use ($user, $data) {
             if (!empty($data['password'])) {
-                $user->update(['password' => Hash::make($data['password'])]);
+                User::query()->where('id', '=', $user->id)->update(['password' => Hash::make($data['password'])]);
             }
 
-            $user->update([
-                'city' => $data['city'],
-                'address' => $data['address'],
-                'phone' => $data['phone'],
+            User::query()->where('id', '=', $user->id)->update([
+                'city' => $data['city'] ?? $user->city,
+                'address' => $data['address'] ?? $user->address,
+                'phone' => $data['phone'] ?? $user->phone,
             ]);
 
-            ClerkProfile::updateOrCreate(
+            ClerkProfile::query()->updateOrCreate(
                 ['user_id' => $user->id],
                 [
                     'court_id' => $data['court_id'],
                     'experience_years' => $data['experience_years'] ?? 0,
                     'bio' => $data['bio'],
-                    // other fields...
                 ]
             );
 
@@ -115,7 +116,7 @@ class UserService
      */
     public function searchUsers(array $filters, string $role = 'guest')
     {
-        $query = User::where('role', $role)->where('status', 'active');
+        $query = User::query()->where('role', '=', $role)->where('status', '=', 'active');
 
         if (!empty($filters['search'])) {
             $query->where('name', 'like', '%' . $filters['search'] . '%');
@@ -129,7 +130,7 @@ class UserService
         
         $authId = Auth::id();
         $users->getCollection()->transform(function ($user) use ($authId) {
-            $user->connection_status = ConnectionRequest::getStatus($authId, $user->id);
+            $user->connection_status = ConnectionRequest::getStatus((int) $authId, (int) $user->id);
             return $user;
         });
 

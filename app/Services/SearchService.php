@@ -18,13 +18,16 @@ class SearchService
 
         // Category Role Filtering
         $query->when($category === 'court_clerk', function ($q) {
-            return $q->role('clerk')->where('sub_role', 'court_clerk');
+            return $q->role('court_clerk');
         })
         ->when($category === 'ip_clerk', function ($q) {
-            return $q->role('clerk')->where('sub_role', 'ip_clerk');
+            return $q->role('ip_clerk');
         })
-        ->when($category === 'roc_agent', function ($q) {
-            return $q->role('clerk')->where('sub_role', 'roc_clerk');
+        ->when($category === 'ca_cs', function ($q) {
+            return $q->role('ca_cs');
+        })
+        ->when($category === 'agent', function ($q) {
+            return $q->role('agent');
         })
         ->when($category === 'advocate', function ($q) {
             return $q->role('advocate');

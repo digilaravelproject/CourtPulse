@@ -11,10 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class CaController extends Controller
+class ProfessionalController extends Controller
 {
-    protected $userService;
-    protected $searchService;
+    protected UserService $userService;
+    protected SearchService $searchService;
 
     public function __construct(UserService $userService, SearchService $searchService)
     {
@@ -22,31 +22,31 @@ class CaController extends Controller
         $this->searchService = $searchService;
     }
 
-    public function dashboard()
+    public function dashboard(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
     {
         try {
             $data = $this->userService->getDashboardData(Auth::user());
             $data['feedbackCount'] = Auth::user()->feedbacksGiven()->count();
-            return view('ca.dashboard', $data);
+            return view('professional.dashboard', $data);
         } catch (\Exception $e) {
-            Log::error('CA Dashboard Error: ' . $e->getMessage());
+            Log::error('Professional Dashboard Error: ' . $e->getMessage());
             return back()->withErrors(['general' => 'Failed to load dashboard.']);
         }
     }
 
-    public function profile()
+    public function profile(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
     {
         try {
             $user = Auth::user();
-            $profile = $user->caProfile ?? new \App\Models\CaProfile;
-            return view('ca.profile', compact('user', 'profile'));
+            $profile = $user->caProfile ?? new \App\Models\CaProfile();
+            return view('professional.profile', compact('user', 'profile'));
         } catch (\Exception $e) {
-            Log::error('CA Profile View Error: ' . $e->getMessage());
+            Log::error('Professional Profile View Error: ' . $e->getMessage());
             return back()->withErrors(['general' => 'Failed to load profile.']);
         }
     }
 
-    public function updateProfile(Request $request)
+    public function updateProfile(Request $request): \Illuminate\Http\RedirectResponse
     {
         try {
             $validated = $request->validate([
@@ -62,15 +62,15 @@ class CaController extends Controller
             ]);
 
             $user = Auth::user();
-            
+
             if ($request->city || $request->state) {
-                $user->update([
+                User::query()->where('id', '=', $user->id)->update([
                     'city' => $request->city,
                     'state' => $request->state,
                 ]);
             }
 
-            \App\Models\CaProfile::updateOrCreate(
+            \App\Models\CaProfile::query()->updateOrCreate(
                 ['user_id' => $user->id],
                 [
                     'firm_name' => $validated['firm_name'],
@@ -84,38 +84,38 @@ class CaController extends Controller
                 ]
             );
 
-            return redirect()->route('ca.profile')->with('success', 'Profile updated successfully!');
+            return redirect()->route('professional.profile')->with('success', 'Profile updated successfully!');
         } catch (\Exception $e) {
-            Log::error('CA Profile Update Error: ' . $e->getMessage());
+            Log::error('Professional Profile Update Error: ' . $e->getMessage());
             return back()->withErrors(['general' => 'Failed to update profile.']);
         }
     }
 
-    public function documents()
+    public function documents(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
     {
         try {
-            $documents = Document::where('user_id', Auth::id())->latest()->get();
-            return view('ca.documents', compact('documents'));
+            $documents = Document::query()->where('user_id', '=', Auth::id())->latest()->get();
+            return view('professional.documents', compact('documents'));
         } catch (\Exception $e) {
             return back()->withErrors(['general' => 'Failed to load documents.']);
         }
     }
 
-    public function feedback()
+    public function feedback(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
     {
         try {
-            $advocates = User::where('role', 'advocate')->where('status', 'active')->get();
+            $advocates = User::query()->where('role', '=', 'advocate')->where('status', '=', 'active')->get();
             $myFeedbacks = Auth::user()->feedbacksGiven()->with('receiver')->latest()->get();
-            return view('ca.feedback', compact('advocates', 'myFeedbacks'));
+            return view('professional.feedback', compact('advocates', 'myFeedbacks'));
         } catch (\Exception $e) {
             return back()->withErrors(['general' => 'Failed to load feedback page.']);
         }
     }
 
-    public function searchAdvocates(Request $request)
+    public function searchAdvocates(Request $request): \Illuminate\View\View|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
     {
         try {
-            // Set default category for CA searching advocates
+            // Set default category for Professional searching advocates
             if (!$request->has('category')) {
                 $request->merge(['category' => 'advocate']);
             }
@@ -130,13 +130,13 @@ class CaController extends Controller
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
-                    'html' => view('ca.partials.advocate-list', compact('advocates'))->render(),
+                    'html' => view('professional.partials.advocate-list', compact('advocates'))->render(),
                 ]);
             }
 
-            return view('ca.search-advocates', compact('advocates'));
+            return view('professional.search-advocates', compact('advocates'));
         } catch (\Exception $e) {
-            Log::error('CA Search Advocates Error: ' . $e->getMessage());
+            Log::error('Professional Search Advocates Error: ' . $e->getMessage());
             return back()->withErrors(['general' => 'Failed to search advocates.']);
         }
     }
