@@ -6,6 +6,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @mixin \Illuminate\Database\Query\Builder
+ */
 class User extends Authenticatable
 {
     use Notifiable, HasRoles;
@@ -32,12 +36,18 @@ class User extends Authenticatable
         'experience_years',
         'capabilities',
         'license_number',
-        'past_employers'
+        'past_employers',
+        'court_id'
     ];
 
     protected $hidden = ['password', 'remember_token'];
 
     protected $casts = ['email_verified_at' => 'datetime'];
+
+    public function court()
+    {
+        return $this->belongsTo(Court::class);
+    }
 
     public function advocateProfile()
     {

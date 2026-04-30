@@ -20,7 +20,7 @@ class AuthService
     public function sendLoginOtp(string $email)
     {
         return DB::transaction(function () use ($email) {
-            $user = User::where('email', $email)->first();
+            $user = User::query()->where('email', '=', $email)->first();
 
             if (!$user) {
                 throw new \Exception('User not found. Please register first.');
@@ -43,7 +43,7 @@ class AuthService
      */
     public function verifyLoginOtp(string $email, string $otp)
     {
-        $user = User::where('email', $email)->first();
+        $user = User::query()->where('email', '=', $email)->first();
 
         if (!$user) {
             throw new \Exception('User not found.');
@@ -65,28 +65,57 @@ class AuthService
     }
 
     /**
-     * Register Step 1: Create user and send OTP.
+     * Register Step 1: Initialize registration with Role selection.
      */
-    public function registerStep1(array $data)
+    public function initializeRegistration(array $data)
+    {
+        // This is handled in session or a partial user record
+        // For simplicity and tracking, we'll create the user in the final "Credentials" step
+        // But we need to store role/sub-role in session
+        session(['reg_user_group' => $data['user_group']]);
+        return true;
+    }
+
+    /**
+     * Register Final Step: Create user and send OTP.
+     */
+    public function registerFinal(array $data)
     {
         return DB::transaction(function () use ($data) {
             $otp = rand(100000, 999999);
             
             $user = User::create([
-                'name'              => $data['name'],
-                'email'             => $data['email'],
-                'phone'             => $data['phone'],
-                'password'          => Hash::make('otp_login_only'),
+                'name'              => session('reg_name'),
+                'email'             => session('reg_email'),
+                'phone'             => session('reg_phone'),
+                'password'          => session('reg_password'),
+                'user_group'        => session('reg_user_group'),
+                'sub_role'          => session('reg_sub_role'),
+                'role'              => session('reg_role'),
+                'court_id'          => $data['court_id'],
+                'experience_years'  => $data['experience_years'],
+                'license_number'    => $data['license_number'] ?? null,
+                'past_employers'    => $data['past_employers'] ?? null,
+                'capabilities'      => $data['capabilities'] ?? null,
                 'registration_step' => 1,
                 'status'            => 'pending',
                 'otp'               => $otp,
                 'otp_expires_at'    => Carbon::now()->addMinutes(10),
             ]);
 
+            // Assign Spatie Role
+            $user->assignRole($user->role);
+
             Mail::to($user->email)->send(new OtpMail($user->name, $otp));
 
             Auth::login($user);
             
+            // Clear registration session
+            session()->forget([
+                'reg_user_group', 'reg_sub_role', 'reg_role', 
+                'reg_name', 'reg_email', 'reg_phone', 'reg_password'
+            ]);
+
             return $user;
         });
     }
@@ -104,33 +133,12 @@ class AuthService
             $user->update([
                 'otp'               => null,
                 'otp_expires_at'    => null,
-                'phone_verified_at' => Carbon::now(),
+                'email_verified_at' => Carbon::now(),
+                'registration_step' => 2 // Completed registration
             ]);
             return true;
         }
 
         throw new \Exception('Invalid or expired OTP.');
-    }
-
-    /**
-     * Store Role and Details.
-     */
-    public function storeUserDetails(User $user, array $data)
-    {
-        return DB::transaction(function () use ($user, $data) {
-            $role = $data['role'] ?? ($data['sub_role'] === 'advocate_support' ? 'advocate' : 'clerk');
-            
-            $user->update(array_merge($data, [
-                'role'              => $role,
-                'registration_step' => 2,
-                'status'            => 'pending'
-            ]));
-
-            if (!$user->hasRole($role)) {
-                $user->assignRole($role);
-            }
-
-            return $user;
-        });
     }
 }

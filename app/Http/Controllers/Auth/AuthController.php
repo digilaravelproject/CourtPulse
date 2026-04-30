@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Services\AuthService;
+use App\Models\Court;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
-    protected $authService;
+    protected AuthService $authService;
 
     public function __construct(AuthService $authService)
     {
@@ -19,7 +20,7 @@ class AuthController extends Controller
 
     public function showRegister()
     {
-        return view('auth.register');
+        return redirect()->route('register.step1');
     }
 
     public function showLogin()
@@ -27,7 +28,7 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    // ─── LOGIN FLOW (OTP BASED) ──────────────────────────────────────────────
+    // ─── LOGIN FLOW ─────────────────────────────────────────────────────────
 
     public function sendLoginOtp(Request $request)
     {
@@ -44,7 +45,7 @@ class AuthController extends Controller
 
     public function showLoginVerify()
     {
-        $email = session('email');
+        $email = session('email') ?? old('email');
         if (!$email) return redirect()->route('login');
         return view('auth.login-verify', compact('email'));
     }
@@ -58,209 +59,144 @@ class AuthController extends Controller
 
         try {
             $user = $this->authService->verifyLoginOtp($request->email, $request->otp);
-            return $this->redirectByRole($user->role);
+            return $this->redirectByRole($user);
         } catch (\Exception $e) {
             Log::error('Login Verify Error: ' . $e->getMessage());
-            return back()->withErrors(['otp' => $e->getMessage()]);
+            return back()->withErrors(['otp' => $e->getMessage()])->withInput();
         }
     }
 
-    // ─── REGISTRATION FLOW (MULTI-STEP) ──────────────────────────────────────
+    // ─── REGISTRATION FLOW (NEW MULTI-STEP) ──────────────────────────────────
 
-    public function registerStep1(Request $request)
+    /**
+     * Step 1: Role Selection
+     */
+    public function showRegisterStep1()
+    {
+        return view('auth.register.step1');
+    }
+
+    public function postRegisterStep1(Request $request)
     {
         $validated = $request->validate([
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'required|digits:10',
-            'name'  => 'required|string|max:255',
+            'user_group' => 'required|in:professional,support',
+            'sub_role'   => 'required|string'
+        ]);
+
+        $role = 'guest';
+        if ($validated['user_group'] === 'professional') {
+            $role = $validated['sub_role']; // advocate, ca, etc.
+        } else {
+            $role = ($validated['sub_role'] === 'advocate_support') ? 'advocate' : 'clerk';
+        }
+
+        session([
+            'reg_user_group' => $validated['user_group'],
+            'reg_sub_role'   => $validated['sub_role'],
+            'reg_role'       => $role,
+        ]);
+
+        return redirect()->route('register.step2');
+    }
+
+    /**
+     * Step 2: Account Credentials
+     */
+    public function showRegisterStep2()
+    {
+        if (!session('reg_user_group')) return redirect()->route('register.step1');
+        return view('auth.register.step2');
+    }
+
+    public function postRegisterStep2(Request $request)
+    {
+        $validated = $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'phone'    => 'required|digits:10|unique:users,phone',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        session([
+            'reg_name'     => $validated['name'],
+            'reg_email'    => $validated['email'],
+            'reg_phone'    => $validated['phone'],
+            'reg_password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
+        ]);
+
+        return redirect()->route('register.step3');
+    }
+
+    /**
+     * Step 3: Professional Details
+     */
+    public function showRegisterStep3()
+    {
+        if (!session('reg_name')) return redirect()->route('register.step2');
+        $courts = Court::query()->where('is_active', '=', true)->get();
+        $user_group = session('reg_user_group');
+        return view('auth.register.step3', compact('courts', 'user_group'));
+    }
+
+    public function postRegisterStep3(Request $request)
+    {
+        $validated = $request->validate([
+            'experience_years' => 'required|numeric|min:0',
+            'court_id'         => 'required|exists:courts,id',
+            'license_number'   => 'nullable|string|max:100',
+            'past_employers'   => 'nullable|string',
+            'capabilities'     => 'nullable|string',
         ]);
 
         try {
-            $this->authService->registerStep1($validated);
-            return redirect()->route('otp.verify');
+            $user = $this->authService->registerFinal($validated);
+            return redirect()->route('register.otp');
         } catch (\Exception $e) {
-            Log::error('Register Step 1 Error: ' . $e->getMessage());
-            return back()->withErrors(['email' => 'Failed to start registration. ' . $e->getMessage()]);
+            Log::error('Register Final Error: ' . $e->getMessage());
+            return back()->withErrors(['general' => 'Registration failed. ' . $e->getMessage()])->withInput();
         }
     }
 
-    public function showOtpVerify()
+    /**
+     * Step 4: OTP Verification
+     */
+    public function showRegisterOtp()
     {
         $user = Auth::user();
         if (!$user) return redirect()->route('login');
-        if ($user->phone_verified_at) return redirect()->route('register.role');
-        
-        return view('auth.otp-verify', compact('user'));
+        if ($user->email_verified_at) return $this->redirectByRole($user);
+
+        return view('auth.register.otp', compact('user'));
     }
 
-    public function verifyOtp(Request $request)
+    public function verifyRegisterOtp(Request $request)
     {
         $request->validate(['otp' => 'required|digits:6']);
         
         try {
-            $this->authService->verifyRegistrationOtp(Auth::user(), $request->otp);
-            return redirect()->route('register.role');
+            $user = Auth::user();
+            $this->authService->verifyRegistrationOtp($user, $request->otp);
+            return $this->redirectByRole($user);
         } catch (\Exception $e) {
             return back()->withErrors(['otp' => $e->getMessage()]);
         }
     }
 
-    public function showRoleSelection()
-    {
-        $user = Auth::user();
-        return view('auth.register-role', compact('user'));
-    }
+    // ─── UTILS ───────────────────────────────────────────────────────────────
 
-    public function storeRoleSelection(Request $request)
+    private function redirectByRole(\App\Models\User $user)
     {
-        $request->validate(['user_group' => 'required|in:professional,support']);
-        $user = Auth::user();
-        
-        $user->update(['user_group' => $request->user_group]);
-        return redirect()->route('register.details');
-    }
-
-    public function showDetailsForm()
-    {
-        $user = Auth::user();
-        if ($user->user_group === 'professional') {
-            return view('auth.register-professional', compact('user'));
-        }
-        return view('auth.register-support', compact('user'));
-    }
-
-    public function storeDetails(Request $request)
-    {
-        $user = Auth::user();
-        
-        $rules = [
-            'city' => 'required|string',
-            'state' => 'required|string',
-            'experience_years' => 'required|numeric',
-        ];
-
-        if ($user->user_group === 'professional') {
-            $rules['role'] = 'required|in:advocate,ca,cs,ip_attorney';
-        } else {
-            $rules['sub_role'] = 'required|in:court_clerk,ip_clerk,roc_clerk,advocate_support';
+        if ($user->status !== 'active' && !$user->isAdmin()) {
+            return redirect()->route('verification.pending');
         }
 
-        $validated = $request->validate($rules);
-
-        try {
-            $user = $this->authService->storeUserDetails($user, $validated);
-
-            return redirect()->route('register.documents');
-        } catch (\Exception $e) {
-            Log::error('Store Details Error: ' . $e->getMessage());
-            return back()->withErrors(['general' => 'Failed to save details.']);
-        }
-    }
-
-    public function showDocumentsForm()
-    {
-        $user = Auth::user();
-        $role = $user->role ?? 'clerk'; // Default to clerk if null
-        $requirements = config("requirements.documents." . $role, []);
-        
-        // If still empty, check if it's a sub_role case
-        if (empty($requirements)) {
-            $requirements = config("requirements.documents.clerk", []);
-        }
-        
-        // Get already uploaded docs
-        $uploadedDocs = $user->documents()->pluck('document_type')->toArray();
-
-        return view('auth.register-documents', compact('user', 'requirements', 'uploadedDocs'));
-    }
-
-    public function uploadDoc(Request $request)
-    {
-        $request->validate([
-            'document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'type'     => 'required|string'
-        ]);
-
-        try {
-            $user = Auth::user();
-            
-            // Remove old doc of same type if exists
-            \App\Models\Document::where('user_id', $user->id)
-                ->where('document_type', $request->type)
-                ->delete();
-
-            $path = $request->file('document')->store('verification_docs/' . $user->id, 'public');
-            
-            \App\Models\Document::create([
-                'user_id' => $user->id,
-                'document_type' => $request->type,
-                'file_name' => $request->file('document')->getClientOriginalName(),
-                'file_path' => $path,
-                'file_size' => $request->file('document')->getSize(),
-                'mime_type' => $request->file('document')->getMimeType(),
-                'status' => 'pending'
-            ]);
-
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            Log::error('Upload Doc Error: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Upload failed: ' . $e->getMessage()], 500);
-        }
-    }
-
-    public function completeRegistration(Request $request)
-    {
-        try {
-            $user = Auth::user();
-            
-            // Verify mandatory docs are uploaded
-            $role = $user->role ?? 'clerk';
-            $requirements = config("requirements.documents." . $role, []);
-            
-            if (empty($requirements)) {
-                $requirements = config("requirements.documents.clerk", []);
-            }
-            
-            $uploadedTypes = $user->documents()->pluck('document_type')->toArray();
-            
-            foreach ($requirements as $key => $req) {
-                if ($req['required'] && !in_array($key, $uploadedTypes)) {
-                    return back()->withErrors(['general' => 'Please upload all required documents.']);
-                }
-            }
-
-            $user->update([
-                'status' => 'pending',
-                'registration_step' => 3
-            ]);
-
-            return redirect()->route('under-process');
-        } catch (\Exception $e) {
-            return back()->withErrors(['general' => $e->getMessage()]);
-        }
-    }
-
-    public function resendOtp()
-    {
-        try {
-            $user = Auth::user();
-            if (!$user) throw new \Exception('Unauthorized');
-            $this->authService->sendLoginOtp($user->email);
-            return back()->with('success', 'OTP has been resent to your email.');
-        } catch (\Exception $e) {
-            return back()->withErrors(['otp' => $e->getMessage()]);
-        }
-    }
-
-    private function redirectByRole(string $role)
-    {
-        return match ($role) {
+        return match ($user->role) {
             'super_admin' => redirect()->route('super.dashboard'),
             'admin'       => redirect()->route('admin.dashboard'),
             'advocate'    => redirect()->route('advocate.dashboard'),
             'clerk'       => redirect()->route('clerk.dashboard'),
             'ca'          => redirect()->route('ca.dashboard'),
-            default       => redirect()->route('guest.dashboard'),
+            default       => redirect()->route('dashboard'),
         };
     }
 
@@ -268,6 +204,7 @@ class AuthController extends Controller
     {
         Auth::logout();
         $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('login');
     }
 }

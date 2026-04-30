@@ -29,38 +29,35 @@
             </h2>
 
             <div class="flex items-center justify-center gap-4 mb-16 reveal stagger-1 visible">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5"
-                    class="float">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
+                    class="animate-bounce stroke-blue">
                     <path d="M7 17L17 7M7 7H17V17" />
                 </svg>
-                <h3 class="text-lg md:text-xl font-bold text-[#B4B4FE] uppercase tracking-[0.25em]">
+                <h3 class="text-lg md:text-xl font-bold text-blue uppercase tracking-[0.25em]">
                     Digitising the last mile of Indian law.
                 </h3>
             </div>
 
             <!-- High Contrast Hero Marquee -->
-            <div class="border-y border-white/15 py-10 overflow-hidden bg-[#0a0f1d] relative shadow-inner">
-                <div class="absolute inset-y-0 left-0 w-24 bg-linear-to-r from-[#0a0f1d] to-transparent z-10"></div>
-                <div class="absolute inset-y-0 right-0 w-24 bg-linear-to-l from-[#0a0f1d] to-transparent z-10"></div>
+            <div class="border-y border-white/15 py-10 overflow-hidden bg-navy2 relative shadow-inner">
+                <div class="absolute inset-y-0 left-0 w-24 bg-linear-to-r from-navy2 to-transparent z-10"></div>
+                <div class="absolute inset-y-0 right-0 w-24 bg-linear-to-l from-navy2 to-transparent z-10"></div>
 
-                <div class="marquee-container" style="background: transparent;">
-                    <div class="marquee-content" style="animation: marquee 40s linear infinite;">
-                        <span class="marquee-item text-[#B4B4FE]! text-[1.1rem]! font-black! tracking-normal!">Every District
+                <div class="marquee-container py-10 overflow-hidden whitespace-nowrap" style="background: transparent;">
+                    <div class="animate-marquee inline-block">
+                        <span class="inline-block px-12 text-blue text-[1.1rem] font-black tracking-normal">Every
+                            District
                             covered. Every Court handled.</span>
-                        <span class="marquee-item text-white! text-[1.1rem]! font-black! tracking-normal!">Delegate court
+                        <span class="inline-block px-12 text-white text-[1.1rem] font-black tracking-normal">Delegate court
                             appearances & routine filings to verified professionals</span>
-                        <span class="marquee-item text-[#B4B4FE]! text-[1.1rem]! font-black! tracking-normal!">Connect with
+                        <span class="inline-block px-12 text-blue text-[1.1rem] font-black tracking-normal">Connect with
                             verified filing professionals across Tribunals & ROC offices.</span>
-                        <span class="marquee-item text-white! text-[1.1rem]! font-black! tracking-normal!">Ideas move fast.
+                        <span class="inline-block px-12 text-white text-[1.1rem] font-black tracking-normal">Ideas move fast.
                             Your filings should too.</span>
                         <!-- Duplicate for seamless scroll -->
-                        <span class="marquee-item text-[#B4B4FE]! text-[1.1rem]! font-black! tracking-normal!">Every District
-                            covered. Every Court handled.</span>
-                        <span class="marquee-item text-white! text-[1.1rem]! font-black! tracking-normal!">Delegate court
-                            appearances & routine filings to verified professionals</span>
-                        <span class="marquee-item text-[#B4B4FE]! text-[1.1rem]! font-black! tracking-normal!">Connect with
+                        <span class="inline-block px-12 text-blue text-[1.1rem] font-black tracking-normal">Connect with
                             verified filing professionals across Tribunals & ROC offices.</span>
-                        <span class="marquee-item text-white! text-[1.1rem]! font-black! tracking-normal!">Ideas move fast.
+                        <span class="inline-block px-12 text-white text-[1.1rem] font-black tracking-normal">Ideas move fast.
                             Your filings should too.</span>
                     </div>
                 </div>
@@ -72,66 +69,69 @@
     <section class="py-32 bg-navy2" id="how-it-works">
         <div class="max-w-[1500px] mx-auto px-6">
             <div class="mb-16 reveal">
-                <h2 class="section-head text-white uppercase tracking-tighter text-4xl mb-4">How it works.</h2>
-                <div class="head-line"></div>
+                <h2 class="text-white uppercase tracking-tighter text-4xl font-extrabold mb-4 leading-none">How it works.</h2>
+                <div class="w-20 h-1 bg-blue"></div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- Card 1 -->
                 <div
-                    class="bg-card border border-white/5 p-10 rounded-xl hover:border-blue-glow transition-all duration-500 group reveal stagger-1 hover-lift">
+                    class="bg-card border border-white/5 p-10 rounded-xl transition-all duration-500 group reveal stagger-1 hover:-translate-y-2 hover:scale-[1.02] hover:glow-blue hover:border-blue/30 cursor-pointer">
                     <div
-                        class="w-14 h-14 bg-navy3 rounded-lg flex items-center justify-center mb-8 border border-white/10 group-hover:border-blue/30">
-                        <svg class="w-8 h-8 text-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="w-14 h-14 bg-navy3 rounded-lg flex items-center justify-center mb-8 border border-white/10 group-hover:border-blue/30 transition-colors">
+                        <svg class="w-8 h-8 text-blue group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-black text-white uppercase mb-4 tracking-tight">Register & Verify</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Create your profile as an Advocate, IP Agent, CA, CS, or Clerk</p>
+                    <h3 class="text-xl font-black text-white uppercase mb-4 tracking-tight group-hover:text-blue transition-colors">Register & Verify</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Create your profile as an Advocate, IP Agent, CA, CS,
+                        or Clerk</p>
                 </div>
 
                 <!-- Card 2 -->
                 <div
-                    class="bg-card border border-white/5 p-10 rounded-xl hover:border-blue-glow transition-all duration-500 group reveal stagger-2 hover-lift">
+                    class="bg-card border border-white/5 p-10 rounded-xl transition-all duration-500 group reveal stagger-2 hover:-translate-y-2 hover:scale-[1.02] hover:glow-blue hover:border-blue/30 cursor-pointer">
                     <div
-                        class="w-14 h-14 bg-navy3 rounded-lg flex items-center justify-center mb-8 border border-white/10 group-hover:border-blue/30">
-                        <svg class="w-8 h-8 text-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="w-14 h-14 bg-navy3 rounded-lg flex items-center justify-center mb-8 border border-white/10 group-hover:border-blue/30 transition-colors">
+                        <svg class="w-8 h-8 text-blue group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-black text-white uppercase mb-4 tracking-tight">Filter & Connect</h3>
+                    <h3 class="text-xl font-black text-white uppercase mb-4 tracking-tight group-hover:text-blue transition-colors">Filter & Connect</h3>
                     <p class="text-slate-400 text-sm leading-relaxed">Search by City, Court, Domain of Practice, Years of
                         Experience, or Task Type. See past feedback before you reach out.</p>
                 </div>
 
                 <!-- Card 3 -->
                 <div
-                    class="bg-card border border-white/5 p-10 rounded-xl hover:border-blue-glow transition-all duration-500 group reveal stagger-3 hover-lift">
+                    class="bg-card border border-white/5 p-10 rounded-xl transition-all duration-500 group reveal stagger-3 hover:-translate-y-2 hover:scale-[1.02] hover:glow-blue hover:border-blue/30 cursor-pointer">
                     <div
-                        class="w-14 h-14 bg-navy3 rounded-lg flex items-center justify-center mb-8 border border-white/10 group-hover:border-blue/30">
-                        <svg class="w-8 h-8 text-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="w-14 h-14 bg-navy3 rounded-lg flex items-center justify-center mb-8 border border-white/10 group-hover:border-blue/30 transition-colors">
+                        <svg class="w-8 h-8 text-blue group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-black text-white uppercase mb-4 tracking-tight">Delegate & Track</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Assign tasks — Appearances, Adjournments, filing VP (Vakalatnama),
+                    <h3 class="text-xl font-black text-white uppercase mb-4 tracking-tight group-hover:text-blue transition-colors">Delegate & Track</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Assign tasks — Appearances, Adjournments, filing VP
+                        (Vakalatnama),
                         track a Court live, and get WhatsApp updates when the job is done.</p>
                 </div>
 
                 <!-- Card 4 -->
                 <div
-                    class="bg-card border border-white/5 p-10 rounded-xl hover:border-blue-glow transition-all duration-500 group reveal stagger-4 hover-lift">
+                    class="bg-card border border-white/5 p-10 rounded-xl transition-all duration-500 group reveal stagger-4 hover:-translate-y-2 hover:scale-[1.02] hover:glow-blue hover:border-blue/30 cursor-pointer">
                     <div
-                        class="w-14 h-14 bg-navy3 rounded-lg flex items-center justify-center mb-8 border border-white/10 group-hover:border-blue/30">
-                        <svg class="w-8 h-8 text-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="w-14 h-14 bg-navy3 rounded-lg flex items-center justify-center mb-8 border border-white/10 group-hover:border-blue/30 transition-colors">
+                        <svg class="w-8 h-8 text-blue group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-black text-white uppercase mb-4 tracking-tight">Feedback.</h3>
+                    <h3 class="text-xl font-black text-white uppercase mb-4 tracking-tight group-hover:text-blue transition-colors">Feedback.</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Rate the professionalism and quality of service provided by the network.</p>
                 </div>
             </div>
         </div>
@@ -158,9 +158,9 @@
                             Mapped. Before you arrive.</h3>
                         <p class="text-slate-400 text-sm uppercase tracking-widest font-bold">Because you have to start
                             before the gate, not after it.</p>
-                        <a href="#" class="btn-primary inline-flex items-center gap-4 mt-8">
+                        <a href="#" class="bg-blue text-navy font-bold px-8 py-4 rounded-md transition-all duration-300 uppercase text-[0.65rem] tracking-wider hover:bg-blue2 hover:scale-105 hover:glow-blue no-underline inline-flex items-center gap-4 mt-8">
                             Find Court Maps & Complex Layouts
-                            <span class="text-[0.6rem] opacity-60 font-medium">Link to collection with Filter</span>
+                            <span class="text-[0.6rem] opacity-60 font-medium group-hover:opacity-100 transition-opacity">Link to collection with Filter</span>
                         </a>
                     </div>
                 </div>
@@ -175,7 +175,7 @@
                         <p class="text-slate-400 text-sm leading-relaxed">Live Court Notices, Tribunal Circulars, and
                             procedural updates — curated daily</p>
                         <a href="#"
-                            class="btn-ghost inline-flex items-center gap-4 mt-8 border-white/10 uppercase tracking-widest">
+                            class="text-slate-400 border border-white/10 px-8 py-4 rounded-md text-[0.75rem] font-semibold transition-all duration-300 hover:text-white hover:border-slate-400 no-underline uppercase tracking-widest inline-flex items-center gap-4 mt-8">
                             Find Notices & Circulars
                         </a>
                     </div>
@@ -201,8 +201,8 @@
     <section class="py-32 bg-navy2" id="contact">
         <div class="max-w-[1500px] mx-auto px-6">
             <div class="mb-16 reveal">
-                <h2 class="section-head text-white uppercase tracking-tighter text-4xl mb-4">Contact Us</h2>
-                <div class="head-line"></div>
+                <h2 class="text-white uppercase tracking-tighter text-4xl font-extrabold mb-4 leading-none">Contact Us</h2>
+                <div class="w-20 h-1 bg-blue"></div>
             </div>
 
             <div

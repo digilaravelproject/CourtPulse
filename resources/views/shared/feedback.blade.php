@@ -57,8 +57,7 @@
                                     @foreach ($targets as $targetRole => $users)
                                         <button type="button"
                                             class="role-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border transition-all
-                                        {{ $loop->first ? 'border-[#D4AF37] text-[#060C18]' : 'bg-white border-slate-200 text-slate-500 hover:border-[#D4AF37] hover:text-[#92650a]' }}"
-                                            style="{{ $loop->first ? 'background:#D4AF37' : '' }}"
+                                        {{ $loop->first ? 'border-gold text-dark bg-gold' : 'bg-white border-slate-200 text-slate-500 hover:border-gold hover:text-gold/80' }}"
                                             data-role="{{ $targetRole }}">
                                             {{ $roleIcons[$targetRole] ?? '👤' }} {{ ucfirst($targetRole) }}
                                             <span class="font-mono text-xs">({{ $users->count() }})</span>
@@ -79,7 +78,7 @@
                                     </label>
                                     <select
                                         class="role-select receiver-select w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white text-slate-700
-                                       focus:outline-none focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20 transition cursor-pointer"
+                                        focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold-glow transition cursor-pointer"
                                         data-role="{{ $targetRole }}">
                                         <option value="">— Select {{ ucfirst($targetRole) }} —</option>
                                         @foreach ($users as $u)
@@ -117,7 +116,7 @@
                                 <textarea name="comment" rows="3" placeholder="Share your experience..."
                                     class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm resize-none
                                        placeholder:text-slate-300 text-slate-700
-                                       focus:outline-none focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20 transition"></textarea>
+                                        focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold-glow transition"></textarea>
                             </div>
 
                             {{-- Anonymous --}}
@@ -125,7 +124,7 @@
                                 <label class="flex items-center gap-2.5 cursor-pointer group">
                                     <input type="checkbox" name="is_anonymous" value="1"
                                         class="w-4 h-4 rounded border-slate-300 cursor-pointer"
-                                        style="accent-color:#D4AF37">
+                                        style="accent-color:var(--gold)">
                                     <span class="text-sm text-slate-600 group-hover:text-slate-800 transition-colors">Submit
                                         anonymously</span>
                                 </label>
@@ -133,9 +132,7 @@
 
                             {{-- Submit --}}
                             <button type="submit"
-                                class="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all active:scale-95"
-                                style="background:#D4AF37;color:#060C18" onmouseover="this.style.background='#B5952F'"
-                                onmouseout="this.style.background='#D4AF37'">
+                                class="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold bg-gold text-dark transition-all active:scale-95 hover:bg-gold/90">
                                 <i class="bi bi-star-fill"></i> Submit Feedback
                             </button>
                         </form>
@@ -174,12 +171,12 @@
                                     {{-- Show contact directly here --}}
                                     <div class="flex flex-col gap-0.5 mt-1">
                                         <span class="flex items-center gap-1.5 text-xs text-slate-500">
-                                            <i class="bi bi-envelope text-[#D4AF37] text-xs"></i>
+                                            <i class="bi bi-envelope text-gold text-xs"></i>
                                             {{ $fb->receiver->email }}
                                         </span>
                                         @if ($fb->receiver->phone)
                                             <span class="flex items-center gap-1.5 text-xs text-slate-500">
-                                                <i class="bi bi-telephone text-[#D4AF37] text-xs"></i>
+                                                <i class="bi bi-telephone text-gold text-xs"></i>
                                                 {{ $fb->receiver->phone }}
                                             </span>
                                         @endif
@@ -191,13 +188,11 @@
                                     @for ($i = 1; $i <= 5; $i++)
                                         <i
                                             class="bi bi-star{{ $i <= $fb->rating ? '-fill' : '' }} text-xs
-                                   {{ $i <= $fb->rating ? 'text-[#D4AF37]' : 'text-slate-200' }}"></i>
+                                   {{ $i <= $fb->rating ? 'text-gold' : 'text-slate-200' }}"></i>
                                     @endfor
                                 </div>
                                 <a href="{{ route('user.detail', $fb->receiver) }}"
-                                    class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap"
-                                    style="background:#D4AF37;color:#060C18" onmouseover="this.style.background='#B5952F'"
-                                    onmouseout="this.style.background='#D4AF37'">
+                                    class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-gold text-dark transition-all whitespace-nowrap hover:bg-gold/90">
                                     <i class="bi bi-person-badge"></i> Full Profile
                                 </a>
                             </div>
@@ -220,11 +215,10 @@
                 <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
                     <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
                         <h3 class="font-display font-bold text-slate-800 text-lg">⭐ Feedback Received</h3>
-                        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full border"
-                            style="background:rgba(212,175,55,.08);border-color:rgba(212,175,55,.25)">
-                            <i class="bi bi-star-fill text-xs text-[#D4AF37]"></i>
+                        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full border bg-gold-glow border-gold/25">
+                            <i class="bi bi-star-fill text-xs text-gold"></i>
                             <span
-                                class="font-mono font-bold text-xs text-[#92650a]">{{ number_format($received->avg('rating'), 1) }}</span>
+                                class="font-mono font-bold text-xs text-gold/80">{{ number_format($received->avg('rating'), 1) }}</span>
                         </div>
                     </div>
                     <div class="divide-y divide-slate-50">
@@ -233,7 +227,7 @@
                                 <div class="flex items-start gap-3">
                                     <div
                                         class="w-9 h-9 rounded-xl font-bold font-display text-sm flex items-center justify-center flex-shrink-0
-                                    {{ $fb->is_anonymous ? 'bg-slate-100 text-slate-500' : 'bg-[#D4AF37]/10 text-[#92650a]' }}">
+                                    {{ $fb->is_anonymous ? 'bg-slate-100 text-slate-500' : 'bg-gold-glow text-gold' }}">
                                         {{ $fb->is_anonymous ? '?' : strtoupper(substr($fb->giver->name ?? 'U', 0, 1)) }}
                                     </div>
                                     <div class="flex-1 min-w-0">
@@ -251,7 +245,7 @@
                                                 @for ($i = 1; $i <= 5; $i++)
                                                     <i
                                                         class="bi bi-star{{ $i <= $fb->rating ? '-fill' : '' }} text-xs
-                                           {{ $i <= $fb->rating ? 'text-[#D4AF37]' : 'text-slate-200' }}"></i>
+                                           {{ $i <= $fb->rating ? 'text-gold' : 'text-slate-200' }}"></i>
                                                 @endfor
                                             </div>
                                         </div>
@@ -311,23 +305,19 @@
                 tab.addEventListener('click', function() {
                     const role = this.dataset.role;
                     document.querySelectorAll('.role-tab').forEach(t => {
-                        t.style.background = '';
-                        t.classList.remove('border-[#D4AF37]', 'text-[#060C18]');
-                        t.classList.add('bg-white', 'border-slate-200', 'text-slate-500');
-                    });
-                    this.style.background = '#D4AF37';
-                    this.classList.add('border-[#D4AF37]', 'text-[#060C18]');
-                    this.classList.remove('bg-white', 'border-slate-200', 'text-slate-500');
+                        this.classList.add('border-gold', 'text-dark', 'bg-gold');
+                        this.classList.remove('bg-white', 'border-slate-200', 'text-slate-500');
 
-                    document.querySelectorAll('.role-section').forEach(sec => {
-                        sec.classList.add('hidden');
+                        document.querySelectorAll('.role-section').forEach(sec => {
+                            sec.classList.add('hidden');
+                        });
+                        const active = document.querySelector(`.role-section[data-role="${role}"]`);
+                        if (active) {
+                            active.classList.remove('hidden');
+                        }
+                        // Sync the receiver after switching tabs
+                        syncReceiver();
                     });
-                    const active = document.querySelector(`.role-section[data-role="${role}"]`);
-                    if (active) {
-                        active.classList.remove('hidden');
-                    }
-                    // Sync the receiver after switching tabs
-                    syncReceiver();
                 });
             });
 
@@ -342,19 +332,19 @@
             stars.forEach((star, index) => {
                 star.addEventListener('click', () => {
                     stars.forEach((s, i) => {
-                        s.style.color = i <= index ? '#D4AF37' : '#e2e8f0';
+                        s.style.color = i <= index ? 'var(--gold)' : '#e2e8f0';
                         s.style.transform = i <= index ? 'scale(1.15)' : 'scale(1)';
                     });
                     if (ratingHint) ratingHint.textContent = ratingLabels[index + 1];
                 });
                 star.addEventListener('mouseover', () => {
-                    stars.forEach((s, i) => s.style.color = i <= index ? '#D4AF37' : '#e2e8f0');
+                    stars.forEach((s, i) => s.style.color = i <= index ? 'var(--gold)' : '#e2e8f0');
                 });
                 star.addEventListener('mouseout', () => {
                     const checked = document.querySelector('input[name="rating"]:checked');
                     const val = checked ? parseInt(checked.value) - 1 : -1;
                     stars.forEach((s, i) => {
-                        s.style.color = i <= val ? '#D4AF37' : '#e2e8f0';
+                        s.style.color = i <= val ? 'var(--gold)' : '#e2e8f0';
                         s.style.transform = i <= val ? 'scale(1.15)' : 'scale(1)';
                     });
                 });

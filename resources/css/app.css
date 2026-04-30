@@ -6,8 +6,178 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+:root {
+    --navy: #050812;
+    --navy2: #080d1a;
+    --navy3: #0b1120;
+    --card: #0e1526;
+    --card2: #111830;
+    --card3: #141c35;
+    --blue: #B4B4FE;
+    --blue2: #9999f0;
+    --blue-glow: rgba(180, 180, 254, 0.3);
+    --blue-light: #d0d0ff;
+    --accent: #B4B4FE;
+    --gold: #D4AF37;
+    --gold-glow: rgba(212, 175, 55, 0.15);
+    --border: rgba(255, 255, 255, 0.06);
+    --border2: rgba(180, 180, 254, 0.35);
+    --text: #CBD5E1;
+    --text2: #94A3B8;
+    --muted: #4A5568;
+    --white: #F8FAFC;
+}
+
 @theme {
     --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
     --font-manrope: "Manrope", sans-serif;
     --font-syne: "Manrope", sans-serif;
+
+    /* Tailwind Mappings */
+    --color-navy: var(--navy);
+    --color-navy2: var(--navy2);
+    --color-navy3: var(--navy3);
+    --color-card: var(--card);
+    --color-card2: var(--card2);
+    --color-card3: var(--card3);
+    --color-blue: var(--blue);
+    --color-blue2: var(--blue2);
+    --color-blue-glow: var(--blue-glow);
+    --color-blue-light: var(--blue-light);
+    --color-accent: var(--accent);
+    --color-border: var(--border);
+    --color-border2: var(--border2);
+    --color-text: var(--text);
+    --color-text2: var(--text2);
+    --color-muted: var(--muted);
+    --color-white: var(--white);
+
+    /* Aliases for smoother migration */
+    --color-primary: var(--blue);
+    --color-gold: var(--gold);
+    --color-gold-glow: var(--gold-glow);
+    --color-dark: var(--navy);
+    
+    /* Animations */
+    --animate-marquee: marquee 30s linear infinite;
+    --animate-marquee-slow: marquee 60s linear infinite;
+    --animate-bounce-subtle: bounce-subtle 2s ease-in-out infinite;
+
+    @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    @keyframes bounce-subtle {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
 }
+
+
+@utility reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+@utility reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@utility reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+@utility reveal-left-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@utility stagger-1 { transition-delay: 100ms; }
+@utility stagger-2 { transition-delay: 200ms; }
+@utility stagger-3 { transition-delay: 300ms; }
+@utility stagger-4 { transition-delay: 400ms; }
+@utility stagger-5 { transition-delay: 500ms; }
+
+/* Premium Design Spells */
+@utility glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@utility glass-dark {
+    background: rgba(5, 8, 18, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@utility text-gradient {
+    background: linear-gradient(135deg, #fff 0%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+@utility glow-blue {
+    box-shadow: 0 0 20px var(--blue-glow);
+}
+
+@utility border-glow {
+    border-color: var(--border2);
+    box-shadow: 0 0 15px rgba(180, 180, 254, 0.1);
+}
+
+/* Marquee container */
+.marquee-container {
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+/* Mobile Menu States */
+#mobile-menu.active {
+    transform: translateX(0) !important;
+    translate: 0 !important;
+}
+
+#navbar.scrolled {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    background: rgba(5, 8, 18, 0.95);
+    border-bottom: 1px solid rgba(180, 180, 254, 0.1);
+    box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.6);
+}
+
+body.mobile-menu-open {
+    overflow: hidden;
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--navy);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--card3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--blue);
+}
+

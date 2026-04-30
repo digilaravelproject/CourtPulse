@@ -4,12 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @mixin \Illuminate\Database\Query\Builder
+ */
 class Court extends Model
 {
     protected $fillable = [
         'name',
         'type',
         'city',
+        'area',
         'state',
         'pincode',
         'address',
@@ -28,17 +33,17 @@ class Court extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function scopeActive($query)
+    public function scopeActive(\Illuminate\Database\Eloquent\Builder $query)
     {
         return $query->where('is_active', true);
     }
 
-    public function scopeByState($query, string $state)
+    public function scopeByState(\Illuminate\Database\Eloquent\Builder $query, string $state)
     {
         return $query->where('state', 'like', '%' . $state . '%');
     }
 
-    public function scopeByType($query, string $type)
+    public function scopeByType(\Illuminate\Database\Eloquent\Builder $query, string $type)
     {
         return $query->where('type', $type);
     }

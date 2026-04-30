@@ -20,12 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'role'               => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission'         => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-            'registration.complete' => \App\Http\Middleware\EnsureRegistrationIsComplete::class,
             'account.status'        => \App\Http\Middleware\CheckAccountStatus::class,
         ]);
 
         $middleware->appendToGroup('web', [
-            \App\Http\Middleware\EnsureRegistrationIsComplete::class,
             \App\Http\Middleware\CheckAccountStatus::class,
         ]);
     })

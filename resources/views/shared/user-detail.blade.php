@@ -34,12 +34,11 @@
             <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
                 {{-- Dark header --}}
                 <div class="px-6 pt-8 pb-6 text-center" style="background:linear-gradient(160deg,#060C18 0%,#0F1A2E 100%)">
-                    <div class="w-20 h-20 rounded-2xl mx-auto mb-4 flex items-center justify-center text-3xl"
-                        style="background:rgba(212,175,55,.12);border:2px solid rgba(212,175,55,.25)">
+                    <div class="w-20 h-20 rounded-2xl mx-auto mb-4 flex items-center justify-center text-3xl bg-gold-glow border-2 border-gold/20">
                         {{ $roleIcons[$user->role] ?? '👤' }}
                     </div>
                     <h2 class="font-display font-bold text-white text-xl leading-tight">{{ $user->name }}</h2>
-                    <div class="font-mono text-xs uppercase tracking-widest mt-1" style="color:#D4AF37">
+                    <div class="font-mono text-xs uppercase tracking-widest mt-1 text-gold">
                         {{ $roleLabel[$user->role] ?? ucfirst($user->role) }}
                     </div>
                     @if ($user->status === 'active')
@@ -56,7 +55,7 @@
                                 @for ($i = 1; $i <= 5; $i++)
                                     <i
                                         class="bi bi-star{{ $i <= round($avgRating) ? '-fill' : '' }} text-sm
-                               {{ $i <= round($avgRating) ? 'text-[#D4AF37]' : 'text-white/10' }}"></i>
+                               {{ $i <= round($avgRating) ? 'text-gold' : 'text-white/10' }}"></i>
                                 @endfor
                             </div>
                             <div class="text-white font-bold font-display text-xl">{{ number_format($avgRating, 1) }}</div>
@@ -81,9 +80,8 @@
                         <div class="space-y-3">
                             {{-- Email --}}
                             <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                                <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                                    style="background:rgba(212,175,55,.1)">
-                                    <i class="bi bi-envelope-fill text-sm" style="color:#D4AF37"></i>
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-gold-glow">
+                                    <i class="bi bi-envelope-fill text-sm text-gold"></i>
                                 </div>
                                 <div class="min-w-0">
                                     <div class="text-xs text-slate-400 font-mono">Email</div>
