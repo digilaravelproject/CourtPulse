@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PasswordResetLinkController extends Controller
@@ -28,9 +29,11 @@ class PasswordResetLinkController extends Controller
         ]);
 
         // Laravel will handle token creation, DB storage, and email sending
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $status = DB::transaction(function() use ($request) {
+            return Password::sendResetLink(
+                $request->only('email')
+            );
+        });
 
         if ($status === Password::RESET_LINK_SENT) {
             return back()->with('status', __($status));

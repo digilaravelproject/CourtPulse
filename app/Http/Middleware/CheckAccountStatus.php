@@ -26,8 +26,9 @@ class CheckAccountStatus
 
             $currentRoute = $request->route()?->getName();
             $allowedRoutes = [
-                'register.otp',
-                'register.otp.verify',
+                'register',
+                'register.post',
+                'register.otp.verify.post',
                 'verification.pending',
                 'logout',
             ];
@@ -35,7 +36,7 @@ class CheckAccountStatus
             // If user is pending or not verified (registration_step 1)
             if ($user->registration_step === 1 || !$user->email_verified_at) {
                 if (!in_array($currentRoute, $allowedRoutes)) {
-                    return redirect()->route('register.otp');
+                    return redirect()->route('register');
                 }
                 return $next($request);
             }
@@ -55,7 +56,7 @@ class CheckAccountStatus
             }
 
             // Redirect active users away from pending screens
-            if ($user->status === 'active' && in_array($currentRoute, ['verification.pending', 'register.otp'])) {
+            if ($user->status === 'active' && in_array($currentRoute, ['verification.pending', 'register'])) {
                 return redirect()->route('dashboard');
             }
         }

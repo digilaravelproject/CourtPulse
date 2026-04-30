@@ -11,9 +11,17 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Services\AuthService;
 
 class NewPasswordController extends Controller
 {
+    protected AuthService $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     /**
      * Show the reset password form.
      */
@@ -38,14 +46,9 @@ class NewPasswordController extends Controller
 
         // Laravel verifies token, updates password, deletes token
         $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
+            $request->only(['email', 'password', 'password_confirmation', 'token']),
             function ($user) use ($request) {
-                $user->forceFill([
-                    'password'       => Hash::make($request->password),
-                    'remember_token' => Str::random(60),
-                ])->save();
-
-                event(new PasswordReset($user));
+                $this->authService->resetUserPassword($user, $request->password);
             }
         );
 

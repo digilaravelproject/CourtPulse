@@ -50,16 +50,16 @@ Route::middleware('guest')->group(function () {
     Route::get('/login/verify', [AuthController::class, 'showLoginVerify'])->name('login.verify');
     Route::post('/login/verify', [AuthController::class, 'verifyLoginOtp'])->name('login.verify.submit');
 
-    // Unified Registration Flow (AJAX Powered)
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'postRegister'])->name('register.post');
-
     // Password Reset (Laravel Built-in)
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
     Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
+
+// Unified Registration Flow (Accessible to Guests & Unverified Logged-in Users)
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'postRegister'])->name('register.post');
 
 /*
 |--------------------------------------------------------------------------
@@ -68,9 +68,8 @@ Route::middleware('guest')->group(function () {
 */
 Route::middleware('auth')->group(function () {
 
-    // OTP Verification for Registration (Inline AJAX & Fallback)
-    Route::get('/register/otp', [AuthController::class, 'showRegisterOtp'])->name('register.otp'); // Fallback View
-    Route::post('/register/verify-otp', [AuthController::class, 'verifyRegisterOtp'])->name('register.otp.verify.post'); // AJAX Submit
+    // OTP Verification for Registration (AJAX)
+    Route::post('/register/verify-otp', [AuthController::class, 'verifyRegisterOtp'])->name('register.otp.verify.post');
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

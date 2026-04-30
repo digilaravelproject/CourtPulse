@@ -22,7 +22,7 @@
                 class="bg-navy2 py-8 px-6 sm:px-10 shadow-2xl sm:rounded-3xl border border-white/10 relative overflow-hidden">
 
                 <!-- REGISTRATION FORM -->
-                <form id="registration-form" class="space-y-6 transition-all duration-500">
+                <form id="registration-form" class="space-y-6 transition-all duration-500 @if(isset($showOtp) && $showOtp) hidden @endif">
                     @csrf
 
                     <!-- Role Selection (Compact Horizontal Cards) -->
@@ -139,9 +139,11 @@
                             <select name="court_id" id="court_id"
                                 class="w-full px-3 py-3 bg-navy border border-white/10 rounded-lg text-white text-sm font-bold focus:outline-none focus:border-blue focus:ring-1 focus:ring-blue appearance-none transition-colors">
                                 <option value="">Select Primary Court</option>
-                                @foreach($courts ?? [] as $court)
+                                @forelse($courts ?? [] as $court)
                                     <option value="{{ $court->id }}">{{ $court->name }} ({{ $court->city }})</option>
-                                @endforeach
+                                @empty
+                                    <option value="">No courts available</option>
+                                @endforelse
                             </select>
                         </div>
 
@@ -211,7 +213,7 @@
                 </form>
 
                 <!-- OTP INLINE SECTION (Hidden Initially) -->
-                <div id="otp-section" class="hidden space-y-6 animate-in fade-in zoom-in duration-500 py-6">
+                <div id="otp-section" class="@if(!isset($showOtp) || !$showOtp) hidden @endif space-y-6 animate-in fade-in zoom-in duration-500 py-6">
                     <div class="text-center">
                         <div
                             class="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-blue/10 text-blue border border-blue/20 mb-4">
@@ -220,7 +222,7 @@
                         <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight mb-2">Verify Your
                             Email</h3>
                         <p class="text-xs md:text-sm font-bold text-white/60">We've sent a 6-digit code to <br><span
-                                id="display-email" class="text-blue"></span></p>
+                                id="display-email" class="text-blue">{{ Auth::check() ? Auth::user()->email : '' }}</span></p>
                     </div>
 
                     <form id="otp-form" class="space-y-6 max-w-sm mx-auto">

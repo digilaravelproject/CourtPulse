@@ -27,14 +27,24 @@ class AuthController extends Controller
 
     public function sendLoginOtp(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
+        // Add password to validation
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string'
+        ]);
 
         try {
+            // Verify credentials BEFORE sending OTP
+            if (!Auth::validate(['email' => $request->email, 'password' => $request->password])) {
+                return back()->withErrors(['email' => 'Invalid email address or password.'])->withInput($request->only('email'));
+            }
+
+            // If credentials are correct, generate and send OTP
             $this->authService->sendLoginOtp($request->email);
             return redirect()->route('login.verify')->with('email', $request->email);
         } catch (\Exception $e) {
             Log::error('Login OTP Error: ' . $e->getMessage());
-            return back()->withErrors(['email' => $e->getMessage()]);
+            return back()->withErrors(['email' => $e->getMessage()])->withInput($request->only('email'));
         }
     }
 
@@ -65,13 +75,24 @@ class AuthController extends Controller
 
     public function showRegister()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->status === 'active') {
+                return redirect()->route('dashboard');
+            }
+            if ($user->registration_step === 1) {
+                $courts = Court::query()->where('is_active', '=', true)->get();
+                return view('auth.register', compact('courts'))->with('showOtp', true);
+            }
+            return redirect()->route('verification.pending');
+        }
+
         $courts = Court::query()->where('is_active', '=', true)->get();
         return view('auth.register', compact('courts'));
     }
 
     public function postRegister(Request $request)
     {
-        // Dynamic Validation Rules based on selection
         $rules = [
             'user_group' => 'required|in:professional,support,guest',
             'name'       => 'required|string|max:255',
@@ -89,7 +110,6 @@ class AuthController extends Controller
         $validated = $request->validate($rules);
 
         try {
-            // Register User & Send OTP internally
             $user = $this->authService->registerUser($request->all());
 
             if ($request->ajax()) {
@@ -99,8 +119,7 @@ class AuthController extends Controller
                 ]);
             }
 
-            // Fallback for non-AJAX
-            return redirect()->route('register.otp');
+            return back()->with('info', 'OTP sent to your email.');
         } catch (\Exception $e) {
             Log::error('Registration Error: ' . $e->getMessage());
 

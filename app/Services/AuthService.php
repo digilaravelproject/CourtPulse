@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Auth\Events\PasswordReset;
 use Carbon\Carbon;
 
 class AuthService
@@ -18,7 +20,10 @@ class AuthService
     public function sendLoginOtp(string $email)
     {
         return DB::transaction(function () use ($email) {
-            $user = User::query()->where('email', '=', $email)->first();
+            $user = User::query()
+                ->where('email', '=', $email)
+                ->lockForUpdate()
+                ->first();
 
             if (!$user) {
                 throw new \Exception('User not found. Please register first.');
@@ -41,24 +46,29 @@ class AuthService
      */
     public function verifyLoginOtp(string $email, string $otp)
     {
-        $user = User::query()->where('email', '=', $email)->first();
+        return DB::transaction(function () use ($email, $otp) {
+            $user = User::query()
+                ->where('email', '=', $email)
+                ->lockForUpdate()
+                ->first();
 
-        if (!$user) {
-            throw new \Exception('User not found.');
-        }
+            if (!$user) {
+                throw new \Exception('User not found.');
+            }
 
-        // --- MASTER OTP FOR TESTING ---
-        $masterOtp = config('auth.master_otp');
-        $isMasterOtp = ($masterOtp && $otp === (string)$masterOtp);
-        $isMailOtp = ($user->otp === $otp && Carbon::now()->lt($user->otp_expires_at));
+            // --- MASTER OTP FOR TESTING ---
+            $masterOtp = config('auth.master_otp');
+            $isMasterOtp = ($masterOtp && $otp === (string)$masterOtp);
+            $isMailOtp = ($user->otp === $otp && Carbon::now()->lt($user->otp_expires_at));
 
-        if ($isMasterOtp || $isMailOtp) {
-            $user->update(['otp' => null, 'otp_expires_at' => null]);
-            Auth::login($user);
-            return $user;
-        }
+            if ($isMasterOtp || $isMailOtp) {
+                $user->update(['otp' => null, 'otp_expires_at' => null]);
+                Auth::login($user);
+                return $user;
+            }
 
-        throw new \Exception('Invalid or expired OTP.');
+            throw new \Exception('Invalid or expired OTP.');
+        });
     }
 
     /**
@@ -118,20 +128,49 @@ class AuthService
      */
     public function verifyRegistrationOtp(User $user, string $otp)
     {
-        // --- MASTER OTP FOR TESTING ---
-        $masterOtp = config('auth.master_otp');
-        $isMasterOtp = ($masterOtp && $otp === (string)$masterOtp);
+        return DB::transaction(function () use ($user, $otp) {
+            // Re-fetch with lock
+            $dbUser = User::query()->where('id', $user->id)->lockForUpdate()->first();
 
-        if ($isMasterOtp || ($user->otp === $otp && Carbon::now()->lt($user->otp_expires_at))) {
-            $user->update([
-                'otp'               => null,
-                'otp_expires_at'    => null,
-                'email_verified_at' => Carbon::now(),
-                'registration_step' => 2 // Completed registration
-            ]);
-            return true;
-        }
+            // --- MASTER OTP FOR TESTING ---
+            $masterOtp = config('auth.master_otp');
+            $isMasterOtp = ($masterOtp && $otp === (string)$masterOtp);
 
-        throw new \Exception('Invalid or expired Verification Code.');
+            if ($isMasterOtp || ($dbUser->otp === $otp && Carbon::now()->lt($dbUser->otp_expires_at))) {
+                $dbUser->update([
+                    'otp'               => null,
+                    'otp_expires_at'    => null,
+                    'email_verified_at' => Carbon::now(),
+                    'registration_step' => 2 // Completed registration
+                ]);
+                return true;
+            }
+
+            throw new \Exception('Invalid or expired Verification Code.');
+        });
+    }
+
+    /**
+     * Reset user password with transaction and lock.
+     */
+    public function resetUserPassword(User $user, string $password)
+    {
+        DB::transaction(function () use ($user, $password) {
+            $dbUser = User::query()
+                ->where('id', '=', $user->id)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$dbUser) {
+                throw new \Exception('User not found.');
+            }
+
+            $dbUser->forceFill([
+                'password'       => Hash::make($password),
+                'remember_token' => Str::random(60),
+            ])->save();
+
+            event(new PasswordReset($dbUser));
+        });
     }
 }
