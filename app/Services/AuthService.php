@@ -3,13 +3,11 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Models\Document;
 use App\Mail\OtpMail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class AuthService
@@ -50,7 +48,6 @@ class AuthService
         }
 
         // --- MASTER OTP FOR TESTING ---
-        // Configured in .env as MASTER_OTP
         $masterOtp = config('auth.master_otp');
         $isMasterOtp = ($masterOtp && $otp === (string)$masterOtp);
         $isMailOtp = ($user->otp === $otp && Carbon::now()->lt($user->otp_expires_at));
@@ -65,35 +62,35 @@ class AuthService
     }
 
     /**
-     * Register Step 1: Initialize registration with Role selection.
+     * Complete Unified Registration: Create user and send OTP.
      */
-    public function initializeRegistration(array $data)
-    {
-        // This is handled in session or a partial user record
-        // For simplicity and tracking, we'll create the user in the final "Credentials" step
-        // But we need to store role/sub-role in session
-        session(['reg_user_group' => $data['user_group']]);
-        return true;
-    }
-
-    /**
-     * Register Final Step: Create user and send OTP.
-     */
-    public function registerFinal(array $data)
+    public function registerUser(array $data)
     {
         return DB::transaction(function () use ($data) {
             $otp = rand(100000, 999999);
-            
+
+            $userGroup = $data['user_group'];
+            $subRole = $data['sub_role'] ?? null;
+
+            // Map sub_role to Spatie role
+            if ($userGroup === 'guest') {
+                $role = 'guest';
+            } else {
+                $role = ($subRole === 'advocate_practicing' || $subRole === 'advocate_non_practicing')
+                    ? 'advocate'
+                    : $subRole;
+            }
+
             $user = User::create([
-                'name'              => session('reg_name'),
-                'email'             => session('reg_email'),
-                'phone'             => session('reg_phone'),
-                'password'          => session('reg_password'),
-                'user_group'        => session('reg_user_group'),
-                'sub_role'          => session('reg_sub_role'),
-                'role'              => session('reg_role'),
-                'court_id'          => $data['court_id'],
-                'experience_years'  => $data['experience_years'],
+                'name'              => $data['name'],
+                'email'             => $data['email'],
+                'phone'             => $data['phone'],
+                'password'          => Hash::make($data['password']),
+                'user_group'        => $userGroup,
+                'sub_role'          => $subRole,
+                'role'              => $role,
+                'court_id'          => $data['court_id'] ?? null,
+                'experience_years'  => $data['experience_years'] ?? null,
                 'license_number'    => $data['license_number'] ?? null,
                 'past_employers'    => $data['past_employers'] ?? null,
                 'capabilities'      => $data['capabilities'] ?? null,
@@ -106,15 +103,11 @@ class AuthService
             // Assign Spatie Role
             $user->assignRole($user->role);
 
+            // Send OTP Email
             Mail::to($user->email)->send(new OtpMail($user->name, $otp));
 
+            // Log user in to complete verification process
             Auth::login($user);
-            
-            // Clear registration session
-            session()->forget([
-                'reg_user_group', 'reg_sub_role', 'reg_role', 
-                'reg_name', 'reg_email', 'reg_phone', 'reg_password'
-            ]);
 
             return $user;
         });
@@ -139,6 +132,6 @@ class AuthService
             return true;
         }
 
-        throw new \Exception('Invalid or expired OTP.');
+        throw new \Exception('Invalid or expired Verification Code.');
     }
 }
