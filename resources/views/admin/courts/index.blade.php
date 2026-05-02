@@ -5,7 +5,11 @@
 
     {{-- Custom Table Styles --}}
     <style>
-        .cp-table { width: 100%; border-collapse: collapse; }
+        .cp-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
         .cp-table thead th {
             background-color: rgba(255, 255, 255, 0.02) !important;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -16,13 +20,20 @@
             padding: 1.25rem 1.5rem !important;
             text-transform: uppercase;
         }
+
         .cp-table tbody td {
             padding: 1.25rem 1.5rem !important;
             vertical-align: middle;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .cp-table tbody tr { transition: background-color 0.2s ease; }
-        .cp-table tbody tr:hover { background-color: rgba(255, 255, 255, 0.03); }
+
+        .cp-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        .cp-table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
     </style>
 
     <div x-data="{
@@ -51,6 +62,8 @@
             this.load();
         }
     }">
+
+
 
         {{-- ── HEADER & ACTIONS ────────────────────────────────────── --}}
         <div class="mb-8 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-6">
@@ -104,10 +117,9 @@
 
 @push('scripts')
     <script>
-
         function deleteCourt(id, btn) {
             if (!confirm('PERMANENTLY DELETE this court? This action cannot be undone.')) return;
-            
+
             btn.disabled = true;
             const orig = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -145,4 +157,3 @@
         }
     </script>
 @endpush
-

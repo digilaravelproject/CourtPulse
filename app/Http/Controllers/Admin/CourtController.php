@@ -63,44 +63,64 @@ class CourtController extends Controller
     /**
      * POST /admin/courts — Create a new court (AJAX).
      */
-    public function store(StoreCourtRequest $request)
-    {
-        $validated = $request->validated();
+   public function store(StoreCourtRequest $request)
+{
+    $validated = $request->validated();
 
-        try {
-            $court = $this->service->store($validated);
+    try {
+        $court = $this->service->store($validated);
 
+        if ($request->ajax()) {
             return response()->json([
                 'success' => true,
                 'message' => "Court \"{$court->name}\" registered successfully!",
-                'court'   => $court,
             ]);
-        } catch (\Exception $e) {
-            Log::error('Court Store Error: ' . $e->getMessage());
+        }
+
+        return redirect()->route('admin.courts.index')
+            ->with('success', "Court \"{$court->name}\" registered successfully!");
+
+    } catch (\Exception $e) {
+        Log::error('Court Store Error: ' . $e->getMessage());
+
+        if ($request->ajax()) {
             return response()->json(['success' => false, 'message' => 'Failed to add court.'], 500);
         }
+
+        return back()->withInput()->withErrors(['general' => 'Failed to add court.']);
     }
+}
 
     /**
      * PUT /admin/courts/{court} — Update court details (AJAX).
      */
-    public function update(UpdateCourtRequest $request, Court $court)
-    {
-        $validated = $request->validated();
+   public function update(UpdateCourtRequest $request, Court $court)
+{
+    $validated = $request->validated();
 
-        try {
-            $updated = $this->service->update($court, $validated);
+    try {
+        $updated = $this->service->update($court, $validated);
 
+        if ($request->ajax()) {
             return response()->json([
                 'success' => true,
                 'message' => "Court \"{$updated->name}\" updated successfully!",
-                'court'   => $updated,
             ]);
-        } catch (\Exception $e) {
-            Log::error('Court Update Error: ' . $e->getMessage());
+        }
+
+        return redirect()->route('admin.courts.index')
+            ->with('success', "Court \"{$updated->name}\" updated successfully!");
+
+    } catch (\Exception $e) {
+        Log::error('Court Update Error: ' . $e->getMessage());
+
+        if ($request->ajax()) {
             return response()->json(['success' => false, 'message' => 'Failed to update court.'], 500);
         }
+
+        return back()->withInput()->withErrors(['general' => 'Failed to update court.']);
     }
+}
 
 
     /**
