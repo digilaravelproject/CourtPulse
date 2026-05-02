@@ -11,7 +11,7 @@ class CourtRepository
     // ── READ ─────────────────────────────────────────────────────────────
 
     /**
-     * Get all courts with filters applied.
+     * Get paginated courts with search/filter.
      */
     public function getFiltered(Request $request, int $perPage = 20): LengthAwarePaginator
     {
@@ -25,48 +25,31 @@ class CourtRepository
                 fn($q) => $q->where('type', $request->type)
             )
             ->when(
-                $request->filled('state'),
-                fn($q) => $q->where('state', 'like', '%' . $request->state . '%')
-            )
-            ->when(
-                $request->filled('city'),
-                fn($q) => $q->where('city', 'like', '%' . $request->city . '%')
-            )
-            ->when(
                 $request->filled('status'),
                 fn($q) => $q->where('is_active', $request->status === 'active')
             )
-            ->with('createdBy:id,name')
             ->latest()
             ->paginate($perPage)
             ->withQueryString();
     }
 
     /**
-     * Find a single court by ID (throws 404 if not found).
-     */
-    public function findOrFail(int $id): Court
-    {
-        return Court::findOrFail($id);
-    }
-
-    /**
-     * Get active courts for dropdowns (e.g. advocate profile form).
+     * Active courts for public-facing dropdowns (advocate profile etc.).
      */
     public function getActiveList(): \Illuminate\Database\Eloquent\Collection
     {
-        return Court::active()
-            ->orderBy('state')
+        return Court::query()
+            ->where('is_active', '=', true)
             ->orderBy('name')
             ->get(['id', 'name', 'type', 'city', 'state']);
     }
 
     /**
-     * Get total active courts count.
+     * Total active courts count (dashboard stats).
      */
     public function getTotalActive(): int
     {
-        return Court::where('is_active', true)->count();
+        return Court::query()->where('is_active', '=', true)->count();
     }
 
     // ── WRITE ────────────────────────────────────────────────────────────
@@ -80,21 +63,23 @@ class CourtRepository
     }
 
     /**
-     * Update an existing court record.
+     * Update an existing court.
      */
     public function update(Court $court, array $data): Court
     {
         $court->update($data);
-
-        return $court->fresh();
+        $court->refresh();
+        return $court;
     }
 
     /**
-     * Soft-deactivate a court (sets is_active = false).
+     * Toggle is_active flag.
      */
-    public function deactivate(Court $court): void
+    public function toggleActive(Court $court): Court
     {
-        $court->update(['is_active' => false]);
+        $court->update(['is_active' => !$court->is_active]);
+        $court->refresh();
+        return $court;
     }
 
     /**
@@ -102,6 +87,6 @@ class CourtRepository
      */
     public function delete(Court $court): void
     {
-        $court->delete();
+        Court::destroy($court->id);
     }
 }

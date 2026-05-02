@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminManagementController;
+use App\Http\Controllers\Admin\CourtController;
 use App\Http\Controllers\Admin\RolePermissionController;
 use App\Http\Controllers\Admin\SuperAdminController;
 use App\Http\Controllers\Auth\AuthController;
@@ -154,25 +155,28 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
     // Admin Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    // System Management (Verification, Courts, Menus)
+    // System Management (Verification, Menus)
     Route::prefix('manage')->name('manage.')->controller(AdminManagementController::class)->group(function () {
-
-        // Users
         Route::get('/users', 'usersIndex')->name('users');
         Route::post('/users/{user}/verify', 'verifyUser')->name('users.verify');
-
-        // Courts
-        Route::get('/courts', 'courtsIndex')->name('courts');
-        Route::post('/courts', 'storeCourt')->name('courts.store');
-        Route::patch('/courts/{court}', 'updateCourt')->name('courts.update');
-
-        // Menus
         Route::get('/menus', 'menusIndex')->name('menus');
         Route::patch('/menus/{menu}', 'updateMenu')->name('menus.update');
     });
 
+    // Courts CRUD (CourtController — AJAX)
+    Route::prefix('courts')->name('courts.')->controller(CourtController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::put('/{court}', 'update')->name('update');
+        Route::patch('/{court}/toggle', 'toggle')->name('toggle');
+        Route::delete('/{court}', 'destroy')->name('destroy');
+    });
+
     // Legacy Admin Routes (Maintained for compatibility)
     Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('users.show');
+    Route::patch('/users/{user}/verify', [AdminController::class, 'verifyUser'])->name('users.verify');
+    Route::patch('/users/{user}/reject', [AdminController::class, 'rejectUser'])->name('users.reject');
     Route::get('/feedback', [AdminController::class, 'feedback'])->name('feedback');
 });
 

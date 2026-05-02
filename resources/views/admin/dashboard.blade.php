@@ -1,258 +1,218 @@
 @extends('layouts.admin')
 @section('title', 'Dashboard')
-@section('page-title', 'Dashboard Overview')
+@section('page-title', 'Overview')
 
 @section('content')
 
     {{-- ══ STAT CARDS ══════════════════════════════════════════════ --}}
-    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
 
-        {{-- Total Advocates --}}
-        <div
-            class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex items-start justify-between gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all">
+        {{-- Total Professionals --}}
+        <div class="bg-navy2 rounded-2xl border border-white/5 shadow-2xl p-6 flex items-start justify-between gap-4 hover:-translate-y-1 hover:border-blue/30 transition-all duration-300 group">
             <div>
-                <div class="font-mono text-[0.58rem] tracking-[1.5px] uppercase text-slate-400 mb-1">Total Advocates</div>
-                <div class="font-display font-bold text-[1.8rem] text-slate-800 leading-tight">
-                    {{ number_format($stats['total_advocates']) }}</div>
-                <div class="flex items-center gap-1.5 mt-1.5 text-green-600 text-xs font-medium">
-                    <i class="bi bi-graph-up-arrow"></i> +12% this month
+                <div class="text-[0.65rem] font-black tracking-[0.2em] uppercase text-white/50 mb-2 group-hover:text-blue transition-colors">Professionals</div>
+                <div class="font-black text-4xl text-white leading-none mb-3">
+                    {{ number_format($stats['professionals']['total'] ?? 0) }}
+                </div>
+                <div class="flex flex-wrap items-center gap-2 text-[0.6rem] font-black uppercase tracking-widest">
+                    <span class="bg-blue/10 text-blue px-2 py-1 rounded-md border border-blue/20">{{ number_format($stats['professionals']['advocates'] ?? 0) }} Adv</span>
+                    <span class="bg-white/5 text-white/80 px-2 py-1 rounded-md border border-white/10">{{ number_format($stats['professionals']['ca_cs'] ?? 0) }} CA/CS</span>
+                    <span class="bg-white/5 text-white/80 px-2 py-1 rounded-md border border-white/10">{{ number_format($stats['professionals']['ip_agents'] ?? 0) }} IP</span>
                 </div>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
-                <i class="bi bi-person-badge text-blue-500 text-lg"></i>
+            <div class="w-12 h-12 rounded-xl bg-blue/10 border border-blue/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <i class="fas fa-user-tie text-blue text-xl"></i>
             </div>
         </div>
 
-        {{-- Total Clerks --}}
-        <div
-            class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex items-start justify-between gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all">
+        {{-- Total Support (Clerks) --}}
+        <div class="bg-navy2 rounded-2xl border border-white/5 shadow-2xl p-6 flex items-start justify-between gap-4 hover:-translate-y-1 hover:border-blue/30 transition-all duration-300 group">
             <div>
-                <div class="font-mono text-[0.58rem] tracking-[1.5px] uppercase text-slate-400 mb-1">Total Clerks</div>
-                <div class="font-display font-bold text-[1.8rem] text-slate-800 leading-tight">
-                    {{ number_format($stats['total_clerks']) }}</div>
-                <div class="flex items-center gap-1.5 mt-1.5 text-green-600 text-xs font-medium">
-                    <i class="bi bi-graph-up-arrow"></i> +5% this month
+                <div class="text-[0.65rem] font-black tracking-[0.2em] uppercase text-white/50 mb-2 group-hover:text-blue transition-colors">Support Staff</div>
+                <div class="font-black text-4xl text-white leading-none mb-3">
+                    {{ number_format($stats['support']['total'] ?? 0) }}
+                </div>
+                <div class="flex flex-wrap items-center gap-2 text-[0.6rem] font-black uppercase tracking-widest">
+                    <span class="bg-blue/10 text-blue px-2 py-1 rounded-md border border-blue/20">{{ number_format($stats['support']['court_clerks'] ?? 0) }} Court</span>
+                    <span class="bg-white/5 text-white/80 px-2 py-1 rounded-md border border-white/10">{{ number_format($stats['support']['ip_clerks'] ?? 0) }} IP</span>
                 </div>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-purple-100 flex items-center justify-center shrink-0">
-                <i class="bi bi-folder2-open text-purple-500 text-lg"></i>
+            <div class="w-12 h-12 rounded-xl bg-blue/10 border border-blue/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <i class="fas fa-users-cog text-blue text-xl"></i>
             </div>
         </div>
 
         {{-- Pending Approval --}}
-        <div class="bg-white rounded-xl border-y border-r border-slate-200 shadow-sm p-5 flex items-start justify-between gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all"
-            style="border-left: 4px solid #B4B4FE;">
+        <div class="bg-navy2 rounded-2xl border-y border-r border-white/5 border-l-4 border-l-blue shadow-2xl p-6 flex items-start justify-between gap-4 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(180,180,254,0.15)] transition-all duration-300 group">
             <div>
-                <div class="font-mono text-[0.58rem] tracking-[1.5px] uppercase text-slate-400 mb-1">Pending Approval</div>
-                <div class="font-display font-bold text-[1.8rem] leading-tight" style="color: #B4B4FE;">
-                    {{ $stats['pending_verifications'] }}</div>
-                <div class="flex items-center gap-1.5 mt-1.5 text-amber-500 text-xs font-medium">
-                    <i class="bi bi-exclamation-circle"></i> Action Required
+                <div class="text-[0.65rem] font-black tracking-[0.2em] uppercase text-white/50 mb-2 group-hover:text-blue transition-colors">Pending Approvals</div>
+                <div class="font-black text-4xl text-blue leading-none mb-3">
+                    {{ number_format($stats['total_pending'] ?? 0) }}
+                </div>
+                <div class="flex items-center gap-1.5 mt-2 text-[0.6rem] font-black uppercase tracking-widest text-red-400 bg-red-500/10 px-2 py-1 rounded-md border border-red-500/20 inline-flex">
+                    <i class="fas fa-exclamation-triangle"></i> Action Required
                 </div>
             </div>
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
-                style="background: rgba(180,180,254,0.15);">
-                <i class="bi bi-hourglass-split text-lg" style="color: #B4B4FE;"></i>
+            <div class="w-12 h-12 rounded-xl bg-blue/10 border border-blue/20 flex items-center justify-center shrink-0 group-hover:rotate-12 transition-transform">
+                <i class="fas fa-hourglass-half text-blue text-xl"></i>
             </div>
         </div>
 
-        {{-- Pending Docs --}}
-        <div
-            class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex items-start justify-between gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all">
+        {{-- Total Guests --}}
+        <div class="bg-navy2 rounded-2xl border border-white/5 shadow-2xl p-6 flex items-start justify-between gap-4 hover:-translate-y-1 hover:border-blue/30 transition-all duration-300 group">
             <div>
-                <div class="font-mono text-[0.58rem] tracking-[1.5px] uppercase text-slate-400 mb-1">Pending Documents</div>
-                <div class="font-display font-bold text-[1.8rem] text-red-500 leading-tight">
-                    {{ $stats['pending_documents'] }}</div>
-                <div class="flex items-center gap-1.5 mt-1.5 text-slate-400 text-xs font-medium">
-                    <i class="bi bi-file-earmark-check"></i> Awaiting Review
+                <div class="text-[0.65rem] font-black tracking-[0.2em] uppercase text-white/50 mb-2 group-hover:text-blue transition-colors">Guest Users</div>
+                <div class="font-black text-4xl text-white leading-none mb-3">
+                    {{ number_format($stats['guests'] ?? 0) }}
+                </div>
+                <div class="flex items-center gap-1.5 mt-2 text-[0.6rem] font-black uppercase tracking-widest text-white/70 bg-white/5 px-2 py-1 rounded-md border border-white/10 inline-flex">
+                    <i class="fas fa-globe"></i> Public Access
                 </div>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
-                <i class="bi bi-file-earmark-text text-red-500 text-lg"></i>
+            <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <i class="fas fa-user text-white/50 text-xl"></i>
             </div>
         </div>
     </div>
 
     {{-- ══ CHART + ACTIVITY ════════════════════════════════════════ --}}
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
 
         {{-- Bar Chart --}}
-        <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-                <h2 class="font-display font-bold text-[1.05rem] text-slate-800">User Growth Analytics</h2>
-                <select
-                    class="py-1.5 pl-3 pr-7 text-xs border border-slate-200 rounded-lg bg-slate-50 font-mono focus:outline-none"
-                    style="focus:ring: 2px; focus:ring-color: rgba(180,180,254,0.30); focus:border-color: #B4B4FE;">
-                    <option>Last 30 Days</option>
-                    <option>Last Quarter</option>
-                    <option>This Year</option>
-                </select>
+        <div class="lg:col-span-2 bg-navy2 rounded-2xl border border-white/5 shadow-2xl overflow-hidden flex flex-col">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 border-b border-white/5 bg-white/5 gap-4">
+                <h2 class="font-black text-sm text-white uppercase tracking-widest">User Growth Analytics</h2>
+                <div class="relative">
+                    <select class="pl-4 pr-8 py-2 text-[0.65rem] font-black uppercase tracking-widest border border-white/10 rounded-lg bg-navy text-blue focus:outline-none focus:border-blue focus:ring-1 focus:ring-blue appearance-none shadow-inner">
+                        <option>Last 30 Days</option>
+                        <option>Last Quarter</option>
+                        <option>This Year</option>
+                    </select>
+                    <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-white/30 text-xs pointer-events-none"></i>
+                </div>
             </div>
-            <div class="p-5">
-                <div class="flex items-end gap-2.5 h-[180px] px-1" id="chartBars"></div>
-                <div class="flex gap-2.5 px-1 mt-2" id="chartLabels"></div>
+            <div class="p-6 flex-grow min-h-[300px] w-full">
+                <canvas id="growthChart"></canvas>
             </div>
         </div>
 
         {{-- Recent Activity --}}
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="px-5 py-4 border-b border-slate-100">
-                <h2 class="font-display font-bold text-[1.05rem] text-slate-800">Recent Activities</h2>
+        <div class="bg-navy2 rounded-2xl border border-white/5 shadow-2xl overflow-hidden flex flex-col">
+            <div class="p-6 border-b border-white/5 bg-white/5">
+                <h2 class="font-black text-sm text-white uppercase tracking-widest">Recent Signups</h2>
             </div>
-            <div>
-                @forelse($recentUsers->take(6) as $u)
-                    @php
-                        $ac =
-                            $u->role === 'advocate'
-                                ? ['bg-blue-100', 'text-blue-700']
-                                : ($u->role === 'clerk'
-                                    ? ['bg-purple-100', 'text-purple-700']
-                                    : ['bg-amber-100', 'text-amber-700']);
-                    @endphp
-                    <div class="flex items-start gap-3 px-5 py-3.5 border-b border-slate-50 last:border-0">
-                        <div
-                            class="w-9 h-9 rounded-xl {{ $ac[0] }} {{ $ac[1] }} flex items-center justify-center font-bold text-[0.72rem] shrink-0">
-                            {{ strtoupper(substr($u->name, 0, 2)) }}
+            <div class="overflow-y-auto flex-grow max-h-[350px]">
+                @forelse($recentUsers->take(8) as $u)
+                    <div class="flex items-start gap-4 p-5 border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors group">
+                        @php
+                            $initials = strtoupper(substr($u->name, 0, 2));
+                            $bgClass = match($u->role) {
+                                'advocate' => 'bg-blue/10 text-blue border-blue/20',
+                                'court_clerk', 'ip_clerk' => 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+                                'ca_cs', 'agent' => 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+                                default => 'bg-white/5 text-white/50 border-white/10'
+                            };
+                        @endphp
+                        <div class="w-10 h-10 rounded-xl border {{ $bgClass }} flex items-center justify-center font-black text-sm shrink-0 shadow-lg group-hover:scale-105 transition-transform">
+                            {{ $initials }}
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="text-[0.83rem] font-semibold text-slate-800">
-                                @if ($u->role === 'advocate')
-                                    New Advocate Registration
-                                @elseif($u->role === 'clerk')
-                                    New Clerk Registration
-                                @else
-                                    New {{ ucfirst($u->role) }} Joined
-                                @endif
+                            <div class="text-xs font-bold text-white truncate mb-1">
+                                {{ $u->name }}
                             </div>
-                            <div class="text-[0.72rem] text-slate-400 truncate mt-0.5">{{ $u->name }}</div>
-                            <div class="text-[0.67rem] text-slate-300 mt-0.5">{{ $u->created_at->diffForHumans() }}</div>
+                            <div class="text-[0.6rem] text-white/50 uppercase tracking-widest mb-1">{{ ucwords(str_replace('_', ' ', $u->role)) }}</div>
+                            <div class="text-[0.6rem] text-white/30 font-mono">{{ $u->created_at->diffForHumans() }}</div>
                         </div>
                         @if ($u->status === 'active')
-                            <span
-                                class="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded bg-green-100 text-green-700 font-mono text-[0.55rem] uppercase tracking-wide font-semibold">Active</span>
+                            <span class="shrink-0 inline-flex items-center px-2 py-1 rounded bg-green-500/10 border border-green-500/20 text-green-400 font-black text-[0.55rem] uppercase tracking-widest">Active</span>
                         @else
-                            <span
-                                class="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-mono text-[0.55rem] uppercase tracking-wide font-semibold">Pending</span>
+                            <span class="shrink-0 inline-flex items-center px-2 py-1 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400 font-black text-[0.55rem] uppercase tracking-widest">{{ $u->status }}</span>
                         @endif
                     </div>
                 @empty
-                    <div class="py-8 text-center text-slate-400 text-sm">No recent activity.</div>
+                    <div class="py-12 text-center text-white/40 text-xs font-bold uppercase tracking-widest">No recent activity.</div>
                 @endforelse
             </div>
         </div>
     </div>
 
     {{-- ══ VERIFICATION QUEUE ══════════════════════════════════════ --}}
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
-        <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+    <div class="bg-navy2 rounded-2xl border border-white/5 shadow-2xl overflow-hidden mb-8">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 border-b border-white/5 bg-white/5 gap-4">
             <div>
-                <h2 class="font-display font-bold text-[1.05rem] text-slate-800">Verification Queue</h2>
-                <p class="text-[0.78rem] text-slate-400 mt-0.5">Review pending profiles and certificates.</p>
+                <h2 class="font-black text-sm text-white uppercase tracking-widest">Verification Queue</h2>
+                <p class="text-[0.65rem] text-white/50 mt-1 uppercase tracking-widest font-bold">Review pending profiles and certificates.</p>
             </div>
-            <a href="{{ route('admin.users') }}"
-                class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-slate-200 rounded-lg bg-white transition-all text-slate-600"
-                style="--hover-border: #B4B4FE; --hover-color: #B4B4FE;"
-                onmouseover="this.style.borderColor='#B4B4FE';this.style.color='#B4B4FE';"
-                onmouseout="this.style.borderColor='';this.style.color='';">
-                <i class="bi bi-funnel"></i> View All
+            <a href="{{ route('admin.manage.users') }}?status=pending"
+                class="flex items-center gap-2 px-5 py-2.5 text-xs font-black uppercase tracking-widest border border-white/10 rounded-lg bg-navy hover:bg-white hover:text-navy text-white transition-all">
+                <i class="fas fa-filter"></i> View All
             </a>
         </div>
 
         <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+            <table class="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
-                    <tr class="bg-slate-50 border-b border-slate-200">
-                        <th class="px-5 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">
-                            Name / Role</th>
-                        <th
-                            class="px-5 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400 hidden md:table-cell">
-                            Date Applied</th>
-                        <th
-                            class="px-5 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400 hidden lg:table-cell">
-                            Documents</th>
-                        <th
-                            class="px-5 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400 hidden sm:table-cell">
-                            Email / Phone</th>
-                        <th class="px-5 py-3 text-right font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">
-                            Actions</th>
+                    <tr class="bg-navy border-b border-white/10">
+                        <th class="px-6 py-4 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/50">User Profile</th>
+                        <th class="px-6 py-4 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/50 hidden md:table-cell">Applied On</th>
+                        <th class="px-6 py-4 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/50 hidden sm:table-cell">Contact Details</th>
+                        <th class="px-6 py-4 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/50 text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @php $pendingUsers = $recentUsers->where('status','pending'); @endphp
+                <tbody class="divide-y divide-white/5">
+                    @php $pendingUsers = $recentUsers->where('status', 'pending'); @endphp
                     @forelse($pendingUsers as $u)
                         @php
-                            $rc =
-                                $u->role === 'advocate'
-                                    ? ['bg-blue-100', 'text-blue-700']
-                                    : ($u->role === 'clerk'
-                                        ? ['bg-purple-100', 'text-purple-700']
-                                        : ['bg-green-100', 'text-green-700']);
-                            $rolePill =
-                                $u->role === 'advocate'
-                                    ? 'bg-blue-100 text-blue-700'
-                                    : ($u->role === 'clerk'
-                                        ? 'bg-purple-100 text-purple-700'
-                                        : 'bg-amber-100 text-amber-700');
+                            $roleClass = match($u->role) {
+                                'advocate' => 'bg-blue/10 text-blue border-blue/20',
+                                'court_clerk', 'ip_clerk' => 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+                                'ca_cs', 'agent' => 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+                                default => 'bg-white/5 text-white/50 border-white/10'
+                            };
                         @endphp
-                        <tr class="trow" data-uid="{{ $u->id }}">
-                            <td class="px-5 py-3.5">
-                                <div class="flex items-center gap-2.5">
-                                    <div
-                                        class="w-10 h-10 rounded-full {{ $rc[0] }} {{ $rc[1] }} flex items-center justify-center font-bold text-[0.78rem] shrink-0">
+                        <tr class="hover:bg-white/5 transition-colors group" data-uid="{{ $u->id }}">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-xl border {{ $roleClass }} flex items-center justify-center font-black text-xs shrink-0 shadow-lg">
                                         {{ strtoupper(substr($u->name, 0, 2)) }}
                                     </div>
                                     <div>
-                                        <div class="font-semibold text-slate-800">{{ $u->name }}</div>
-                                        <span
-                                            class="inline-block mt-0.5 text-[0.6rem] font-semibold px-2 py-0.5 rounded {{ $rolePill }} font-mono uppercase tracking-wide">{{ $u->role }}</span>
+                                        <div class="font-bold text-xs text-white mb-1">{{ $u->name }}</div>
+                                        <span class="inline-block text-[0.55rem] font-black px-2 py-0.5 rounded {{ $roleClass }} uppercase tracking-widest border">
+                                            {{ str_replace('_', ' ', $u->role) }}
+                                        </span>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-5 py-3.5 text-slate-400 text-[0.8rem] hidden md:table-cell">
-                                {{ $u->created_at->format('M d, Y') }}</td>
-                            <td class="px-5 py-3.5 hidden lg:table-cell">
-                                @if ($u->documents->count())
-                                    @foreach ($u->documents->take(1) as $doc)
-                                        <a href="{{ Storage::url($doc->file_path) }}" target="_blank"
-                                            class="inline-flex items-center gap-1.5 text-slate-500 text-[0.8rem] transition-colors"
-                                            onmouseover="this.style.color='#B4B4FE';" onmouseout="this.style.color='';">
-                                            <i class="bi bi-file-earmark-text"></i>
-                                            {{ Str::limit(basename($doc->file_path), 22) }}
-                                        </a>
-                                    @endforeach
-                                    @if ($u->documents->count() > 1)
-                                        <span class="text-[0.68rem] text-slate-400 ml-1">+{{ $u->documents->count() - 1 }}
-                                            more</span>
-                                    @endif
-                                @else
-                                    <span class="text-slate-300 text-xs">—</span>
-                                @endif
+                            <td class="px-6 py-4 text-white/60 text-[0.7rem] font-bold uppercase tracking-wider hidden md:table-cell">
+                                {{ $u->created_at->format('d M, Y') }}
                             </td>
-                            <td class="px-5 py-3.5 hidden sm:table-cell">
-                                <div class="text-[0.82rem] text-slate-700">{{ $u->email }}</div>
-                                <div class="text-[0.72rem] text-slate-400">{{ $u->phone ?? '—' }}</div>
+                            <td class="px-6 py-4 hidden sm:table-cell">
+                                <div class="text-xs font-bold text-white mb-1">{{ $u->email }}</div>
+                                <div class="text-[0.65rem] text-white/50 tracking-widest font-mono">{{ $u->phone ?? 'Not Provided' }}</div>
                             </td>
-                            <td class="px-5 py-3.5">
-                                <div class="flex items-center gap-2 justify-end">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3 justify-end">
                                     <button
-                                        onclick="openVerify({{ $u->id }},'{{ addslashes($u->name) }}','{{ $u->role }}','{{ $u->email }}','{{ $u->phone ?? '' }}','{{ $u->created_at->format('d M Y') }}','{{ $u->city ?? '' }}')"
-                                        class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-green-500 hover:bg-green-600
-                       text-white text-xs font-bold transition-all shadow-sm shadow-green-200/60">
-                                        <i class="bi bi-check-lg"></i> Verify
+                                        onclick="openVerify({{ $u->id }}, '{{ addslashes($u->name) }}', '{{ $u->role }}', '{{ $u->email }}', '{{ $u->phone ?? '' }}')"
+                                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-500/10 border border-green-500/30 hover:bg-green-500 text-green-400 hover:text-white text-[0.65rem] font-black uppercase tracking-widest transition-all">
+                                        <i class="fas fa-check"></i> Verify
                                     </button>
-                                    <button onclick="openReject({{ $u->id }},'{{ addslashes($u->name) }}')"
-                                        class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-red-500 hover:bg-red-600
-                       text-white text-xs font-bold transition-all shadow-sm shadow-red-200/60">
-                                        <i class="bi bi-x-lg"></i> Reject
+                                    <button onclick="openReject({{ $u->id }}, '{{ addslashes($u->name) }}')"
+                                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/30 hover:bg-red-500 text-red-400 hover:text-white text-[0.65rem] font-black uppercase tracking-widest transition-all">
+                                        <i class="fas fa-times"></i> Reject
                                     </button>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="py-12 text-center text-slate-400 text-sm">
-                                <i class="bi bi-check-circle text-green-400 text-2xl block mb-2"></i>
-                                All verifications are up to date!
+                            <td colspan="4" class="py-16 text-center">
+                                <div class="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center text-green-400 text-2xl mx-auto mb-4 border border-green-500/20">
+                                    <i class="fas fa-check-double"></i>
+                                </div>
+                                <p class="text-white text-sm font-black uppercase tracking-widest mb-1">All Caught Up!</p>
+                                <p class="text-[0.65rem] text-white/50 uppercase tracking-widest font-bold">No pending verifications at the moment.</p>
                             </td>
                         </tr>
                     @endforelse
@@ -261,217 +221,83 @@
         </div>
 
         @if ($pendingUsers->count() > 0)
-            <div class="px-5 py-3.5 border-t border-slate-100 flex items-center justify-between">
-                <span class="text-xs text-slate-400 font-mono">{{ $pendingUsers->count() }} pending requests</span>
-                <a href="{{ route('admin.users') }}?status=pending" class="text-xs font-medium transition-colors"
-                    style="color: #B4B4FE;" onmouseover="this.style.color='#9898e0';"
-                    onmouseout="this.style.color='#B4B4FE';">
-                    View All Pending →
+            <div class="px-6 py-4 border-t border-white/5 bg-navy flex items-center justify-between">
+                <span class="text-[0.65rem] text-white/50 font-black uppercase tracking-widest">{{ $pendingUsers->count() }} Profiles Waiting</span>
+                <a href="{{ route('admin.manage.users') }}?status=pending" class="text-[0.65rem] font-black uppercase tracking-widest text-blue hover:text-white transition-colors flex items-center gap-1">
+                    Process Queue <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
         @endif
     </div>
 
-    {{-- ══ PENDING DOCUMENTS ═══════════════════════════════════════ --}}
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-            <h2 class="font-display font-bold text-[1.05rem] text-slate-800">Pending Documents</h2>
-            <a href="{{ route('admin.documents') }}"
-                class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-slate-200 rounded-lg bg-white transition-all text-slate-600"
-                onmouseover="this.style.borderColor='#B4B4FE';this.style.color='#B4B4FE';"
-                onmouseout="this.style.borderColor='';this.style.color='';">
-                View All <i class="bi bi-arrow-right"></i>
-            </a>
-        </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="bg-slate-50 border-b border-slate-200">
-                        <th class="px-5 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">
-                            User</th>
-                        <th
-                            class="px-5 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400 hidden sm:table-cell">
-                            Role</th>
-                        <th class="px-5 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">
-                            Document</th>
-                        <th
-                            class="px-5 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400 hidden md:table-cell">
-                            Uploaded</th>
-                        <th class="px-5 py-3 text-right font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">
-                            Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($pendingDocs as $doc)
-                        <tr class="trow">
-                            <td class="px-5 py-3.5">
-                                <div class="flex items-center gap-2.5">
-                                    <div class="w-9 h-9 rounded-lg bg-ncard flex items-center justify-center font-bold text-[0.8rem] shrink-0"
-                                        style="color: #B4B4FE;">
-                                        {{ strtoupper(substr($doc->user->name, 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold text-slate-800 text-[0.84rem]">{{ $doc->user->name }}
-                                        </div>
-                                        <div class="text-[0.7rem] text-slate-400">{{ $doc->user->email }}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-5 py-3.5 hidden sm:table-cell">
-                                @php $rp = ['advocate'=>'bg-blue-100 text-blue-700','clerk'=>'bg-purple-100 text-purple-700','ca'=>'bg-amber-100 text-amber-700','guest'=>'bg-slate-100 text-slate-600']; @endphp
-                                <span
-                                    class="text-[0.6rem] font-semibold px-2 py-0.5 rounded {{ $rp[$doc->user->role] ?? 'bg-slate-100 text-slate-600' }} font-mono uppercase tracking-wide">{{ $doc->user->role }}</span>
-                            </td>
-                            <td class="px-5 py-3.5">
-                                <a href="{{ Storage::url($doc->file_path) }}" target="_blank"
-                                    class="inline-flex items-center gap-1.5 text-slate-500 text-[0.82rem] transition-colors"
-                                    onmouseover="this.style.color='#B4B4FE';" onmouseout="this.style.color='';">
-                                    <i class="bi bi-file-earmark-text"></i>
-                                    {{ ucwords(str_replace('_', ' ', $doc->document_type)) }}
-                                </a>
-                            </td>
-                            <td class="px-5 py-3.5 text-slate-400 text-[0.75rem] hidden md:table-cell">
-                                {{ $doc->created_at->format('d M Y') }}</td>
-                            <td class="px-5 py-3.5">
-                                <div class="flex items-center gap-1.5 justify-end">
-                                    <button
-                                        onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Document approved!','ok')"
-                                        data-body='{"status":"approved"}'
-                                        class="w-8 h-8 rounded-lg bg-green-500 hover:bg-green-600 text-white flex items-center justify-center transition-all text-sm"
-                                        title="Approve">
-                                        <i class="bi bi-check-lg"></i>
-                                    </button>
-                                    <button
-                                        onclick="ajaxAction('/admin/documents/{{ $doc->id }}/review','PATCH',this,'Document rejected.','err')"
-                                        data-body='{"status":"rejected","rejection_reason":"Invalid documents"}'
-                                        class="w-8 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition-all text-sm"
-                                        title="Reject">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="py-10 text-center text-slate-400 text-sm">
-                                <i class="bi bi-check-circle text-green-400 text-xl block mb-1"></i> No pending documents!
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
-
     {{-- ══ MODALS ═══════════════════════════════════════════════════ --}}
-    <div id="vOverlay" onclick="closeModal()" class="hidden fixed inset-0 bg-navy/60 backdrop-blur-sm z-1000"></div>
+    <div id="vOverlay" onclick="closeModal()" class="hidden fixed inset-0 bg-navy/80 backdrop-blur-sm z-[2000] transition-opacity duration-300"></div>
 
     {{-- Verify Modal --}}
-    <div id="vModal"
-        class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-         w-[min(500px,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl z-1001">
-        <div
-            class="flex items-center gap-4 px-6 py-5 border-b border-slate-100 rounded-t-2xl bg-linear-to-br from-green-50 to-white">
-            <div
-                class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-green-600 text-2xl shrink-0">
-                <i class="bi bi-person-check-fill"></i>
+    <div id="vModal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(450px,calc(100vw-2rem))] bg-navy2 border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.8)] z-[2001] overflow-hidden transform scale-95 transition-transform duration-300">
+        <div class="flex items-center gap-4 px-6 py-5 border-b border-white/5 bg-white/5">
+            <div class="w-12 h-12 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-xl shrink-0 shadow-[0_0_15px_rgba(34,197,94,0.2)]">
+                <i class="fas fa-user-check"></i>
             </div>
             <div class="flex-1">
-                <div class="font-display font-bold text-[1.1rem] text-slate-800">Verify Professional</div>
-                <div class="text-xs text-slate-500 mt-0.5">Review details before approving account access.</div>
+                <div class="font-black text-sm text-white uppercase tracking-widest">Verify Identity</div>
+                <div class="text-[0.65rem] text-white/50 uppercase tracking-wider font-bold mt-1">Approve Account Access</div>
             </div>
-            <button onclick="closeModal()"
-                class="text-slate-400 hover:text-slate-700 transition-colors text-xl leading-none"><i
-                    class="bi bi-x-lg"></i></button>
+            <button onclick="closeModal()" class="text-white/40 hover:text-white transition-colors text-lg focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <div class="p-6 space-y-4">
-            <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
-                <div id="v_avatar"
-                    class="w-14 h-14 rounded-xl bg-navy flex items-center justify-center font-bold text-xl font-display shrink-0"
-                    style="color: #B4B4FE; border: 2px solid rgba(180,180,254,0.30);">
-                </div>
+        <div class="p-6 space-y-5 bg-navy/50">
+            <div class="flex items-center gap-4 p-4 bg-navy rounded-xl border border-white/5 shadow-inner">
+                <div id="v_avatar" class="w-12 h-12 rounded-xl bg-blue/10 border border-blue/20 flex items-center justify-center font-black text-sm text-blue shrink-0"></div>
                 <div>
-                    <div id="v_name" class="font-bold text-base text-slate-800 font-display"></div>
-                    <span id="v_rpill"
-                        class="inline-block mt-1 text-[0.6rem] font-semibold px-2.5 py-0.5 rounded font-mono uppercase tracking-wide"></span>
+                    <div id="v_name" class="font-bold text-sm text-white mb-1"></div>
+                    <span id="v_rpill" class="inline-block text-[0.55rem] font-black px-2 py-0.5 rounded border uppercase tracking-widest"></span>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-slate-50 border border-slate-200 rounded-lg p-3">
-                    <div
-                        class="flex items-center gap-1.5 font-mono text-[0.57rem] uppercase tracking-wider text-slate-400 mb-1.5">
-                        <i class="bi bi-envelope"></i> Email
-                    </div>
-                    <div id="v_email" class="text-sm font-semibold text-slate-700 break-all"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-navy rounded-xl border border-white/5 p-4 shadow-inner">
+                    <div class="text-[0.6rem] font-black uppercase tracking-[0.2em] text-white/40 mb-1">Email Address</div>
+                    <div id="v_email" class="text-xs font-bold text-white break-all"></div>
                 </div>
-                <div class="bg-slate-50 border border-slate-200 rounded-lg p-3">
-                    <div
-                        class="flex items-center gap-1.5 font-mono text-[0.57rem] uppercase tracking-wider text-slate-400 mb-1.5">
-                        <i class="bi bi-phone"></i> Phone
-                    </div>
-                    <div id="v_phone" class="text-sm font-semibold text-slate-700"></div>
+                <div class="bg-navy rounded-xl border border-white/5 p-4 shadow-inner">
+                    <div class="text-[0.6rem] font-black uppercase tracking-[0.2em] text-white/40 mb-1">Phone Number</div>
+                    <div id="v_phone" class="text-xs font-bold text-white font-mono tracking-wider"></div>
                 </div>
-                <div class="bg-slate-50 border border-slate-200 rounded-lg p-3">
-                    <div
-                        class="flex items-center gap-1.5 font-mono text-[0.57rem] uppercase tracking-wider text-slate-400 mb-1.5">
-                        <i class="bi bi-calendar3"></i> Registered
-                    </div>
-                    <div id="v_date" class="text-sm font-semibold text-slate-700"></div>
-                </div>
-                <div class="bg-slate-50 border border-slate-200 rounded-lg p-3">
-                    <div
-                        class="flex items-center gap-1.5 font-mono text-[0.57rem] uppercase tracking-wider text-slate-400 mb-1.5">
-                        <i class="bi bi-shield-check"></i> Post-Verification
-                    </div>
-                    <div class="text-sm font-semibold text-green-600">Status → <strong>Active</strong></div>
-                </div>
-            </div>
-            <div
-                class="flex items-start gap-3 px-4 py-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 text-xs leading-relaxed">
-                <i class="bi bi-info-circle-fill shrink-0 mt-0.5"></i>
-                Once verified, this user gets full dashboard access and will appear in the professional directory.
             </div>
         </div>
-        <div class="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50/80 rounded-b-2xl">
-            <button onclick="closeModal()"
-                class="px-5 py-2.5 text-sm font-medium border border-slate-200 rounded-lg hover:border-slate-400 bg-white transition-all">Cancel</button>
-            <button id="vConfirmBtn" onclick="doVerify()"
-                class="flex items-center gap-2 px-6 py-2.5 text-sm font-bold bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all shadow-md shadow-green-200">
-                <i class="bi bi-check-lg"></i> Confirm Verify
+        <div class="flex justify-end gap-3 px-6 py-5 border-t border-white/5 bg-navy">
+            <button onclick="closeModal()" class="px-6 py-3 text-[0.65rem] font-black uppercase tracking-widest border border-white/10 rounded-xl hover:bg-white/5 text-white/70 hover:text-white transition-all">Cancel</button>
+            <button id="vConfirmBtn" onclick="doAction('verify')" class="flex items-center gap-2 px-6 py-3 text-[0.65rem] font-black uppercase tracking-widest bg-green-500 hover:bg-green-400 text-navy rounded-xl transition-all shadow-[0_5px_15px_rgba(34,197,94,0.2)]">
+                <i class="fas fa-check"></i> Confirm Verify
             </button>
         </div>
     </div>
 
     {{-- Reject Modal --}}
-    <div id="rModal"
-        class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-         w-[min(440px,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl z-1001">
-        <div
-            class="flex items-center gap-4 px-6 py-5 border-b border-slate-100 rounded-t-2xl bg-linear-to-br from-red-50 to-white">
-            <div
-                class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-red-500 text-2xl shrink-0">
-                <i class="bi bi-person-x-fill"></i>
+    <div id="rModal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(450px,calc(100vw-2rem))] bg-navy2 border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.8)] z-[2001] overflow-hidden transform scale-95 transition-transform duration-300">
+        <div class="flex items-center gap-4 px-6 py-5 border-b border-white/5 bg-red-500/5">
+            <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-xl shrink-0 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                <i class="fas fa-user-times"></i>
             </div>
             <div class="flex-1">
-                <div class="font-display font-bold text-[1.1rem] text-slate-800">Reject Registration</div>
-                <div id="r_sub" class="text-xs text-slate-500 mt-0.5"></div>
+                <div class="font-black text-sm text-white uppercase tracking-widest">Reject Application</div>
+                <div id="r_sub" class="text-[0.65rem] text-white/50 uppercase tracking-wider font-bold mt-1"></div>
             </div>
-            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 text-xl leading-none"><i
-                    class="bi bi-x-lg"></i></button>
+            <button onclick="closeModal()" class="text-white/40 hover:text-white transition-colors text-lg focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <div class="p-6">
-            <div
-                class="flex items-start gap-3 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-xs leading-relaxed">
-                <i class="bi bi-exclamation-triangle-fill shrink-0 mt-0.5"></i>
-                This marks the user as <strong>Rejected</strong>. They will not be able to access role-specific features.
+        <div class="p-6 bg-navy/50">
+            <div class="flex items-start gap-3 px-5 py-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-bold leading-relaxed shadow-inner">
+                <i class="fas fa-exclamation-triangle mt-0.5 text-lg"></i>
+                <p>Warning: This action will mark the user's profile as rejected. They will be denied access to all verified professional features.</p>
             </div>
         </div>
-        <div class="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50/80 rounded-b-2xl">
-            <button onclick="closeModal()"
-                class="px-5 py-2.5 text-sm font-medium border border-slate-200 rounded-lg hover:border-slate-400 bg-white transition-all">Cancel</button>
-            <button id="rConfirmBtn" onclick="doReject()"
-                class="flex items-center gap-2 px-6 py-2.5 text-sm font-bold bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all shadow-md shadow-red-200">
-                <i class="bi bi-x-lg"></i> Confirm Reject
+        <div class="flex justify-end gap-3 px-6 py-5 border-t border-white/5 bg-navy">
+            <button onclick="closeModal()" class="px-6 py-3 text-[0.65rem] font-black uppercase tracking-widest border border-white/10 rounded-xl hover:bg-white/5 text-white/70 hover:text-white transition-all">Cancel</button>
+            <button id="rConfirmBtn" onclick="doAction('reject')" class="flex items-center gap-2 px-6 py-3 text-[0.65rem] font-black uppercase tracking-widest bg-red-500 hover:bg-red-400 text-white rounded-xl transition-all shadow-[0_5px_15px_rgba(239,68,68,0.3)]">
+                <i class="fas fa-times"></i> Confirm Reject
             </button>
         </div>
     </div>
@@ -479,168 +305,203 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        /* ── CHART ────────────────────────────────────── */
-        (function() {
-            const data = [{
-                    l: 'Feb 1',
-                    v: 20
-                }, {
-                    l: 'Feb 5',
-                    v: 35
-                }, {
-                    l: 'Feb 10',
-                    v: 28
-                }, {
-                    l: 'Feb 15',
-                    v: 50
-                },
-                {
-                    l: 'Feb 20',
-                    v: 44
-                }, {
-                    l: 'Feb 25',
-                    v: 65
-                }, {
-                    l: 'Mar 1',
-                    v: 80
-                }, {
-                    l: 'Mar 5',
-                    v: 72
-                }, {
-                    l: 'Mar 10',
-                    v: 90
-                }
-            ];
-            const max = Math.max(...data.map(d => d.v));
-            const bE = document.getElementById('chartBars'),
-                lE = document.getElementById('chartLabels');
-            data.forEach(d => {
-                const h = Math.round((d.v / max) * 165);
-                bE.innerHTML += `<div class="flex-1 min-w-[28px] rounded-t-md cursor-pointer relative group transition-opacity hover:opacity-70"
-                        style="height:${h}px;background:linear-gradient(to top,#B4B4FE,#d4d4ff);">
-                     <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-navy text-white text-[0.65rem] px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">${d.l}: ${d.v}</div>
-                   </div>`;
-                lE.innerHTML +=
-                    `<div class="flex-1 text-center font-mono text-[0.6rem] text-slate-400">${d.l.split(' ')[0]}</div>`;
-            });
+        /* ── CHART IMPLEMENTATION (DARK MODE) ────────────────────────────────────── */
+        (function () {
+            const ctx = document.getElementById('growthChart');
+            if (ctx) {
+                const labels = {!! json_encode($stats['chart_labels'] ?? []) !!};
+                const dataPoints = {!! json_encode($stats['chart_data'] ?? []) !!};
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'New Registrations',
+                            data: dataPoints,
+                            borderColor: '#B4B4FE',
+                            backgroundColor: 'rgba(180, 180, 254, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#050812',
+                            pointBorderColor: '#B4B4FE',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: '#B4B4FE',
+                            pointHoverBorderColor: '#fff',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(11, 17, 32, 0.9)',
+                                titleColor: '#fff',
+                                bodyColor: '#B4B4FE',
+                                titleFont: { family: "'Manrope', sans-serif", size: 11, weight: 'bold' },
+                                bodyFont: { family: "'Manrope', sans-serif", size: 14, weight: 'bold' },
+                                padding: 12,
+                                cornerRadius: 8,
+                                displayColors: false,
+                                borderColor: 'rgba(255,255,255,0.1)',
+                                borderWidth: 1
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    color: 'rgba(255, 255, 255, 0.4)',
+                                    font: { family: "'Manrope', sans-serif", size: 10, weight: 'bold' }
+                                },
+                                border: { display: false },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.05)',
+                                    drawBorder: false,
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.4)',
+                                    font: { family: "'Manrope', sans-serif", size: 10, weight: 'bold' }
+                                },
+                                border: { display: false },
+                                grid: { display: false }
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index',
+                        },
+                    }
+                });
+            }
         })();
 
-        /* ── MODAL ────────────────────────────────────── */
-        let _uid = null,
-            _uname = null;
-        const RPILL = {
-            advocate: 'bg-blue-100 text-blue-700',
-            clerk: 'bg-purple-100 text-purple-700',
-            ca: 'bg-amber-100 text-amber-700',
-            guest: 'bg-slate-100 text-slate-600'
-        };
+        /* ── MODAL LOGIC ────────────────────────────────── */
+        let _uid = null;
+        let _uname = null;
 
-        function openVerify(id, name, role, email, phone, date, city) {
+        function openVerify(id, name, role, email, phone) {
             _uid = id;
             _uname = name;
             document.getElementById('v_avatar').textContent = name.substring(0, 2).toUpperCase();
             document.getElementById('v_name').textContent = name;
             document.getElementById('v_email').textContent = email;
-            document.getElementById('v_phone').textContent = phone || '—';
-            document.getElementById('v_date').textContent = date;
+            document.getElementById('v_phone').textContent = phone || 'Not Provided';
+
             const p = document.getElementById('v_rpill');
-            p.textContent = role;
-            p.className =
-                `inline-block mt-1 text-[0.6rem] font-semibold px-2.5 py-0.5 rounded font-mono uppercase tracking-wide ${RPILL[role]||'bg-slate-100 text-slate-600'}`;
-            const btn = document.getElementById('vConfirmBtn');
-            btn.disabled = false;
-            btn.innerHTML = '<i class="bi bi-check-lg"></i> Confirm Verify';
-            document.getElementById('vOverlay').classList.remove('hidden');
-            const m = document.getElementById('vModal');
-            m.classList.remove('hidden');
-            m.classList.add('modal-pop');
+            p.textContent = role.replace('_', ' ');
+
+            // Assign color classes based on role
+            let rClass = 'bg-white/10 text-white border-white/20';
+            if(role === 'advocate') rClass = 'bg-blue/10 text-blue border-blue/20';
+            else if(role === 'court_clerk' || role === 'ip_clerk') rClass = 'bg-purple-500/10 text-purple-400 border-purple-500/20';
+            else if(role === 'ca_cs' || role === 'agent') rClass = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+
+            p.className = `inline-block text-[0.55rem] font-black px-2 py-0.5 rounded border uppercase tracking-widest ${rClass}`;
+
+            const overlay = document.getElementById('vOverlay');
+            const modal = document.getElementById('vModal');
+
+            overlay.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            // Small delay for transition
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                modal.classList.remove('scale-95');
+                modal.classList.add('scale-100');
+            }, 10);
         }
 
         function openReject(id, name) {
             _uid = id;
             _uname = name;
-            document.getElementById('r_sub').textContent = `Confirm rejection for "${name}"`;
-            const btn = document.getElementById('rConfirmBtn');
-            btn.disabled = false;
-            btn.innerHTML = '<i class="bi bi-x-lg"></i> Confirm Reject';
-            document.getElementById('vOverlay').classList.remove('hidden');
-            const m = document.getElementById('rModal');
-            m.classList.remove('hidden');
-            m.classList.add('modal-pop');
+            document.getElementById('r_sub').textContent = `Target: ${name}`;
+
+            const overlay = document.getElementById('vOverlay');
+            const modal = document.getElementById('rModal');
+
+            overlay.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                modal.classList.remove('scale-95');
+                modal.classList.add('scale-100');
+            }, 10);
         }
 
         function closeModal() {
-            ['vModal', 'rModal'].forEach(id => {
-                const m = document.getElementById(id);
-                if (m) {
-                    m.classList.add('hidden');
-                    m.classList.remove('modal-pop');
+            const overlay = document.getElementById('vOverlay');
+            const vModal = document.getElementById('vModal');
+            const rModal = document.getElementById('rModal');
+
+            overlay.classList.add('opacity-0');
+            vModal.classList.remove('scale-100');
+            vModal.classList.add('scale-95');
+            rModal.classList.remove('scale-100');
+            rModal.classList.add('scale-95');
+
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                vModal.classList.add('hidden');
+                rModal.classList.add('hidden');
+                _uid = _uname = null;
+            }, 300);
+        }
+
+        function doAction(action) {
+            const btnId = action === 'verify' ? 'vConfirmBtn' : 'rConfirmBtn';
+            const btn = document.getElementById(btnId);
+            const originalHtml = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
+
+            const url = `{{ url('/admin/manage/users') }}/${_uid}/verify`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ action: action })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message || "Action completed successfully!", "ok");
+                    closeModal();
+
+                    const row = document.querySelector(`tr[data-uid="${_uid}"]`);
+                    if (row) {
+                        row.style.transition = 'all 0.4s ease';
+                        row.style.opacity = '0';
+                        row.style.transform = 'scale(0.98)';
+                        setTimeout(() => row.remove(), 400);
+                    }
+                } else {
+                    throw new Error(data.message || "Something went wrong");
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast(error.message || "Failed to process request", "err");
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
             });
-            document.getElementById('vOverlay').classList.add('hidden');
-            _uid = _uname = null;
-        }
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeModal();
-        });
-
-        function doVerify() {
-            const btn = document.getElementById('vConfirmBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> Verifying…';
-            fetch(`/admin/users/${_uid}/verify`, {
-                    method: 'PATCH',
-                    headers: {
-                        'X-CSRF-TOKEN': CSRF,
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(r => r.json()).then(() => {
-                    const n = _uname;
-                    closeModal();
-                    showToast(`${n} Verified Successfully!`, 'ok');
-                    document.querySelectorAll(`[data-uid="${_uid}"]`).forEach(r => {
-                        r.style.transition = 'opacity .3s';
-                        r.style.opacity = '0';
-                        setTimeout(() => r.remove(), 300);
-                    });
-                })
-                .catch(() => {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="bi bi-check-lg"></i> Confirm Verify';
-                    showToast('Error!', 'err');
-                });
-        }
-
-        function doReject() {
-            const btn = document.getElementById('rConfirmBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> Rejecting…';
-            fetch(`/admin/users/${_uid}/reject`, {
-                    method: 'PATCH',
-                    headers: {
-                        'X-CSRF-TOKEN': CSRF,
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(r => r.json()).then(() => {
-                    const n = _uname;
-                    closeModal();
-                    showToast(`${n} rejected.`, 'err');
-                    document.querySelectorAll(`[data-uid="${_uid}"]`).forEach(r => {
-                        r.style.transition = 'opacity .3s';
-                        r.style.opacity = '0';
-                        setTimeout(() => r.remove(), 300);
-                    });
-                })
-                .catch(() => {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="bi bi-x-lg"></i> Confirm Reject';
-                    showToast('Error!', 'err');
-                });
         }
     </script>
 @endpush

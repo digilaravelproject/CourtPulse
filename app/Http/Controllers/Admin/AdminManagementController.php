@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Court;
 use App\Models\NavigationMenu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -32,9 +31,20 @@ class AdminManagementController extends Controller
     public function verifyUser(Request $request, User $user): \Illuminate\Http\JsonResponse
     {
         try {
+            $action = $request->input('action', 'verify');
+
+            if ($action === 'reject') {
+                $user->update(['status' => 'rejected']);
+                return response()->json([
+                    'success' => true,
+                    'status' => 'rejected',
+                    'message' => "User registration rejected."
+                ]);
+            }
+
             $newStatus = $user->status === 'active' ? 'pending' : 'active';
             $user->update(['status' => $newStatus]);
-            
+
             return response()->json([
                 'success' => true,
                 'status' => $newStatus,
@@ -43,64 +53,6 @@ class AdminManagementController extends Controller
         } catch (\Exception $e) {
             Log::error('Verify User Error: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Failed to update status.'], 500);
-        }
-    }
-
-    /**
-     * Display a listing of courts.
-     */
-    public function courtsIndex(): \Illuminate\View\View
-    {
-        $courts = Court::query()->orderBy('name', 'asc')->paginate(20);
-        return view('admin.management.courts', compact('courts'));
-    }
-
-    /**
-     * Store a newly created court.
-     */
-    public function storeCourt(Request $request): \Illuminate\Http\RedirectResponse
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|string',
-            'area' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'pincode' => 'required|digits:6',
-        ]);
-
-        try {
-            Court::query()->create(array_merge($validated, [
-                'is_active' => true,
-                'created_by' => (int) \Illuminate\Support\Facades\Auth::id()
-            ]));
-
-            return back()->with('success', 'Court added successfully.');
-        } catch (\Exception $e) {
-            Log::error('Store Court Error: ' . $e->getMessage());
-            return back()->withErrors(['general' => 'Failed to add court.']);
-        }
-    }
-
-    /**
-     * Update the specified court.
-     */
-    public function updateCourt(Request $request, Court $court): \Illuminate\Http\RedirectResponse
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|string',
-            'area' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'pincode' => 'required|digits:6',
-            'is_active' => 'required|boolean',
-        ]);
-
-        try {
-            $court->update($validated);
-            return back()->with('success', 'Court updated successfully.');
-        } catch (\Exception $e) {
-            Log::error('Update Court Error: ' . $e->getMessage());
-            return back()->withErrors(['general' => 'Failed to update court.']);
         }
     }
 

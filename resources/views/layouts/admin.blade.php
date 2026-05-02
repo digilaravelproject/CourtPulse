@@ -5,25 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') — DockIt</title>
+    <title>@yield('title', 'Dashboard') — Admin</title>
 
     {{-- Fonts --}}
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    {{-- Tailwind --}}
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- Tailwind CSS --}}
+    @vite('resources/css/app.css', 'resources/js/app.js')
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        brand: '#B4B4FE',
-                        'brand-h': '#9898e0',
-                        navy: '#060B16',
-                        'ncard': '#0D1526',
-                        'nbg': '#0A1120',
+                        navy: '#050812',
+                        navy2: '#080d1a',
+                        navy3: '#0b1120',
+                        blue: '#B4B4FE',
+                        blue2: '#9999f0',
                     },
                     fontFamily: {
                         display: ['Manrope', 'sans-serif'],
@@ -40,207 +44,135 @@
 
     <style>
         :root {
-            --sw: 256px;
             --brand: #B4B4FE;
-            --brand-h: #9898e0;
-            --brand-dim: rgba(180, 180, 254, 0.09);
-            --brand-border: rgba(180, 180, 254, 0.22);
-            --brand-muted: rgba(180, 180, 254, 0.65);
-            --brand-pat: rgba(180, 180, 254, 0.03);
-            --sb-bg: #060B16;
-            --sb-border: rgba(100, 110, 180, 0.10);
+            --brand-glow: rgba(180, 180, 254, 0.3);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
-        /* scrollbar */
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        /* Premium Scrollbar */
         ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px
+            width: 6px;
+            height: 6px;
         }
 
         ::-webkit-scrollbar-track {
-            background: transparent
+            background: #050812;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px
+            background: rgba(180, 180, 254, 0.2);
+            border-radius: 10px;
         }
 
-        /* brand pattern */
-        .gpat {
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23B4B4FE' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(180, 180, 254, 0.5);
         }
 
-        /* active link bar */
+        /* Active Nav Link */
         .nav-active {
-            position: relative;
-            background: rgba(180, 180, 254, .09);
-            color: #B4B4FE !important
+            background: rgba(180, 180, 254, 0.1);
+            color: #B4B4FE !important;
+            border-left: 3px solid #B4B4FE;
+            box-shadow: inset 10px 0 20px -10px rgba(180, 180, 254, 0.15);
         }
 
-        .nav-active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: #B4B4FE;
-            border-radius: 0 2px 2px 0
-        }
-
-        /* table row hover */
-        .trow:hover td {
-            background: #f8fafc
-        }
-
-        .trow td {
-            border-bottom: 1px solid #f1f5f9;
-            padding: 12px 16px;
-            vertical-align: middle
-        }
-
-        .trow:last-child td {
-            border-bottom: none
-        }
-
-        /* spin */
+        /* Spinner */
         .spin {
             display: inline-block;
-            animation: sp .7s linear infinite
+            animation: sp .7s linear infinite;
         }
 
         @keyframes sp {
             to {
-                transform: rotate(360deg)
+                transform: rotate(360deg);
             }
         }
 
-        /* modal pop */
-        @keyframes popIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -46%) scale(.95)
-            }
-
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1)
-            }
-        }
-
-        .modal-pop {
-            animation: popIn .25s cubic-bezier(.34, 1.56, .64, 1) forwards
-        }
-
-        /* toast slide */
+        /* Toast Slide */
         @keyframes tIn {
             from {
                 opacity: 0;
-                transform: translateX(12px)
+                transform: translateX(100%);
             }
 
             to {
                 opacity: 1;
-                transform: translateX(0)
+                transform: translateX(0);
             }
         }
 
         .t-slide {
-            animation: tIn .25s ease forwards
+            animation: tIn .3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* status dots */
-        .dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            display: inline-block
-        }
-
-        /* Alpine.js — hide elements until Alpine initialises */
         [x-cloak] {
             display: none !important;
-        }
-
-        /* Topbar bell hover uses brand */
-        .bell-btn:hover {
-            border-color: var(--brand) !important;
-            color: var(--brand) !important;
-        }
-
-        /* Sidebar nav hover */
-        .nav-item-default:hover {
-            background: rgba(255, 255, 255, 0.04);
-            color: rgba(255, 255, 255, 0.80) !important;
         }
     </style>
     @stack('styles')
 </head>
 
-<body class="bg-slate-100 font-sans min-h-screen" style="font-weight: 400;">
+<body class="bg-navy text-slate-300 font-sans min-h-screen selection:bg-blue selection:text-navy">
 
     {{-- ── TOAST BOX ────────────────────────────────────────── --}}
-    <div id="toastBox" class="fixed top-16 right-4 z-[9999] flex flex-col gap-2 w-72 pointer-events-none"></div>
+    <div id="toastBox" class="fixed top-20 right-6 z-[9999] flex flex-col gap-3 w-80 pointer-events-none"></div>
 
     {{-- ── SIDEBAR OVERLAY (mobile) ────────────────────────── --}}
-    <div id="sbOverlay" onclick="closeSb()" class="hidden fixed inset-0 bg-navy/60 backdrop-blur-sm z-[198]"></div>
+    <div id="sbOverlay" onclick="closeSb()"
+        class="hidden fixed inset-0 bg-navy/80 backdrop-blur-sm z-[198] transition-opacity duration-300"></div>
 
     {{-- ════════════════════════════════════════
     SIDEBAR
     ════════════════════════════════════════ --}}
-    <aside id="sidebar" class="gpat fixed inset-y-0 left-0 w-64 flex flex-col z-[199]
-         border-r transition-transform duration-300
-         -translate-x-full lg:translate-x-0" style="background: var(--sb-bg); border-color: var(--sb-border);">
+    <aside id="sidebar"
+        class="fixed inset-y-0 left-0 w-64 flex flex-col z-[199] bg-navy2 border-r border-white/5 transition-transform duration-300 ease-out -translate-x-full lg:translate-x-0 shadow-2xl">
 
         {{-- Logo --}}
-        <div class="flex items-center gap-3 px-5 py-[21px] flex-shrink-0"
-            style="border-bottom: 1px solid var(--sb-border);">
-            <div class="w-9 h-9 rounded-[9px] overflow-hidden flex items-center justify-center flex-shrink-0"
-                style="border: 1px solid var(--brand-border); background: var(--brand-dim);">
-                <img src="{{ asset('images/logo.jpeg') }}" alt="DockIt Logo" class="w-full h-full object-cover">
+        <div class="flex items-center gap-3 px-6 py-5 shrink-0 border-b border-white/5">
+            <div
+                class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-blue/10 border border-blue/20 text-blue font-black shadow-[0_0_15px_rgba(180,180,254,0.15)]">
+                CP
             </div>
             <div>
-                <div class="font-display text-[1.1rem] font-bold text-white leading-tight">DockIt</div>
-                <div class="font-mono text-[0.52rem] uppercase tracking-[2.5px]" style="color: var(--brand-muted);">
-                    Admin Panel</div>
+                <div class="font-black text-lg text-white leading-tight uppercase tracking-tight">CourtPulse</div>
+                <div class="font-bold text-[0.6rem] uppercase tracking-[0.2em] text-blue">Admin Panel</div>
             </div>
         </div>
 
         {{-- Nav --}}
-        <nav class="flex-1 overflow-y-auto py-3 space-y-0.5">
-
+        <nav class="flex-1 overflow-y-auto py-4 space-y-1">
             @php
-                function navLink($route, $icon, $label, $badge = null)
+                function navLink($route, $icon, $label, $badge = null, $urlParams = [])
                 {
-                    $active = request()->routeIs($route . '*');
-                    $cls = $active ? 'nav-active' : 'nav-item-default text-white/45';
+                    $active = request()->routeIs($route . '*') && empty(array_diff_assoc($urlParams, request()->all()));
+                    if (empty($urlParams) && !empty(request()->query('role_category'))) {
+                        $active = false;
+                    }
+                    $cls = $active ? 'nav-active' : 'text-white/50 hover:bg-white/5 hover:text-white border-left border-transparent';
                     $b = $badge
-                        ? "<span class='ml-auto text-[0.54rem] font-bold px-1.5 py-0.5 rounded-full font-mono' style='background:#B4B4FE; color:#060B16;'>{$badge}</span>"
+                        ? "<span class='ml-auto text-[0.6rem] font-bold px-2 py-0.5 rounded-full bg-blue text-navy'>{$badge}</span>"
                         : '';
-                    return "<a href='" .
-                        route($route) .
-                        "' class='flex items-center gap-3 px-5 py-2.5 text-[0.84rem] font-medium transition-all {$cls}'>
-                                  <i class='bi {$icon} w-[18px] flex-shrink-0'></i> {$label} {$b}
-                                </a>";
+                    return "<a href='" . route($route, $urlParams) . "' class='flex items-center gap-3 px-6 py-3.5 text-[0.8rem] font-bold uppercase tracking-widest transition-all duration-300 {$cls}'>
+                                                                                                                <i class='bi {$icon} text-lg w-5 shrink-0'></i> {$label} {$b}
+                                                                                                            </a>";
                 }
             @endphp
 
-            <div class="px-5 pt-3 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase"
-                style="color: rgba(255,255,255,0.20);">Main</div>
-            {!! navLink('admin.dashboard', 'bi-grid-3x3-gap', 'Dashboard') !!}
+            <div class="px-6 pt-4 pb-2 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/30">Main</div>
+            {!! navLink('admin.dashboard', 'bi-grid-1x2-fill', 'Dashboard') !!}
 
-            <div class="px-5 pt-4 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase"
-                style="color: rgba(255,255,255,0.20);">User Management</div>
-            {!! navLink('admin.advocates', 'bi-person-badge', 'Advocates', $pendingAdvocatesCount ?? 0 > 0 ? $pendingAdvocatesCount ?? 0 : null) !!}
-            {!! navLink('admin.clerks', 'bi-folder2-open', 'Clerks', $pendingClerksCount ?? 0 > 0 ? $pendingClerksCount ?? 0 : null) !!}
-            {!! navLink('admin.users', 'bi-people', 'All Users', $pendingCount ?? 0 > 0 ? $pendingCount ?? 0 : null) !!}
+            <div class="px-6 pt-6 pb-2 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/30">Network</div>
+            {!! navLink('admin.users', 'bi-shield-check', 'Support Staff', null, ['role_category' => 'support']) !!}
+            {!! navLink('admin.users', 'bi-briefcase-fill', 'Professionals', null, ['role_category' => 'professional']) !!}
+            {!! navLink('admin.users', 'bi-people-fill', 'Guest Users', null, ['role_category' => 'guest']) !!}
 
-            <div class="px-5 pt-4 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase"
-                style="color: rgba(255,255,255,0.20);">Content</div>
-            {!! navLink('admin.documents', 'bi-file-earmark-check', 'Documents') !!}
-            {!! navLink('admin.courts.index', 'bi-building', 'Courts') !!}
-            {!! navLink('admin.feedback', 'bi-star', 'Feedback') !!}
+            <div class="px-6 pt-6 pb-2 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/30">System</div>
+            {!! navLink('admin.courts.index', 'bi-buildings-fill', 'Courts Data') !!}
+            {!! navLink('admin.feedback', 'bi-star-fill', 'Feedback') !!}
 
             @php
                 $isSuperAdmin = DB::table('model_has_roles')
@@ -251,32 +183,31 @@
                     ->exists();
             @endphp
             @if ($isSuperAdmin)
-                <div class="px-5 pt-4 pb-1 font-mono text-[0.5rem] tracking-[2.5px] uppercase"
-                    style="color: rgba(255,255,255,0.20);">Super Admin</div>
-                {!! navLink('super.roles', 'bi-shield-lock', 'Roles') !!}
-                {!! navLink('super.permissions', 'bi-key', 'Permissions') !!}
+                <div class="px-6 pt-6 pb-2 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/30">Security</div>
+                {!! navLink('super.roles', 'bi-shield-lock-fill', 'Roles') !!}
                 {!! navLink('super.activity', 'bi-clock-history', 'Activity Logs') !!}
             @endif
 
         </nav>
 
         {{-- Footer --}}
-        <div class="flex-shrink-0 px-5 py-4" style="border-top: 1px solid var(--sb-border);">
+        <div class="shrink-0 px-6 py-5 border-t border-white/5 bg-navy3/50">
             <div class="flex items-center gap-3">
-                <div class="w-[34px] h-[34px] rounded-[8px] flex items-center justify-center font-bold text-[0.82rem] flex-shrink-0"
-                    style="background: #0D1526; border: 1px solid var(--brand-border); color: var(--brand);">
+                <div
+                    class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg bg-blue text-navy shrink-0 shadow-[0_0_15px_rgba(180,180,254,0.3)]">
                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                 </div>
                 <div class="overflow-hidden flex-1 min-w-0">
-                    <div class="text-[0.82rem] font-semibold text-white truncate">{{ auth()->user()->name }}</div>
-                    <div class="font-mono text-[0.55rem] uppercase tracking-wide" style="color: var(--brand-muted);">
-                        {{ auth()->user()->role }}
+                    <div class="text-xs font-bold text-white truncate">{{ auth()->user()->name }}</div>
+                    <div class="text-[0.65rem] uppercase tracking-widest text-blue mt-0.5 font-bold">
+                        {{ str_replace('_', ' ', auth()->user()->role == 'super_admin' ? 'admin' : auth()->user()->role) }}
                     </div>
                 </div>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button title="Logout" class="text-white/25 hover:text-red-400 transition-colors text-[1rem]">
-                        <i class="bi bi-box-arrow-right"></i>
+                    <button title="Logout"
+                        class="w-8 h-8 rounded-lg flex items-center justify-center text-white/40 hover:bg-red-500/10 hover:text-red-400 transition-colors">
+                        <i class="bi bi-box-arrow-right text-lg"></i>
                     </button>
                 </form>
             </div>
@@ -286,67 +217,48 @@
     {{-- ════════════════════════════════════════
     TOPBAR
     ════════════════════════════════════════ --}}
-    <header class="fixed top-0 left-0 lg:left-64 right-0 h-[58px] bg-white
-               border-b border-slate-200 flex items-center px-5 gap-4 z-[100]">
+    <header
+        class="fixed top-0 left-0 lg:left-64 right-0 h-[72px] bg-navy/80 backdrop-blur-md border-b border-white/5 flex items-center px-6 gap-4 z-[100] transition-all">
 
-        <button onclick="toggleSb()" class="lg:hidden text-slate-500 text-xl mr-1">
+        <button onclick="toggleSb()"
+            class="lg:hidden text-white/70 hover:text-white text-2xl transition-colors focus:outline-none">
             <i class="bi bi-list"></i>
         </button>
 
-        <div class="flex items-center gap-2">
-            <img src="{{ asset('images/logo.jpeg') }}" alt="DockIt Logo" class="w-7 h-7 rounded-full object-cover"
-                style="border: 1px solid var(--brand-border);">
+        <div class="flex flex-col">
             <span
-                class="font-display font-bold text-[1.1rem] text-slate-800 truncate">@yield('page-title', 'Dashboard')</span>
+                class="font-black text-lg text-white uppercase tracking-tight">@yield('page-title', 'Dashboard')</span>
         </div>
 
-        <div class="ml-auto flex items-center gap-2">
-            @php
-                $di = (int) ($pendingDocsCount ?? 0);
-                $ui = (int) ($pendingCount ?? 0);
-            @endphp
+        <div class="ml-auto flex items-center gap-4">
+            @php $ui = (int) ($pendingCount ?? 0); @endphp
 
-            <a href="{{ route('admin.documents') }}" class="bell-btn relative w-9 h-9 rounded-lg border border-slate-200 bg-white
-              flex items-center justify-center text-slate-500 transition-all">
-                <i class="bi bi-file-earmark-check text-[1rem]"></i>
-                @if ($di > 0)
-                    <span
-                        class="absolute -top-1.5 -right-1.5 min-w-[17px] h-[17px] rounded-full text-[0.5rem] font-bold flex items-center justify-center font-mono border-2 border-white px-0.5"
-                        style="background: var(--brand); color: #060B16;">{{ $di }}</span>
-                @endif
-            </a>
-
-            <a href="{{ route('admin.users') }}?status=pending" class="relative w-9 h-9 rounded-lg border border-slate-200 bg-white
-              flex items-center justify-center text-slate-500
-              hover:border-red-400 hover:text-red-500 transition-all">
-                <i class="bi bi-bell text-[1rem]"></i>
+            <a href="{{ route('admin.users') }}?status=pending"
+                class="relative w-10 h-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 hover:border-blue hover:text-blue hover:bg-blue/5 transition-all group">
+                <i class="bi bi-bell-fill text-lg group-hover:animate-swing"></i>
                 @if ($ui > 0)
                     <span
-                        class="absolute -top-1.5 -right-1.5 min-w-[17px] h-[17px] bg-red-500 rounded-full text-white text-[0.5rem] font-bold flex items-center justify-center border-2 border-white px-0.5">{{ $ui }}</span>
+                        class="absolute -top-1.5 -right-1.5 min-w-[20px] h-[20px] bg-red-500 rounded-full text-white text-[10px] font-black flex items-center justify-center px-1 shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+                        {{ $ui }}
+                    </span>
                 @endif
             </a>
-
-            <div class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-[0.82rem]"
-                style="background: #0D1526; border: 1px solid var(--brand-border); color: var(--brand);">
-                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-            </div>
         </div>
     </header>
 
     {{-- ════════════════════════════════════════
-    MAIN
+    MAIN CONTENT
     ════════════════════════════════════════ --}}
-    <main class="lg:ml-64 pt-[58px] min-h-screen">
-        <div class="p-5 lg:p-6">
+    <main class="lg:ml-64 pt-[72px] min-h-screen flex flex-col">
+        <div class="flex-grow p-6 lg:p-8">
 
-            {{-- Flash --}}
-            @foreach (['success' => 'green', 'error' => 'red', 'info' => 'amber'] as $key => $color)
+            {{-- Flash Messages --}}
+            @foreach (['success' => 'green', 'error' => 'red', 'info' => 'blue'] as $key => $color)
                 @if (session($key))
-                    <div class="flex items-center gap-3 mb-4 px-4 py-3 rounded-xl
-                        bg-{{ $color }}-50 border border-{{ $color }}-200
-                        text-{{ $color }}-700 text-sm font-medium">
+                    <div
+                        class="flex items-center gap-3 mb-6 px-5 py-4 rounded-xl bg-{{ $color }}-500/10 border border-{{ $color }}-500/20 text-{{ $color }}-400 text-xs font-bold uppercase tracking-widest shadow-lg">
                         <i
-                            class="bi bi-{{ $color === 'green' ? 'check-circle-fill' : ($color === 'red' ? 'exclamation-circle-fill' : 'info-circle-fill') }}"></i>
+                            class="bi bi-{{ $color === 'green' ? 'check-circle-fill' : ($color === 'red' ? 'exclamation-circle-fill' : 'info-circle-fill') }} text-lg"></i>
                         {{ session($key) }}
                     </div>
                 @endif
@@ -354,47 +266,62 @@
 
             @yield('content')
         </div>
+
+        <footer
+            class="mt-auto px-8 py-6 border-t border-white/5 text-center lg:text-left text-[10px] font-bold text-white/30 uppercase tracking-widest">
+            &copy; {{ date('Y') }} CourtPulse Admin Portal. All Rights Reserved.
+        </footer>
     </main>
 
     {{-- ── GLOBAL JS ─────────────────────────────────────────── --}}
     <script>
         const CSRF = document.querySelector('meta[name="csrf-token"]').content;
 
-        /* Sidebar toggle */
+        /* Sidebar Toggle */
         function toggleSb() {
             document.getElementById('sidebar').classList.toggle('-translate-x-full');
             document.getElementById('sbOverlay').classList.toggle('hidden');
+            setTimeout(() => {
+                document.getElementById('sbOverlay').classList.toggle('opacity-0');
+            }, 10);
         }
 
         function closeSb() {
             document.getElementById('sidebar').classList.add('-translate-x-full');
-            document.getElementById('sbOverlay').classList.add('hidden');
+            document.getElementById('sbOverlay').classList.add('opacity-0');
+            setTimeout(() => {
+                document.getElementById('sbOverlay').classList.add('hidden');
+            }, 300);
         }
 
-        /* Toast */
+        /* Premium Dark Mode Toast */
         function showToast(msg, type = 'ok') {
             const isOk = type === 'ok';
             const box = document.getElementById('toastBox');
             const el = document.createElement('div');
-            el.className = `t-slide pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl
-                  border shadow-lg text-sm font-medium
-                  ${isOk ? 'bg-white border-green-200 text-green-700' : 'bg-white border-red-200 text-red-600'}`;
-            el.innerHTML = `<i class="bi ${isOk ? 'bi-check-circle-fill text-green-500' : 'bi-exclamation-circle-fill text-red-500'}"></i>
-                  <span class="flex-1">${msg}</span>`;
+
+            const colorClass = isOk ? 'bg-green-500/10 border-green-500/30 text-green-400 shadow-[0_5px_20px_rgba(34,197,94,0.15)]' : 'bg-red-500/10 border-red-500/30 text-red-400 shadow-[0_5px_20px_rgba(239,68,68,0.15)]';
+            const iconClass = isOk ? 'bi-check-circle-fill text-green-400' : 'bi-exclamation-circle-fill text-red-400';
+
+            el.className = `t-slide pointer-events-auto flex items-center gap-4 px-5 py-4 rounded-xl border backdrop-blur-md text-xs font-bold uppercase tracking-widest ${colorClass}`;
+            el.innerHTML = `<i class="bi ${iconClass} text-lg"></i><span class="flex-1 leading-relaxed">${msg}</span>`;
+
             box.appendChild(el);
             setTimeout(() => {
-                el.style.transition = 'opacity .3s';
+                el.style.transition = 'opacity .4s ease, transform .4s ease';
                 el.style.opacity = '0';
-                setTimeout(() => el.remove(), 300);
-            }, 3500);
+                el.style.transform = 'translateX(20px)';
+                setTimeout(() => el.remove(), 400);
+            }, 4000);
         }
 
-        /* AJAX action helper (approve/reject inline) */
+        /* AJAX Action Helper */
         function ajaxAction(url, method, btn, successMsg, type = 'ok') {
             btn.disabled = true;
             const orig = btn.innerHTML;
-            btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i>';
+            btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> Processing...';
             const body = btn.dataset.body || null;
+
             fetch(url, {
                 method,
                 headers: {
@@ -408,20 +335,21 @@
                 .then(d => {
                     if (d.success !== false) {
                         showToast(successMsg, type);
-                        const row = btn.closest('tr');
+                        const row = btn.closest('tr') || btn.closest('.data-card');
                         if (row) {
-                            row.style.transition = 'opacity .3s';
+                            row.style.transition = 'all .4s ease';
                             row.style.opacity = '0';
-                            setTimeout(() => row.remove(), 300);
+                            row.style.transform = 'scale(0.95)';
+                            setTimeout(() => row.remove(), 400);
                         }
                     } else {
-                        showToast(d.message || 'Error', 'err');
+                        showToast(d.message || 'Error executing action', 'err');
                         btn.disabled = false;
                         btn.innerHTML = orig;
                     }
                 })
                 .catch(() => {
-                    showToast('Request failed', 'err');
+                    showToast('Network Request failed', 'err');
                     btn.disabled = false;
                     btn.innerHTML = orig;
                 });

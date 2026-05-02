@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Models\Court;
 use App\Repositories\CourtRepository;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class CourtService
 {
@@ -17,7 +17,7 @@ class CourtService
     // ── INDEX ────────────────────────────────────────────────────────────
 
     /**
-     * Return all data needed for courts index view.
+     * Return paginated courts for admin index.
      */
     public function getIndexData(Request $request): array
     {
@@ -29,11 +29,11 @@ class CourtService
     // ── STORE ────────────────────────────────────────────────────────────
 
     /**
-     * Create a new court after preparing the data.
+     * Create a new court.
      */
     public function store(array $validated): Court
     {
-        $validated['created_by'] = auth()->id();
+        $validated['created_by'] = Auth::id();
         $validated['is_active']  = true;
 
         return $this->repo->create($validated);
@@ -42,31 +42,37 @@ class CourtService
     // ── UPDATE ───────────────────────────────────────────────────────────
 
     /**
-     * Update court. Handles is_active checkbox (absent = false).
+     * Update an existing court.
      */
     public function update(Court $court, array $validated): Court
     {
-        $validated['is_active'] = isset($validated['is_active'])
-            ? (bool) $validated['is_active']
-            : false;
-
         return $this->repo->update($court, $validated);
     }
 
-    // ── DESTROY ──────────────────────────────────────────────────────────
+    // ── TOGGLE ──────────────────────────────────────────────────────────
 
     /**
-     * Deactivate (soft-delete) a court.
+     * Toggle court active/inactive status.
      */
-    public function deactivate(Court $court): void
+    public function toggleActive(Court $court): Court
     {
-        $this->repo->deactivate($court);
+        return $this->repo->toggleActive($court);
+    }
+
+    // ── DELETE ───────────────────────────────────────────────────────────
+
+    /**
+     * Permanently delete a court.
+     */
+    public function destroy(Court $court): void
+    {
+        $this->repo->delete($court);
     }
 
     // ── HELPERS ──────────────────────────────────────────────────────────
 
     /**
-     * Active courts list for dropdowns across the app.
+     * Active courts for public-facing dropdowns.
      */
     public function getActiveList(): Collection
     {
@@ -74,7 +80,7 @@ class CourtService
     }
 
     /**
-     * Total active courts count (used in dashboard stats etc.).
+     * Total active courts count.
      */
     public function getTotalActive(): int
     {

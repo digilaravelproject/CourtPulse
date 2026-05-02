@@ -89,59 +89,7 @@ class AdminController extends Controller
         }
     }
 
-    public function advocates(Request $request)
-    {
-        try {
-            $data = $this->service->getAdvocatesData($request);
-            if ($request->ajax()) {
-                return response()->json([
-                    'html' => view('admin.partials.advocates-table', $data)->render(),
-                ]);
-            }
-            return view('admin.advocates', $data);
-        } catch (\Exception $e) {
-            Log::error('Admin Advocates List Error: ' . $e->getMessage());
-            return $request->ajax()
-                ? response()->json(['error' => 'Failed to load advocates.'], 500)
-                : back()->withErrors(['general' => 'Failed to load advocates.']);
-        }
-    }
 
-    public function clerks(Request $request)
-    {
-        try {
-            $data = $this->service->getClerksData($request);
-            if ($request->ajax()) {
-                return response()->json([
-                    'html' => view('admin.partials.clerks-table', $data)->render(),
-                ]);
-            }
-            return view('admin.clerks', $data);
-        } catch (\Exception $e) {
-            Log::error('Admin Clerks List Error: ' . $e->getMessage());
-            return $request->ajax()
-                ? response()->json(['error' => 'Failed to load clerks.'], 500)
-                : back()->withErrors(['general' => 'Failed to load clerks.']);
-        }
-    }
-
-    public function documents(Request $request)
-    {
-        try {
-            $data = $this->service->getDocumentsData($request);
-            if ($request->ajax()) {
-                return response()->json([
-                    'html' => view('admin.partials.documents-table', $data)->render(),
-                ]);
-            }
-            return view('admin.documents', $data);
-        } catch (\Exception $e) {
-            Log::error('Admin Documents List Error: ' . $e->getMessage());
-            return $request->ajax()
-                ? response()->json(['error' => 'Failed to load documents.'], 500)
-                : back()->withErrors(['general' => 'Failed to load documents.']);
-        }
-    }
 
     public function feedback(Request $request)
     {

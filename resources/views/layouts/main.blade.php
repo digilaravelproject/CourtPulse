@@ -7,6 +7,7 @@
     <meta name="description"
         content="India's Premier Legal Professional Network. Connect with Court Clerks, IP Agents, and Advocates instantly.">
     <meta name="theme-color" content="#050812">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'CourtPulse') — India's Legal Professional Network</title>
 

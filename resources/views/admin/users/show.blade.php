@@ -4,441 +4,302 @@
 
 @section('content')
 
-    <div class="mb-4">
-        <a href="{{ route('admin.users') }}"
-            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium
-           border border-slate-200 rounded-lg hover:border-slate-400 bg-white
-           text-slate-600 transition-all">
-            <i class="bi bi-arrow-left"></i> Back to Users
-        </a>
-    </div>
+    <div class="max-w-5xl mx-auto">
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        {{-- ── BACK BUTTON ─────────────────────────────── --}}
+        <div class="mb-8">
+            <a href="{{ route('admin.users') ?? url()->previous() }}"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 text-white/70 hover:text-white transition-all text-xs font-black uppercase tracking-widest shadow-lg">
+                <i class="fas fa-arrow-left"></i> Back to Directory
+            </a>
+        </div>
 
-        {{-- ── LEFT: Profile Card ─────────────────────────────── --}}
-        <div class="lg:col-span-1 space-y-5">
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        {{-- ── MAIN PROFILE CARD ─────────────────────────────── --}}
+        <div class="bg-navy2 rounded-3xl border border-white/5 shadow-2xl overflow-hidden">
 
-                {{-- Header --}}
-                <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-                    <h2 class="font-display font-bold text-[1rem] text-slate-800">Profile</h2>
-                    @if ($user->status === 'active')
-                        <span
-                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-green-100 text-green-700 font-mono text-[0.6rem] uppercase tracking-wide font-semibold"><span
-                                class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>Active</span>
-                    @elseif($user->status === 'pending')
-                        <span
-                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-100 text-amber-700 font-mono text-[0.6rem] uppercase tracking-wide font-semibold"><span
-                                class="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block"></span>Pending</span>
-                    @else
-                        <span
-                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-red-100 text-red-600 font-mono text-[0.6rem] uppercase tracking-wide font-semibold"><span
-                                class="w-1.5 h-1.5 rounded-full bg-red-500 inline-block"></span>Rejected</span>
-                    @endif
-                </div>
-
-                <div class="p-5">
-                    {{-- Avatar + Name --}}
-                    <div class="flex items-center gap-4 pb-4 mb-4 border-b border-slate-100">
-                        <div
-                            class="w-14 h-14 rounded-xl bg-navy border-2 border-gold/30 flex items-center justify-center text-gold font-bold text-xl font-display shrink-0">
-                            {{ strtoupper(substr($user->name, 0, 1)) }}
-                        </div>
-                        <div>
-                            <div class="font-display font-bold text-[1.15rem] text-slate-800">{{ $user->name }}</div>
-                            <div class="font-mono text-[0.62rem] uppercase tracking-[1.5px] text-slate-400 mt-0.5">
-                                {{ $user->role }}</div>
+            {{-- Header --}}
+            <div class="p-8 md:p-10 border-b border-white/5 bg-white/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+                <div class="flex items-center gap-6">
+                    @php
+                        $roleClass = match($user->role) {
+                            'advocate' => 'bg-blue/10 text-blue border-blue/20 shadow-[0_0_20px_rgba(180,180,254,0.15)]',
+                            'court_clerk', 'ip_clerk' => 'bg-purple-500/10 text-purple-400 border-purple-500/20 shadow-[0_0_20px_rgba(168,85,247,0.15)]',
+                            'ca_cs', 'agent' => 'bg-amber-500/10 text-amber-400 border-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.15)]',
+                            default => 'bg-white/5 text-white/50 border-white/10'
+                        };
+                        $initials = strtoupper(substr($user->name, 0, 1)) . (strtoupper(substr(strrchr($user->name, " "), 1, 1)) ?: '');
+                    @endphp
+                    <div class="w-20 h-20 rounded-2xl {{ $roleClass }} border flex items-center justify-center font-black text-3xl shrink-0">
+                        {{ $initials }}
+                    </div>
+                    <div>
+                        <h2 class="font-black text-2xl md:text-3xl text-white uppercase tracking-tight mb-3">{{ $user->name }}</h2>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <span class="inline-block text-[0.65rem] font-black uppercase tracking-widest {{ $roleClass }} border px-3 py-1 rounded-md">
+                                {{ str_replace('_', ' ', $user->role) }}
+                            </span>
+                            @if ($user->status === 'active')
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-green-500/10 border border-green-500/20 text-green-400 font-black text-[0.65rem] uppercase tracking-widest">
+                                    <i class="fas fa-check-circle"></i> Active
+                                </span>
+                            @elseif($user->status === 'pending')
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-400 font-black text-[0.65rem] uppercase tracking-widest">
+                                    <i class="fas fa-hourglass-half"></i> Pending Review
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-red-500/10 border border-red-500/20 text-red-400 font-black text-[0.65rem] uppercase tracking-widest">
+                                    <i class="fas fa-times-circle"></i> Rejected
+                                </span>
+                            @endif
                         </div>
                     </div>
+                </div>
 
-                    {{-- Basic details --}}
-                    @foreach (['Email' => $user->email, 'Phone' => $user->phone ?? '—', 'City' => $user->city ?? '—', 'State' => $user->state ?? '—', 'Joined' => $user->created_at->format('d M Y')] as $lbl => $val)
-                        <div
-                            class="flex justify-between items-start py-2.5 border-b border-slate-100 last:border-0 text-sm gap-3">
-                            <span class="text-slate-400 shrink-0">{{ $lbl }}</span>
-                            <span class="font-medium text-slate-700 text-right break-all">{{ $val }}</span>
-                        </div>
-                    @endforeach
+                {{-- Action Buttons --}}
+                @if ($user->status === 'pending')
+                    <div class="flex gap-4 w-full md:w-auto mt-4 md:mt-0">
+                        <button onclick="openVerify({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->role }}')"
+                            class="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-green-500/10 border border-green-500/30 hover:bg-green-500 text-green-400 hover:text-white text-xs font-black uppercase tracking-widest transition-all shadow-lg hover:shadow-[0_0_20px_rgba(34,197,94,0.3)]">
+                            <i class="fas fa-check"></i> Verify
+                        </button>
+                        <button onclick="openReject({{ $user->id }}, '{{ addslashes($user->name) }}')"
+                            class="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-red-500/10 border border-red-500/30 hover:bg-red-500 text-red-400 hover:text-white text-xs font-black uppercase tracking-widest transition-all shadow-lg hover:shadow-[0_0_20px_rgba(239,68,68,0.3)]">
+                            <i class="fas fa-times"></i> Reject
+                        </button>
+                    </div>
+                @endif
+            </div>
 
-                    {{-- Role-specific --}}
-                    @if ($user->advocateProfile)
-                        <div class="mt-4 pt-3 border-t border-slate-100">
-                            <div class="font-mono text-[0.55rem] tracking-[2px] uppercase text-slate-400 mb-3">Advocate Info
+            {{-- Body Grid --}}
+            <div class="p-8 md:p-10">
+
+                {{-- Basic Info --}}
+                <div class="mb-10">
+                    <h3 class="text-[0.65rem] font-black text-white/40 uppercase tracking-[0.25em] mb-6 border-b border-white/5 pb-4">Basic Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @php
+                            $basicDetails = [
+                                'Email Address' => $user->email,
+                                'Phone Number' => $user->phone ?? 'Not Provided',
+                                'Registered On' => $user->created_at ? $user->created_at->format('d M, Y') : 'N/A',
+                            ];
+                            if ($user->status === 'active') {
+                                $basicDetails['Verified On'] = $user->updated_at ? $user->updated_at->format('d M, Y') : 'N/A';
+                            }
+                        @endphp
+                        @foreach ($basicDetails as $lbl => $val)
+                            <div class="bg-navy rounded-2xl border border-white/5 p-6 shadow-inner">
+                                <div class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 mb-2">{{ $lbl }}</div>
+                                <div class="text-sm font-bold text-white break-all">{{ $val }}</div>
                             </div>
-                            @foreach (['Bar Council No.' => $user->advocateProfile->bar_council_number ?? '—', 'High Court' => $user->advocateProfile->high_court ?? '—', 'Experience' => ($user->advocateProfile->experience_years ?? 0) . ' yrs'] as $l => $v)
-                                <div
-                                    class="flex justify-between py-2 text-sm border-b border-slate-100 last:border-0 gap-3">
-                                    <span class="text-slate-400 shrink-0">{{ $l }}</span><span
-                                        class="font-medium text-slate-700">{{ $v }}</span>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
-
-                    @if ($user->clerkProfile)
-                        <div class="mt-4 pt-3 border-t border-slate-100">
-                            <div class="font-mono text-[0.55rem] tracking-[2px] uppercase text-slate-400 mb-3">Clerk Info
-                            </div>
-                            @foreach (['Clerk ID' => $user->clerkProfile->clerk_id_number ?? '—', 'Court' => $user->clerkProfile->court_name ?? '—', 'Dept' => $user->clerkProfile->department ?? '—'] as $l => $v)
-                                <div
-                                    class="flex justify-between py-2 text-sm border-b border-slate-100 last:border-0 gap-3">
-                                    <span class="text-slate-400 shrink-0">{{ $l }}</span><span
-                                        class="font-medium text-slate-700">{{ $v }}</span>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
-
-                    @if ($user->caProfile)
-                        <div class="mt-4 pt-3 border-t border-slate-100">
-                            <div class="font-mono text-[0.55rem] tracking-[2px] uppercase text-slate-400 mb-3">CA Info</div>
-                            @foreach (['Membership No.' => $user->caProfile->membership_number ?? '—', 'ICAI Region' => $user->caProfile->icai_region ?? '—'] as $l => $v)
-                                <div
-                                    class="flex justify-between py-2 text-sm border-b border-slate-100 last:border-0 gap-3">
-                                    <span class="text-slate-400 shrink-0">{{ $l }}</span><span
-                                        class="font-medium text-slate-700">{{ $v }}</span>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
-
-                    {{-- Verify / Reject --}}
-                    @if ($user->status === 'pending')
-                        <div class="mt-5 pt-4 border-t border-slate-100 flex gap-3">
-                            <button
-                                onclick="openVerify({{ $user->id }},'{{ addslashes($user->name) }}','{{ $user->role }}','{{ $user->email }}','{{ $user->phone ?? '' }}','{{ $user->created_at->format('d M Y') }}','{{ $user->city ?? '' }}', {{ $user->documents->where('status', 'pending')->count() }})"
-                                class="flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-bold
-                   bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all shadow-sm shadow-green-200">
-                                <i class="bi bi-check-circle"></i> Verify
-                            </button>
-                            <button onclick="openReject({{ $user->id }},'{{ addslashes($user->name) }}')"
-                                class="flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-bold
-                   bg-red-50 hover:bg-red-500 text-red-600 hover:text-white border border-red-200 hover:border-red-500 rounded-lg transition-all">
-                                <i class="bi bi-x-circle"></i> Reject
-                            </button>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        {{-- ── RIGHT: Documents ───────────────────────────────── --}}
-        <div class="lg:col-span-2 space-y-5">
-            {{-- Awaiting Review --}}
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-amber-50/30">
-                    <div class="flex items-center gap-2">
-                        <i class="bi bi-clock-history text-amber-500"></i>
-                        <h2 class="font-display font-bold text-[1rem] text-slate-800">Awaiting Review</h2>
-                    </div>
-                    <span class="font-mono text-[0.6rem] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">
-                        {{ $user->documents->where('status', 'pending')->count() }} Required
-                    </span>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr class="bg-slate-50 border-b border-slate-200">
-                                <th class="px-4 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">Type</th>
-                                <th class="px-4 py-3 text-left font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">File</th>
-                                <th class="px-4 py-3 text-center font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">Status</th>
-                                <th class="px-4 py-3 text-right font-mono text-[0.58rem] tracking-widest uppercase text-slate-400">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="awaitingTableBody">
-                            @forelse($user->documents->where('status', 'pending') as $doc)
-                                <tr class="trow" data-docid="{{ $doc->id }}">
-                                    <td class="font-medium text-slate-700">
-                                        {{ ucwords(str_replace('_', ' ', $doc->document_type)) }}</td>
-                                    <td>
-                                        <button
-                                            onclick="openDocViewer('{{ addslashes(Storage::url($doc->file_path)) }}', '{{ addslashes(ucwords(str_replace('_', ' ', $doc->document_type))) }}')"
-                                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200
-                                         hover:border-gold hover:text-gold transition-all text-slate-600 text-[0.7rem] font-bold">
-                                            <i class="bi bi-eye"></i> View
-                                        </button>
-                                    </td>
-                                    <td class="text-center">
-                                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-100 text-amber-700 font-mono text-[0.55rem] uppercase tracking-wide font-bold">
-                                            Pending
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center gap-1.5 justify-end">
-                                            <button
-                                                onclick="reviewDoc({{ $doc->id }}, 'approved', this)"
-                                                class="flex items-center gap-1 px-3 h-8 rounded-lg bg-green-500 hover:bg-green-600 text-white text-xs font-bold transition-all">
-                                                <i class="bi bi-check-lg"></i> Approve
-                                            </button>
-                                            <button
-                                                onclick="reviewDoc({{ $doc->id }}, 'rejected', this)"
-                                                class="flex items-center gap-1 px-3 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition-all">
-                                                <i class="bi bi-x-lg"></i> Reject
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="py-10 text-center text-slate-400 text-sm italic">
-                                        All documents reviewed or nothing pending.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {{-- Verified Documents --}}
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden opacity-80 hover:opacity-100 transition-opacity">
-                <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-                    <div class="flex items-center gap-2 text-slate-600">
-                        <i class="bi bi-shield-check text-green-500"></i>
-                        <h2 class="font-display font-medium text-[0.95rem]">Verified Documents</h2>
+                        @endforeach
                     </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <tbody id="verifiedTableBody" class="divide-y divide-slate-100">
-                            @forelse($user->documents->whereIn('status', ['approved', 'rejected']) as $doc)
-                                <tr class="trow bg-slate-50/30">
-                                    <td class="px-4 py-3 font-medium text-slate-500 w-1/3 text-[0.8rem]">
-                                        {{ ucwords(str_replace('_', ' ', $doc->document_type)) }}
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <button onclick="openDocViewer('{{ addslashes(Storage::url($doc->file_path)) }}', '{{ addslashes(ucwords(str_replace('_', ' ', $doc->document_type))) }}')"
-                                            class="text-slate-400 hover:text-gold text-[0.75rem] flex items-center gap-1">
-                                            <i class="bi bi-file-earmark"></i> Re-view
-                                        </button>
-                                    </td>
-                                    <td class="px-4 py-3 text-right">
-                                        @if ($doc->status === 'approved')
-                                            <span class="text-green-600 font-bold text-[0.65rem] uppercase tracking-widest inline-flex items-center gap-1">
-                                                <i class="bi bi-check-circle"></i> Verified
-                                            </span>
-                                        @else
-                                            <div class="flex flex-col items-end">
-                                                <span class="text-red-500 font-bold text-[0.65rem] uppercase tracking-widest">Rejected</span>
-                                                <span class="text-[0.6rem] text-slate-400">{{ $doc->rejection_reason }}</span>
-                                            </div>
-                                        @endif
-                                    </td>
-                                </tr>
+
+                {{-- Professional Info --}}
+                @if ($user->role !== 'guest')
+                    <div>
+                        <h3 class="text-[0.65rem] font-black text-white/40 uppercase tracking-[0.25em] mb-6 border-b border-white/5 pb-4">Professional Details</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                            @php
+                                $profDetails = [];
+                                
+                                if (in_array($user->role, ['advocate', 'court_clerk', 'ip_clerk'])) {
+                                    $profDetails['Primary Court'] = $user->court ? $user->court->name : 'Not Provided';
+                                }
+                                
+                                if ($user->sub_role) {
+                                    $profDetails['Specialization'] = ucwords(str_replace('_', ' ', $user->sub_role));
+                                }
+
+                                if ($user->experience_years) {
+                                    $profDetails['Experience'] = $user->experience_years . ' Years';
+                                }
+                                
+                                if ($user->license_number) {
+                                    $profDetails['License / Reg No.'] = $user->license_number;
+                                }
+                                
+                                if ($user->capabilities) {
+                                    $profDetails['Capabilities'] = $user->capabilities;
+                                }
+                                
+                                if ($user->past_employers) {
+                                    $profDetails['Past Employers'] = $user->past_employers;
+                                }
+                            @endphp
+
+                            @forelse ($profDetails as $lbl => $val)
+                                <div class="bg-navy rounded-2xl border border-white/5 p-6 shadow-inner">
+                                    <div class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 mb-2">{{ $lbl }}</div>
+                                    <div class="text-sm font-bold text-white">{{ $val }}</div>
+                                </div>
                             @empty
-                                <tr>
-                                    <td colspan="3" class="py-8 text-center text-slate-400 text-sm">No documents verified yet.</td>
-                                </tr>
+                                <div class="col-span-full p-6 text-center text-white/40 text-sm font-bold uppercase tracking-widest border border-white/5 rounded-2xl bg-white/5">
+                                    No professional details provided during registration.
+                                </div>
                             @endforelse
-                        </tbody>
-                    </table>
-                </div>
+
+                        </div>
+                    </div>
+                @endif
             </div>
+
         </div>
     </div>
 
-    {{-- Document Viewer Modal --}}
-    <div id="docViewer" class="hidden fixed inset-0 z-1000 items-center justify-center p-4">
-        <div onclick="closeDocViewer()" class="absolute inset-0 bg-navy/80 backdrop-blur-sm"></div>
-        <div id="docBox" class="bg-white rounded-2xl w-full max-w-5xl h-[85vh] relative flex flex-col overflow-hidden shadow-2xl transition-all duration-300 transform scale-95 opacity-0">
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
-                <div>
-                    <h3 class="font-display font-bold text-slate-800" id="docModelTitle">Document Review</h3>
-                    <p class="text-[0.65rem] text-slate-400 font-mono uppercase tracking-wider mt-0.5">Confidential User Data</p>
-                </div>
-                <button onclick="closeDocViewer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors">
-                    <i class="bi bi-x-lg"></i>
-                </button>
+    {{-- ═══════════════════════════════════════════
+     VERIFY MODAL
+    ═══════════════════════════════════════════ --}}
+    <div id="vOverlay" onclick="closeModal()" class="hidden fixed inset-0 bg-navy/80 backdrop-blur-sm z-[2000] transition-opacity duration-300"></div>
+
+    <div id="vModal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(450px,calc(100vw-2rem))] bg-navy2 border border-white/10 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[2001] overflow-hidden transform scale-95 transition-transform duration-300">
+        <div class="flex items-center gap-5 px-8 py-6 border-b border-white/5 bg-white/5">
+            <div class="w-14 h-14 rounded-2xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-2xl shrink-0 shadow-[0_0_20px_rgba(34,197,94,0.2)]">
+                <i class="fas fa-user-check"></i>
             </div>
-            <div class="flex-1 bg-slate-50 overflow-hidden relative">
-                <iframe id="docFrame" class="w-full h-full border-0" src=""></iframe>
-                <div id="docImageWrap" class="hidden w-full h-full overflow-auto items-center justify-center p-4">
-                    <img id="docImage" src="" class="max-w-full shadow-lg rounded-lg">
-                </div>
+            <div class="flex-1">
+                <div class="font-black text-base text-white uppercase tracking-widest">Verify Professional</div>
+                <div id="v_sub" class="text-[0.7rem] text-white/50 uppercase tracking-wider font-bold mt-1.5">Approve Account Access</div>
             </div>
-            <div class="px-6 py-3 border-t bg-slate-50 flex justify-between items-center">
-                <span class="text-[0.7rem] text-slate-400">Tip: Scroll inside the viewer to see the full document.</span>
-                <button onclick="closeDocViewer()" class="px-5 py-1.5 bg-slate-800 text-white rounded-lg text-sm font-bold">Close</button>
+        </div>
+        <div class="p-8 bg-navy/50">
+            <div class="flex items-start gap-4 px-6 py-5 bg-green-500/10 border border-green-500/20 rounded-2xl text-green-400 text-sm font-bold leading-relaxed shadow-inner">
+                <i class="fas fa-info-circle mt-0.5 text-xl"></i>
+                <p>This will grant the user full access to the dashboard and directory.</p>
             </div>
+        </div>
+        <div class="flex justify-end gap-4 px-8 py-6 border-t border-white/5 bg-navy">
+            <button onclick="closeModal()" class="px-8 py-3.5 text-xs font-black uppercase tracking-widest border border-white/10 rounded-xl hover:bg-white/5 text-white/70 hover:text-white transition-all">Cancel</button>
+            <button id="vConfirmBtn" onclick="doAction('verify')" class="flex items-center gap-2 px-8 py-3.5 text-xs font-black uppercase tracking-widest bg-green-500 hover:bg-green-400 text-navy rounded-xl transition-all shadow-[0_5px_20px_rgba(34,197,94,0.25)]">
+                <i class="fas fa-check text-sm"></i> Confirm Verify
+            </button>
         </div>
     </div>
 
-    @include('admin.partials.verify-reject-modals')
+    {{-- ═══════════════════════════════════════════
+     REJECT MODAL
+    ═══════════════════════════════════════════ --}}
+    <div id="rModal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(450px,calc(100vw-2rem))] bg-navy2 border border-white/10 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[2001] overflow-hidden transform scale-95 transition-transform duration-300">
+        <div class="flex items-center gap-5 px-8 py-6 border-b border-white/5 bg-red-500/5">
+            <div class="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-2xl shrink-0 shadow-[0_0_20px_rgba(239,68,68,0.2)]">
+                <i class="fas fa-user-times"></i>
+            </div>
+            <div class="flex-1">
+                <div class="font-black text-base text-white uppercase tracking-widest">Reject Registration</div>
+                <div id="r_sub" class="text-[0.7rem] text-white/50 uppercase tracking-wider font-bold mt-1.5"></div>
+            </div>
+        </div>
+        <div class="p-8 bg-navy/50">
+            <div class="flex items-start gap-4 px-6 py-5 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-sm font-bold leading-relaxed shadow-inner">
+                <i class="fas fa-exclamation-triangle mt-0.5 text-xl"></i>
+                <p>Warning: This will reject the user's profile and deny access to the network.</p>
+            </div>
+        </div>
+        <div class="flex justify-end gap-4 px-8 py-6 border-t border-white/5 bg-navy">
+            <button onclick="closeModal()" class="px-8 py-3.5 text-xs font-black uppercase tracking-widest border border-white/10 rounded-xl hover:bg-white/5 text-white/70 hover:text-white transition-all">Cancel</button>
+            <button id="rConfirmBtn" onclick="doAction('reject')" class="flex items-center gap-2 px-8 py-3.5 text-xs font-black uppercase tracking-widest bg-red-500 hover:bg-red-400 text-white rounded-xl transition-all shadow-[0_5px_20px_rgba(239,68,68,0.3)]">
+                <i class="fas fa-times text-sm"></i> Confirm Reject
+            </button>
+        </div>
+    </div>
 
 @endsection
 
 @push('scripts')
-    <script>
-        @include('admin.partials.modal-script')
+<script>
+    let _uid = null;
 
-        // Document Viewer Logic
-        function openDocViewer(url, title) {
-            const modal = document.getElementById('docViewer');
-            const box = document.getElementById('docBox');
-            const frame = document.getElementById('docFrame');
-            const imgWrap = document.getElementById('docImageWrap');
-            const img = document.getElementById('docImage');
-            const titleEl = document.getElementById('docModelTitle');
+    function openVerify(id, name, role) {
+        _uid = id;
+        document.getElementById('v_sub').textContent = `Approve ${name}`;
+        _showModal('vModal');
+    }
 
-            titleEl.innerText = title;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+    function openReject(id, name) {
+        _uid = id;
+        document.getElementById('r_sub').textContent = `Target: ${name}`;
+        _showModal('rModal');
+    }
 
-            const isImg = url.match(/\.(jpeg|jpg|gif|png|webp)$/i);
+    function _showModal(modalId) {
+        const overlay = document.getElementById('vOverlay');
+        const modal = document.getElementById(modalId);
 
-            if (isImg) {
-                frame.classList.add('hidden');
-                imgWrap.classList.remove('hidden');
-                imgWrap.classList.add('flex');
-                img.src = url;
-            } else {
-                imgWrap.classList.remove('flex');
-                imgWrap.classList.add('hidden');
-                frame.classList.remove('hidden');
-                frame.src = url;
+        overlay.classList.remove('hidden');
+        modal.classList.remove('hidden');
+
+        setTimeout(() => {
+            overlay.classList.remove('opacity-0');
+            modal.classList.remove('scale-95', 'opacity-0');
+            modal.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeModal() {
+        ['vModal', 'rModal'].forEach(id => {
+            const m = document.getElementById(id);
+            if(m) {
+                m.classList.remove('scale-100', 'opacity-100');
+                m.classList.add('scale-95', 'opacity-0');
             }
+        });
+        const overlay = document.getElementById('vOverlay');
+        if(overlay) overlay.classList.add('opacity-0');
 
-            setTimeout(() => {
-                box.classList.remove('scale-95', 'opacity-0');
-            }, 50);
-        }
+        setTimeout(() => {
+            ['vModal', 'rModal', 'vOverlay'].forEach(id => {
+                if(document.getElementById(id)) document.getElementById(id).classList.add('hidden');
+            });
+            _uid = null;
+        }, 300);
+    }
 
-        function closeDocViewer() {
-            const modal = document.getElementById('docViewer');
-            const box = document.getElementById('docBox');
-            box.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-                document.getElementById('docFrame').src = '';
-                document.getElementById('docImage').src = '';
-            }, 300);
-        }
+    function doAction(action) {
+        const btnId = action === 'verify' ? 'vConfirmBtn' : 'rConfirmBtn';
+        const btn = document.getElementById(btnId);
+        const originalHtml = btn.innerHTML;
 
-        function reviewDoc(id, status, btn) {
-            const reason = status === 'rejected' ? 'Invalid document' : '';
-            btn.disabled = true;
-            const orig = btn.innerHTML;
-            btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i>';
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
 
-            fetch(`/admin/documents/${id}/review`, {
-                    method: 'PATCH',
-                    headers: {
-                        'X-CSRF-TOKEN': CSRF,
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        status,
-                        rejection_reason: reason
-                    })
-                })
-                .then(r => r.json())
-                .then(d => {
-                    if (d.success !== false) {
-                        showToast(status === 'approved' ? 'Document Approved!' : 'Document Rejected.', status === 'approved' ? 'ok' : 'err');
-                        
-                        const row = btn.closest('tr');
-                        const docType = row.cells[0].innerText;
-                        const viewBtn = row.querySelector('button[onclick^="openDocViewer"]');
-                        const viewOnclick = viewBtn ? viewBtn.getAttribute('onclick') : '';
+        const url = `/admin/manage/users/${_uid}/verify`;
 
-                        // Create new row for Verified table
-                        const newRow = document.createElement('tr');
-                        newRow.className = 'trow bg-slate-50/30';
-                        newRow.innerHTML = `
-                        <td class="px-4 py-3 font-medium text-slate-500 w-1/3 text-[0.8rem]">
-                            ${docType}
-                        </td>
-                        <td class="px-4 py-3">
-                            <button onclick="${viewOnclick}"
-                                class="text-slate-400 hover:text-gold text-[0.75rem] flex items-center gap-1">
-                                <i class="bi bi-file-earmark"></i> Re-view
-                            </button>
-                        </td>
-                        <td class="px-4 py-3 text-right">
-                            ${status === 'approved' ? `
-                                <span class="text-green-600 font-bold text-[0.65rem] uppercase tracking-widest inline-flex items-center gap-1">
-                                    <i class="bi bi-check-circle"></i> Verified
-                                </span>` : `
-                                <div class="flex flex-col items-end">
-                                    <span class="text-red-500 font-bold text-[0.65rem] uppercase tracking-widest">Rejected</span>
-                                    <span class="text-[0.6rem] text-slate-400">${reason}</span>
-                                </div>`}
-                        </td>`;
-
-                        const verifiedBody = document.getElementById('verifiedTableBody');
-                        if (verifiedBody.querySelector('td[colspan="3"]')) {
-                            verifiedBody.innerHTML = '';
-                        }
-                        verifiedBody.appendChild(newRow);
-
-                        // Remove from pending
-                        row.remove();
-
-                        // If pending empty, show helper
-                        const pendingBody = document.getElementById('awaitingTableBody');
-                        if (pendingBody.children.length === 0) {
-                            pendingBody.innerHTML = '<tr><td colspan="4" class="py-10 text-center text-slate-400 text-sm italic">All documents reviewed or nothing pending.</td></tr>';
-                        }
-                    } else {
-                        showToast(d.message || 'Error', 'err');
-                        btn.disabled = false;
-                        btn.innerHTML = orig;
-                    }
-                })
-                .catch(() => {
-                    showToast('Request Failed', 'err');
-                    btn.disabled = false;
-                    btn.innerHTML = orig;
-                });
-        }
-
-        // After verify on show page, redirect back
-        function doVerify() {
-            const btn = document.getElementById('vConfirmBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> Verifying…';
-            fetch(`/admin/users/${_uid}/verify`, {
-                    method: 'PATCH',
-                    headers: {
-                        'X-CSRF-TOKEN': CSRF,
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(r => r.json()).then(() => {
-                    showToast('User Verified Successfully!', 'ok');
-                    setTimeout(() => location.reload(), 1200);
-                })
-                .catch(() => {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="bi bi-check-lg"></i> Confirm Verify';
-                    showToast('Verification Failed', 'err');
-                });
-        }
-
-        function doReject() {
-            const btn = document.getElementById('rConfirmBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> Rejecting…';
-            fetch(`/admin/users/${_uid}/reject`, {
-                    method: 'PATCH',
-                    headers: {
-                        'X-CSRF-TOKEN': CSRF,
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(r => r.json()).then(() => {
-                    showToast('User Rejected.', 'err');
-                    setTimeout(() => location.reload(), 1200);
-                })
-                .catch(() => {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="bi bi-x-lg"></i> Confirm Reject';
-                    showToast('Rejection Failed', 'err');
-                });
-        }
-    </script>
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ action: action })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (typeof showToast === 'function') {
+                    showToast(data.message || "Action completed successfully!", "ok");
+                }
+                closeModal();
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                throw new Error(data.message || "Something went wrong");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            if (typeof showToast === 'function') {
+                showToast(error.message || "Failed to process request", "err");
+            } else {
+                alert(error.message || "Failed to process request");
+            }
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        });
+    }
+</script>
 @endpush

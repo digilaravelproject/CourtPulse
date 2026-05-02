@@ -283,7 +283,7 @@
 
                         <button type="submit" id="btn-verify"
                             class="w-full flex justify-center items-center py-4 px-6 rounded-xl text-xs font-black text-navy uppercase tracking-widest bg-blue hover:bg-white transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-[0_10px_20px_rgba(180,180,254,0.2)]">
-                            <span>Verify & Login</span>
+                            <span>Verify & Register</span>
                             <i class="fas fa-check-circle ml-3"></i>
                         </button>
                     </form>
@@ -444,7 +444,11 @@
                 const formData = new FormData(form);
                 const response = await fetch("{{ route('register.post') }}", {
                     method: 'POST',
-                    headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
                     body: formData
                 });
 
@@ -535,7 +539,11 @@
                 const formData = new FormData(e.target);
                 const response = await fetch("{{ route('register.otp.verify.post') }}", {
                     method: 'POST',
-                    headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
                     body: formData
                 });
 
@@ -544,13 +552,13 @@
                 if (response.ok && data.success) {
                     window.location.href = data.redirect;
                 } else {
-                    btn.innerHTML = '<span>Verify & Login</span><i class="fas fa-check-circle ml-3"></i>';
+                    btn.innerHTML = '<span>Verify & Register</span><i class="fas fa-check-circle ml-3"></i>';
                     btn.disabled = false;
                     errDiv.classList.remove('hidden');
                     errDiv.innerHTML = '<i class="fas fa-exclamation-triangle mr-1"></i> ' + (data.message || 'Invalid or Expired OTP.');
                 }
             } catch (error) {
-                btn.innerHTML = '<span>Verify & Login</span><i class="fas fa-check-circle ml-3"></i>';
+                btn.innerHTML = '<span>Verify & Register</span><i class="fas fa-check-circle ml-3"></i>';
                 btn.disabled = false;
                 errDiv.classList.remove('hidden');
                 errDiv.innerHTML = '<i class="fas fa-exclamation-triangle mr-1"></i> Verification failed. Try again.';

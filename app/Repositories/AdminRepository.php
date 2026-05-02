@@ -13,16 +13,53 @@ class AdminRepository
     // ── STATS ────────────────────────────────────────────────
     public function getDashboardStats(): array
     {
+        $supportTotal = User::query()->whereIn('role', ['court_clerk', 'ip_clerk'], 'and', false)->count();
+        $supportActive = User::query()->whereIn('role', ['court_clerk', 'ip_clerk'], 'and', false)->where('status', 'active')->count();
+        $supportPending = User::query()->whereIn('role', ['court_clerk', 'ip_clerk'], 'and', false)->where('status', 'pending')->count();
+        
+        $profTotal = User::query()->whereIn('role', ['advocate', 'ca_cs', 'agent'], 'and', false)->count();
+        $profActive = User::query()->whereIn('role', ['advocate', 'ca_cs', 'agent'], 'and', false)->where('status', 'active')->count();
+        $profPending = User::query()->whereIn('role', ['advocate', 'ca_cs', 'agent'], 'and', false)->where('status', 'pending')->count();
+
+        // User Growth Data (Last 30 Days)
+        $dates = collect();
+        for ($i = 29; $i >= 0; $i--) {
+            $dates->push(now()->subDays($i)->format('Y-m-d'));
+        }
+
+        $growthData = User::query()
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as count', [])
+            ->where('created_at', '>=', now()->subDays(30))
+            ->groupBy('date')
+            ->pluck('count', 'date');
+
+        $chartLabels = [];
+        $chartData = [];
+        foreach ($dates as $date) {
+            $chartLabels[] = \Carbon\Carbon::parse($date)->format('M d');
+            $chartData[] = $growthData->get($date, 0);
+        }
+
         return [
-            'total_advocates'       => User::query()->where('role', '=', 'advocate')->count(),
-            'total_court_clerks'    => User::query()->where('role', '=', 'court_clerk')->count(),
-            'total_ip_clerks'       => User::query()->where('role', '=', 'ip_clerk')->count(),
-            'total_ca_cs'           => User::query()->where('role', '=', 'ca_cs')->count(),
-            'total_agents'          => User::query()->where('role', '=', 'agent')->count(),
-            'total_guests'          => User::query()->where('role', '=', 'guest')->count(),
-            'pending_verifications' => User::query()->where('status', '=', 'pending')->where('registration_step', '>=', 2)->count(),
-            'in_registration'      => User::query()->where('status', '=', 'pending')->where('registration_step', '=', 1)->count(),
-            'pending_documents'     => Document::query()->where('status', '=', 'pending')->count(),
+            'support' => [
+                'total' => $supportTotal,
+                'active' => $supportActive,
+                'pending' => $supportPending,
+                'court_clerks' => User::query()->where('role', 'court_clerk')->count(),
+                'ip_clerks' => User::query()->where('role', 'ip_clerk')->count(),
+            ],
+            'professionals' => [
+                'total' => $profTotal,
+                'active' => $profActive,
+                'pending' => $profPending,
+                'advocates' => User::query()->where('role', 'advocate')->count(),
+                'ca_cs' => User::query()->where('role', 'ca_cs')->count(),
+                'ip_agents' => User::query()->where('role', 'agent')->count(),
+            ],
+            'guests' => User::query()->where('role', 'guest')->count(),
+            'total_pending' => User::query()->where('status', 'pending')->where('registration_step', '>=', 2)->count(),
+            'chart_labels' => $chartLabels,
+            'chart_data' => $chartData,
         ];
     }
 
@@ -31,21 +68,25 @@ class AdminRepository
         return User::query()->where('status', '=', 'pending')->where('registration_step', '>=', 2)->count();
     }
 
-    public function getPendingDocsCount(): int
-    {
-        return Document::query()->where('status', '=', 'pending')->count();
-    }
-
     // ── USERS ────────────────────────────────────────────────
     public function getRecentUsers(int $limit = 10)
     {
-        return User::query()->with('documents')->latest()->take($limit)->get();
+        return User::query()->latest()->take($limit)->get();
     }
 
     public function getFilteredUsers(Request $request, int $perPage = 20)
     {
         return User::query()->with(['advocateProfile', 'clerkProfile', 'caProfile'])
             ->when($request->role,   fn($q) => $q->where('role', '=', $request->role))
+            ->when($request->role_category, function ($q) use ($request) {
+                if ($request->role_category === 'support') {
+                    $q->whereIn('role', ['court_clerk', 'ip_clerk']);
+                } elseif ($request->role_category === 'professional') {
+                    $q->whereIn('role', ['ca', 'cs', 'agent', 'advocate']);
+                } elseif ($request->role_category === 'guest') {
+                    $q->where('role', 'guest');
+                }
+            })
             ->when($request->status, fn($q) => $q->where('status', '=', $request->status))
             ->when($request->search, fn($q) => $q->where(function ($sq) use ($request) {
                 $sq->where('name',  'like', '%' . $request->search . '%')
@@ -57,14 +98,11 @@ class AdminRepository
 
     public function getUserWithRelations(User $user): User
     {
-        return $user->load(['advocateProfile', 'clerkProfile', 'caProfile', 'documents']);
+        return $user->load(['advocateProfile', 'clerkProfile', 'caProfile']);
     }
 
     public function verifyUser(User $user): void
     {
-        // Automatically approve all pending documents when user is verified
-        $user->documents()->where('status', '=', 'pending')->update(['status' => 'approved']);
-        
         $user->update(['status' => 'active']);
     }
 
@@ -73,59 +111,7 @@ class AdminRepository
         $user->update(['status' => 'rejected']);
     }
 
-    // ── ADVOCATES ────────────────────────────────────────────
-    public function getFilteredAdvocates(Request $request, int $perPage = 20)
-    {
-        return User::query()->with('advocateProfile')
-            ->where('role', '=', 'advocate')
-            ->when($request->status, fn($q) => $q->where('status', '=', $request->status))
-            ->when($request->search, fn($q) => $q->where('name', 'like', '%' . $request->search . '%'))
-            ->latest()
-            ->paginate($perPage);
-    }
 
-    // ── CLERKS ───────────────────────────────────────────────
-    public function getFilteredSupport(Request $request, int $perPage = 20)
-    {
-        return User::query()->with('clerkProfile')
-            ->whereIn('role', ['court_clerk', 'ip_clerk'])
-            ->when($request->status, fn($q) => $q->where('status', '=', $request->status))
-            ->when($request->search, fn($q) => $q->where('name', 'like', '%' . $request->search . '%'))
-            ->latest()
-            ->paginate($perPage);
-    }
-
-    // ── DOCUMENTS ────────────────────────────────────────────
-    public function getPendingDocuments(int $limit = 10)
-    {
-        return Document::query()->with('user')
-            ->where('status', '=', 'pending')
-            ->latest()
-            ->take($limit)
-            ->get();
-    }
-
-    public function getFilteredDocuments(Request $request, int $perPage = 20)
-    {
-        return Document::query()->with('user')
-            ->when($request->status,        fn($q) => $q->where('status', '=', $request->status))
-            ->when($request->document_type, fn($q) => $q->where('document_type', '=', $request->document_type))
-            ->when($request->search,        fn($q) => $q->whereHas(
-                'user',
-                fn($uq) =>
-                $uq->where('name', 'like', '%' . $request->search . '%')
-            ))
-            ->latest()
-            ->paginate($perPage);
-    }
-
-    public function reviewDocument(Document $document, string $status, ?string $reason = null): void
-    {
-        $document->update([
-            'status'           => $status,
-            'rejection_reason' => $reason,
-        ]);
-    }
 
     // ── FEEDBACK ─────────────────────────────────────────────
     public function getFilteredFeedback(Request $request, int $perPage = 20)
