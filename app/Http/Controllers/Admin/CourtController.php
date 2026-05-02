@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\StoreCourtRequest;
+use App\Http\Requests\UpdateCourtRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Court;
 use App\Services\CourtService;
@@ -61,16 +63,9 @@ class CourtController extends Controller
     /**
      * POST /admin/courts — Create a new court (AJAX).
      */
-    public function store(Request $request)
+    public function store(StoreCourtRequest $request)
     {
-        $validated = $request->validate([
-            'name'    => 'required|string|max:255',
-            'type'    => 'required|string|max:100',
-            'area'    => 'required|string|max:255',
-            'city'    => 'required|string|max:100',
-            'state'   => 'nullable|string|max:100',
-            'pincode' => 'required|digits:6',
-        ]);
+        $validated = $request->validated();
 
         try {
             $court = $this->service->store($validated);
@@ -89,16 +84,9 @@ class CourtController extends Controller
     /**
      * PUT /admin/courts/{court} — Update court details (AJAX).
      */
-    public function update(Request $request, Court $court)
+    public function update(UpdateCourtRequest $request, Court $court)
     {
-        $validated = $request->validate([
-            'name'    => 'required|string|max:255',
-            'type'    => 'required|string|max:100',
-            'area'    => 'required|string|max:255',
-            'city'    => 'required|string|max:100',
-            'state'   => 'nullable|string|max:100',
-            'pincode' => 'required|digits:6',
-        ]);
+        $validated = $request->validated();
 
         try {
             $updated = $this->service->update($court, $validated);
@@ -114,26 +102,6 @@ class CourtController extends Controller
         }
     }
 
-    /**
-     * PATCH /admin/courts/{court}/toggle — Toggle active/inactive.
-     */
-    public function toggle(Court $court)
-    {
-        try {
-            $updated = $this->service->toggleActive($court);
-
-            return response()->json([
-                'success'   => true,
-                'is_active' => $updated->is_active,
-                'message'   => $updated->is_active
-                    ? "Court \"{$updated->name}\" is now LIVE."
-                    : "Court \"{$updated->name}\" has been disabled.",
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Court Toggle Error: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Failed to toggle status.'], 500);
-        }
-    }
 
     /**
      * DELETE /admin/courts/{court} — Permanently delete a court.

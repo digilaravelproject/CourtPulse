@@ -9,6 +9,9 @@ class NavigationMenu extends Model
     protected $fillable = [
         'key',
         'label',
+        'route',
+        'type',
+        'icon',
         'is_visible',
         'order'
     ];
@@ -17,7 +20,7 @@ class NavigationMenu extends Model
         'is_visible' => 'boolean',
     ];
 
-    public function scopeVisible($query)
+    public function scopeVisible(\Illuminate\Database\Eloquent\Builder $query)
     {
         return $query->where('is_visible', true)->orderBy('order');
     }

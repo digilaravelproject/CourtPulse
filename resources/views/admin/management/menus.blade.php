@@ -25,30 +25,16 @@
             <div
                 class="bg-navy2 rounded-3xl border border-white/5 shadow-2xl p-8 flex flex-col lg:flex-row items-center justify-between gap-8 group hover:border-blue/20 transition-all duration-300">
 
-                {{-- Left: Order & Route --}}
-                <div class="flex items-center gap-6 w-full lg:w-auto">
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-blue/10 border border-blue/20 flex items-center justify-center text-blue font-black text-xl shrink-0 shadow-[0_0_15px_rgba(180,180,254,0.1)] group-hover:shadow-[0_0_20px_rgba(180,180,254,0.2)] transition-all">
-                        {{ $menu->order }}
-                    </div>
-                    <div>
-                        <div class="text-[0.6rem] text-white/30 font-black uppercase tracking-[0.2em] mb-1.5">Route /
-                            Endpoint</div>
-                        <div class="text-sm font-black text-white uppercase tracking-tight">{{ $menu->route }}</div>
-                    </div>
+                {{-- Left: Label Input --}}
+                <div class="flex flex-col gap-2 min-w-[250px] w-full lg:w-auto">
+                    <label class="text-[0.6rem] font-black text-white/40 uppercase tracking-widest ml-1">Menu
+                        Label</label>
+                    <input type="text" name="label" value="{{ $menu->label }}" id="label-{{ $menu->id }}"
+                        class="bg-navy border border-white/10 rounded-xl px-4 py-3 text-sm font-bold text-white placeholder-white/20 outline-none focus:border-blue focus:ring-1 focus:ring-blue transition-colors shadow-inner w-full">
                 </div>
 
-                {{-- Right: Form Controls --}}
                 {{-- Right: Controls --}}
                 <div class="flex flex-wrap items-end gap-6 w-full lg:w-auto justify-between lg:justify-end">
-
-                    {{-- Label Input --}}
-                    <div class="flex flex-col gap-2 min-w-[200px]">
-                        <label class="text-[0.6rem] font-black text-white/40 uppercase tracking-widest ml-1">Menu
-                            Label</label>
-                        <input type="text" name="label" value="{{ $menu->label }}" id="label-{{ $menu->id }}"
-                            class="bg-navy border border-white/10 rounded-xl px-4 py-3 text-sm font-bold text-white placeholder-white/20 outline-none focus:border-blue focus:ring-1 focus:ring-blue transition-colors shadow-inner">
-                    </div>
 
                     {{-- Visibility Toggle --}}
                     <div class="flex flex-col gap-2">
@@ -71,7 +57,7 @@
                     {{-- Save Button --}}
                     <button type="button"
                         onclick="saveMenu(this, {{ $menu->id }}, '{{ route('admin.manage.menus.update', $menu) }}')"
-                        class="flex items-center gap-2 px-6 py-3 text-xs font-black uppercase tracking-widest bg-blue/10 text-blue border border-blue/20 rounded-xl hover:bg-blue hover:text-navy transition-all shadow-[0_0_15px_rgba(180,180,254,0.1)]">
+                        class="flex items-center gap-2 px-6 py-3 text-xs font-black uppercase tracking-widest bg-blue/10 text-blue border border-blue/20 rounded-xl hover:bg-blue hover:text-navy transition-all shadow-[0_0_15px_rgba(180,180,254,0.15)]">
                         <i class="fas fa-check text-sm"></i> <span>Save</span>
                     </button>
                 </div>

@@ -33,9 +33,6 @@ class CourtService
      */
     public function store(array $validated): Court
     {
-        $validated['created_by'] = Auth::id();
-        $validated['is_active']  = true;
-
         return $this->repo->create($validated);
     }
 
@@ -47,16 +44,6 @@ class CourtService
     public function update(Court $court, array $validated): Court
     {
         return $this->repo->update($court, $validated);
-    }
-
-    // ── TOGGLE ──────────────────────────────────────────────────────────
-
-    /**
-     * Toggle court active/inactive status.
-     */
-    public function toggleActive(Court $court): Court
-    {
-        return $this->repo->toggleActive($court);
     }
 
     // ── DELETE ───────────────────────────────────────────────────────────

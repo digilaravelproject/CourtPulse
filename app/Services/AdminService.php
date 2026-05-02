@@ -60,10 +60,12 @@ class AdminService
         ];
     }
 
+
     public function updateMenu(\App\Models\NavigationMenu $menu, array $data): void
     {
         $this->menuRepo->update($menu, $data);
     }
+
 
     // ── FEEDBACK ─────────────────────────────────────────────
     public function getFeedbackData(Request $request): array

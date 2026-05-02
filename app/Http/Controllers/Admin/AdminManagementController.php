@@ -104,7 +104,7 @@ class AdminManagementController extends Controller
 
         try {
             $this->service->updateMenu($menu, $validated);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => "Menu \"{$menu->label}\" updated successfully!",

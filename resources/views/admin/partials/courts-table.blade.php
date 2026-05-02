@@ -3,9 +3,7 @@
     <thead>
         <tr>
             <th class="text-left">Institution Name</th>
-            <th class="text-left">Type</th>
             <th class="text-left hidden md:table-cell">Location</th>
-            <th class="text-center">Status</th>
             <th class="text-right">Actions</th>
         </tr>
     </thead>
@@ -23,12 +21,6 @@
                     </div>
                 </td>
 
-                {{-- Type --}}
-                <td>
-                    <span class="text-[0.6rem] font-black uppercase tracking-widest text-white/70 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg inline-block">
-                        {{ str_replace('_', ' ', $court->type) }}
-                    </span>
-                </td>
 
                 {{-- Location --}}
                 <td class="hidden md:table-cell">
@@ -37,24 +29,10 @@
                         {{ $court->area ?? '—' }}
                     </div>
                     <div class="text-[0.6rem] text-white/40 font-black uppercase tracking-widest">
-                        {{ $court->city }}{{ $court->state ? ', ' . $court->state : '' }}
+                        {{ $court->city }}{{ $court->pincode ? ' - ' . $court->pincode : '' }}
                     </div>
                 </td>
 
-                {{-- Status Toggle --}}
-                <td class="text-center">
-                    @if($court->is_active)
-                        <button onclick="toggleStatus({{ $court->id }}, this)" title="Click to disable"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 font-black text-[0.6rem] uppercase tracking-widest hover:bg-green-500/20 transition-all cursor-pointer">
-                            <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span> Live
-                        </button>
-                    @else
-                        <button onclick="toggleStatus({{ $court->id }}, this)" title="Click to enable"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 font-black text-[0.6rem] uppercase tracking-widest hover:bg-red-500/20 transition-all cursor-pointer">
-                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Disabled
-                        </button>
-                    @endif
-                </td>
 
                 {{-- Actions --}}
                 <td class="text-right">

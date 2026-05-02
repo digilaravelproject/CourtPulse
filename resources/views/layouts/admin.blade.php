@@ -166,12 +166,13 @@
             {!! navLink('admin.dashboard', 'bi-grid-1x2-fill', 'Dashboard') !!}
 
             <div class="px-6 pt-6 pb-2 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/30">Network</div>
-            {!! navLink('admin.users', 'bi-shield-check', 'Support Staff', null, ['role_category' => 'support']) !!}
-            {!! navLink('admin.users', 'bi-briefcase-fill', 'Professionals', null, ['role_category' => 'professional']) !!}
-            {!! navLink('admin.users', 'bi-people-fill', 'Guest Users', null, ['role_category' => 'guest']) !!}
+            {!! navLink('admin.manage.users', 'bi-shield-check', 'Support Staff', null, ['role_category' => 'support']) !!}
+            {!! navLink('admin.manage.users', 'bi-briefcase-fill', 'Professionals', null, ['role_category' => 'professional']) !!}
+            {!! navLink('admin.manage.users', 'bi-people-fill', 'Guest Users', null, ['role_category' => 'guest']) !!}
 
             <div class="px-6 pt-6 pb-2 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/30">System</div>
             {!! navLink('admin.courts.index', 'bi-buildings-fill', 'Courts Data') !!}
+            {!! navLink('admin.manage.menus', 'bi-list-ul', 'Menu Management') !!}
             {!! navLink('admin.feedback', 'bi-star-fill', 'Feedback') !!}
 
             @php
@@ -233,7 +234,7 @@
         <div class="ml-auto flex items-center gap-4">
             @php $ui = (int) ($pendingCount ?? 0); @endphp
 
-            <a href="{{ route('admin.users') }}?status=pending"
+            <a href="{{ route('admin.manage.users') }}?status=pending"
                 class="relative w-10 h-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 hover:border-blue hover:text-blue hover:bg-blue/5 transition-all group">
                 <i class="bi bi-bell-fill text-lg group-hover:animate-swing"></i>
                 @if ($ui > 0)

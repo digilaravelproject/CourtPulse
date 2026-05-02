@@ -26,7 +26,7 @@
     </style>
 
     <div x-data="{
-        f: { search: '', type: '', state: '' },
+        f: { search: '' },
         loading: false,
         load() {
             this.loading = true;
@@ -47,7 +47,7 @@
                 });
         },
         reset() {
-            this.f = { search: '', type: '', state: '' };
+            this.f = { search: '' };
             this.load();
         }
     }">
@@ -78,30 +78,6 @@
                     class="w-full bg-navy border-white/5 pl-11 pr-4 py-2.5 rounded-xl text-xs font-bold text-white placeholder-white/20 focus:ring-1 focus:ring-blue/50 focus:border-blue/50 transition-all outline-none">
             </div>
 
-            {{-- Type Filter --}}
-            <div class="w-full md:w-48 relative">
-                <select x-model="f.type" @change="load()"
-                    class="w-full bg-navy border-white/5 px-4 py-2.5 rounded-xl text-xs font-bold text-white appearance-none focus:ring-1 focus:ring-blue/50 outline-none cursor-pointer">
-                    <option value="">All Categories</option>
-                    <option value="supreme">Supreme Court</option>
-                    <option value="high">High Court</option>
-                    <option value="district">District Court</option>
-                    <option value="session">Sessions Court</option>
-                    <option value="civil">Civil Court</option>
-                    <option value="criminal">Criminal Court</option>
-                    <option value="family">Family Court</option>
-                    <option value="consumer">Consumer Court</option>
-                    <option value="tribunal">Tribunal</option>
-                </select>
-                <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none text-[0.6rem]"></i>
-            </div>
-
-            {{-- State Filter --}}
-            <div class="w-full md:w-48 relative">
-                <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-white/20 text-xs"></i>
-                <input type="text" x-model="f.state" @input.debounce.400ms="load()" placeholder="Filter by State..."
-                    class="w-full bg-navy border-white/5 pl-10 pr-4 py-2.5 rounded-xl text-xs font-bold text-white placeholder-white/20 focus:ring-1 focus:ring-blue/50 transition-all outline-none">
-            </div>
 
             {{-- Reset --}}
             <button @click="reset()"
@@ -128,39 +104,6 @@
 
 @push('scripts')
     <script>
-        function toggleStatus(id, btn) {
-            const isLive = btn.innerText.toLowerCase().includes('live');
-            if (!confirm(`Are you sure you want to ${isLive ? 'disable' : 'activate'} this institution?`)) return;
-            
-            btn.disabled = true;
-            const orig = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>';
-
-            fetch(`/admin/courts/${id}/toggle`, {
-                    method: 'PATCH',
-                    headers: {
-                        'X-CSRF-TOKEN': CSRF,
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(r => r.json())
-                .then(d => {
-                    if (d.success) {
-                        showToast(d.message, 'ok');
-                        setTimeout(() => window.location.reload(), 600);
-                    } else {
-                        showToast(d.message || 'Error toggling status', 'err');
-                        btn.disabled = false;
-                        btn.innerHTML = orig;
-                    }
-                })
-                .catch(() => {
-                    btn.disabled = false;
-                    btn.innerHTML = orig;
-                    showToast('Something went wrong!', 'err');
-                });
-        }
 
         function deleteCourt(id, btn) {
             if (!confirm('PERMANENTLY DELETE this court? This action cannot be undone.')) return;

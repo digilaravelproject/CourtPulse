@@ -16,11 +16,27 @@ class MenuRepository
     }
 
     /**
+     * Create a new menu item.
+     */
+    public function create(array $data): NavigationMenu
+    {
+        return NavigationMenu::create($data);
+    }
+
+    /**
      * Update a menu item.
      */
     public function update(NavigationMenu $menu, array $data): NavigationMenu
     {
         $menu->update($data);
         return $menu->refresh();
+    }
+
+    /**
+     * Delete a menu item.
+     */
+    public function delete(NavigationMenu $menu): bool
+    {
+        return $menu->forceDelete();
     }
 }

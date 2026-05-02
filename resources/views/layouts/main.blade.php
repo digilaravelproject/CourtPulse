@@ -67,17 +67,35 @@
 
             <!-- Desktop Navigation -->
             <nav class="hidden lg:flex items-center gap-8" aria-label="Main Navigation">
-                <a href="{{ url('/') }}"
-                    class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">Home</a>
-                <a href="{{ url('/#how-it-works') }}"
-                    class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">How
-                    it works</a>
-                <a href="{{ route('find') }}"
-                    class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">Search</a>
-                <a href="{{ route('blogs') }}"
-                    class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">Blogs</a>
-                <a href="{{ route('updates') }}"
-                    class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">Updates</a>
+                @if(($navMenus['home'] ?? null)?->is_visible)
+                    <a href="{{ url('/') }}"
+                        class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">{{ $navMenus['home']->label }}</a>
+                @endif
+                
+                @if(($navMenus['how-it-works'] ?? null)?->is_visible)
+                    <a href="{{ url('/#how-it-works') }}"
+                        class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">{{ $navMenus['how-it-works']->label }}</a>
+                @endif
+
+                @if(($navMenus['search'] ?? null)?->is_visible)
+                    <a href="{{ route('find') }}"
+                        class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">{{ $navMenus['search']->label }}</a>
+                @endif
+
+                @if(($navMenus['blogs'] ?? null)?->is_visible)
+                    <a href="{{ route('blogs') }}"
+                        class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">{{ $navMenus['blogs']->label }}</a>
+                @endif
+
+                @if(($navMenus['updates'] ?? null)?->is_visible)
+                    <a href="{{ route('updates') }}"
+                        class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">{{ $navMenus['updates']->label }}</a>
+                @endif
+
+                @if(($navMenus['contact'] ?? null)?->is_visible)
+                    <a href="{{ route('contact') }}"
+                        class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">{{ $navMenus['contact']->label }}</a>
+                @endif
             </nav>
 
             <!-- Auth Buttons & Mobile Toggle -->
@@ -140,42 +158,59 @@
 
             <!-- Mobile Links -->
             <nav class="flex flex-col gap-2" aria-label="Mobile Navigation">
-                <a href="{{ url('/') }}"
-                    class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
-                    <span><i class="bi bi-house mr-3 opacity-50"></i> Home</span>
-                    <i
-                        class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
-                </a>
-                <a href="{{ url('/#how-it-works') }}"
-                    class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
-                    <span><i class="bi bi-info-circle mr-3 opacity-50"></i> How it works</span>
-                    <i
-                        class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
-                </a>
-                <a href="{{ route('find') }}"
-                    class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
-                    <span><i class="bi bi-search mr-3 opacity-50"></i> Search</span>
-                    <i
-                        class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
-                </a>
-                <a href="{{ route('blogs') }}"
-                    class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
-                    <span><i class="bi bi-journal-text mr-3 opacity-50"></i> Legal Blogs</span>
-                    <i
-                        class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
-                </a>
-                <a href="{{ route('updates') }}"
-                    class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
-                    <span><i class="bi bi-bell mr-3 opacity-50"></i> Latest Updates</span>
-                    <i
-                        class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
-                </a>
-                <a href="{{ url('/contact-us') }}"
-                    class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
-                    <span><i class="bi bi-envelope mr-3 opacity-50"></i> Contact Us</span>
-                    <i
-                        class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
-                </a>
+                @if(($navMenus['home'] ?? null)?->is_visible)
+                    <a href="{{ url('/') }}"
+                        class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
+                        <span><i class="bi bi-house mr-3 opacity-50"></i> {{ $navMenus['home']->label }}</span>
+                        <i
+                            class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
+                    </a>
+                @endif
+
+                @if(($navMenus['how-it-works'] ?? null)?->is_visible)
+                    <a href="{{ url('/#how-it-works') }}"
+                        class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
+                        <span><i class="bi bi-info-circle mr-3 opacity-50"></i> {{ $navMenus['how-it-works']->label }}</span>
+                        <i
+                            class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
+                    </a>
+                @endif
+
+                @if(($navMenus['search'] ?? null)?->is_visible)
+                    <a href="{{ route('find') }}"
+                        class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
+                        <span><i class="bi bi-search mr-3 opacity-50"></i> {{ $navMenus['search']->label }}</span>
+                        <i
+                            class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
+                    </a>
+                @endif
+
+                @if(($navMenus['blogs'] ?? null)?->is_visible)
+                    <a href="{{ route('blogs') }}"
+                        class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
+                        <span><i class="bi bi-journal-text mr-3 opacity-50"></i> {{ $navMenus['blogs']->label }}</span>
+                        <i
+                            class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
+                    </a>
+                @endif
+
+                @if(($navMenus['updates'] ?? null)?->is_visible)
+                    <a href="{{ route('updates') }}"
+                        class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
+                        <span><i class="bi bi-bell mr-3 opacity-50"></i> {{ $navMenus['updates']->label }}</span>
+                        <i
+                            class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
+                    </a>
+                @endif
+
+                @if(($navMenus['contact'] ?? null)?->is_visible)
+                    <a href="{{ url('/contact-us') }}"
+                        class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
+                        <span><i class="bi bi-envelope mr-3 opacity-50"></i> {{ $navMenus['contact']->label }}</span>
+                        <i
+                            class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
+                    </a>
+                @endif
             </nav>
 
             <!-- Mobile Auth Footer -->
@@ -289,15 +324,19 @@
                         class="text-white text-xs font-black uppercase tracking-widest mb-6 border-b border-white/10 pb-4 inline-block pr-8">
                         Platform</h4>
                     <ul class="space-y-4 list-none p-0 text-slate-400 text-xs font-bold uppercase tracking-widest">
+                        @if(($navMenus['home'] ?? null)?->is_visible)
                         <li><a href="{{ url('/') }}"
-                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">Home</a>
+                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">{{ $navMenus['home']->label }}</a>
                         </li>
+                        @endif
+                        @if(($navMenus['how-it-works'] ?? null)?->is_visible)
                         <li><a href="{{ url('/#how-it-works') }}"
-                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">How
-                                it works</a></li>
+                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">{{ $navMenus['how-it-works']->label }}</a></li>
+                        @endif
+                        @if(($navMenus['search'] ?? null)?->is_visible)
                         <li><a href="{{ route('find') }}"
-                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">Search
-                                Support</a></li>
+                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">{{ $navMenus['search']->label }}</a></li>
+                        @endif
                         <li><a href="{{ route('register') }}"
                                 class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">Join
                                 Network</a></li>
@@ -310,18 +349,23 @@
                         class="text-white text-xs font-black uppercase tracking-widest mb-6 border-b border-white/10 pb-4 inline-block pr-8">
                         Resources</h4>
                     <ul class="space-y-4 list-none p-0 text-slate-400 text-xs font-bold uppercase tracking-widest">
+                        @if(($navMenus['updates'] ?? null)?->is_visible)
                         <li><a href="{{ route('updates') }}"
-                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">Court
-                                Updates</a></li>
+                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">{{ $navMenus['updates']->label }}</a></li>
+                        @endif
+                        @if(($navMenus['blogs'] ?? null)?->is_visible)
                         <li><a href="{{ route('blogs') }}"
-                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">Legal
-                                Blogs</a></li>
+                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">{{ $navMenus['blogs']->label }}</a></li>
+                        @endif
+                        @if(($navMenus['contact'] ?? null)?->is_visible)
                         <li><a href="{{ url('/contact-us') }}"
-                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">Contact
-                                Us</a></li>
+                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">{{ $navMenus['contact']->label }}</a></li>
+                        @endif
+                        @if(($navMenus['careers'] ?? null)?->is_visible)
                         <li><a href="{{ route('careers') }}"
-                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">Careers</a>
+                                class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">{{ $navMenus['careers']->label }}</a>
                         </li>
+                        @endif
                     </ul>
                 </div>
 

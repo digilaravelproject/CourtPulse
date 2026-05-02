@@ -8,54 +8,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class CourtRepository
 {
-    // ── READ ─────────────────────────────────────────────────────────────
+    // ── CREATE/UPDATE ───────────────────────────────────────────────────
 
     /**
-     * Get paginated courts with search/filter.
-     */
-    public function getFiltered(Request $request, int $perPage = 20): LengthAwarePaginator
-    {
-        return Court::query()
-            ->when(
-                $request->filled('search'),
-                fn($q) => $q->where('name', 'like', '%' . $request->search . '%')
-            )
-            ->when(
-                $request->filled('type'),
-                fn($q) => $q->where('type', $request->type)
-            )
-            ->when(
-                $request->filled('status'),
-                fn($q) => $q->where('is_active', $request->status === 'active')
-            )
-            ->latest()
-            ->paginate($perPage)
-            ->withQueryString();
-    }
-
-    /**
-     * Active courts for public-facing dropdowns (advocate profile etc.).
-     */
-    public function getActiveList(): \Illuminate\Database\Eloquent\Collection
-    {
-        return Court::query()
-            ->where('is_active', '=', true)
-            ->orderBy('name')
-            ->get(['id', 'name', 'type', 'city', 'state']);
-    }
-
-    /**
-     * Total active courts count (dashboard stats).
-     */
-    public function getTotalActive(): int
-    {
-        return Court::query()->where('is_active', '=', true)->count();
-    }
-
-    // ── WRITE ────────────────────────────────────────────────────────────
-
-    /**
-     * Create a new court record.
+     * Create a new court.
      */
     public function create(array $data): Court
     {
@@ -68,18 +24,42 @@ class CourtRepository
     public function update(Court $court, array $data): Court
     {
         $court->update($data);
-        $court->refresh();
         return $court;
     }
 
+    // ── READ ─────────────────────────────────────────────────────────────
+
     /**
-     * Toggle is_active flag.
+     * Get paginated courts with search/filter.
      */
-    public function toggleActive(Court $court): Court
+    public function getFiltered(Request $request, int $perPage = 20): LengthAwarePaginator
     {
-        $court->update(['is_active' => !$court->is_active]);
-        $court->refresh();
-        return $court;
+        return Court::query()
+            ->when(
+                $request->filled('search'),
+                fn($q) => $q->where('name', 'like', '%' . $request->search . '%')
+            )
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    /**
+     * Active courts for public-facing dropdowns (advocate profile etc.).
+     */
+    public function getActiveList(): \Illuminate\Database\Eloquent\Collection
+    {
+        return Court::query()
+            ->orderBy('name', 'asc')
+            ->get(['id', 'name', 'city', 'area']);
+    }
+
+    /**
+     * Total active courts count (dashboard stats).
+     */
+    public function getTotalActive(): int
+    {
+        return Court::query()->count('*');
     }
 
     /**

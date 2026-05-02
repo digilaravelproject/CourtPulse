@@ -63,35 +63,34 @@
                         @enderror
                     </div>
 
-                    {{-- Court Type --}}
-                    <div>
+                    {{-- Area --}}
+                    <div class="md:col-span-2">
                         <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
-                            Court Type <span class="text-red-400">*</span>
+                            Area
                         </label>
-                        <select name="type" required
+                        <input type="text" name="area" value="{{ old('area') }}"
+                            placeholder="e.g. Bandra East"
                             class="w-full px-3.5 py-2.5 text-sm border rounded-lg transition
                    focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold
-                   {{ $errors->has('type') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-white' }}">
-                            <option value="">— Select Type —</option>
-                            <option value="supreme" {{ old('type') === 'supreme' ? 'selected' : '' }}>Supreme Court
-                            </option>
-                            <option value="high" {{ old('type') === 'high' ? 'selected' : '' }}>High Court</option>
-                            <option value="district" {{ old('type') === 'district' ? 'selected' : '' }}>District Court
-                            </option>
-                            <option value="session" {{ old('type') === 'session' ? 'selected' : '' }}>Sessions Court
-                            </option>
-                            <option value="civil" {{ old('type') === 'civil' ? 'selected' : '' }}>Civil Court</option>
-                            <option value="criminal" {{ old('type') === 'criminal' ? 'selected' : '' }}>Criminal Court
-                            </option>
-                            <option value="family" {{ old('type') === 'family' ? 'selected' : '' }}>Family Court</option>
-                            <option value="consumer" {{ old('type') === 'consumer' ? 'selected' : '' }}>Consumer Court
-                            </option>
-                            <option value="tribunal" {{ old('type') === 'tribunal' ? 'selected' : '' }}>Tribunal</option>
-                        </select>
-                        @error('type')
+                   {{ $errors->has('area') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-white' }}">
+                        @error('area')
                             <p class="mt-1 text-xs text-red-500 flex items-center gap-1">
                                 <i class="bi bi-exclamation-circle"></i> {{ $message }}
                             </p>
+                        @enderror
+                    </div>
+
+                    {{-- City --}}
+                    <div>
+                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
+                            City
+                        </label>
+                        <input type="text" name="city" value="{{ old('city') }}" placeholder="e.g. Mumbai"
+                            class="w-full px-3.5 py-2.5 text-sm border rounded-lg transition
+                   focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold
+                   {{ $errors->has('city') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-white' }}">
+                        @error('city')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -108,77 +107,6 @@
                         @error('pincode')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                         @enderror
-                    </div>
-
-                    {{-- City --}}
-                    <div>
-                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
-                            City <span class="text-red-400">*</span>
-                        </label>
-                        <input type="text" name="city" value="{{ old('city') }}" required placeholder="e.g. Mumbai"
-                            class="w-full px-3.5 py-2.5 text-sm border rounded-lg transition
-                   focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold
-                   {{ $errors->has('city') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-white' }}">
-                        @error('city')
-                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- State --}}
-                    <div>
-                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
-                            State <span class="text-red-400">*</span>
-                        </label>
-                        <input type="text" name="state" value="{{ old('state') }}" required
-                            placeholder="e.g. Maharashtra"
-                            class="w-full px-3.5 py-2.5 text-sm border rounded-lg transition
-                   focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold
-                   {{ $errors->has('state') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-white' }}">
-                        @error('state')
-                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Address --}}
-                    <div class="md:col-span-2">
-                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
-                            Address
-                        </label>
-                        <textarea name="address" rows="2" placeholder="Full Court address"
-                            class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-lg bg-white resize-none
-                   focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition">{{ old('address') }}</textarea>
-                    </div>
-
-                    {{-- Phone --}}
-                    <div>
-                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
-                            Phone
-                        </label>
-                        <div class="relative">
-                            <i class="bi bi-telephone absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                            <input type="text" name="phone" value="{{ old('phone') }}"
-                                placeholder="Court phone number"
-                                class="w-full pl-8 pr-3.5 py-2.5 text-sm border border-slate-200 rounded-lg bg-white
-                     focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition">
-                        </div>
-                    </div>
-
-                    {{-- Email --}}
-                    <div>
-                        <label class="block font-mono text-[0.6rem] tracking-[1.5px] uppercase text-slate-500 mb-1.5">
-                            Email
-                        </label>
-                        <div class="relative">
-                            <i class="bi bi-envelope absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                            <input type="email" name="email" value="{{ old('email') }}"
-                                placeholder="Court email address"
-                                class="w-full pl-8 pr-3.5 py-2.5 text-sm border rounded-lg bg-white transition
-                     focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold
-                     {{ $errors->has('email') ? 'border-red-400' : 'border-slate-200' }}">
-                            @error('email')
-                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                            @enderror
-                        </div>
                     </div>
 
                     {{-- Submit Row --}}
