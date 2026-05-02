@@ -103,8 +103,9 @@ class AuthController extends Controller
 
         if ($request->user_group !== 'guest') {
             $rules['sub_role']         = 'required|string';
-            $rules['experience_years'] = 'required|numeric|min:0';
-            $rules['court_id']         = 'required|exists:courts,id';
+            $rules['experience_years'] = 'nullable|numeric|min:0';
+            $rules['court_ids']        = 'nullable|array';
+            $rules['court_ids.*']      = 'exists:courts,id';
         }
 
         $validated = $request->validate($rules);

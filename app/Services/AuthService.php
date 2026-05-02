@@ -86,9 +86,11 @@ class AuthService
             if ($userGroup === 'guest') {
                 $role = 'guest';
             } else {
-                $role = ($subRole === 'advocate_practicing' || $subRole === 'advocate_non_practicing')
-                    ? 'advocate'
-                    : $subRole;
+                // Default sub_role if null
+                if (!$subRole) {
+                    $subRole = ($userGroup === 'professional') ? 'advocate' : 'court_clerk';
+                }
+                $role = ($subRole === 'advocate') ? 'advocate' : $subRole;
             }
 
             $user = User::create([
@@ -99,11 +101,9 @@ class AuthService
                 'user_group'        => $userGroup,
                 'sub_role'          => $subRole,
                 'role'              => $role,
-                'court_id'          => $data['court_id'] ?? null,
+                'court_id'          => (isset($data['court_ids']) && count($data['court_ids']) > 0) ? $data['court_ids'][0] : null,
+                'court_ids'         => $data['court_ids'] ?? [],
                 'experience_years'  => $data['experience_years'] ?? null,
-                'license_number'    => $data['license_number'] ?? null,
-                'past_employers'    => $data['past_employers'] ?? null,
-                'capabilities'      => $data['capabilities'] ?? null,
                 'registration_step' => 1,
                 'status'            => 'pending',
                 'otp'               => $otp,
