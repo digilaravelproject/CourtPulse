@@ -76,15 +76,17 @@ class AdminRepository
 
     public function getFilteredUsers(Request $request, int $perPage = 20)
     {
-        return User::query()->with(['advocateProfile', 'clerkProfile', 'caProfile'])
+        return User::query()
+            ->whereNotIn('role', ['super_admin', 'admin'], 'and')
+            ->with(['advocateProfile', 'clerkProfile', 'caProfile'])
             ->when($request->role,   fn($q) => $q->where('role', '=', $request->role))
             ->when($request->role_category, function ($q) use ($request) {
                 if ($request->role_category === 'support') {
-                    $q->whereIn('role', ['court_clerk', 'ip_clerk']);
+                    $q->whereIn('role', ['court_clerk', 'ip_clerk'], 'and', false);
                 } elseif ($request->role_category === 'professional') {
-                    $q->whereIn('role', ['ca', 'cs', 'agent', 'advocate']);
+                    $q->whereIn('role', ['ca', 'cs', 'agent', 'advocate'], 'and', false);
                 } elseif ($request->role_category === 'guest') {
-                    $q->where('role', 'guest');
+                    $q->where('role', '=', 'guest');
                 }
             })
             ->when($request->status, fn($q) => $q->where('status', '=', $request->status))

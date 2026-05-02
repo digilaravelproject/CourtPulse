@@ -29,7 +29,7 @@ class CourtController extends Controller
                 ]);
             }
 
-            return view('admin.management.courts', $data);
+            return view('admin.courts.index', $data);
         } catch (\Exception $e) {
             Log::error('Court Index Error: ' . $e->getMessage());
 
@@ -40,6 +40,23 @@ class CourtController extends Controller
             return back()->withErrors(['general' => 'Failed to load courts.']);
         }
     }
+
+    /**
+     * GET /admin/courts/create — Show create form.
+     */
+    public function create()
+    {
+        return view('admin.courts.create');
+    }
+
+    /**
+     * GET /admin/courts/{court}/edit — Show edit form.
+     */
+    public function edit(Court $court)
+    {
+        return view('admin.courts.edit', compact('court'));
+    }
+
 
     /**
      * POST /admin/courts — Create a new court (AJAX).

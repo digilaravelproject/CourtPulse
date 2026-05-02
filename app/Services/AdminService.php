@@ -3,14 +3,14 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Models\Document;
-use App\Repositories\AdminRepository;
 use Illuminate\Http\Request;
 
 class AdminService
 {
     public function __construct(
-        protected AdminRepository $repo
+        protected \App\Repositories\AdminRepository $repo,
+        protected \App\Repositories\MenuRepository $menuRepo,
+        protected \App\Repositories\CourtRepository $courtRepo
     ) {}
 
     // ── DASHBOARD ────────────────────────────────────────────
@@ -18,6 +18,7 @@ class AdminService
     {
         return [
             'stats'           => $this->repo->getDashboardStats(),
+            'courtCount'      => $this->courtRepo->getTotalActive(),
             'recentUsers'     => $this->repo->getRecentUsers(10),
             'pendingCount'    => $this->repo->getPendingCount(),
         ];
@@ -50,7 +51,19 @@ class AdminService
         $this->repo->rejectUser($user);
     }
 
+    // ── MENUS ────────────────────────────────────────────────
+    public function getMenuData(): array
+    {
+        return [
+            'menus'        => $this->menuRepo->getAll(),
+            'pendingCount' => $this->repo->getPendingCount(),
+        ];
+    }
 
+    public function updateMenu(\App\Models\NavigationMenu $menu, array $data): void
+    {
+        $this->menuRepo->update($menu, $data);
+    }
 
     // ── FEEDBACK ─────────────────────────────────────────────
     public function getFeedbackData(Request $request): array

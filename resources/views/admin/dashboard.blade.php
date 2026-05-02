@@ -58,19 +58,19 @@
             </div>
         </div>
 
-        {{-- Total Guests --}}
-        <div class="bg-navy2 rounded-2xl border border-white/5 shadow-2xl p-6 flex items-start justify-between gap-4 hover:-translate-y-1 hover:border-blue/30 transition-all duration-300 group">
+        {{-- Total Courts --}}
+        <div class="bg-navy2 rounded-2xl border border-white/5 shadow-2xl p-6 flex items-start justify-between gap-4 hover:-translate-y-1 hover:border-gold/30 transition-all duration-300 group">
             <div>
-                <div class="text-[0.65rem] font-black tracking-[0.2em] uppercase text-white/50 mb-2 group-hover:text-blue transition-colors">Guest Users</div>
+                <div class="text-[0.65rem] font-black tracking-[0.2em] uppercase text-white/50 mb-2 group-hover:text-gold transition-colors">Registered Courts</div>
                 <div class="font-black text-4xl text-white leading-none mb-3">
-                    {{ number_format($stats['guests'] ?? 0) }}
+                    {{ number_format($courtCount ?? 0) }}
                 </div>
-                <div class="flex items-center gap-1.5 mt-2 text-[0.6rem] font-black uppercase tracking-widest text-white/70 bg-white/5 px-2 py-1 rounded-md border border-white/10 inline-flex">
-                    <i class="fas fa-globe"></i> Public Access
+                <div class="flex items-center gap-1.5 mt-2 text-[0.6rem] font-black uppercase tracking-widest text-gold/70 bg-gold/5 px-2 py-1 rounded-md border border-gold/10 inline-flex">
+                    <i class="fas fa-gavel"></i> Judicial Network
                 </div>
             </div>
-            <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                <i class="fas fa-user text-white/50 text-xl"></i>
+            <div class="w-12 h-12 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <i class="fas fa-university text-gold text-xl"></i>
             </div>
         </div>
     </div>
