@@ -1,111 +1,233 @@
-@extends('layouts.clerk')
-@section('title', 'View Advocates')
-@section('page-title', 'View Advocates')
+@extends('support.layouts.master')
+@section('title', 'Search Advocates')
+@section('page-title', 'Search Advocates')
+
 @section('content')
 
-    @php $hasFeedback = \App\Http\Controllers\FeedbackController::clerkHasFeedback(auth()->id()); @endphp
-
-    <div class="mb-6">
-        <h2 class="font-display font-bold text-slate-800 text-2xl">View Advocates</h2>
-        <p class="text-slate-400 text-sm mt-1">Search and connect with verified advocates.</p>
+<!-- Search Filter Card -->
+<div class="bg-navy2 border border-white/5 rounded-2xl overflow-hidden shadow-sm mb-6">
+    <div class="px-6 py-4 border-b border-white/5 bg-white/2">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fas fa-search-plus text-blue text-sm"></i>
+            Find Advocates
+        </h3>
     </div>
+    <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+            <div>
+                <label class="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mb-2">Court Name</label>
+                <select name="court_id" id="courtId" class="w-full bg-navy border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-blue/50 focus:ring-0 transition-all outline-none appearance-none cursor-pointer">
+                    <option value="">All Courts</option>
+                    @foreach($courts as $court)
+                        <option value="{{ $court->id }}">{{ $court->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mb-2">Court City</label>
+                <select name="court_city" id="courtCity" class="w-full bg-navy border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-blue/50 focus:ring-0 transition-all outline-none appearance-none cursor-pointer">
+                    <option value="">All Cities</option>
+                    @foreach($courts->pluck('city')->unique() as $city)
+                        @if($city)
+                            <option value="{{ $city }}">{{ $city }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mb-2">Court Pincode</label>
+                <select name="court_pincode" id="courtPincode" class="w-full bg-navy border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-blue/50 focus:ring-0 transition-all outline-none appearance-none cursor-pointer">
+                    <option value="">All Pincodes</option>
+                    @foreach($courts->pluck('pincode')->unique() as $pincode)
+                        @if($pincode)
+                            <option value="{{ $pincode }}">{{ $pincode }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="relative pt-2">
+            <label class="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
+                Advocate Name <span class="text-blue/60 lowercase font-medium tracking-normal">(auto-search after 3 characters)</span>
+            </label>
+            <div class="relative">
+                <i class="fas fa-user-tie absolute left-4 top-1/2 -translate-y-1/2 text-white/20 text-xs"></i>
+                <input type="text" name="advocate_name" id="advocateName"
+                    class="w-full bg-navy border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:border-blue/50 focus:ring-0 transition-all outline-none placeholder:text-white/10"
+                    placeholder="Type at least 3 characters to search...">
+            </div>
+        </div>
+    </div>
+</div>
 
-    {{-- Locked Banner --}}
-    @if (!$hasFeedback)
-        <div class="flex items-center gap-4 p-4 mb-6 rounded-2xl border border-red-200 bg-red-50 flex-wrap">
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-red-100 flex-shrink-0">
-                <i class="bi bi-lock-fill text-red-500"></i>
+{{-- Locked Banner --}}
+@if (!$hasFeedback)
+    <div class="bg-red-500/10 border border-red-500/20 rounded-2xl p-6 mb-6 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-4 text-center md:text-left">
+            <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 shrink-0">
+                <i class="fas fa-lock text-xl"></i>
             </div>
-            <div class="flex-1">
-                <div class="font-semibold text-red-700 text-sm">Contact Details Locked</div>
-                <div class="text-slate-500 text-xs mt-0.5">Submit compulsory feedback to unlock advocate contacts.</div>
+            <div>
+                <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-1">Contact Intelligence Restricted</h4>
+                <p class="text-white/40 text-xs uppercase tracking-wider">Provide mandatory node feedback to decrypt advocate contact vectors.</p>
             </div>
-            <a href="{{ route('feedback') }}"
-                class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all flex-shrink-0"
-                style="background:#D4AF37;color:#060C18" onmouseover="this.style.background='#B5952F'"
-                onmouseout="this.style.background='#D4AF37'">
-                Give Feedback →
-            </a>
+        </div>
+        <a href="{{ route('support.feedback') }}" class="px-8 py-3 rounded-xl bg-red-500 text-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-red-600 transition-all">
+            Unlock Data Access
+        </a>
+    </div>
+@endif
+
+<!-- Results Area -->
+<div id="advocatesResults" class="animate-in fade-in slide-in-from-bottom-4 duration-500">
+    @if($advocates->isNotEmpty())
+        @include('support.partials.advocate-list', ['advocates' => $advocates, 'hasFeedback' => $hasFeedback, 'authId' => $authId])
+    @else
+        <div class="bg-navy2 border border-white/5 rounded-2xl p-12 text-center">
+            <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-white/10 text-2xl mx-auto mb-4">
+                <i class="fas fa-search"></i>
+            </div>
+            <h4 class="text-white font-semibold mb-1 uppercase tracking-widest text-sm">No advocates detected</h4>
+            <p class="text-white/40 text-[10px] uppercase tracking-wider">Try adjusting your filters or search parameters.</p>
         </div>
     @endif
+</div>
 
-    {{-- Filters --}}
-    <div x-data="{
-        f: { search: '{{ request('search') }}', high_court: '{{ request('high_court') }}', city: '{{ request('city') }}' },
-        loading: false,
-        doSearch() {
-            this.loading = true;
-            const qs = new URLSearchParams(this.f).toString();
-            fetch('{{ route('clerk.advocates') }}?' + qs, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-                .then(r => r.json())
-                .then(d => {
-                    document.getElementById('advocateGrid').innerHTML = d.html;
-                    this.loading = false;
-                })
-                .catch(() => this.loading = false);
-        },
-        reset() {
-            this.f = { search: '', high_court: '', city: '' };
-            this.doSearch();
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+@endpush
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+(function() {
+    let debounceTimer;
+    const minChars = 3;
+    const resultsContainer = document.getElementById('advocatesResults');
+
+    function searchAdvocates() {
+        resultsContainer.style.opacity = '0.5';
+
+        const params = new URLSearchParams({
+            court_id: document.getElementById('courtId').value,
+            court_city: document.getElementById('courtCity').value,
+            court_pincode: document.getElementById('courtPincode').value,
+            advocate_name: document.getElementById('advocateName').value,
+            category: 'advocate'
+        });
+
+        fetch('{{ route("support.search.advocates") }}?' + params.toString(), {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+            .then(res => res.json())
+            .then(data => {
+                resultsContainer.style.opacity = '1';
+                resultsContainer.innerHTML = data.html;
+                initConnectionButtons();
+            })
+            .catch(err => {
+                resultsContainer.style.opacity = '1';
+                console.error('Search error:', err);
+            });
+    }
+
+    function debounceSearch() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(searchAdvocates, 300);
+    }
+
+    function initConnectionButtons() {
+        document.querySelectorAll('.send-connection-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const userId = this.dataset.userId;
+                const originalContent = this.innerHTML;
+
+                Swal.fire({
+                    title: 'INITIATE CONNECTION',
+                    text: 'Add an optional handshake protocol note:',
+                    input: 'textarea',
+                    inputPlaceholder: 'Brief introduction...',
+                    showCancelButton: true,
+                    confirmButtonText: 'SEND REQUEST',
+                    cancelButtonText: 'ABORT',
+                    confirmButtonColor: '#3B82F6',
+                    cancelButtonColor: '#1E293B',
+                    background: '#0F172A',
+                    color: '#F1F5F9',
+                    customClass: {
+                        popup: 'rounded-4xl border border-white/10',
+                        input: 'bg-navy border-white/10 rounded-xl text-white text-sm focus:border-blue/50'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const notes = result.value || '';
+                        
+                        this.disabled = true;
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                        fetch('{{ route("support.connection.send") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            body: JSON.stringify({ receiver_id: userId, notes: notes })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            Swal.fire({
+                                icon: data.message.includes('successfully') ? 'success' : 'error',
+                                title: data.message.toUpperCase(),
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                background: '#0F172A',
+                                color: '#F1F5F9'
+                            });
+                            if (data.message.includes('successfully')) {
+                                searchAdvocates();
+                            } else {
+                                this.disabled = false;
+                                this.innerHTML = originalContent;
+                            }
+                        })
+                        .catch(err => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'TRANSMISSION FAILED',
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                background: '#0F172A',
+                                color: '#F1F5F9'
+                            });
+                            this.disabled = false;
+                            this.innerHTML = originalContent;
+                        });
+                    }
+                });
+            });
+        });
+    }
+
+    ['courtId', 'courtCity', 'courtPincode'].forEach(id => {
+        document.getElementById(id).addEventListener('change', searchAdvocates);
+    });
+
+    document.getElementById('advocateName').addEventListener('input', function() {
+        if (this.value.length >= minChars) {
+            debounceSearch();
+        } else if (this.value.length === 0) {
+            searchAdvocates();
         }
-    }">
+    });
 
-        <div class="bg-white rounded-2xl border border-slate-200 p-5 mb-5">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                <div>
-                    <label class="block font-mono text-xs tracking-widest uppercase text-slate-400 mb-1.5">Name</label>
-                    <input type="text" x-model="f.search" @input.debounce.400ms="doSearch()"
-                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-700
-                           focus:outline-none focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20 transition"
-                        placeholder="Advocate name...">
-                </div>
-                <div>
-                    <label class="block font-mono text-xs tracking-widest uppercase text-slate-400 mb-1.5">High
-                        Court</label>
-                    <input type="text" x-model="f.high_court" @input.debounce.400ms="doSearch()"
-                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-700
-                           focus:outline-none focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20 transition"
-                        placeholder="e.g. Bombay High Court">
-                </div>
-                <div>
-                    <label class="block font-mono text-xs tracking-widest uppercase text-slate-400 mb-1.5">City</label>
-                    <input type="text" x-model="f.city" @input.debounce.400ms="doSearch()"
-                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-700
-                           focus:outline-none focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20 transition"
-                        placeholder="City...">
-                </div>
-            </div>
-            <div class="flex items-center gap-3">
-                <button @click="doSearch()"
-                    class="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold transition-all"
-                    style="background:#D4AF37;color:#060C18" onmouseover="this.style.background='#B5952F'"
-                    onmouseout="this.style.background='#D4AF37'">
-                    <i class="bi bi-search"></i> Search
-                </button>
-                <button @click="reset()"
-                    class="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold border border-slate-200
-                       text-slate-600 hover:border-slate-300 bg-white transition-all">
-                    <i class="bi bi-x-lg"></i> Clear
-                </button>
-                <div x-show="loading" class="flex items-center gap-2 text-sm text-slate-400">
-                    <svg class="animate-spin w-4 h-4 text-[#D4AF37]" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                            stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-                    </svg>
-                    Searching...
-                </div>
-            </div>
-        </div>
-
-        {{-- Results Grid --}}
-        <div id="advocateGrid">
-            @include('clerk.partials.advocate-list', [
-                'advocates' => $advocates,
-                'hasFeedback' => $hasFeedback,
-            ])
-        </div>
-
-    </div>
+    initConnectionButtons();
+})();
+</script>
+@endpush
 
 @endsection

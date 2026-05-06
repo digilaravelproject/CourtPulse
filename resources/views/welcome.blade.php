@@ -6,7 +6,7 @@
     <header class="relative pt-32 pb-24 overflow-hidden bg-navy group/hero">
         <!-- Premium Hero Background -->
         <div
-            class="absolute inset-0 opacity-20 pointer-events-none scale-105 group-hover/hero:scale-110 transition-transform duration-[15000ms] ease-out">
+            class="absolute inset-0 opacity-20 pointer-events-none scale-105 group-hover/hero:scale-110 transition-transform duration-15000 ease-out">
             <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=1500"
                 class="w-full h-full object-cover grayscale brightness-[0.2]" alt="Legal Tech Background">
         </div>
