@@ -97,22 +97,13 @@ class SupportController extends Controller
                 $validated
             );
 
-            return redirect()->route('support.profile')->with('success', 'Profile updated successfully!');
+            return redirect()->route('clerk.profile')->with('success', 'Profile updated successfully!');
         } catch (\Exception $e) {
             Log::error('Clerk Profile Update Error: ' . $e->getMessage());
             return back()->withErrors(['general' => 'Failed to update profile.']);
         }
     }
 
-    public function documents(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
-    {
-        try {
-            $documents = Document::query()->where('user_id', '=', Auth::id())->latest()->get();
-            return view('support.documents', compact('documents'));
-        } catch (\Exception $e) {
-            return back()->withErrors(['general' => 'Failed to load documents.']);
-        }
-    }
 
     public function feedback(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
     {

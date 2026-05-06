@@ -6,12 +6,13 @@
     @php
         $hasFeedback = \App\Http\Controllers\User\FeedbackController::clerkHasFeedback(auth()->id());
         $firstName = explode(' ', $user->name)[0];
-        $approvedDocs = $documentsStatus['approved'];
-        $pendingDocs = $documentsStatus['pending'];
-        $totalDocs = $documentsStatus['total'];
-        $requiredTotal = 6;
-        $completePct = $requiredTotal > 0 ? min(100, round(($approvedDocs / $requiredTotal) * 100)) : 0;
         $designation = optional($profile)->designation ?? 'Senior Court Clerk';
+        
+        // Calculate profile completeness based on filled fields instead of documents
+        $fields = ['bio', 'experience_years', 'city', 'phone', 'address'];
+        $filled = 0;
+        foreach($fields as $f) if(!empty($user->$f) || ($profile && !empty($profile->$f))) $filled++;
+        $completePct = round(($filled / count($fields)) * 100);
     @endphp
 
     {{-- ── TOP HEADER ── --}}
@@ -32,7 +33,7 @@
                          {{ $user->status === 'active' ? 'bg-green-500' : 'bg-amber-500' }}"></span>
                 </span>
                 <span class="text-sm font-medium text-gray-700">
-                    {{ $user->status === 'active' ? 'Profile Visible' : 'Pending Verification' }}
+                    {{ $user->status === 'active' ? 'Profile Visible' : 'Account Active' }}
                 </span>
             </div>
         </div>
@@ -51,27 +52,15 @@
                             style="width:{{ $completePct }}%"></div>
                     </div>
                     <p class="text-sm text-text-muted-light mb-4">
-                        Complete your profile to increase visibility to top advocates.
-                        @if ($approvedDocs < $requiredTotal)
-                            You are missing:
-                            <span class="font-medium text-gray-700">
-                                {{ $requiredTotal - $approvedDocs }} document(s) pending approval
-                            </span>
-                        @else
-                            Your profile is complete! 🎉
-                        @endif
+                        Complete your profile details to increase visibility to top advocates.
                     </p>
-                    <a href="{{ route('clerk.documents') }}" class="inline-block text-sm bg-gray-900 text-white px-4 py-2 rounded-lg font-medium
+                    <a href="{{ route('clerk.profile') }}" class="inline-block text-sm bg-gray-900 text-white px-4 py-2 rounded-lg font-medium
                       hover:bg-gray-800 transition-colors">
-                        Complete Profile
+                        Update Profile
                     </a>
                 </div>
                 <div class="hidden md:block w-px h-24 bg-gray-200 mx-4"></div>
                 <div class="flex gap-8 md:w-auto w-full justify-around md:justify-start shrink-0">
-                    <div class="text-center">
-                        <p class="text-3xl font-display font-bold text-gray-900">{{ $approvedDocs }}</p>
-                        <p class="text-xs font-medium text-text-muted-light uppercase tracking-wide mt-1">Docs Approved</p>
-                    </div>
                     <div class="text-center">
                         <p class="text-3xl font-display font-bold text-gray-900">
                             {{ $avgRating ? number_format($avgRating, 1) : '—' }}
@@ -215,22 +204,7 @@
                     </div>
                 @endif
 
-                @if ($pendingDocs > 0)
-                    <div class="flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                        <div
-                            class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0">
-                            <span class="material-icons-round text-lg">warning</span>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-900">Documents Pending</p>
-                            <p class="text-sm text-text-muted-light">{{ $pendingDocs }} document(s) pending admin review.
-                                Please check your submissions.</p>
-                            <p class="text-xs text-text-muted-light mt-1">Awaiting review</p>
-                        </div>
-                    </div>
-                @endif
-
-                @if ($user->status === 'active' && $hasFeedback && $pendingDocs === 0)
+                @if ($user->status === 'active' && $hasFeedback)
                     <div class="py-6 text-center text-text-muted-light text-sm">
                         <span class="material-icons-round text-2xl block mb-2 text-gray-300">notifications_none</span>
                         All caught up! No new notifications.
@@ -243,13 +217,13 @@
         <div class="bg-surface-light rounded-2xl p-6 border border-gray-200 shadow-sm">
             <h3 class="font-display font-bold text-xl text-gray-900 mb-4">Quick Actions</h3>
             <div class="space-y-3">
-                <a href="{{ route('clerk.documents') }}" class="w-full flex items-center justify-between p-3 rounded-xl border border-gray-200
+                <a href="{{ route('clerk.profile') }}" class="w-full flex items-center justify-between p-3 rounded-xl border border-gray-200
                     hover:border-primary hover:bg-gray-50 transition-all group">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-purple-100 rounded-lg text-purple-600">
-                            <span class="material-icons-round text-lg">upload_file</span>
+                        <div class="p-2 bg-blue-100 rounded-lg text-blue-600">
+                            <span class="material-icons-round text-lg">edit</span>
                         </div>
-                        <span class="font-medium text-gray-700">Upload Certificates</span>
+                        <span class="font-medium text-gray-700">Update Profile Bio</span>
                     </div>
                     <span
                         class="material-icons-round text-gray-400 group-hover:text-primary transition-colors">chevron_right</span>

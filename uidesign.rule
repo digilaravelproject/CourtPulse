@@ -1,0 +1,123 @@
+CourtPulse / DockIt - Premium Dark Theme Guidelines
+
+This document serves as the absolute source of truth for the CourtPulse/DockIt UI/UX design system. Whenever generating, updating, or fixing a Blade view, the AI MUST strictly adhere to these Tailwind CSS classes and design patterns.
+
+1. Core Philosophy
+
+Theme: Deep Dark Luxury (Navy & Glowing Blue).
+
+Vibe: Professional, Legal, High-End, Glassmorphism, and Highly Readable.
+
+Icons: ALWAYS use FontAwesome 6 (fas, far, fab). NEVER use Bootstrap icons (bi bi-*).
+
+2. Color Palette (Tailwind Custom Colors)
+
+Backgrounds: * Main Body: bg-navy (#050812)
+
+Cards/Containers: bg-navy2 (#080d1a)
+
+Darker Accents: bg-navy3 (#0b1120)
+
+Brand Accents: * Primary: text-blue / bg-blue (#B4B4FE)
+
+Hover/Secondary: bg-blue2 (#9999f0)
+
+Text Colors:
+
+Primary Headings: text-white
+
+Secondary Text/Descriptions: text-white/70, text-white/60, text-white/50
+
+Muted/Labels: text-white/40, text-white/30
+
+Semantic Colors (Always use opacity variants for backgrounds):
+
+Success: text-green-400, bg-green-500/10, border-green-500/20
+
+Danger: text-red-400, bg-red-500/10, border-red-500/20
+
+Warning: text-amber-400, bg-amber-500/10, border-amber-500/20
+
+3. Typography
+
+Font Family: 'Manrope', sans-serif.
+
+Large Page Titles: text-3xl md:text-4xl font-black text-white uppercase tracking-tighter leading-none
+
+Card Headings: font-black text-base text-white uppercase tracking-widest
+
+Small Labels (Form Labels, Mini Titles): text-[10px] or text-[11px], font-black text-white/70 uppercase tracking-widest mb-2
+
+Body/Descriptions: text-xs or text-sm, font-bold text-white/60 leading-relaxed
+
+4. UI Components
+
+4.1. Cards & Containers
+
+Main Wrapper (The outer card): bg-navy2 rounded-3xl border border-white/5 shadow-2xl overflow-hidden
+
+Inner Sections/Panels: bg-navy/50 or bg-white/5, border-b border-white/5, p-6 or p-8
+
+Data Display Cards (Small inner cards): bg-navy rounded-2xl border border-white/5 p-6 shadow-inner
+
+4.2. Form Elements
+
+Input/Select/Textarea Wrapper: Always use relative positioning with an absolute icon inside.
+
+Input Fields: w-full pl-11 pr-4 py-3.5 bg-navy border border-white/10 rounded-xl text-white text-sm font-bold placeholder-white/20 focus:outline-none focus:border-blue focus:ring-1 focus:ring-blue transition-colors shadow-inner
+
+Form Icons (Inside Input): fas fa-[icon-name] absolute left-4 top-1/2 -translate-y-1/2 text-white/30 (Note: for Textareas, use top-4 instead of -translate-y-1/2).
+
+Validation Error Text: mt-1.5 text-[10px] font-bold text-red-400 flex items-center gap-1
+
+4.3. Buttons
+
+Primary Submit/Action Button:
+w-full flex justify-center items-center gap-2 py-3.5 px-6 rounded-xl text-xs font-black text-navy uppercase tracking-widest bg-blue hover:bg-white transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-[0_5px_15px_rgba(180,180,254,0.2)]
+
+Secondary/Cancel Button:
+px-8 py-3.5 text-xs font-black uppercase tracking-widest border border-white/10 rounded-xl hover:bg-white/5 text-white/70 hover:text-white transition-all
+
+Danger Button: Replace bg-blue with bg-red-500 hover:bg-red-400 text-white.
+
+4.4. Badges & Pills (Status/Role)
+
+Base Classes: inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-black text-[0.6rem] uppercase tracking-widest border
+
+Active/Verified: bg-green-500/10 border-green-500/20 text-green-400
+
+Pending/Warning: bg-amber-500/10 border-amber-500/20 text-amber-400
+
+Role (Advocate): bg-blue/10 border-blue/20 text-blue
+
+Role (Clerks): bg-purple-500/10 border-purple-500/20 text-purple-400
+
+4.5. Avatars & Icons
+
+Standard Avatar/Icon Box: w-12 h-12 rounded-xl bg-blue/10 border border-blue/20 flex items-center justify-center text-blue text-lg shrink-0 shadow-[0_0_15px_rgba(180,180,254,0.15)]
+
+Initials text inside Avatar: font-black
+
+4.6. Modals
+
+Overlay: fixed inset-0 bg-navy/80 backdrop-blur-sm z-[2000] transition-opacity
+
+Modal Box: fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(500px,calc(100vw-2rem))] bg-navy2 border border-white/10 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[2001] overflow-hidden
+
+5. Spacing & Dividers
+
+Always use generous padding: p-6, p-8.
+
+Gaps between grid items: gap-6 or gap-8.
+
+Dividers (Horizontal lines): border-t border-white/5 or border-b border-white/5.
+
+6. Strict Development Rules for AI
+
+NO Light Mode Classes: Never use bg-white, text-slate-800, bg-slate-50. Everything must map to the navy, white/opacity, and blue palette.
+
+NO Bootstrap Icons: Automatically convert <i class="bi bi-x"></i> to <i class="fas fa-x"></i>.
+
+Animations: Always apply transition-all duration-300 to interactive elements (buttons, hover cards).
+
+Consistency: Ensure form labels are ALWAYS uppercase with wide tracking (tracking-widest).

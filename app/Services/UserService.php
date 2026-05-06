@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\AdvocateProfile;
 use App\Models\ClerkProfile;
 use App\Models\CaProfile;
-use App\Models\Document;
 use App\Models\ConnectionRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -26,12 +25,6 @@ class UserService
         $role = $user->role;
         $data = [
             'user' => $user,
-            'documentsStatus' => [
-                'total' => Document::query()->where('user_id', '=', $user->id)->count(),
-                'approved' => Document::query()->where('user_id', '=', $user->id)->where('status', '=', 'approved')->count(),
-                'pending' => Document::query()->where('user_id', '=', $user->id)->where('status', '=', 'pending')->count(),
-                'rejected' => Document::query()->where('user_id', '=', $user->id)->where('status', '=', 'rejected')->count(),
-            ],
             'feedbacksReceived' => $user->feedbacksReceived()->latest()->take(5)->get(),
             'avgRating' => (float) $user->feedbacksReceived()->avg('rating'),
         ];

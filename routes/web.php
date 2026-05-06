@@ -114,26 +114,41 @@ Route::middleware(['auth', 'account.status'])->group(function () {
 Route::middleware(['auth', 'account.status'])->group(function () {
 
     // Advocate Role
-    Route::middleware(['role:advocate'])->prefix('advocate')->name('advocate.')->controller(AdvocateController::class)->group(function () {
-        Route::get('/dashboard', 'dashboard')->name('dashboard');
-        Route::get('/profile', 'profile')->name('profile');
-        Route::post('/profile', 'updateProfile')->name('profile.update');
-        Route::get('/search-clerks', 'searchClerks')->name('search.clerks');
+    Route::middleware(['role:advocate'])->prefix('advocate')->name('advocate.')->group(function () {
+        Route::controller(AdvocateController::class)->group(function () {
+            Route::get('/dashboard', 'dashboard')->name('dashboard');
+            Route::get('/profile', 'profile')->name('profile');
+            Route::post('/profile', 'updateProfile')->name('profile.update');
+            Route::get('/search-clerks', 'searchClerks')->name('search.clerks');
+            Route::get('/clerks/{user}', 'viewClerkProfile')->name('clerks.show');
+            Route::get('/guests', 'browseGuests')->name('guests');
+            Route::get('/guests/{user}', 'viewGuestProfile')->name('guests.show');
+        });
     });
 
     // Professional Role (CA/CS, Agent)
-    Route::middleware(['role:ca_cs|agent'])->prefix('professional')->name('professional.')->controller(ProfessionalController::class)->group(function () {
-        Route::get('/dashboard', 'dashboard')->name('dashboard');
-        Route::get('/profile', 'profile')->name('profile');
-        Route::post('/profile', 'updateProfile')->name('profile.update');
+    Route::middleware(['role:ca_cs|agent'])->prefix('professional')->name('ca.')->group(function () {
+        Route::controller(ProfessionalController::class)->group(function () {
+            Route::get('/dashboard', 'dashboard')->name('dashboard');
+            Route::get('/profile', 'profile')->name('profile');
+            Route::post('/profile', 'updateProfile')->name('profile.update');
+            Route::get('/search-advocates', 'searchAdvocates')->name('search.advocates');
+            Route::get('/feedback', 'feedback')->name('feedback');
+        });
     });
 
     // Support Role (Court Clerk, IP Clerk)
-    Route::middleware(['role:court_clerk|ip_clerk'])->prefix('support')->name('support.')->controller(SupportController::class)->group(function () {
-        Route::get('/dashboard', 'dashboard')->name('dashboard');
-        Route::get('/profile', 'profile')->name('profile');
-        Route::post('/profile', 'updateProfile')->name('profile.update');
-        Route::get('/advocates', 'viewAdvocates')->name('advocates');
+    Route::middleware(['role:court_clerk|ip_clerk'])->prefix('support')->name('clerk.')->group(function () {
+        Route::controller(SupportController::class)->group(function () {
+            Route::get('/dashboard', 'dashboard')->name('dashboard');
+            Route::get('/profile', 'profile')->name('profile');
+            Route::post('/profile', 'updateProfile')->name('profile.update');
+            Route::get('/advocates', 'viewAdvocates')->name('advocates');
+            Route::get('/advocates/{user}', 'showAdvocate')->name('advocates.show');
+            Route::get('/guests', 'browseGuests')->name('guests');
+            Route::get('/guests/{user}', 'viewGuestProfile')->name('guests.show');
+            Route::get('/feedback', 'feedback')->name('feedback');
+        });
     });
 
     // Guest Role

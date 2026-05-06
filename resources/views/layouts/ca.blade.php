@@ -456,15 +456,7 @@
                 <div class="logo-sub">CA Panel</div>
             </div>
         </div>
-        @if (auth()->user()->status === 'pending')
-            <div class="mx-3 mt-2 mb-4 rounded-3 px-3 py-2 flex gap-2 align-items-start"
-                style="background:rgba(200,135,42,0.08);border:1px solid rgba(200,135,42,0.2)">
-                <i class="bi bi-clock-history shrink-0 mt-1" style="color:var(--amber);font-size:.9rem"></i>
-                <p class="mb-0" style="color:var(--amber);font-size:.7rem;line-height:1.3;font-weight:600">
-                    Account pending verification. Upload required documents.
-                </p>
-            </div>
-        @endif
+
         <nav class="sidebar-nav">
             <div class="nav-section-label">My Space</div>
             <a href="{{ route('ca.dashboard') }}"
@@ -473,9 +465,7 @@
             <a href="{{ route('ca.profile') }}"
                 class="sidebar-link {{ request()->routeIs('ca.profile*') ? 'active' : '' }}"><i
                     class="bi bi-person-circle"></i> My Profile</a>
-            <a href="{{ route('ca.documents') }}"
-                class="sidebar-link {{ request()->routeIs('ca.documents*') ? 'active' : '' }}"><i
-                    class="bi bi-file-earmark-arrow-up"></i> My Documents</a>
+
             <div class="nav-section-label">Network</div>
             <a href="{{ route('ca.search.advocates') }}"
                 class="sidebar-link {{ request()->routeIs('ca.search*') ? 'active' : '' }}"><i class="bi bi-search"></i>
@@ -500,7 +490,7 @@
         <button class="topbar-toggle" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
         <div class="topbar-title">@yield('page-title', 'Dashboard')</div>
         <div class="topbar-right">
-            <a href="{{ route('ca.documents') }}" class="topbar-btn"><i class="bi bi-file-earmark-check"></i></a>
+
             <a href="{{ route('ca.profile') }}" class="topbar-btn"><i class="bi bi-person"></i></a>
         </div>
     </header>

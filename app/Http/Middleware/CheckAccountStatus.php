@@ -19,7 +19,7 @@ class CheckAccountStatus
         if (Auth::check()) {
             $user = Auth::user();
 
-            // Always allow admins
+            // 1. Always allow admins
             if ($user->isAdmin()) {
                 return $next($request);
             }
@@ -33,7 +33,21 @@ class CheckAccountStatus
                 'logout',
             ];
 
-            // If user is pending or not verified (registration_step 1)
+            // 2. If account is rejected - Force Logout
+            if ($user->status === 'rejected') {
+                Auth::logout();
+                return redirect()->route('login')->withErrors(['email' => 'Your account has been rejected by the admin.']);
+            }
+
+            // 3. If user is active - Always allow them to proceed unless they are on auth/pending screens
+            if ($user->status === 'active') {
+                if (in_array($currentRoute, ['register', 'verification.pending'])) {
+                    return redirect()->route('dashboard');
+                }
+                return $next($request);
+            }
+
+            // 4. If user is still in registration phase (Needs OTP verification)
             if ($user->registration_step === 1 || !$user->email_verified_at) {
                 if (!in_array($currentRoute, $allowedRoutes)) {
                     return redirect()->route('register');
@@ -41,23 +55,12 @@ class CheckAccountStatus
                 return $next($request);
             }
 
-            // If registration complete but admin has not verified status
+            // 5. If registration complete but admin has not verified status
             if ($user->status === 'pending') {
                 if (!in_array($currentRoute, $allowedRoutes)) {
                     return redirect()->route('verification.pending');
                 }
                 return $next($request);
-            }
-
-            // If account is rejected
-            if ($user->status === 'rejected') {
-                Auth::logout();
-                return redirect()->route('login')->withErrors(['email' => 'Your account has been rejected by the admin.']);
-            }
-
-            // Redirect active users away from pending screens
-            if ($user->status === 'active' && in_array($currentRoute, ['verification.pending', 'register'])) {
-                return redirect()->route('dashboard');
             }
         }
 

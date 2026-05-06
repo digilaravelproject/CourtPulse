@@ -84,22 +84,13 @@ class ProfessionalController extends Controller
                 ]
             );
 
-            return redirect()->route('professional.profile')->with('success', 'Profile updated successfully!');
+            return redirect()->route('ca.profile')->with('success', 'Profile updated successfully!');
         } catch (\Exception $e) {
             Log::error('Professional Profile Update Error: ' . $e->getMessage());
             return back()->withErrors(['general' => 'Failed to update profile.']);
         }
     }
 
-    public function documents(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
-    {
-        try {
-            $documents = Document::query()->where('user_id', '=', Auth::id())->latest()->get();
-            return view('professional.documents', compact('documents'));
-        } catch (\Exception $e) {
-            return back()->withErrors(['general' => 'Failed to load documents.']);
-        }
-    }
 
     public function feedback(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
     {
