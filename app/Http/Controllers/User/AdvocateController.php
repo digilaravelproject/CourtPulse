@@ -55,11 +55,11 @@ class AdvocateController extends Controller
                     'current_password' => 'required',
                     'password' => 'required|min:8|confirmed',
                 ]);
-                
+
                 if (! \Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
                     return back()->withErrors(['current_password' => 'Current password is incorrect.']);
                 }
-                
+
                 $this->userService->updateAdvocateProfile($user, ['password' => $request->password]);
                 return back()->with('success', 'Password updated!');
             }
@@ -125,7 +125,7 @@ class AdvocateController extends Controller
     {
         try {
             $authId = Auth::id();
-            
+
             // Set default category for advocate searching clerks
             if (!$request->has('category')) {
                 $request->merge(['category' => 'court_clerk']);

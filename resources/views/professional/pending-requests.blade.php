@@ -1,0 +1,151 @@
+@extends('professional.layouts.master')
+@section('title', 'Pending Requests')
+@section('page-title', 'Network Intelligence')
+
+@section('content')
+<div class="grid lg:grid-cols-2 gap-8 reveal animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <!-- Incoming Requests Section -->
+    <div class="flex flex-col gap-6">
+        <div class="flex items-center justify-between px-4">
+            <h2 class="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Inbound Transmissions</h2>
+            @if($pendingReceived->count() > 0)
+                <span class="px-3 py-1 rounded-full bg-blue/10 border border-blue-500/20 text-blue text-[9px] font-black uppercase tracking-widest animate-pulse">
+                    {{ $pendingReceived->count() }} Signal{{ $pendingReceived->count() > 1 ? 's' : '' }} detected
+                </span>
+            @endif
+        </div>
+
+        <div class="glass rounded-[3rem] p-8 lg:p-10 min-h-[500px] flex flex-col relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue/5 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-blue/10 transition-colors duration-700"></div>
+            
+            @if($pendingReceived->isEmpty())
+                <div class="flex-1 flex flex-col items-center justify-center text-center py-20">
+                    <div class="w-24 h-24 rounded-[2rem] bg-white/2 border border-white/5 flex items-center justify-center mb-8 relative">
+                        <div class="absolute inset-0 bg-blue/5 blur-2xl rounded-full"></div>
+                        <i class="fas fa-satellite-dish text-white/10 text-4xl"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white/40 uppercase tracking-[0.2em] mb-2">Zero Inbound Activity</h3>
+                    <p class="text-[10px] font-bold text-white/20 uppercase tracking-widest leading-relaxed">System is monitoring for external connection attempts</p>
+                </div>
+            @else
+                <div class="flex-1 space-y-5 relative z-10">
+                    @foreach($pendingReceived as $request)
+                        <div class="group/item relative p-6 rounded-[2.5rem] bg-white/2 border border-white/5 hover:bg-white/5 hover:border-blue-500/20 transition-all duration-500 overflow-hidden">
+                            <div class="absolute inset-0 bg-linear-to-br from-blue/5 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity"></div>
+                            
+                            <div class="flex items-start gap-6 relative z-10">
+                                <div class="w-16 h-16 rounded-2xl bg-linear-to-br from-blue/20 to-blue2/10 border border-blue-500/30 flex items-center justify-center text-blue text-2xl font-black shadow-lg shadow-blue/5 group-hover/item:scale-110 transition-transform duration-500">
+                                    {{ strtoupper(substr($request->sender->name, 0, 1)) }}
+                                </div>
+                                
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-start justify-between mb-1">
+                                        <h4 class="text-lg font-bold text-white tracking-tight group-hover/item:text-blue transition-colors">{{ $request->sender->name }}</h4>
+                                        <span class="text-[9px] font-black text-white/20 uppercase tracking-widest pt-1">{{ $request->created_at->diffForHumans() }}</span>
+                                    </div>
+                                    
+                                    <div class="flex flex-wrap items-center gap-3 text-[10px] font-black text-white/40 uppercase tracking-[0.15em]">
+                                        <span class="px-2 py-0.5 rounded-lg bg-blue/10 text-blue border border-blue-500/10">
+                                            {{ $request->sender->sub_role ?? $request->sender->role }}
+                                        </span>
+                                        @if($request->sender->court)
+                                            <span class="w-1 h-1 rounded-full bg-white/10"></span>
+                                            <span class="truncate">{{ $request->sender->court->name }}</span>
+                                        @endif
+                                    </div>
+
+                                    @if($request->notes)
+                                        <div class="mt-4 p-5 rounded-2xl bg-black/40 border border-white/5 relative group-hover/item:border-blue-500/10 transition-colors">
+                                            <i class="fas fa-quote-left absolute -top-2 -left-2 text-blue/20 text-xl"></i>
+                                            <p class="text-[11px] font-bold text-white/50 leading-relaxed italic tracking-wide">
+                                                {{ $request->notes }}
+                                            </p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="mt-8 flex items-center gap-4 relative z-10">
+                                <form action="{{ route('professional.connections.accept', $request->id) }}" method="POST" class="flex-1">
+                                    @csrf
+                                    <button type="submit" class="w-full py-4 rounded-2xl bg-blue text-navy text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white hover:shadow-[0_0_30px_rgba(180,180,254,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+                                        Authorize Connection
+                                    </button>
+                                </form>
+                                <form action="{{ route('professional.connections.reject', $request->id) }}" method="POST" class="shrink-0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="w-14 py-4 rounded-2xl bg-white/5 border border-white/10 text-white/20 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/30 transition-all duration-300" title="Decline Request">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <!-- Outgoing Requests Section -->
+    <div class="flex flex-col gap-6">
+        <div class="px-4">
+            <h2 class="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Outbound Signals</h2>
+        </div>
+
+        <div class="glass rounded-[3rem] p-8 lg:p-10 min-h-[500px] flex flex-col relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-fuchsia-500/5 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-fuchsia-500/10 transition-colors duration-700"></div>
+
+            @if($pendingSent->isEmpty())
+                <div class="flex-1 flex flex-col items-center justify-center text-center py-20">
+                    <div class="w-24 h-24 rounded-[2rem] bg-white/2 border border-white/5 flex items-center justify-center mb-8 relative">
+                        <div class="absolute inset-0 bg-fuchsia-500/5 blur-2xl rounded-full"></div>
+                        <i class="fas fa-paper-plane text-white/10 text-4xl"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white/40 uppercase tracking-[0.2em] mb-2">No Active Broadcasts</h3>
+                    <p class="text-[10px] font-bold text-white/20 uppercase tracking-widest leading-relaxed">Search for professionals to establish new connections</p>
+                </div>
+            @else
+                <div class="flex-1 space-y-4 relative z-10">
+                    @foreach($pendingSent as $request)
+                        <div class="group/item relative p-6 rounded-[2.5rem] bg-white/2 border border-white/5 hover:bg-white/5 hover:border-fuchsia-500/20 transition-all duration-500">
+                            <div class="flex items-center gap-6">
+                                <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/20 text-2xl font-black group-hover/item:bg-fuchsia-500/10 group-hover/item:text-fuchsia-400 group-hover/item:border-fuchsia-500/20 transition-all duration-500">
+                                    {{ strtoupper(substr($request->receiver->name, 0, 1)) }}
+                                </div>
+                                
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-base font-bold text-white tracking-tight mb-1 group-hover/item:text-fuchsia-400 transition-colors">{{ $request->receiver->name }}</h4>
+                                    <div class="flex items-center gap-3 text-[10px] font-black text-white/40 uppercase tracking-widest">
+                                        <span>{{ $request->receiver->sub_role ?? $request->receiver->role }}</span>
+                                        <span class="w-1.5 h-1.5 rounded-full bg-fuchsia-500 animate-pulse shadow-[0_0_10px_rgba(217,70,239,0.5)]"></span>
+                                        <span class="text-fuchsia-400/70 tracking-[0.15em]">Pending Verification</span>
+                                    </div>
+                                </div>
+
+                                <form action="{{ route('professional.connections.reject', $request->id) }}" method="POST" class="shrink-0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/20 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/30 transition-all duration-300" title="Retract Signal">
+                                        <i class="fas fa-trash-alt text-sm"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('styles')
+<style>
+    @keyframes reveal {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { animation: reveal 0.8s cubic-bezier(0.2, 1, 0.3, 1) forwards; }
+</style>
+@endpush

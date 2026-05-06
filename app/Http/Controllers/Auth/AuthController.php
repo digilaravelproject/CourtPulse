@@ -181,7 +181,7 @@ class AuthController extends Controller
         return match ($user->role) {
             'super_admin' => route('super.dashboard'),
             'admin'       => route('admin.dashboard'),
-            'advocate'    => route('advocate.dashboard'),
+            'advocate'    => route('professional.dashboard'),
             'ca_cs'       => route('professional.dashboard'),
             'agent'       => route('professional.dashboard'),
             'court_clerk' => route('support.dashboard'),

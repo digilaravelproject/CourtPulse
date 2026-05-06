@@ -67,6 +67,14 @@ class CourtService
     }
 
     /**
+     * Search for courts based on filters.
+     */
+    public function searchCourts(array $filters)
+    {
+        return $this->repo->getFiltered(new Request($filters));
+    }
+
+    /**
      * Total active courts count.
      */
     public function getTotalActive(): int

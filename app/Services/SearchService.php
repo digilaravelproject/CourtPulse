@@ -34,52 +34,65 @@ class SearchService
         });
 
         // Global Filters
-        $query->when($filters['search'] ?? null, function ($q, $search) {
-            return $q->where('name', 'like', "%{$search}%");
+        $query->when($filters['court_id'] ?? null, function ($q, $courtId) {
+            return $q->where('court_id', $courtId);
         });
 
         $query->when($filters['city'] ?? null, function ($q, $city) {
             return $q->where('city', 'like', "%{$city}%");
         });
 
-        $query->when($filters['state'] ?? null, function ($q, $state) {
-            return $q->where('state', 'like', "%{$state}%");
+        $query->when($filters['pincode'] ?? null, function ($q, $pincode) {
+            return $q->where('pincode', $pincode);
         });
 
-        $query->when($filters['domain'] ?? null, function ($q, $domain) {
-            return $q->where('capabilities', 'like', "%{$domain}%");
-        });
-
-        $query->when($filters['exp'] ?? null, function ($q, $exp) {
-            return $q->where('experience_years', '>=', $exp);
+        $query->when($filters['search'] ?? $filters['name'] ?? null, function ($q, $search) {
+            return $q->where('name', 'like', "%{$search}%");
         });
 
         // Specific Court/Profile Filters
-        if ($category === 'advocate') {
-            $query->when($filters['practice_area'] ?? null, function ($q, $area) {
-                return $q->whereHas('advocateProfile', function ($sq) use ($area) {
-                    $sq->whereJsonContains('practice_areas', $area);
-                });
+        $query->when($filters['court_name'] ?? null, function ($q, $courtName) {
+            return $q->whereHas('court', function ($sq) use ($courtName) {
+                $sq->where('name', 'like', "%{$courtName}%");
+            })
+            ->orWhereHas('clerkProfile', function ($sq) use ($courtName) {
+                $sq->where('court_name', 'like', "%{$courtName}%");
+            })
+            ->orWhereHas('advocateProfile', function ($sq) use ($courtName) {
+                $sq->where('high_court', 'like', "%{$courtName}%");
             });
-        }
+        });
 
-        if (in_array($category, ['court_clerk', 'advocate'])) {
-            $query->when($filters['court'] ?? null, function ($q, $court) {
-                return $q->where(function ($sub) use ($court) {
-                    $sub->whereHas('clerkProfile', function ($sq) use ($court) {
-                        $sq->where('court_name', 'like', "%{$court}%");
-                    })
-                    ->orWhereHas('advocateProfile', function ($sq) use ($court) {
-                        $sq->where('high_court', 'like', "%{$court}%");
-                    });
-                });
-            });
-        }
-
-        return $query->with(['clerkProfile', 'advocateProfile', 'caProfile'])
+        return $query->with(['clerkProfile', 'advocateProfile', 'caProfile', 'court'])
                     ->withCount('feedbacksReceived')
                     ->latest()
                     ->paginate(12)
                     ->appends($filters);
+    }
+
+    /**
+     * Search for courts directly.
+     */
+    public function searchCourts(array $filters)
+    {
+        return \App\Models\Court::query()
+            ->when($filters['search'] ?? $filters['name'] ?? null, function ($q, $search) {
+                $q->where('name', 'like', "%{$search}%");
+            })
+            ->when($filters['city'] ?? null, function ($q, $city) {
+                $q->where('city', 'like', "%{$city}%");
+            })
+            ->when($filters['state'] ?? null, function ($q, $state) {
+                $q->where('state', 'like', "%{$state}%");
+            })
+            ->when($filters['pincode'] ?? null, function ($q, $pincode) {
+                $q->where('pincode', $pincode);
+            })
+            ->when($filters['area'] ?? null, function ($q, $area) {
+                $q->where('area', 'like', "%{$area}%");
+            })
+            ->latest()
+            ->paginate(12)
+            ->appends($filters);
     }
 }

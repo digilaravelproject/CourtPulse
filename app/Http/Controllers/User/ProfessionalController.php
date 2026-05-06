@@ -3,120 +3,353 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdvocateProfile;
+use App\Models\CaProfile;
+use App\Models\ConnectionRequest;
+use App\Models\Feedback;
 use App\Models\User;
-use App\Models\Document;
-use App\Services\UserService;
+use App\Services\CourtService;
 use App\Services\SearchService;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProfessionalController extends Controller
 {
     protected UserService $userService;
+
     protected SearchService $searchService;
 
-    public function __construct(UserService $userService, SearchService $searchService)
-    {
+    protected CourtService $courtService;
+
+    public function __construct(
+        UserService $userService,
+        SearchService $searchService,
+        CourtService $courtService
+    ) {
         $this->userService = $userService;
         $this->searchService = $searchService;
+        $this->courtService = $courtService;
     }
 
-    public function dashboard(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
-    {
-        try {
-            $data = $this->userService->getDashboardData(Auth::user());
-            $data['feedbackCount'] = Auth::user()->feedbacksGiven()->count();
-            return view('professional.dashboard', $data);
-        } catch (\Exception $e) {
-            Log::error('Professional Dashboard Error: ' . $e->getMessage());
-            return back()->withErrors(['general' => 'Failed to load dashboard.']);
-        }
-    }
-
-    public function profile(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+    public function dashboard()
     {
         try {
             $user = Auth::user();
-            $profile = $user->caProfile ?? new \App\Models\CaProfile();
+
+            $totalConnections = ConnectionRequest::query()
+                ->where('status', 'accepted')
+                ->where(function ($q) use ($user) {
+                    $q->where('sender_id', $user->id)->orWhere('receiver_id', $user->id);
+                })->count();
+
+            $pendingRequests = ConnectionRequest::query()
+                ->where('receiver_id', $user->id)
+                ->where('status', 'pending')
+                ->with('sender')
+                ->count();
+
+            $clerksConnected = ConnectionRequest::query()
+                ->where('status', 'accepted')
+                ->where(function ($q) use ($user) {
+                    $q->where('sender_id', $user->id)->orWhere('receiver_id', $user->id);
+                })
+                ->with(['sender', 'receiver'])
+                ->get()
+                ->filter(function ($r) use ($user) {
+                    $other = $r->sender_id === $user->id ? $r->receiver : $r->sender;
+                    return $other && in_array($other->role, ['court_clerk', 'ip_clerk']);
+                })->count();
+
+            $feedbacksReceived = $user->feedbacksReceived()->count();
+            $avgRating = $user->feedbacksReceived()->avg('rating') ?? 0;
+
+            $profile = match($user->role) {
+                'advocate' => $user->advocateProfile,
+                'ca_cs'    => $user->caProfile,
+                default    => null
+            };
+
+            return view('professional.dashboard', compact(
+                'totalConnections',
+                'pendingRequests',
+                'clerksConnected',
+                'feedbacksReceived',
+                'avgRating',
+                'profile'
+            ));
+        } catch (\Exception $e) {
+            Log::error('Professional Dashboard Error: ' . $e->getMessage());
+            return view('professional.dashboard', [
+                'totalConnections' => 0,
+                'pendingRequests' => 0,
+                'clerksConnected' => 0,
+                'feedbacksReceived' => 0,
+                'avgRating' => 0,
+                'profile' => null,
+            ])->with('error', 'Failed to load dashboard data.');
+        }
+    }
+
+    public function profile()
+    {
+        try {
+            $user = Auth::user();
+            $profile = match($user->role) {
+                'advocate' => $user->advocateProfile ?? new AdvocateProfile(),
+                'ca_cs'    => $user->caProfile ?? new CaProfile(),
+                default    => null
+            };
+
             return view('professional.profile', compact('user', 'profile'));
         } catch (\Exception $e) {
-            Log::error('Professional Profile View Error: ' . $e->getMessage());
+            Log::error('Professional Profile View Error: '.$e->getMessage());
             return back()->withErrors(['general' => 'Failed to load profile.']);
         }
     }
 
-    public function updateProfile(Request $request): \Illuminate\Http\RedirectResponse
+    public function updateProfile(Request $request)
     {
+        DB::beginTransaction();
         try {
-            $validated = $request->validate([
-                'firm_name' => 'nullable|string|max:255',
-                'membership_number' => 'required|string|max:100',
-                'icai_region' => 'required|string|max:100',
-                'membership_date' => 'required|date',
-                'experience_years' => 'nullable|integer|min:0|max:50',
-                'bio' => 'nullable|string|max:2000',
-                'office_address' => 'nullable|string|max:500',
-                'city' => 'nullable|string|max:100',
-                'state' => 'nullable|string|max:100',
-            ]);
-
             $user = Auth::user();
 
-            if ($request->city || $request->state) {
-                User::query()->where('id', '=', $user->id)->update([
-                    'city' => $request->city,
-                    'state' => $request->state,
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:users,email,'.$user->id,
+                'phone_number' => 'required|string|max:20',
+            ]);
+
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone_number,
+                'city' => $request->city,
+                'state' => $request->state,
+                'address' => $request->address,
+                'pincode' => $request->pincode,
+            ]);
+
+            if ($user->role === 'advocate') {
+                AdvocateProfile::query()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'bar_council_number' => $request->membership_number,
+                        'enrollment_number' => $request->enrollment_number,
+                        'enrollment_date' => $request->membership_date,
+                        'experience_years' => $request->experience_years,
+                        'bio' => $request->bio,
+                        'office_address' => $request->office_address,
+                    ]
+                );
+            } elseif ($user->role === 'ca_cs') {
+                CaProfile::query()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'firm_name' => $request->firm_name,
+                        'membership_number' => $request->membership_number,
+                        'icai_region' => $request->icai_region,
+                        'membership_date' => $request->membership_date,
+                        'experience_years' => $request->experience_years,
+                        'bio' => $request->bio,
+                        'office_address' => $request->office_address,
+                    ]
+                );
+            }
+
+            DB::commit();
+            return redirect()->route('professional.profile')->with('success', 'Profile updated successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Professional Profile Update Error: '.$e->getMessage());
+
+            return back()->withErrors(['general' => 'Failed to update profile.'])->withInput();
+        }
+    }
+
+    public function settings()
+    {
+        return view('professional.settings');
+    }
+
+    public function pendingRequests()
+    {
+        try {
+            $user = Auth::user();
+
+            $pendingReceived = ConnectionRequest::query()
+                ->where('receiver_id', $user->id)
+                ->where('status', 'pending')
+                ->with('sender')
+                ->latest()
+                ->get();
+
+            $pendingSent = ConnectionRequest::query()
+                ->where('sender_id', $user->id)
+                ->where('status', 'pending')
+                ->with('receiver')
+                ->latest()
+                ->get();
+
+            return view('professional.pending-requests', compact('pendingReceived', 'pendingSent'));
+        } catch (\Exception $e) {
+            Log::error('Professional Pending Requests Error: '.$e->getMessage());
+
+            return back()->withErrors(['general' => 'Failed to load pending requests.']);
+        }
+    }
+
+    public function acceptRequest($id)
+    {
+        DB::beginTransaction();
+        try {
+            $connectionRequest = ConnectionRequest::findOrFail($id);
+            $user = Auth::user();
+
+            if ($connectionRequest->receiver_id !== $user->id) {
+                return back()->withErrors(['general' => 'Unauthorized.']);
+            }
+
+            $connectionRequest->update(['status' => 'accepted']);
+
+            DB::commit();
+            return back()->with('success', 'Connection request accepted!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Accept Request Error: '.$e->getMessage());
+            return back()->withErrors(['general' => 'Failed to accept request.']);
+        }
+    }
+
+    public function rejectRequest($id)
+    {
+        DB::beginTransaction();
+        try {
+            $connectionRequest = ConnectionRequest::findOrFail($id);
+            $user = Auth::user();
+
+            // Authorization check: either sender or receiver can retract/reject
+            if ($connectionRequest->receiver_id !== $user->id && $connectionRequest->sender_id !== $user->id) {
+                return back()->withErrors(['general' => 'Unauthorized access.']);
+            }
+
+            $connectionRequest->delete();
+
+            DB::commit();
+            return back()->with('success', 'Connection request removed successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Reject Request Error: ' . $e->getMessage());
+            return back()->withErrors(['general' => 'Failed to process the request.']);
+        }
+    }
+
+    public function myConnections()
+    {
+        try {
+            $user = Auth::user();
+
+            $connected = ConnectionRequest::query()
+                ->where('status', 'accepted')
+                ->where(function ($q) use ($user) {
+                    $q->where('sender_id', $user->id)->orWhere('receiver_id', $user->id);
+                })
+                ->with(['sender', 'receiver', 'sender.clerkProfile', 'receiver.clerkProfile', 'sender.court', 'receiver.court'])
+                ->latest()
+                ->get()
+                ->map(fn ($r) => $r->sender_id === $user->id ? $r->receiver : $r->sender)
+                ->filter(); // Ensure no nulls if a user was deleted
+
+            return view('professional.connections', [
+                'connected' => $connected
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Professional My Connections Error: ' . $e->getMessage());
+            return view('professional.connections', [
+                'connected' => collect([])
+            ])->with('error', 'Failed to load connections.');
+        }
+    }
+
+    public function searchClerks(Request $request)
+    {
+        try {
+            $courts = $this->courtService->getActiveList();
+            
+            $filters = [
+                'category' => 'court_clerk',
+                'court_id' => $request->court_id,
+                'city'     => $request->court_city,
+                'pincode'  => $request->court_pincode,
+                'name'     => $request->clerk_name,
+            ];
+
+            $results = $this->searchService->search($filters);
+            $clerks = $results->getCollection();
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'html' => view('professional.partials.clerk-list', compact('clerks'))->render(),
                 ]);
             }
 
-            \App\Models\CaProfile::query()->updateOrCreate(
-                ['user_id' => $user->id],
-                [
-                    'firm_name' => $validated['firm_name'],
-                    'membership_number' => $validated['membership_number'],
-                    'icai_region' => $validated['icai_region'],
-                    'membership_date' => $validated['membership_date'],
-                    'experience_years' => $validated['experience_years'] ?? 0,
-                    'bio' => $validated['bio'],
-                    'office_address' => $validated['office_address'],
-                    'ca_type' => $request->ca_type ?? 'Individual',
-                ]
-            );
-
-            return redirect()->route('ca.profile')->with('success', 'Profile updated successfully!');
+            return view('professional.search-clerks', compact('courts', 'clerks'));
         } catch (\Exception $e) {
-            Log::error('Professional Profile Update Error: ' . $e->getMessage());
-            return back()->withErrors(['general' => 'Failed to update profile.']);
+            Log::error('Search Clerks Error: '.$e->getMessage());
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Search failed.'], 500);
+            }
+            return back()->withErrors(['general' => 'Failed to search clerks.']);
+        }
+    }
+
+    public function searchCourts(Request $request)
+    {
+        try {
+            $filters = [
+                'search' => $request->search,
+                'city'   => $request->city,
+                'state'  => $request->state,
+            ];
+
+            $courts = $this->courtService->searchCourts($filters);
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'html' => view('professional.partials.court-list', compact('courts'))->render(),
+                ]);
+            }
+
+            return view('professional.search-courts', compact('courts'));
+        } catch (\Exception $e) {
+            Log::error('Search Courts Error: '.$e->getMessage());
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Search failed.'], 500);
+            }
+            return back()->withErrors(['general' => 'Failed to search courts.']);
         }
     }
 
 
-    public function feedback(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+    public function searchAdvocates(Request $request)
     {
         try {
-            $advocates = User::query()->where('role', '=', 'advocate')->where('status', '=', 'active')->get();
-            $myFeedbacks = Auth::user()->feedbacksGiven()->with('receiver')->latest()->get();
-            return view('professional.feedback', compact('advocates', 'myFeedbacks'));
-        } catch (\Exception $e) {
-            return back()->withErrors(['general' => 'Failed to load feedback page.']);
-        }
-    }
+            $courts = $this->courtService->getActiveList();
+            
+            $filters = [
+                'category' => 'advocate',
+                'court_id' => $request->court_id,
+                'city'     => $request->court_city,
+                'pincode'  => $request->court_pincode,
+                'name'     => $request->advocate_name,
+            ];
 
-    public function searchAdvocates(Request $request): \Illuminate\View\View|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
-    {
-        try {
-            // Set default category for Professional searching advocates
-            if (!$request->has('category')) {
-                $request->merge(['category' => 'advocate']);
-            }
-
-            // Map custom internal fields to service expected fields
-            if ($request->has('high_court')) {
-                $request->merge(['court' => $request->high_court]);
-            }
-
-            $advocates = $this->searchService->search($request->all());
+            $results = $this->searchService->search($filters);
+            $advocates = $results->getCollection();
 
             if ($request->ajax()) {
                 return response()->json([
@@ -125,10 +358,164 @@ class ProfessionalController extends Controller
                 ]);
             }
 
-            return view('professional.search-advocates', compact('advocates'));
+            return view('professional.search-advocates', compact('courts', 'advocates'));
         } catch (\Exception $e) {
-            Log::error('Professional Search Advocates Error: ' . $e->getMessage());
+            Log::error('Search Advocates Error: '.$e->getMessage());
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Search failed.'], 500);
+            }
             return back()->withErrors(['general' => 'Failed to search advocates.']);
+        }
+    }
+
+
+    public function viewUserProfile(User $user)
+    {
+        try {
+            $user->load(['clerkProfile', 'advocateProfile', 'caProfile', 'court']);
+            $authId = Auth::id();
+
+            $connectionStatus = ConnectionRequest::getStatus((int) $authId, (int) $user->id);
+            $connectionReq = ConnectionRequest::query()->where(function ($q) use ($authId, $user) {
+                $q->where('sender_id', $authId)->where('receiver_id', $user->id);
+            })->orWhere(function ($q) use ($authId, $user) {
+                $q->where('sender_id', $user->id)->where('receiver_id', $authId);
+            })->first();
+
+            $isConnected = ($connectionStatus === 'connected');
+
+            $feedbacks = $user->feedbacksReceived()
+                ->with('giver')
+                ->latest()
+                ->get();
+
+            $avgRating = $feedbacks->avg('rating') ?? 0;
+            $totalRatings = $feedbacks->count();
+
+            return view('professional.user-profile', [
+                'targetUser' => $user,
+                'isConnected' => $isConnected,
+                'connectionStatus' => $connectionStatus,
+                'connectionReq' => $connectionReq,
+                'feedbacks' => $feedbacks,
+                'avgRating' => $avgRating,
+                'totalRatings' => $totalRatings
+            ]);
+        } catch (\Exception $e) {
+            Log::error('View User Profile Error: '.$e->getMessage());
+
+            return back()->withErrors(['general' => 'Failed to load user profile.']);
+        }
+    }
+
+    public function sendConnection(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $sender = Auth::user();
+            $receiver = User::query()->findOrFail($request->receiver_id);
+
+            $alreadyExists = ConnectionRequest::query()->where(function ($q) use ($sender, $receiver) {
+                $q->where('sender_id', $sender->id)->where('receiver_id', $receiver->id);
+            })->orWhere(function ($q) use ($sender, $receiver) {
+                $q->where('sender_id', $receiver->id)->where('receiver_id', $sender->id);
+            })->exists();
+
+            if ($alreadyExists) {
+                return response()->json(['message' => 'Request already sent or connected.'], 400);
+            }
+
+            ConnectionRequest::query()->create([
+                'sender_id' => $sender->id,
+                'receiver_id' => $receiver->id,
+                'status' => 'pending',
+                'notes' => $request->notes,
+            ]);
+
+            DB::commit();
+            return response()->json(['message' => 'Connection request sent successfully!']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Send Connection Error: '.$e->getMessage());
+
+            return response()->json(['message' => 'Failed to send request.'], 500);
+        }
+    }
+
+    public function feedback()
+    {
+        try {
+            $user = Auth::user();
+
+            $connectedUsers = ConnectionRequest::query()
+                ->where('status', 'accepted')
+                ->where(function ($q) use ($user) {
+                    $q->where('sender_id', $user->id)->orWhere('receiver_id', $user->id);
+                })
+                ->with(['sender', 'receiver'])
+                ->get()
+                ->map(fn ($r) => $r->sender_id === $user->id ? $r->receiver : $r->sender)
+                ->filter(fn ($u) => $u && in_array($u->role, ['court_clerk', 'ip_clerk', 'advocate']))
+                ->values();
+
+            $myFeedbacks = Feedback::query()
+                ->where('given_by', $user->id)
+                ->with('receiver')
+                ->latest()
+                ->get();
+
+            return view('professional.feedback', compact('connectedUsers', 'myFeedbacks'));
+        } catch (\Exception $e) {
+            Log::error('Professional Feedback View Error: '.$e->getMessage());
+            return back()->withErrors(['general' => 'Failed to load feedback page.']);
+        }
+    }
+
+    public function submitFeedback(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $request->validate([
+                'receiver_id' => 'required|exists:users,id',
+                'rating' => 'required|integer|min:1|max:5',
+                'comment' => 'nullable|string|max:1000',
+            ]);
+
+            $user = Auth::user();
+
+            $isConnected = ConnectionRequest::areConnected((int) $user->id, (int) $request->receiver_id);
+            if (! $isConnected) {
+                return back()->withErrors(['general' => 'You can only give feedback to connected users.']);
+            }
+
+            $existingFeedback = Feedback::query()
+                ->where('given_by', $user->id)
+                ->where('given_to', $request->receiver_id)
+                ->first();
+
+            if ($existingFeedback) {
+                $existingFeedback->update([
+                    'rating' => $request->rating,
+                    'comment' => $request->comment,
+                ]);
+                $message = 'Feedback updated successfully!';
+            } else {
+                Feedback::query()->create([
+                    'given_by' => $user->id,
+                    'given_to' => $request->receiver_id,
+                    'rating' => $request->rating,
+                    'comment' => $request->comment,
+                ]);
+                $message = 'Feedback submitted successfully!';
+            }
+
+            DB::commit();
+            return back()->with('success', $message);
+        } catch (\Exception $e) {
+            DB::rollBack();
+                Log::error('Submit Feedback Error: '.$e->getMessage());
+
+            return back()->withErrors(['general' => 'Failed to submit feedback.']);
         }
     }
 }

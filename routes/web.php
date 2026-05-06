@@ -10,7 +10,6 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
-use App\Http\Controllers\User\AdvocateController;
 use App\Http\Controllers\User\ConnectionController;
 use App\Http\Controllers\User\FeedbackController as UserFeedbackController;
 use App\Http\Controllers\User\GuestController;
@@ -113,28 +112,41 @@ Route::middleware(['auth', 'account.status'])->group(function () {
 */
 Route::middleware(['auth', 'account.status'])->group(function () {
 
-    // Advocate Role
-    Route::middleware(['role:advocate'])->prefix('advocate')->name('advocate.')->group(function () {
-        Route::controller(AdvocateController::class)->group(function () {
-            Route::get('/dashboard', 'dashboard')->name('dashboard');
-            Route::get('/profile', 'profile')->name('profile');
-            Route::post('/profile', 'updateProfile')->name('profile.update');
-            Route::get('/search-clerks', 'searchClerks')->name('search.clerks');
-            Route::get('/clerks/{user}', 'viewClerkProfile')->name('clerk.profile');
-            Route::get('/guests', 'browseGuests')->name('guests');
-            Route::get('/guests/{user}', 'viewGuestProfile')->name('guests.show');
-        });
-    });
-
-    // Professional Role (CA/CS, Agent)
-    Route::middleware(['role:ca_cs|agent'])->prefix('professional')->name('ca.')->group(function () {
+    // Professional Role (Advocate, CA/CS, Agent) - Unified Module
+    Route::middleware(['role:advocate|ca_cs|agent'])->prefix('professional')->name('professional.')->group(function () {
         Route::controller(ProfessionalController::class)->group(function () {
             Route::get('/dashboard', 'dashboard')->name('dashboard');
             Route::get('/profile', 'profile')->name('profile');
             Route::post('/profile', 'updateProfile')->name('profile.update');
+            Route::get('/settings', 'settings')->name('settings');
+
+            // Connection System
+            Route::get('/pending-requests', 'pendingRequests')->name('pending.requests');
+            Route::post('/connections/{connectionRequest}/accept', 'acceptRequest')->name('connections.accept');
+            Route::delete('/connections/{connectionRequest}/reject', 'rejectRequest')->name('connections.reject');
+            Route::get('/connections', 'myConnections')->name('connections');
+
+            // Search System (Unified for all Professionals)
+            Route::get('/search-clerks', 'searchClerks')->name('search.clerks');
+            Route::get('/search-clerks/ajax', 'searchClerks')->name('search.clerks.ajax');
+
             Route::get('/search-advocates', 'searchAdvocates')->name('search.advocates');
+            Route::get('/search-advocates/ajax', 'searchAdvocates')->name('search.advocates.ajax');
+
+            Route::get('/search-courts', 'searchCourts')->name('search.courts');
+            Route::get('/search-courts/ajax', 'searchCourts')->name('search.courts.ajax');
+            
+            // Unified Profile View
+            Route::get('/user-profile/{user}', 'viewUserProfile')->name('user.profile.view');
+
+            // Connection Request AJAX
+            Route::post('/connection/send', 'sendConnection')->name('connection.send');
+
+            // Feedback
             Route::get('/feedback', 'feedback')->name('feedback');
+            Route::post('/feedback', 'submitFeedback')->name('feedback.submit');
         });
+    });
     });
 
     // Support Role (Court Clerk, IP Clerk)
@@ -157,7 +169,7 @@ Route::middleware(['auth', 'account.status'])->group(function () {
         Route::get('/advocates', 'advocates')->name('advocates');
         Route::get('/clerks', 'clerks')->name('clerks');
     });
-});
+
 
 /*
 |--------------------------------------------------------------------------

@@ -27,12 +27,8 @@ class DashboardController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
-        if ($user->hasRole('advocate')) {
-            return redirect()->route('advocate.dashboard');
-        }
-
-        if ($user->hasRole(['ca_cs', 'agent'])) {
-            return redirect()->route('ca.dashboard');
+        if ($user->hasRole(['advocate', 'ca_cs', 'agent'])) {
+            return redirect()->route('professional.dashboard');
         }
 
         if ($user->hasRole(['court_clerk', 'ip_clerk'])) {

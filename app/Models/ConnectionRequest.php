@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ConnectionRequest extends Model
 {
-    protected $fillable = ['sender_id', 'receiver_id', 'status'];
+    protected $fillable = ['sender_id', 'receiver_id', 'status', 'notes'];
 
     public function sender()
     {
@@ -20,9 +20,16 @@ class ConnectionRequest extends Model
 
     // ── Helpers ───────────────────────────────────────────────────────────
 
+    /**
+     * Get the connection status between two users.
+     * 
+     * @param int $authId
+     * @param int $targetId
+     * @return string (none, connected, sent, received)
+     */
     public static function getStatus(int $authId, int $targetId): string
     {
-        $req = static::where(function ($q) use ($authId, $targetId) {
+        $req = self::query()->where(function ($q) use ($authId, $targetId) {
             $q->where('sender_id', $authId)->where('receiver_id', $targetId);
         })->orWhere(function ($q) use ($authId, $targetId) {
             $q->where('sender_id', $targetId)->where('receiver_id', $authId);
@@ -34,9 +41,16 @@ class ConnectionRequest extends Model
         return 'received'; // auth user ko request aayi hai
     }
 
+    /**
+     * Check if two users are connected.
+     * 
+     * @param int $authId
+     * @param int $targetId
+     * @return bool
+     */
     public static function areConnected(int $authId, int $targetId): bool
     {
-        return static::where('status', 'accepted')
+        return self::query()->where('status', 'accepted')
             ->where(function ($q) use ($authId, $targetId) {
                 $q->where('sender_id', $authId)->where('receiver_id', $targetId);
             })->orWhere(function ($q) use ($authId, $targetId) {

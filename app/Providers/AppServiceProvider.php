@@ -33,5 +33,18 @@ class AppServiceProvider extends ServiceProvider
         View::composer(['layouts.main', 'layouts.admin'], function ($view) {
             $view->with('navMenus', NavigationMenu::query()->orderBy('order', 'asc')->get()->keyBy('key'));
         });
+
+        // Share pending count to Professional views
+        View::composer('professional.layouts.master', function ($view) {
+            if (Auth::check()) {
+                $pendingCount = \App\Models\ConnectionRequest::query()
+                    ->where('receiver_id', Auth::id())
+                    ->where('status', 'pending')
+                    ->count();
+                $view->with('pendingCount', $pendingCount);
+            } else {
+                $view->with('pendingCount', 0);
+            }
+        });
     }
 }
