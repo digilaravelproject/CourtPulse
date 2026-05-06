@@ -71,16 +71,16 @@
                     <a href="{{ url('/') }}"
                         class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">{{ $navMenus['home']->label }}</a>
                 @endif
-                
+
                 @if(($navMenus['how-it-works'] ?? null)?->is_visible)
                     <a href="{{ url('/#how-it-works') }}"
                         class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">{{ $navMenus['how-it-works']->label }}</a>
                 @endif
 
-                @if(($navMenus['search'] ?? null)?->is_visible)
+                {{-- @if(($navMenus['search'] ?? null)?->is_visible)
                     <a href="{{ route('find') }}"
                         class="text-xs font-bold text-slate-400 hover:text-white transition-colors no-underline tracking-[0.15em] uppercase hover:shadow-[0_2px_0_0_#B4B4FE] pb-1">{{ $navMenus['search']->label }}</a>
-                @endif
+                @endif --}}
 
                 @if(($navMenus['blogs'] ?? null)?->is_visible)
                     <a href="{{ route('blogs') }}"
@@ -176,14 +176,14 @@
                     </a>
                 @endif
 
-                @if(($navMenus['search'] ?? null)?->is_visible)
+                {{-- @if(($navMenus['search'] ?? null)?->is_visible)
                     <a href="{{ route('find') }}"
                         class="mobile-nav-link group flex items-center justify-between text-sm font-bold text-slate-300 uppercase tracking-widest no-underline p-4 rounded-xl hover:bg-white/5 hover:text-white transition-all">
                         <span><i class="bi bi-search mr-3 opacity-50"></i> {{ $navMenus['search']->label }}</span>
                         <i
                             class="bi bi-chevron-right text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity text-blue"></i>
                     </a>
-                @endif
+                @endif --}}
 
                 @if(($navMenus['blogs'] ?? null)?->is_visible)
                     <a href="{{ route('blogs') }}"
@@ -333,10 +333,10 @@
                         <li><a href="{{ url('/#how-it-works') }}"
                                 class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">{{ $navMenus['how-it-works']->label }}</a></li>
                         @endif
-                        @if(($navMenus['search'] ?? null)?->is_visible)
+                        {{-- @if(($navMenus['search'] ?? null)?->is_visible)
                         <li><a href="{{ route('find') }}"
                                 class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">{{ $navMenus['search']->label }}</a></li>
-                        @endif
+                        @endif --}}
                         <li><a href="{{ route('register') }}"
                                 class="hover:text-white hover:translate-x-1 inline-block transition-transform no-underline">Join
                                 Network</a></li>
