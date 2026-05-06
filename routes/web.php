@@ -120,7 +120,7 @@ Route::middleware(['auth', 'account.status'])->group(function () {
             Route::get('/profile', 'profile')->name('profile');
             Route::post('/profile', 'updateProfile')->name('profile.update');
             Route::get('/search-clerks', 'searchClerks')->name('search.clerks');
-            Route::get('/clerks/{user}', 'viewClerkProfile')->name('clerks.show');
+            Route::get('/clerks/{user}', 'viewClerkProfile')->name('clerk.profile');
             Route::get('/guests', 'browseGuests')->name('guests');
             Route::get('/guests/{user}', 'viewGuestProfile')->name('guests.show');
         });
@@ -144,7 +144,7 @@ Route::middleware(['auth', 'account.status'])->group(function () {
             Route::get('/profile', 'profile')->name('profile');
             Route::post('/profile', 'updateProfile')->name('profile.update');
             Route::get('/advocates', 'viewAdvocates')->name('advocates');
-            Route::get('/advocates/{user}', 'showAdvocate')->name('advocates.show');
+            Route::get('/advocates/{user}', 'showAdvocate')->name('advocate.profile');
             Route::get('/guests', 'browseGuests')->name('guests');
             Route::get('/guests/{user}', 'viewGuestProfile')->name('guests.show');
             Route::get('/feedback', 'feedback')->name('feedback');

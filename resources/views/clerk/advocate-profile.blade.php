@@ -2,456 +2,257 @@
 @section('title', $user->name . ' — Advocate Profile')
 @section('page-title', 'Advocate Profile')
 
-@push('styles')
-    <style>
-        .ap-hero {
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 24px;
-            background: linear-gradient(135deg, #060C18 0%, #0F1A2E 50%, #1a1a08 100%);
-            border: 1px solid rgba(212, 175, 55, .15);
-            position: relative;
-        }
-
-        .ap-hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse 55% 60% at 85% 50%, rgba(212, 175, 55, .12) 0%, transparent 65%);
-            pointer-events: none;
-        }
-
-        .ap-grid {
-            position: absolute;
-            inset: 0;
-            background-image: linear-gradient(rgba(212, 175, 55, .04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(212, 175, 55, .04) 1px, transparent 1px);
-            background-size: 36px 36px;
-            pointer-events: none;
-        }
-
-        .ap-avatar {
-            position: relative;
-            width: 80px;
-            height: 80px;
-            flex-shrink: 0;
-        }
-
-        .ap-avatar::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            background: conic-gradient(#D4AF37 0deg, #B5952F 90deg, rgba(212, 175, 55, .15) 200deg, #D4AF37 360deg);
-            animation: spinRing 7s linear infinite;
-        }
-
-        .ap-avatar-inner {
-            position: absolute;
-            inset: 3px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #D4AF37, #B5952F);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #060C18;
-            font-family: 'Playfair Display', serif;
-            z-index: 1;
-        }
-
-        @keyframes spinRing {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .ap-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 10px 16px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, .08);
-            border: 1px solid rgba(255, 255, 255, .12);
-            min-width: 64px;
-        }
-
-        .ap-stat-val {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #D4AF37;
-            line-height: 1;
-        }
-
-        .ap-stat-lbl {
-            font-size: .5rem;
-            font-family: monospace;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, .35);
-            margin-top: 3px;
-        }
-
-        .info-card {
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
-        }
-
-        .info-card-header {
-            padding: 12px 20px;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: .62rem;
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: .15em;
-            text-transform: uppercase;
-            color: #B5952F;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .info-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            border-bottom: 1px solid #f8fafc;
-            transition: background .15s;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-row:hover {
-            background: #fafbfc;
-        }
-
-        .info-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(212, 175, 55, .08);
-            color: #B5952F;
-            border: 1px solid rgba(212, 175, 55, .15);
-            font-size: .75rem;
-        }
-
-        .info-label {
-            font-size: .58rem;
-            font-family: monospace;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            color: #94a3b8;
-            margin-bottom: 2px;
-        }
-
-        .info-value {
-            font-size: .85rem;
-            color: #1e293b;
-            font-weight: 500;
-        }
-
-        .info-locked {
-            font-size: .85rem;
-            color: #cbd5e1;
-            filter: blur(3px);
-            user-select: none;
-        }
-
-        .rating-bar {
-            height: 4px;
-            border-radius: 99px;
-            background: #f1f5f9;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .rating-fill {
-            height: 100%;
-            border-radius: 99px;
-            background: linear-gradient(90deg, #D4AF37, #B5952F);
-        }
-
-        .locked-overlay {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .locked-overlay::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(4px);
-            border-radius: 10px;
-            z-index: 2;
-        }
-
-        .locked-overlay-msg {
-            position: absolute;
-            inset: 0;
-            z-index: 3;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: .8rem;
-            font-weight: 600;
-            color: #B5952F;
-        }
-    </style>
-@endpush
-
 @section('content')
 
-    {{-- Back --}}
-    <div class="mb-4">
-        <a href="{{ route('clerk.advocates') }}"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 bg-white text-text-muted-light hover:text-gray-800 hover:border-gray-300 transition-all shadow-sm">
-            <i class="bi bi-arrow-left text-xs"></i> Back to Advocates
-        </a>
-    </div>
-
-    {{-- HERO --}}
-    <div class="ap-hero">
-        <div class="ap-grid"></div>
-        <div style="position:relative;z-index:1;padding:28px 32px;">
-            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px;">
-
-                <div class="ap-avatar">
-                    <div class="ap-avatar-inner">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
-                </div>
-
-                <div style="flex:1;min-width:0;">
-                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
-                        <span
-                            style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.3);color:#D4AF37;font-family:monospace;">Advocate</span>
-                        <span
-                            style="display:flex;align-items:center;gap:5px;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:#4ade80;font-family:monospace;">
-                            <span
-                                style="width:5px;height:5px;border-radius:50%;background:#4ade80;display:inline-block;"></span>
-                            Verified
-                        </span>
-                        @if ($connected)
-                            <span
-                                style="display:flex;align-items:center;gap:5px;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.4);color:#D4AF37;font-family:monospace;">
-                                <i class="bi bi-patch-check-fill"></i> Connected
-                            </span>
-                        @endif
-                    </div>
-
-                    {{-- Name always visible --}}
-                    <h1
-                        style="font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:700;color:#F1F5F9;margin-bottom:6px;">
-                        {{ $user->name }}</h1>
-
-                    {{-- City/Court: only when connected --}}
-                    <p style="font-size:.85rem;color:rgba(255,255,255,.45);display:flex;gap:12px;flex-wrap:wrap;">
-                        @if ($profile?->high_court)
-                            <span><i class="bi bi-building-columns" style="color:#D4AF37;margin-right:4px;"></i>
-                                {{ $connected ? $profile->high_court : '••••• High Court' }}
-                            </span>
-                        @endif
-                        @if ($user->city)
-                            <span><i class="bi bi-geo-alt" style="color:#D4AF37;margin-right:4px;"></i>
-                                {{ $connected ? $user->city : '•••••' }}
-                            </span>
-                        @endif
-                    </p>
-                </div>
-
-                <div style="display:flex;gap:12px;flex-wrap:wrap;">
-                    <div class="ap-stat">
-                        <div class="ap-stat-val">{{ $avgRating ? number_format($avgRating, 1) : '—' }}</div>
-                        <div class="ap-stat-lbl">Rating</div>
-                    </div>
-                    <div class="ap-stat">
-                        <div class="ap-stat-val">{{ $feedbacks->count() }}</div>
-                        <div class="ap-stat-lbl">Reviews</div>
-                    </div>
-                    @if ($profile?->experience_years)
-                        <div class="ap-stat">
-                            <div class="ap-stat-val">{{ $profile->experience_years }}</div>
-                            <div class="ap-stat-lbl">Yrs Exp</div>
-                        </div>
-                    @endif
-                </div>
+    {{-- Header / Back --}}
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+        <div class="flex items-center gap-6">
+            <a href="{{ route('clerk.advocates') }}"
+                class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/[0.03] border border-white/5 text-white/40 hover:text-white hover:bg-white/[0.08] hover:border-white/10 transition-all group shadow-inner">
+                <i class="fa-solid fa-arrow-left text-sm group-hover:-translate-x-1 transition-transform"></i>
+            </a>
+            <div>
+                <h1 class="text-4xl md:text-5xl font-black text-white uppercase tracking-widest leading-none mb-2">
+                    Advocate <span class="text-blue">Profile</span>
+                </h1>
+                <p class="text-white/40 font-bold uppercase tracking-[0.2em] text-[10px]">Digital Professional Portfolio</p>
             </div>
-
-            {{-- Connect / Status --}}
-            <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
-                @if ($connectionStatus === 'none')
-                    <button id="connectBtn" onclick="sendConnectProfile({{ $user->id }})"
-                        style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,#D4AF37,#B5952F);color:#060C18;font-weight:700;font-size:.88rem;border:none;cursor:pointer;">
-                        <i class="bi bi-person-plus-fill"></i> Send Connect Request
-                    </button>
-                @elseif($connectionStatus === 'sent')
-                    <div
-                        style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);font-size:.88rem;">
-                        <i class="bi bi-clock"></i> Request Pending
-                    </div>
-                @elseif($connectionStatus === 'received')
-                    <button onclick="handleReq({{ $connectionReq?->id }}, 'accept')"
-                        style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:10px;background:#16a34a;color:white;font-weight:700;font-size:.88rem;border:none;cursor:pointer;">
-                        <i class="bi bi-check-lg"></i> Accept Request
-                    </button>
-                    <button onclick="handleReq({{ $connectionReq?->id }}, 'reject')"
-                        style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;font-size:.88rem;cursor:pointer;background-color:transparent;">
-                        <i class="bi bi-x-lg"></i> Reject
-                    </button>
-                @elseif($connectionStatus === 'connected')
-                    <div
-                        style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:10px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80;font-size:.88rem;font-weight:600;">
-                        <i class="bi bi-patch-check-fill"></i> Connected — Full details unlocked
-                    </div>
-                @endif
-
-                @if (!$hasFeedback)
-                    <a href="{{ route('feedback') }}"
-                        style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5;font-size:.85rem;text-decoration:none;">
-                        <i class="bi bi-lock-fill"></i> Submit Feedback to Unlock Contact
-                    </a>
-                @endif
-            </div>
-
-            {{-- Not connected notice --}}
-            @if (!$connected)
-                <div
-                    style="margin-top:16px;padding:10px 16px;border-radius:10px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);display:flex;align-items:center;gap:10px;">
-                    <i class="bi bi-info-circle" style="color:#D4AF37;font-size:1rem;flex-shrink:0;"></i>
-                    <span style="font-size:.8rem;color:rgba(255,255,255,.5);">
-                        Send a connection request to unlock full profile details, contact information, and more.
-                    </span>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            @if ($connected)
+                <div class="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-blue/10 border border-blue/20 text-blue shadow-lg shadow-blue/5">
+                    <i class="fa-solid fa-link"></i>
+                    <span class="text-xs font-black uppercase tracking-widest">Connected Member</span>
                 </div>
             @endif
         </div>
     </div>
 
-    {{-- BODY --}}
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
-
-        {{-- LEFT SIDEBAR --}}
-        <div class="lg:col-span-2 space-y-4">
-
-            <div class="info-card">
-                <div class="info-card-header"><i class="bi bi-person-vcard"></i> Contact Details</div>
-
-                <div class="info-row">
-                    <div class="info-icon"><i class="bi bi-envelope"></i></div>
-                    <div>
-                        <div class="info-label">Email</div>
-                        @if ($connected && $hasFeedback)
-                            <div class="info-value">{{ $user->email }}</div>
-                        @else
-                            <div class="info-locked">{{ str_repeat('•', strlen($user->email)) }}</div>
-                            <div style="font-size:.65rem;color:#D4AF37;margin-top:2px;"><i class="bi bi-lock-fill"></i>
-                                Connect & submit feedback</div>
-                        @endif
+    {{-- HERO SECTION --}}
+    <div class="relative rounded-[40px] overflow-hidden border border-white/5 shadow-2xl mb-8 bg-navy2 min-h-[300px]">
+        {{-- Background Effects --}}
+        <div class="absolute inset-0 bg-linear-to-br from-navy2 via-navy2 to-blue/5"></div>
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay"></div>
+        <div class="absolute inset-0 opacity-[0.03] pointer-events-none" 
+             style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 40px 40px;"></div>
+        
+        {{-- Content Grid --}}
+        <div class="relative z-10 p-8 md:p-12 h-full flex flex-col md:flex-row items-center md:items-end justify-between gap-12">
+            
+            <div class="flex flex-col md:flex-row items-center md:items-end gap-10 text-center md:text-left w-full md:w-auto">
+                {{-- Animated Avatar Container --}}
+                <div class="relative group shrink-0">
+                    <div class="absolute -inset-4 bg-linear-to-tr from-blue to-blue/20 rounded-full opacity-20 blur-2xl group-hover:opacity-40 transition-opacity duration-700 animate-pulse"></div>
+                    <div class="relative w-40 h-40 md:w-48 md:h-48 rounded-full p-1.5 bg-linear-to-br from-white/20 to-transparent shadow-2xl overflow-hidden group">
+                        {{-- Spin Ring --}}
+                        <div class="absolute inset-0 rounded-full border-2 border-dashed border-blue/30 animate-[spin_20s_linear_infinite] group-hover:animate-[spin_10s_linear_infinite]"></div>
+                        
+                        <div class="w-full h-full rounded-full bg-navy flex items-center justify-center border border-white/10 relative overflow-hidden">
+                            {{-- Identity Background --}}
+                            <div class="absolute inset-0 bg-linear-to-br from-blue/10 to-transparent"></div>
+                            <span class="text-6xl md:text-7xl font-black text-white/90 drop-shadow-2xl z-10">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                        </div>
+                    </div>
+                    
+                    {{-- Verified Badge --}}
+                    <div class="absolute -bottom-2 -right-2 bg-blue text-white w-12 h-12 rounded-2xl flex items-center justify-center border-4 border-navy2 shadow-xl animate-bounce" title="Verified Professional">
+                        <i class="fa-solid fa-shield-check text-xl"></i>
                     </div>
                 </div>
 
-                <div class="info-row">
-                    <div class="info-icon"><i class="bi bi-telephone"></i></div>
-                    <div>
-                        <div class="info-label">Phone</div>
-                        @if ($connected && $hasFeedback)
-                            <div class="info-value">{{ $user->phone ?? 'Not provided' }}</div>
-                        @else
-                            <div class="info-locked">••••••••••</div>
-                            <div style="font-size:.65rem;color:#D4AF37;margin-top:2px;"><i class="bi bi-lock-fill"></i>
-                                Connect & submit feedback</div>
-                        @endif
+                <div class="flex-1 space-y-4">
+                    <div class="flex items-center gap-3 flex-wrap justify-center md:justify-start">
+                        <span class="px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/60">Professional Advocate</span>
+                        <span class="px-4 py-1.5 rounded-full bg-blue/10 border border-blue/20 text-[10px] font-black uppercase tracking-widest text-blue flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue animate-ping"></span> Active
+                        </span>
                     </div>
-                </div>
-
-                @if ($profile?->high_court)
-                    <div class="info-row">
-                        <div class="info-icon"><i class="bi bi-building-columns"></i></div>
-                        <div>
-                            <div class="info-label">High Court</div>
-                            <div class="info-value">{{ $connected ? $profile->high_court : '••••• High Court' }}</div>
-                        </div>
-                    </div>
-                @endif
-
-                @if ($profile?->practice_areas)
-                    <div class="info-row">
-                        <div class="info-icon"><i class="bi bi-briefcase"></i></div>
-                        <div>
-                            <div class="info-label">Practice Areas</div>
-                            @if ($connected)
-                                <div class="info-value" style="font-size:.8rem;">{{ $profile->practice_areas }}</div>
-                            @else
-                                <div class="info-locked">•••••••••••••••••</div>
-                                <div style="font-size:.65rem;color:#D4AF37;margin-top:2px;"><i class="bi bi-lock-fill"></i>
-                                    Connect to unlock</div>
-                            @endif
-                        </div>
-                    </div>
-                @endif
-
-                <div class="info-row">
-                    <div class="info-icon"><i class="bi bi-calendar3"></i></div>
-                    <div>
-                        <div class="info-label">Member Since</div>
-                        <div class="info-value">{{ $user->created_at->format('d M Y') }}</div>
+                    
+                    <h2 class="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.9] drop-shadow-lg">
+                        {{ $user->name }}
+                    </h2>
+                    
+                    <div class="flex items-center gap-6 text-white/40 font-bold uppercase tracking-widest text-[11px] justify-center md:justify-start">
+                        <span class="flex items-center gap-2 group transition-colors hover:text-blue">
+                            <i class="fa-solid fa-location-dot text-blue"></i>
+                            {{ $connected ? ($user->city ?? 'Location Secured') : 'Location Secured' }}
+                        </span>
+                        <span class="flex items-center gap-2 group transition-colors hover:text-blue">
+                            <i class="fa-solid fa-building-columns text-blue"></i>
+                            {{ $connected ? ($profile?->high_court ?? 'Court Locked') : 'High Court Locked' }}
+                        </span>
                     </div>
                 </div>
             </div>
 
-            {{-- Bio: only when connected --}}
-            @if ($profile?->bio)
-                <div class="info-card">
-                    <div class="info-card-header"><i class="bi bi-person-lines-fill"></i> About</div>
-                    @if ($connected)
-                        <div style="padding:16px 20px;font-size:.85rem;color:#64748b;line-height:1.7;">{{ $profile->bio }}
+            {{-- Action & Stats Area --}}
+            <div class="flex flex-col items-center md:items-end gap-8 w-full md:w-auto">
+                <div class="flex gap-4">
+                    <div class="bg-white/[0.03] border border-white/5 backdrop-blur-xl px-8 py-5 rounded-3xl text-center group hover:bg-white/[0.08] transition-all">
+                        <div class="text-3xl font-black text-white mb-1 group-hover:scale-110 transition-transform">{{ $avgRating ? number_format($avgRating, 1) : '—' }}</div>
+                        <div class="text-[9px] font-black text-white/30 uppercase tracking-[0.2em]">Platform Rating</div>
+                    </div>
+                    <div class="bg-white/[0.03] border border-white/5 backdrop-blur-xl px-8 py-5 rounded-3xl text-center group hover:bg-white/[0.08] transition-all">
+                        <div class="text-3xl font-black text-white mb-1 group-hover:scale-110 transition-transform">{{ $feedbacks->count() }}</div>
+                        <div class="text-[9px] font-black text-white/30 uppercase tracking-[0.2em]">Verified Reviews</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4 justify-center">
+                    @if ($connectionStatus === 'none')
+                        <button id="connectBtn" onclick="sendConnectProfile({{ $user->id }})"
+                            class="flex items-center gap-3 px-8 py-4 rounded-2xl bg-blue text-white font-black uppercase tracking-widest text-sm hover:bg-blue/80 hover:shadow-2xl hover:shadow-blue/30 transition-all active:scale-95 group">
+                            <i class="fa-solid fa-user-plus group-hover:rotate-12 transition-transform"></i>
+                            Request Connection
+                        </button>
+                    @elseif($connectionStatus === 'sent')
+                        <div class="flex items-center gap-3 px-8 py-4 rounded-2xl bg-white/5 border border-white/10 text-white/40 font-black uppercase tracking-widest text-sm">
+                            <i class="fa-solid fa-clock animate-spin-slow"></i>
+                            Request Pending
                         </div>
-                    @else
-                        <div style="padding:16px 20px;position:relative;min-height:80px;">
-                            <div style="font-size:.85rem;color:#64748b;line-height:1.7;filter:blur(4px);user-select:none;">
-                                {{ $profile->bio }}
-                            </div>
-                            <div
-                                style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:6px;font-size:.8rem;color:#B5952F;font-weight:600;">
-                                <i class="bi bi-lock-fill"></i> Connect to read full bio
-                            </div>
+                    @elseif($connectionStatus === 'received')
+                        <div class="flex gap-2">
+                            <button onclick="handleReq({{ $connectionReq?->id }}, 'accept')"
+                                class="flex items-center gap-3 px-8 py-4 rounded-2xl bg-green-500 text-white font-black uppercase tracking-widest text-sm hover:bg-green-600 transition-all">
+                                <i class="fa-solid fa-check"></i> Accept
+                            </button>
+                            <button onclick="handleReq({{ $connectionReq?->id }}, 'reject')"
+                                class="flex items-center gap-3 px-6 py-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 font-black uppercase tracking-widest text-sm hover:bg-red-500 hover:text-white transition-all">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    @elseif($connectionStatus === 'connected')
+                        <div class="flex items-center gap-3 px-8 py-4 rounded-2xl bg-blue/10 border border-blue/20 text-blue font-black uppercase tracking-widest text-sm shadow-inner">
+                            <i class="fa-solid fa-handshake"></i>
+                            Member Connected
                         </div>
                     @endif
+
+                    @if (!$hasFeedback)
+                        <a href="{{ route('feedback') }}"
+                            class="flex items-center gap-3 px-8 py-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 font-black uppercase tracking-widest text-sm hover:bg-red-500 hover:text-white transition-all group">
+                            <i class="fa-solid fa-lock group-hover:shake"></i>
+                            Submit Feedback to Unlock
+                        </a>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- MAIN CONTENT AREA --}}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        {{-- LEFT: DETAILS --}}
+        <div class="lg:col-span-4 space-y-8">
+            
+            {{-- Contact Information Card --}}
+            <div class="bg-navy2 rounded-3xl border border-white/5 shadow-2xl overflow-hidden group">
+                <div class="px-8 py-6 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+                    <h3 class="text-sm font-black text-white uppercase tracking-widest flex items-center gap-3">
+                        <i class="fa-solid fa-address-card text-blue"></i> Contact Intelligence
+                    </h3>
+                </div>
+                
+                <div class="p-4 space-y-2">
+                    @php
+                        $contactItems = [
+                            ['label' => 'Primary Email', 'icon' => 'fa-envelope', 'value' => $user->email, 'locked' => !($connected && $hasFeedback)],
+                            ['label' => 'Phone Network', 'icon' => 'fa-phone-volume', 'value' => $user->phone ?? 'Not Registered', 'locked' => !($connected && $hasFeedback)],
+                            ['label' => 'High Court Jurisdiction', 'icon' => 'fa-gavel', 'value' => $profile?->high_court ?? 'Not Specified', 'locked' => !$connected],
+                        ];
+                    @endphp
+
+                    @foreach($contactItems as $item)
+                        <div class="relative bg-navy/40 border border-white/5 p-5 rounded-2xl hover:border-blue/20 hover:bg-navy transition-all overflow-hidden group/item">
+                            @if($item['locked'])
+                                <div class="absolute inset-0 backdrop-blur-md bg-navy/60 z-10 flex flex-col items-center justify-center gap-1 opacity-0 group-hover/item:opacity-100 transition-opacity">
+                                    <i class="fa-solid fa-lock text-blue text-lg"></i>
+                                    <span class="text-[8px] font-black text-white uppercase tracking-tighter">Information Encrypted</span>
+                                </div>
+                            @endif
+                            <div class="flex items-center gap-5 relative z-0">
+                                <div class="w-12 h-12 rounded-xl bg-navy flex items-center justify-center text-blue border border-white/5 shadow-inner">
+                                    <i class="fa-solid {{ $item['icon'] }}"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-[9px] font-black text-white/20 uppercase tracking-[0.2em] mb-1">{{ $item['label'] }}</p>
+                                    <p class="text-sm font-bold text-white truncate {{ $item['locked'] ? 'blur-[5px] select-none opacity-20' : '' }}">
+                                        {{ $item['locked'] ? str_repeat('•', 15) : $item['value'] }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Experience Card --}}
+            @if($profile?->experience_years || $profile?->practice_areas)
+                <div class="bg-navy2 rounded-3xl border border-white/5 shadow-2xl overflow-hidden">
+                    <div class="px-8 py-6 border-b border-white/5 bg-white/[0.02]">
+                        <h3 class="text-sm font-black text-white uppercase tracking-widest flex items-center gap-3">
+                            <i class="fa-solid fa-briefcase text-blue"></i> Professional Experience
+                        </h3>
+                    </div>
+                    <div class="p-8 space-y-6">
+                        @if($profile?->experience_years)
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-white/40 uppercase tracking-wider">Years Active</span>
+                                <span class="px-4 py-1.5 rounded-xl bg-blue/10 border border-blue/20 text-blue font-black text-sm">{{ $profile->experience_years }} Years</span>
+                            </div>
+                        @endif
+
+                        @if($profile?->practice_areas)
+                            <div>
+                                <span class="block text-xs font-bold text-white/40 uppercase tracking-wider mb-4">Core Specializations</span>
+                                @if($connected)
+                                    <div class="flex flex-wrap gap-2">
+                                        @foreach(explode(',', $profile->practice_areas) as $area)
+                                            <span class="px-3 py-1.5 rounded-lg bg-navy border border-white/5 text-[10px] font-bold text-white/60 hover:text-white hover:border-blue/30 transition-all cursor-default uppercase">
+                                                {{ trim($area) }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div class="p-6 rounded-2xl bg-navy/40 border border-white/5 border-dashed text-center">
+                                        <i class="fa-solid fa-shield-slash text-white/10 text-3xl mb-3"></i>
+                                        <p class="text-[10px] font-black text-white/30 uppercase tracking-widest">Connect to view practice areas</p>
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
+                    </div>
                 </div>
             @endif
 
+            {{-- Rating Breakdown --}}
             @if ($feedbacks->count())
-                @php
-                    $ratingCounts = $feedbacks->groupBy('rating')->map->count();
-                    $total = $feedbacks->count();
-                @endphp
-                <div class="info-card">
-                    <div class="info-card-header"><i class="bi bi-bar-chart"></i> Rating Breakdown</div>
-                    <div style="padding:16px 20px;">
+                <div class="bg-navy2 rounded-3xl border border-white/5 shadow-2xl overflow-hidden">
+                    <div class="px-8 py-6 border-b border-white/5 bg-white/[0.02]">
+                        <h3 class="text-sm font-black text-white uppercase tracking-widest flex items-center gap-3">
+                            <i class="fa-solid fa-chart-line text-blue"></i> Rating Performance
+                        </h3>
+                    </div>
+                    <div class="p-8 space-y-5">
+                        @php
+                            $ratingCounts = $feedbacks->groupBy('rating')->map->count();
+                            $total = $feedbacks->count();
+                        @endphp
                         @for ($star = 5; $star >= 1; $star--)
                             @php
                                 $cnt = $ratingCounts[$star] ?? 0;
                                 $pct = $total ? round(($cnt / $total) * 100) : 0;
                             @endphp
-                            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                                <span
-                                    style="font-size:.7rem;font-family:monospace;color:#94a3b8;width:20px;">{{ $star }}★</span>
-                                <div class="rating-bar">
-                                    <div class="rating-fill" style="width:{{ $pct }}%"></div>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between text-[10px] font-black uppercase tracking-widest">
+                                    <span class="text-white/40">{{ $star }} Star Recognition</span>
+                                    <span class="text-blue">{{ $cnt }}</span>
                                 </div>
-                                <span
-                                    style="font-size:.7rem;color:#D4AF37;width:16px;text-align:right;">{{ $cnt }}</span>
+                                <div class="h-2 w-full bg-navy rounded-full overflow-hidden border border-white/5 p-[1px]">
+                                    <div class="h-full bg-linear-to-r from-blue to-blue/40 rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(59,130,246,0.3)]" style="width: {{ $pct }}%"></div>
+                                </div>
                             </div>
                         @endfor
                     </div>
@@ -459,54 +260,113 @@
             @endif
         </div>
 
-        {{-- REVIEWS --}}
-        <div class="lg:col-span-3">
-            <div class="info-card">
-                <div class="info-card-header" style="justify-content:space-between;">
-                    <span><i class="bi bi-chat-quote"></i> Reviews Received</span>
-                    @if ($feedbacks->count())
-                        <span style="color:#94a3b8;font-size:.65rem;">{{ number_format($avgRating, 1) }} avg ·
-                            {{ $feedbacks->count() }} reviews</span>
-                    @endif
-                </div>
-                @forelse($feedbacks as $fb)
-                    <div style="padding:16px 20px;border-bottom:1px solid #f1f5f9;">
-                        <div
-                            style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;">
-                            <div style="display:flex;align-items:center;gap:10px;">
-                                <div
-                                    style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#060C18;flex-shrink:0;background:linear-gradient(135deg,#D4AF37,#B5952F);">
-                                    {{ $fb->is_anonymous ? '?' : strtoupper(substr($fb->giver->name ?? 'A', 0, 1)) }}
+        {{-- RIGHT: REVIEWS & BIO --}}
+        <div class="lg:col-span-8 space-y-8">
+            
+            {{-- Bio Card --}}
+            @if ($profile?->bio)
+                <div class="bg-navy2 rounded-3xl border border-white/5 shadow-2xl overflow-hidden relative group">
+                    <div class="px-8 py-6 border-b border-white/5 bg-white/[0.02]">
+                        <h3 class="text-sm font-black text-white uppercase tracking-widest flex items-center gap-3">
+                            <i class="fa-solid fa-user-gear text-blue"></i> About the Professional
+                        </h3>
+                    </div>
+                    <div class="p-8 relative">
+                        @if ($connected)
+                            <p class="text-white/60 font-medium leading-loose text-lg italic bg-navy/40 p-8 rounded-[32px] border border-white/5">
+                                <i class="fa-solid fa-quote-left text-blue/30 text-4xl -mb-6 mr-4"></i>
+                                {{ $profile->bio }}
+                                <i class="fa-solid fa-quote-right text-blue/30 text-4xl -mt-6 ml-4"></i>
+                            </p>
+                        @else
+                            <div class="relative min-h-[200px] flex items-center justify-center overflow-hidden rounded-[32px] bg-navy/40 border border-white/5 border-dashed">
+                                <div class="absolute inset-0 blur-2xl opacity-20 pointer-events-none p-10 leading-relaxed font-serif text-white italic">
+                                    {{ $profile->bio }} {{ $profile->bio }}
                                 </div>
-                                <div>
-                                    <div style="font-size:.85rem;font-weight:600;color:#1e293b;">
-                                        {{ $fb->is_anonymous ? 'Anonymous' : $fb->giver->name ?? 'Unknown' }}
+                                <div class="relative z-10 flex flex-col items-center gap-6 text-center px-12">
+                                    <div class="w-16 h-16 rounded-3xl bg-blue/10 border border-blue/20 flex items-center justify-center text-blue text-2xl shadow-xl shadow-blue/5">
+                                        <i class="fa-solid fa-lock"></i>
                                     </div>
-                                    <div style="font-size:.65rem;color:#94a3b8;">{{ $fb->created_at->diffForHumans() }}
+                                    <div class="space-y-2">
+                                        <h4 class="text-lg font-black text-white uppercase tracking-widest">Biography Encrypted</h4>
+                                        <p class="text-sm font-bold text-white/30 uppercase tracking-widest leading-relaxed">Secure a connection with this advocate to review their professional background and expertise.</p>
                                     </div>
+                                    <button onclick="sendConnectProfile({{ $user->id }})" class="px-8 py-4 rounded-2xl bg-blue text-white font-black uppercase tracking-widest text-xs hover:bg-blue/80 transition-all active:scale-95">
+                                        Request Access
+                                    </button>
                                 </div>
-                            </div>
-                            <div style="display:flex;gap:2px;flex-shrink:0;">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <i class="bi bi-star{{ $i <= $fb->rating ? '-fill' : '' }}"
-                                        style="font-size:.7rem;color:{{ $i <= $fb->rating ? '#D4AF37' : '#e2e8f0' }};"></i>
-                                @endfor
-                            </div>
-                        </div>
-                        @if ($fb->comment)
-                            <div
-                                style="background:#faf9f6;border-left:3px solid #D4AF37;border-radius:0 8px 8px 0;padding:10px 14px;font-size:.82rem;color:#64748b;line-height:1.6;">
-                                "{{ $fb->comment }}"
                             </div>
                         @endif
                     </div>
-                @empty
-                    <div style="padding:48px 20px;text-align:center;">
-                        <span class="material-icons-round"
-                            style="font-size:2.5rem;color:#e2e8f0;display:block;margin-bottom:10px;">reviews</span>
-                        <p style="color:#94a3b8;font-size:.85rem;">No reviews yet</p>
-                    </div>
-                @endforelse
+                </div>
+            @endif
+
+            {{-- Reviews Card --}}
+            <div class="bg-navy2 rounded-3xl border border-white/5 shadow-2xl overflow-hidden flex flex-col min-h-[500px]">
+                <div class="px-8 py-6 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+                    <h3 class="text-sm font-black text-white uppercase tracking-widest flex items-center gap-3">
+                        <i class="fa-solid fa-star-half-stroke text-blue"></i> Professional Testimonials
+                    </h3>
+                    @if ($feedbacks->count())
+                        <div class="flex items-center gap-4 bg-navy/40 px-5 py-2.5 rounded-2xl border border-white/5">
+                             <div class="flex gap-1">
+                                @for($i=1;$i<=5;$i++)
+                                    <i class="fa-solid fa-star text-[8px] {{ $i <= floor($avgRating) ? 'text-blue' : 'text-white/10' }}"></i>
+                                @endfor
+                             </div>
+                             <span class="text-[10px] font-black text-white uppercase tracking-widest">{{ number_format($avgRating, 1) }} Score</span>
+                        </div>
+                    @endif
+                </div>
+                
+                <div class="flex-1 divide-y divide-white/5 custom-scrollbar">
+                    @forelse($feedbacks as $fb)
+                        <div class="p-8 hover:bg-white/[0.02] transition-all group">
+                            <div class="flex items-start gap-6">
+                                <div class="w-14 h-14 rounded-2xl bg-linear-to-br from-blue to-navy border border-white/10 flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-all duration-500">
+                                    <span class="text-xl font-black text-white uppercase">
+                                        {{ $fb->is_anonymous ? '?' : strtoupper(substr($fb->giver->name ?? 'A', 0, 1)) }}
+                                    </span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                                        <div>
+                                            <h4 class="font-black text-white uppercase tracking-widest text-sm mb-1 group-hover:text-blue transition-colors">
+                                                {{ $fb->is_anonymous ? 'Anonymous Member' : $fb->giver->name ?? 'Unknown Member' }}
+                                            </h4>
+                                            <p class="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] flex items-center gap-2">
+                                                <i class="fa-regular fa-calendar-check text-blue/40"></i>
+                                                {{ $fb->created_at->format('M d, Y') }}
+                                                <span class="text-white/5 font-normal mx-1">|</span>
+                                                {{ $fb->created_at->diffForHumans() }}
+                                            </p>
+                                        </div>
+                                        <div class="flex gap-1.5 bg-navy px-4 py-2 rounded-xl border border-white/5 group-hover:border-blue/20 transition-all">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <i class="fa-solid fa-star text-[10px] {{ $i <= $fb->rating ? 'text-blue shadow-blue/50' : 'text-white/10' }}"></i>
+                                            @endfor
+                                        </div>
+                                    </div>
+                                    
+                                    @if ($fb->comment)
+                                        <div class="relative bg-navy/40 p-6 rounded-3xl border border-white/5 group-hover:border-white/10 group-hover:bg-navy transition-all overflow-hidden italic text-white/70 leading-relaxed font-medium">
+                                            <i class="fa-solid fa-quote-left absolute top-4 left-4 text-blue/5 text-4xl"></i>
+                                            "{{ $fb->comment }}"
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="flex-1 flex flex-col items-center justify-center p-12 text-center">
+                            <div class="w-24 h-24 bg-navy rounded-[32px] flex items-center justify-center mb-8 border border-white/5 shadow-inner">
+                                <i class="fa-solid fa-comments text-4xl text-white/10"></i>
+                            </div>
+                            <h4 class="text-lg font-black text-white uppercase tracking-widest mb-3">No Testimonials Found</h4>
+                            <p class="text-sm font-bold text-white/20 uppercase tracking-[0.2em] max-w-xs">Be the first to provide professional feedback for this advocate.</p>
+                        </div>
+                    @endforelse
+                </div>
             </div>
         </div>
     </div>
@@ -517,8 +377,11 @@
 
             function sendConnectProfile(userId) {
                 const btn = document.getElementById('connectBtn');
+                if(!btn) return;
+                
                 btn.disabled = true;
-                btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Sending...';
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Initializing...';
+                
                 fetch('{{ route('connections.send') }}', {
                         method: 'POST',
                         headers: {
@@ -531,12 +394,13 @@
                     })
                     .then(r => r.json())
                     .then(() => {
-                        btn.outerHTML =
-                            `<div style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);font-size:.88rem;"><i class="bi bi-clock"></i> Request Sent</div>`;
+                        btn.classList.remove('bg-blue');
+                        btn.classList.add('bg-white/5', 'text-white/40', 'border', 'border-white/10');
+                        btn.innerHTML = '<i class="fa-solid fa-clock"></i> Request Sent';
                     })
                     .catch(() => {
                         btn.disabled = false;
-                        btn.innerHTML = '<i class="bi bi-person-plus-fill"></i> Send Connect Request';
+                        btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Try Again';
                     });
             }
 
@@ -553,3 +417,4 @@
     @endpush
 
 @endsection
+

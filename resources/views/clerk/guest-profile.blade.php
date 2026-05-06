@@ -4,494 +4,213 @@
 
 @push('styles')
     <style>
-        .gp-hero-light {
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 24px;
-            background: linear-gradient(135deg, #060C18 0%, #0F1A2E 50%, #1a1a08 100%);
-            border: 1px solid rgba(212, 175, 55, .15);
-            position: relative;
+        .gp-hero {
+            border-radius: 24px; overflow: hidden; margin-bottom: 24px;
+            background: linear-gradient(135deg, #050812 0%, #080d1a 50%, #0b1120 100%);
+            border: 1px solid rgba(180,180,254,0.1); position: relative;
         }
-
-        .gp-hero-light::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 55% 60% at 85% 50%, rgba(212, 175, 55, .15) 0%, transparent 65%),
-                radial-gradient(ellipse 25% 40% at 5% 90%, rgba(212, 175, 55, .06) 0%, transparent 60%);
-            pointer-events: none;
+        .gp-hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 55% 60% at 85% 50%, rgba(180,180,254,0.08) 0%, transparent 65%),
+                radial-gradient(ellipse 25% 40% at 5% 90%, rgba(180,180,254,0.04) 0%, transparent 60%);
         }
-
         .gp-grid-bg {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(212, 175, 55, .04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(212, 175, 55, .04) 1px, transparent 1px);
+            position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(180,180,254,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(180,180,254,0.03) 1px, transparent 1px);
             background-size: 36px 36px;
-            pointer-events: none;
         }
-
-        .avatar-spin-ring {
-            position: relative;
-            width: 88px;
-            height: 88px;
-            flex-shrink: 0;
-        }
-
-        .avatar-spin-ring::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            background: conic-gradient(#D4AF37 0deg, #B5952F 90deg, rgba(212, 175, 55, .15) 200deg, #D4AF37 360deg);
+        .avatar-ring { position: relative; width: 88px; height: 88px; flex-shrink: 0; }
+        .avatar-ring::before {
+            content: ''; position: absolute; inset: -3px; border-radius: 50%;
+            background: conic-gradient(#B4B4FE 0deg, #9999f0 90deg, rgba(180,180,254,0.15) 200deg, #B4B4FE 360deg);
             animation: spinRing 7s linear infinite;
         }
-
-        .avatar-spin-inner {
-            position: absolute;
-            inset: 3px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #D4AF37, #B5952F);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #060C18;
-            font-family: 'Playfair Display', serif;
-            z-index: 1;
+        .avatar-inner {
+            position: absolute; inset: 3px; border-radius: 50%;
+            background: linear-gradient(135deg, #B4B4FE, #9999f0);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; font-weight: 700; color: #050812; z-index: 1;
         }
-
-        @keyframes spinRing {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .info-card {
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
-        }
-
+        @keyframes spinRing { to { transform: rotate(360deg); } }
+        .info-card { background: #080d1a; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; overflow: hidden; }
         .info-card-header {
-            padding: 14px 20px;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: .65rem;
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: .15em;
-            text-transform: uppercase;
-            color: #B5952F;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            padding: 14px 24px; border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: .6rem; font-family: 'Manrope', monospace; letter-spacing: .15em;
+            text-transform: uppercase; color: #B4B4FE; display: flex; align-items: center; gap: 8px;
         }
-
-        .info-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            border-bottom: 1px solid #f8fafc;
-            transition: background .15s;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-row:hover {
-            background: #fafbfc;
-        }
-
+        .info-row { display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .info-row:last-child { border-bottom: none; }
+        .info-row:hover { background: rgba(255,255,255,0.02); }
         .info-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 9px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(212, 175, 55, .08);
-            color: #B5952F;
-            border: 1px solid rgba(212, 175, 55, .15);
-            font-size: .8rem;
+            width: 32px; height: 32px; border-radius: 10px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(180,180,254,0.1); color: #B4B4FE; border: 1px solid rgba(180,180,254,0.2); font-size: .8rem;
         }
-
-        .info-label {
-            font-size: .6rem;
-            font-family: monospace;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            color: #94a3b8;
-            margin-bottom: 2px;
-        }
-
-        .info-value {
-            font-size: .85rem;
-            color: #1e293b;
-            font-weight: 500;
-        }
-
-        .review-item {
-            padding: 16px 20px;
-            border-bottom: 1px solid #f1f5f9;
-            transition: background .15s;
-        }
-
-        .review-item:last-child {
-            border-bottom: none;
-        }
-
-        .review-item:hover {
-            background: #fafbfc;
-        }
-
-        .rating-bar {
-            height: 5px;
-            border-radius: 99px;
-            background: #f1f5f9;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .rating-bar-fill {
-            height: 100%;
-            border-radius: 99px;
-            background: linear-gradient(90deg, #D4AF37, #B5952F);
-        }
-
-        .stat-chip {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 12px 18px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, .08);
-            border: 1px solid rgba(255, 255, 255, .1);
-            min-width: 72px;
-        }
-
-        .stat-val {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #D4AF37;
-            line-height: 1;
-        }
-
-        .stat-lbl {
-            font-size: .5rem;
-            font-family: monospace;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, .4);
-            margin-top: 3px;
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(14px)
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
-
-        .fu {
-            animation: fadeUp .35s ease both;
-        }
-
-        .fu-1 {
-            animation-delay: .04s;
-        }
-
-        .fu-2 {
-            animation-delay: .1s;
-        }
-
-        .fu-3 {
-            animation-delay: .16s;
-        }
+        .info-label { font-size: .55rem; font-family: 'Manrope', monospace; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2px; }
+        .info-value { font-size: .85rem; color: rgba(255,255,255,0.8); font-weight: 600; }
+        .review-item { padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .review-item:last-child { border-bottom: none; }
+        .review-item:hover { background: rgba(255,255,255,0.02); }
+        .rating-bar { height: 5px; border-radius: 99px; background: rgba(255,255,255,0.07); flex: 1; }
+        .rating-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #B4B4FE, #9999f0); }
+        .stat-chip { display: flex; flex-direction: column; align-items: center; padding: 12px 20px; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); min-width: 72px; }
+        .stat-val { font-size: 1.5rem; font-weight: 700; color: #B4B4FE; line-height: 1; }
+        .stat-lbl { font-size: .5rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 4px; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+        .fu { animation: fadeUp .35s ease both; }
+        .fu-1 { animation-delay: .04s; }
+        .fu-2 { animation-delay: .1s; }
+        .fu-3 { animation-delay: .16s; }
     </style>
-@endpush
+@endsection
 
 @section('content')
-
-    {{-- Back --}}
     <div class="mb-4 fu">
-        <a href="{{ route('clerk.guests') }}"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 bg-white text-text-muted-light hover:text-gray-800 hover:border-gray-300 transition-all shadow-sm">
-            <i class="bi bi-arrow-left text-xs"></i> Back to Guests
+        <a href="{{ route('clerk.guests') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"
+            style="color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)"
+            onmouseover="this.style.borderColor='rgba(180,180,254,0.4)';this.style.color='#B4B4FE'"
+            onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.color='rgba(255,255,255,0.5)'">
+            <i class="fas fa-arrow-left text-xs"></i> Back to Guests
         </a>
     </div>
 
-    {{-- ── HERO BANNER ── --}}
-    <div class="gp-hero-light fu fu-1">
+    <div class="gp-hero fu fu-1">
         <div class="gp-grid-bg"></div>
         <div class="relative z-10 p-6 sm:p-8">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-
-                {{-- Spinning avatar --}}
-                <div class="avatar-spin-ring">
-                    <div class="avatar-spin-inner">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
-                </div>
-
-                {{-- Info --}}
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                <div class="avatar-ring"><div class="avatar-inner">{{ strtoupper(substr($user->name, 0, 1)) }}</div></div>
                 <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2 flex-wrap mb-1.5">
-                        <span class="font-mono text-[.55rem] tracking-[.2em] uppercase px-2.5 py-1 rounded-full"
-                            style="background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.3);color:#D4AF37">
+                    <div class="flex items-center gap-3 flex-wrap mb-2">
+                        <span class="font-mono text-[.55rem] tracking-[.2em] uppercase px-3 py-1.5 rounded-full"
+                            style="background:rgba(180,180,254,0.12);border:1px solid rgba(180,180,254,0.3);color:#B4B4FE">
                             Guest User
                         </span>
                         @if ($user->status === 'active')
-                            <span
-                                class="flex items-center gap-1.5 font-mono text-[.55rem] tracking-widest uppercase px-2.5 py-1 rounded-full"
-                                style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80">
-                                <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse inline-block"></span>
-                                Active
+                            <span class="flex items-center gap-1.5 font-mono text-[.55rem] tracking-widest uppercase px-3 py-1.5 rounded-full"
+                                style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);color:#4ade80">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> Active
                             </span>
                         @endif
                     </div>
-                    <h1 class="font-display font-bold text-white mb-1.5" style="font-size:clamp(1.4rem,3vw,2rem)">
-                        {{ $user->name }}</h1>
-                    <p class="text-sm flex items-center gap-2 flex-wrap" style="color:rgba(255,255,255,.4)">
-                        <span><i class="bi bi-envelope-fill text-xs" style="color:#D4AF37"></i> {{ $user->email }}</span>
-                        @if ($user->city)
-                            <span>·</span>
-                            <span><i class="bi bi-geo-alt-fill text-xs" style="color:#D4AF37"></i>
-                                {{ $user->city }}</span>
-                        @endif
-                        <span>·</span>
-                        <span>Member since {{ $user->created_at->format('M Y') }}</span>
+                    <h1 class="font-bold text-white mb-1" style="font-size:clamp(1.4rem,3vw,2rem);">{{ $user->name }}</h1>
+                    <p class="text-sm flex items-center gap-2 flex-wrap" style="color:rgba(255,255,255,0.4)">
+                        <span><i class="fas fa-envelope text-xs" style="color:#B4B4FE"></i> {{ $user->email }}</span>
+                        @if ($user->city) <span>·</span> <span><i class="fas fa-map-marker-alt text-xs" style="color:#B4B4FE"></i> {{ $user->city }}</span> @endif
+                        <span>·</span> <span>Member since {{ $user->created_at->format('M Y') }}</span>
                     </p>
                 </div>
-
-                {{-- Stats --}}
                 <div class="flex gap-3">
-                    <div class="stat-chip">
-                        <div class="stat-val">{{ $avgRating ? number_format($avgRating, 1) : '—' }}</div>
-                        <div class="stat-lbl">Avg Rating</div>
-                    </div>
-                    <div class="stat-chip">
-                        <div class="stat-val">{{ $feedbacks->count() }}</div>
-                        <div class="stat-lbl">Reviews</div>
-                    </div>
+                    <div class="stat-chip"><div class="stat-val">{{ $avgRating ? number_format($avgRating, 1) : '—' }}</div><div class="stat-lbl">Avg Rating</div></div>
+                    <div class="stat-chip"><div class="stat-val">{{ $feedbacks->count() }}</div><div class="stat-lbl">Reviews</div></div>
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- ── BODY ── --}}
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
-
-        {{-- SIDEBAR --}}
-        <div class="lg:col-span-2 space-y-4 fu fu-2">
-
-            {{-- Contact --}}
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        <div class="lg:col-span-2 space-y-5 fu fu-2">
             <div class="info-card">
-                <div class="info-card-header"><i class="bi bi-person-vcard"></i> Contact Details</div>
-
-                <div class="info-row">
-                    <div class="info-icon"><i class="bi bi-envelope"></i></div>
-                    <div>
-                        <div class="info-label">Email</div>
-                        <div class="info-value break-all">{{ $user->email }}</div>
-                    </div>
-                </div>
-                @if ($user->phone)
-                    <div class="info-row">
-                        <div class="info-icon"><i class="bi bi-telephone"></i></div>
-                        <div>
-                            <div class="info-label">Phone</div>
-                            <div class="info-value">{{ $user->phone }}</div>
-                        </div>
-                    </div>
-                @endif
-                @if ($user->city)
-                    <div class="info-row">
-                        <div class="info-icon"><i class="bi bi-geo-alt"></i></div>
-                        <div>
-                            <div class="info-label">City</div>
-                            <div class="info-value">{{ $user->city }}</div>
-                        </div>
-                    </div>
-                @endif
-                <div class="info-row">
-                    <div class="info-icon"><i class="bi bi-calendar3"></i></div>
-                    <div>
-                        <div class="info-label">Member Since</div>
-                        <div class="info-value">{{ $user->created_at->format('d M Y') }}</div>
-                    </div>
-                </div>
-                <div class="info-row">
-                    <div class="info-icon"><i class="bi bi-clock-history"></i></div>
-                    <div>
-                        <div class="info-label">Last Active</div>
-                        <div class="info-value">{{ $user->updated_at->diffForHumans() }}</div>
-                    </div>
-                </div>
+                <div class="info-card-header"><i class="fas fa-id-card"></i> Contact Details</div>
+                <div class="info-row"><div class="info-icon"><i class="fas fa-envelope"></i></div><div><div class="info-label">Email</div><div class="info-value break-all">{{ $user->email }}</div></div>
+                @if ($user->phone) <div class="info-row"><div class="info-icon"><i class="fas fa-phone"></i></div><div><div class="info-label">Phone</div><div class="info-value">{{ $user->phone }}</div></div> @endif
+                @if ($user->city) <div class="info-row"><div class="info-icon"><i class="fas fa-map-marker-alt"></i></div><div><div class="info-label">City</div><div class="info-value">{{ $user->city }}</div></div> @endif
+                <div class="info-row"><div class="info-icon"><i class="fas fa-calendar"></i></div><div><div class="info-label">Member Since</div><div class="info-value">{{ $user->created_at->format('d M Y') }}</div></div></div>
+                <div class="info-row"><div class="info-icon"><i class="fas fa-clock"></i></div><div><div class="info-label">Last Active</div><div class="info-value">{{ $user->updated_at->diffForHumans() }}</div></div></div>
             </div>
 
-            {{-- ✅ Connect Action Box (NEW) --}}
             @php
                 $reqId = 'null';
                 if (in_array($connectionStatus, ['received', 'sent', 'connected'])) {
                     $existingReq = \App\Models\ConnectionRequest::where(function ($q) use ($user) {
                         $q->where('sender_id', auth()->id())->where('receiver_id', $user->id);
-                    })
-                        ->orWhere(function ($q) use ($user) {
-                            $q->where('sender_id', $user->id)->where('receiver_id', auth()->id());
-                        })
-                        ->first();
-                    if ($existingReq) {
-                        $reqId = $existingReq->id;
-                    }
+                    })->orWhere(function ($q) use ($user) {
+                        $q->where('sender_id', $user->id)->where('receiver_id', auth()->id());
+                    })->first();
+                    if ($existingReq) { $reqId = $existingReq->id; }
                 }
             @endphp
 
             <div x-data="profileConnection('{{ $connectionStatus }}', {{ $user->id }}, {{ $reqId }})" class="info-card p-5">
-                <div class="info-card-header !px-0 !pt-0 !border-b-0 mb-3"><i class="bi bi-diagram-3"></i> Network Status
-                </div>
-
+                <div class="info-card-header !p-0 !mb-3"><i class="fas fa-network-wired"></i> Network Status</div>
                 <template x-if="status === 'none'">
-                    <button @click="sendReq()"
-                        class="w-full py-3 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2"
-                        style="background:#D4AF37;color:#0e0e0f" onmouseover="this.style.background='#B5952F'"
-                        onmouseout="this.style.background='#D4AF37'">
-                        <i class="bi bi-person-plus-fill text-lg"></i> Connect
+                    <button @click="sendReq()" class="btn-primary w-full justify-center">
+                        <i class="fas fa-user-plus"></i> Connect
                     </button>
                 </template>
-
                 <template x-if="status === 'sent'">
-                    <button disabled
-                        class="w-full py-3 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2 bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed">
-                        <i class="bi bi-clock-history text-lg"></i> Request Sent
+                    <button disabled class="w-full py-3 rounded-xl text-sm font-bold flex justify-center items-center gap-2 bg-white/5 border border-white/10 text-white/40 cursor-not-allowed">
+                        <i class="fas fa-clock"></i> Request Sent
                     </button>
                 </template>
-
                 <template x-if="status === 'received'">
-                    <button @click="acceptReq()"
-                        class="w-full py-3 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2 shadow-lg hover:opacity-90"
-                        style="background:#10b981;color:#ffffff">
-                        <i class="bi bi-check-circle-fill text-lg"></i> Accept Request
+                    <button @click="acceptReq()" class="btn-primary w-full justify-center" style="background:#10b981;">
+                        <i class="fas fa-check-circle"></i> Accept Request
                     </button>
                 </template>
-
                 <template x-if="status === 'connected'">
-                    <button disabled
-                        class="w-full py-3 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2 bg-green-50 border border-green-200 text-green-600 cursor-default">
-                        <i class="bi bi-patch-check-fill text-lg"></i> You are Connected
+                    <button disabled class="w-full py-3 rounded-xl text-sm font-bold flex justify-center items-center gap-2 bg-green-500/10 border border-green-500/20 text-green-400 cursor-default">
+                        <i class="fas fa-check-circle"></i> You are Connected
                     </button>
                 </template>
             </div>
 
-            {{-- Rating breakdown --}}
             @if ($feedbacks->count() > 0)
-                @php
-                    $ratingCounts = $feedbacks->groupBy('rating')->map->count();
-                    $total = $feedbacks->count();
-                @endphp
+                @php $ratingCounts = $feedbacks->groupBy('rating')->map->count(); $total = $feedbacks->count(); @endphp
                 <div class="info-card">
-                    <div class="info-card-header"><i class="bi bi-bar-chart"></i> Rating Breakdown</div>
+                    <div class="info-card-header"><i class="fas fa-chart-bar"></i> Rating Breakdown</div>
                     <div class="px-5 py-4 space-y-2.5">
                         @for ($star = 5; $star >= 1; $star--)
-                            @php
-                                $cnt = $ratingCounts[$star] ?? 0;
-                                $pct = $total ? round(($cnt / $total) * 100) : 0;
-                            @endphp
+                            @php $cnt = $ratingCounts[$star] ?? 0; $pct = $total ? round(($cnt / $total) * 100) : 0; @endphp
                             <div class="flex items-center gap-3">
-                                <div class="flex items-center gap-1 w-12 flex-shrink-0">
-                                    <span class="text-xs font-mono text-text-muted-light">{{ $star }}</span>
-                                    <i class="bi bi-star-fill text-xs text-primary"></i>
-                                </div>
-                                <div class="rating-bar">
-                                    <div class="rating-bar-fill" style="width:{{ $pct }}%"></div>
-                                </div>
-                                <span
-                                    class="text-xs font-semibold text-text-muted-light w-6 text-right flex-shrink-0">{{ $cnt }}</span>
+                                <div class="flex items-center gap-1 w-12 flex-shrink-0"><span class="text-xs font-mono text-white/50">{{ $star }}</span><i class="fas fa-star text-xs" style="color:#B4B4FE"></i></div>
+                                <div class="rating-bar flex-1"><div class="rating-bar-fill" style="width:{{ $pct }}%"></div></div>
+                                <span class="text-xs font-semibold text-white/50 w-6 text-right flex-shrink-0">{{ $cnt }}</span>
                             </div>
                         @endfor
                     </div>
                 </div>
             @endif
 
-            {{-- Note --}}
-            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex gap-3">
-                <i class="bi bi-info-circle text-amber-500 flex-shrink-0 mt-0.5"></i>
-                <p class="text-xs text-amber-700 leading-relaxed">
-                    Guest users browse advocates & clerks on Court Pulse. They give feedback to unlock contact details.
-                </p>
+            <div class="rounded-2xl p-4" style="background:rgba(180,180,254,0.04);border:1px solid rgba(180,180,254,0.12)">
+                <div class="flex gap-3"><i class="fas fa-info-circle text-blue mt-0.5 flex-shrink-0" style="color:#B4B4FE"></i><p class="text-xs text-white/50 leading-relaxed">Guest users browse advocates & clerks on Court Pulse. They give feedback to unlock contact details.</p></div>
             </div>
         </div>
 
-        {{-- REVIEWS --}}
         <div class="lg:col-span-3 fu fu-3">
             <div class="info-card">
                 <div class="info-card-header justify-between">
-                    <span class="flex items-center gap-2"><i class="bi bi-chat-quote"></i> Reviews Received</span>
+                    <span class="flex items-center gap-2"><i class="fas fa-comment-quote"></i> Reviews Received</span>
                     @if ($feedbacks->count())
                         <span class="flex items-center gap-2">
                             <span class="flex gap-0.5">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <i class="bi bi-star{{ $avgRating && $i <= round($avgRating) ? '-fill' : '' }} text-xs"
-                                        style="color:{{ $avgRating && $i <= round($avgRating) ? '#D4AF37' : '#e2e8f0' }}"></i>
-                                @endfor
+                                @for ($i = 1; $i <= 5; $i++) <i class="fas fa-star{{ $avgRating && $i <= round($avgRating) ? '' : '-empty' }} text-xs" style="color:{{ $avgRating && $i <= round($avgRating) ? '#B4B4FE' : 'rgba(255,255,255,0.12)' }}"></i> @endfor
                             </span>
-                            <span class="font-bold" style="color:#B5952F">{{ number_format($avgRating, 1) }}</span>
-                            <span class="text-gray-400 font-normal normal-case"
-                                style="font-size:.65rem">({{ $feedbacks->count() }})</span>
+                            <span class="font-bold" style="color:#B4B4FE">{{ number_format($avgRating, 1) }}</span>
+                            <span class="text-white/25" style="font-size:.65rem">({{ $feedbacks->count() }})</span>
                         </span>
                     @endif
                 </div>
-
                 @forelse($feedbacks as $fb)
                     <div class="review-item">
                         <div class="flex items-start justify-between gap-3 mb-2">
                             <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0 text-white"
-                                    style="background:linear-gradient(135deg,#D4AF37,#B5952F)">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 text-navy" style="background:linear-gradient(135deg,#B4B4FE,#9999f0)">
                                     {{ $fb->is_anonymous ? '?' : strtoupper(substr($fb->giver->name ?? 'A', 0, 1)) }}
                                 </div>
                                 <div>
-                                    <div class="font-semibold text-gray-900 text-sm">
-                                        {{ $fb->is_anonymous ? 'Anonymous' : $fb->giver->name ?? 'Unknown' }}
-                                    </div>
-                                    <div class="text-xs text-text-muted-light">
-                                        {{ !$fb->is_anonymous && $fb->giver ? ucfirst($fb->giver->role) : 'Court Pulse User' }}
-                                    </div>
+                                    <div class="font-semibold text-white text-sm">{{ $fb->is_anonymous ? 'Anonymous' : $fb->giver->name ?? 'Unknown' }}</div>
+                                    <div class="text-xs text-white/40">{{ !$fb->is_anonymous && $fb->giver ? ucfirst($fb->giver->role) : 'Court Pulse User' }}</div>
                                 </div>
                             </div>
                             <div class="flex flex-col items-end gap-1 flex-shrink-0">
-                                <div class="flex gap-0.5">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <i class="bi bi-star{{ $i <= $fb->rating ? '-fill' : '' }} text-xs"
-                                            style="color:{{ $i <= $fb->rating ? '#D4AF37' : '#e2e8f0' }}"></i>
-                                    @endfor
-                                </div>
-                                <span class="text-xs text-text-muted-light">{{ $fb->created_at->diffForHumans() }}</span>
+                                <div class="flex gap-0.5">@for ($i = 1; $i <= 5; $i++) <i class="fas fa-star{{ $i <= $fb->rating ? '' : '-empty' }} text-xs" style="color:{{ $i <= $fb->rating ? '#B4B4FE' : 'rgba(255,255,255,0.1)' }}"></i> @endfor</div>
+                                <span class="text-xs text-white/40">{{ $fb->created_at->diffForHumans() }}</span>
                             </div>
                         </div>
-                        @if ($fb->comment)
-                            <div class="rounded-lg px-3 py-2.5 text-sm text-gray-600 leading-relaxed"
-                                style="background:#faf9f6;border-left:3px solid #D4AF37">
-                                "{{ $fb->comment }}"
-                            </div>
-                        @endif
+                        @if ($fb->comment) <div class="rounded-lg px-4 py-3 text-sm" style="background:rgba(180,180,254,0.07);border-left:2px solid #B4B4FE;color:rgba(255,255,255,0.55);">"{{ $fb->comment }}"</div> @endif
                     </div>
                 @empty
-                    <div class="py-16 text-center">
-                        <span class="material-icons-round text-5xl text-gray-200 block mb-3">reviews</span>
-                        <p class="text-gray-500 font-medium">No reviews yet</p>
-                        <p class="text-sm text-text-muted-light mt-1">This guest hasn't received any feedback yet.</p>
-                    </div>
+                    <div class="py-16 text-center"><i class="fas fa-comment-slash text-5xl text-white/10 block mb-3"></i><p class="text-white/40 font-medium">No reviews yet</p></div>
                 @endforelse
             </div>
         </div>
@@ -501,47 +220,20 @@
         <script>
             function profileConnection(initialStatus, userId, reqId) {
                 return {
-                    status: initialStatus,
-                    requestId: reqId,
-
+                    status: initialStatus, requestId: reqId,
                     async sendReq() {
-                        try {
-                            const res = await fetch(`{{ route('connections.send') }}`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                    'Accept': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    receiver_id: userId
-                                })
-                            });
+                        try { const res = await fetch(`{{ route('connections.send') }}`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }, body: JSON.stringify({ receiver_id: userId }) });
                             if (res.ok) this.status = 'sent';
-                        } catch (e) {
-                            console.error(e);
-                        }
+                        } catch (e) { console.error(e); }
                     },
-
                     async acceptReq() {
                         if (!this.requestId) return;
-                        try {
-                            const res = await fetch(`/connections/${this.requestId}/accept`, {
-                                method: 'PATCH',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                    'Accept': 'application/json'
-                                }
-                            });
+                        try { const res = await fetch(`/connections/${this.requestId}/accept`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' } });
                             if (res.ok) this.status = 'connected';
-                        } catch (e) {
-                            console.error(e);
-                        }
+                        } catch (e) { console.error(e); }
                     }
                 }
             }
         </script>
     @endpush
-
 @endsection

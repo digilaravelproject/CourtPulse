@@ -34,7 +34,7 @@ class SupportController extends Controller
                 ->where('status', '=', 'active')
                 ->latest()->take(5)->get();
 
-            return view('support.dashboard', $data);
+            return view('clerk.dashboard', $data);
         } catch (\Exception $e) {
             Log::error('Support Dashboard Error: ' . $e->getMessage());
             return back()->withErrors(['general' => 'Failed to load dashboard.']);
@@ -46,7 +46,7 @@ class SupportController extends Controller
         try {
             $user = Auth::user();
             $profile = $user->clerkProfile ?? new \App\Models\ClerkProfile();
-            return view('support.profile', compact('user', 'profile'));
+            return view('clerk.profile', compact('user', 'profile'));
         } catch (\Exception $e) {
             Log::error('Support Profile View Error: ' . $e->getMessage());
             return back()->withErrors(['general' => 'Failed to load profile.']);
@@ -110,7 +110,7 @@ class SupportController extends Controller
         try {
             $advocates = User::query()->where('role', '=', 'advocate')->where('status', '=', 'active')->get();
             $myFeedbacks = Auth::user()->feedbacksGiven()->with('receiver')->latest()->get();
-            return view('support.feedback', compact('advocates', 'myFeedbacks'));
+            return view('clerk.feedback', compact('advocates', 'myFeedbacks'));
         } catch (\Exception $e) {
             return back()->withErrors(['general' => 'Failed to load feedback page.']);
         }
@@ -131,11 +131,11 @@ class SupportController extends Controller
 
             if ($request->ajax()) {
                 return response()->json([
-                    'html' => view('support.partials.advocate-list', compact('advocates', 'hasFeedback', 'authId'))->render()
+                    'html' => view('clerk.partials.advocate-list', compact('advocates', 'hasFeedback', 'authId'))->render()
                 ]);
             }
 
-            return view('support.advocates', compact('advocates', 'hasFeedback', 'authId'));
+            return view('clerk.advocates', compact('advocates', 'hasFeedback', 'authId'));
         } catch (\Exception $e) {
             Log::error('Support View Advocates Error: ' . $e->getMessage());
             return back()->withErrors(['general' => 'Failed to load advocates.']);
@@ -161,7 +161,7 @@ class SupportController extends Controller
             $feedbacks = $user->feedbacksReceived()->with('giver')->latest()->take(5)->get();
             $avgRating = (float) $user->feedbacksReceived()->avg('rating');
 
-            return view('support.advocate-profile', compact(
+            return view('clerk.advocate-profile', compact(
                 'user',
                 'profile',
                 'hasFeedback',
@@ -186,7 +186,7 @@ class SupportController extends Controller
                 return response()->json($guests);
             }
 
-            return view('support.guests', compact('guests'));
+            return view('clerk.guests', compact('guests'));
         } catch (\Exception $e) {
             Log::error('Support Browse Guests Error: ' . $e->getMessage());
             return back()->withErrors(['general' => 'Failed to load guests.']);
@@ -203,7 +203,7 @@ class SupportController extends Controller
             $feedbacks = $user->feedbacksReceived()->with('giver')->latest()->get();
             $avgRating = (float) $feedbacks->avg('rating');
 
-            return view('support.guest-profile', compact('user', 'feedbacks', 'avgRating', 'me', 'connectionStatus'));
+            return view('clerk.guest-profile', compact('user', 'feedbacks', 'avgRating', 'me', 'connectionStatus'));
         } catch (\Exception $e) {
             Log::error('Support View Guest Profile Error: ' . $e->getMessage());
             return back()->withErrors(['general' => 'Failed to load guest profile.']);

@@ -19,53 +19,50 @@
     <section>
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
             <div>
-                <h1 class="font-display text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                <h1 class="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter leading-none mb-2">
                     Welcome back, {{ $firstName }}
                 </h1>
-                <p class="text-text-muted-light">Here's what's happening with your profile today.</p>
+                <p class="text-xs font-bold text-white/60 leading-relaxed">Here's what's happening with your profile today.</p>
             </div>
             <div
-                class="flex items-center gap-2 bg-surface-light px-4 py-2 rounded-full border border-gray-200 shadow-sm w-fit">
-                <span class="relative flex h-3 w-3">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75
-                         {{ $user->status === 'active' ? 'bg-green-400' : 'bg-amber-400' }}"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3
-                         {{ $user->status === 'active' ? 'bg-green-500' : 'bg-amber-500' }}"></span>
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-black text-[0.6rem] uppercase tracking-widest border {{ $user->status === 'active' ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-amber-500/10 border-amber-500/20 text-amber-400' }}">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-current"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-current"></span>
                 </span>
-                <span class="text-sm font-medium text-gray-700">
+                <span>
                     {{ $user->status === 'active' ? 'Profile Visible' : 'Account Active' }}
                 </span>
             </div>
         </div>
 
         {{-- Profile Completeness Card --}}
-        <div class="bg-surface-light rounded-2xl p-6 shadow-sm border border-gray-200 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-16 -mt-16 pointer-events-none"></div>
+        <div class="bg-navy2 rounded-3xl border border-white/5 shadow-2xl p-6 md:p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue/5 rounded-full -mr-16 -mt-16 pointer-events-none"></div>
             <div class="flex flex-col md:flex-row gap-6 items-center relative z-10">
                 <div class="flex-1 w-full">
                     <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-semibold text-lg text-gray-900">Profile Completeness</h3>
-                        <span class="font-bold text-primary">{{ $completePct }}%</span>
+                        <h3 class="font-black text-base text-white uppercase tracking-widest">Profile Completeness</h3>
+                        <span class="font-black text-blue">{{ $completePct }}%</span>
                     </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                        <div class="bg-primary h-2.5 rounded-full transition-all duration-1000 ease-out"
+                    <div class="w-full bg-navy border border-white/5 rounded-full h-2.5 mb-4">
+                        <div class="bg-blue h-2.5 rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(180,180,254,0.5)]"
                             style="width:{{ $completePct }}%"></div>
                     </div>
-                    <p class="text-sm text-text-muted-light mb-4">
+                    <p class="text-xs font-bold text-white/60 leading-relaxed mb-4">
                         Complete your profile details to increase visibility to top advocates.
                     </p>
-                    <a href="{{ route('clerk.profile') }}" class="inline-block text-sm bg-gray-900 text-white px-4 py-2 rounded-lg font-medium
-                      hover:bg-gray-800 transition-colors">
+                    <a href="{{ route('clerk.profile') }}" class="w-fit flex justify-center items-center gap-2 py-3.5 px-6 rounded-xl text-xs font-black text-navy uppercase tracking-widest bg-blue hover:bg-white transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-[0_5px_15px_rgba(180,180,254,0.2)]">
                         Update Profile
                     </a>
                 </div>
-                <div class="hidden md:block w-px h-24 bg-gray-200 mx-4"></div>
+                <div class="hidden md:block w-px h-24 bg-white/5 mx-4"></div>
                 <div class="flex gap-8 md:w-auto w-full justify-around md:justify-start shrink-0">
                     <div class="text-center">
-                        <p class="text-3xl font-display font-bold text-gray-900">
+                        <p class="text-3xl font-black text-white">
                             {{ $avgRating ? number_format($avgRating, 1) : '—' }}
                         </p>
-                        <p class="text-xs font-medium text-text-muted-light uppercase tracking-wide mt-1">Avg Rating</p>
+                        <p class="text-[10px] font-black text-white/70 uppercase tracking-widest mt-1">Avg Rating</p>
                     </div>
                 </div>
             </div>
@@ -73,37 +70,36 @@
     </section>
 
     {{-- ── INTERESTED ADVOCATES ── --}}
-    <section>
+    <section class="mt-8">
         <div class="flex items-center justify-between mb-6">
-            <h2 class="font-display text-2xl font-bold text-gray-900">Interested Advocates</h2>
+            <h2 class="text-xl font-black text-white uppercase tracking-widest">Interested Advocates</h2>
             <a href="{{ route('clerk.advocates') }}"
-                class="text-primary hover:text-primary-dark font-medium text-sm flex items-center gap-1">
-                View All <span class="material-icons-round text-sm">arrow_forward</span>
+                class="text-blue hover:text-white transition-colors font-black text-[10px] uppercase tracking-widest flex items-center gap-1">
+                View All <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             @forelse($interestedAdvocates as $adv)
                 <div
-                    class="bg-surface-light rounded-2xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition-shadow group">
+                    class="bg-navy2 rounded-3xl border border-white/5 shadow-2xl p-6 transition-all duration-300 hover:border-white/10 group">
                     <div class="flex items-start gap-4 mb-4">
-                        <div class="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 font-display font-bold text-2xl text-white shadow-sm"
-                            style="background:linear-gradient(135deg,#D4AF37,#B5952F)">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 text-lg font-black bg-blue/10 border border-blue/20 text-blue shadow-[0_0_15px_rgba(180,180,254,0.15)]">
                             {{ strtoupper(substr($adv->name, 0, 1)) }}
                         </div>
                         <div class="min-w-0">
                             <h3
-                                class="font-semibold text-lg text-gray-900 group-hover:text-primary transition-colors leading-tight">
+                                class="font-black text-base text-white uppercase tracking-widest group-hover:text-blue transition-colors leading-tight">
                                 Adv. {{ $adv->name }}
                             </h3>
-                            <p class="text-sm text-text-muted-light">
+                            <p class="text-[10px] font-black text-white/50 uppercase tracking-widest mt-1">
                                 {{ optional($adv->advocateProfile)->high_court ?? ($adv->city ?? 'Advocate') }}
                             </p>
                             @php $advRating = round($adv->feedbacksReceived()->avg('rating') ?? 0, 1); @endphp
                             @if ($advRating > 0)
-                                <div class="flex items-center gap-1 mt-1 text-xs text-text-muted-light">
-                                    <span class="material-icons-round text-sm text-primary">star</span>
-                                    <span class="font-medium text-gray-700">{{ $advRating }}</span>
+                                <div class="flex items-center gap-1 mt-1 text-[10px] font-bold text-white/40 uppercase tracking-widest">
+                                    <i class="fas fa-star text-blue"></i>
+                                    <span class="text-white">{{ $advRating }}</span>
                                     @if (optional($adv->advocateProfile)->practice_areas)
                                         <span>•
                                             {{ is_array($adv->advocateProfile->practice_areas) ? $adv->advocateProfile->practice_areas[0] : Str::limit($adv->advocateProfile->practice_areas, 20) }}</span>
@@ -113,8 +109,8 @@
                         </div>
                     </div>
 
-                    <div class="bg-gray-50 rounded-lg p-3 mb-4">
-                        <p class="text-sm text-gray-600 line-clamp-2">
+                    <div class="bg-navy rounded-2xl border border-white/5 p-4 mb-4 shadow-inner">
+                        <p class="text-xs font-bold text-white/60 leading-relaxed line-clamp-2">
                             "{{ optional($adv->advocateProfile)->bio ?? 'Looking for an experienced clerk for filing and drafting assistance in court matters.' }}"
                         </p>
                     </div>
@@ -122,133 +118,104 @@
                     <div class="flex items-center gap-3">
                         @if ($hasFeedback)
                             <a href="{{ route('user.detail', $adv) }}"
-                                class="flex-1 text-center text-sm font-medium py-2.5 px-4 rounded-lg transition-colors shadow-sm"
-                                style="background:#D4AF37;color:#1a1a1a" onmouseover="this.style.background='#B5952F'"
-                                onmouseout="this.style.background='#D4AF37'">
+                                class="flex-1 flex justify-center items-center gap-2 py-2.5 px-4 rounded-xl text-[10px] font-black text-navy uppercase tracking-widest bg-blue hover:bg-white transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-[0_5px_15px_rgba(180,180,254,0.2)]">
                                 Contact
                             </a>
                         @else
                             <button onclick="showToast('Give feedback first to unlock contacts','error')"
-                                class="flex-1 text-sm font-medium py-2.5 px-4 rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed">
-                                🔒 Locked
+                                class="flex-1 flex justify-center items-center gap-2 py-2.5 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest bg-red-500/10 text-red-400 border border-red-500/20 cursor-not-allowed">
+                                <i class="fas fa-lock"></i> Locked
                             </button>
                         @endif
-                        <a href="{{ route('user.detail', $adv) }}" class="flex-1 text-center bg-white border border-gray-200 hover:border-gray-300
-                          text-gray-700 text-sm font-medium py-2.5 px-4 rounded-lg transition-colors">
-                            View Details
+                        <a href="{{ route('user.detail', $adv) }}" class="flex-1 flex justify-center items-center py-2.5 px-4 text-[10px] font-black uppercase tracking-widest border border-white/10 rounded-xl hover:bg-white/5 text-white/70 hover:text-white transition-all">
+                            Details
                         </a>
                     </div>
-                    <p class="text-xs text-center text-text-muted-light mt-3">
+                    <p class="text-[10px] text-center font-bold text-white/30 uppercase tracking-widest mt-4">
                         Joined {{ $adv->created_at->diffForHumans() }}
                     </p>
                 </div>
             @empty
-                <div class="xl:col-span-3 bg-surface-light rounded-2xl p-12 border border-gray-200 shadow-sm text-center">
-                    <div class="text-4xl mb-3">⚖️</div>
-                    <p class="font-medium text-gray-500">No advocates found yet</p>
-                    <p class="text-sm text-text-muted-light mt-1">Check back soon as advocates register on the platform</p>
+                <div class="xl:col-span-3 bg-navy2 rounded-3xl border border-white/5 shadow-2xl p-12 text-center">
+                    <div class="text-4xl mb-4 text-white/20"><i class="fas fa-scale-balanced"></i></div>
+                    <p class="font-black text-white uppercase tracking-widest">No advocates found yet</p>
+                    <p class="text-xs font-bold text-white/50 mt-2">Check back soon as advocates register on the platform</p>
                 </div>
             @endforelse
         </div>
     </section>
 
     {{-- ── NOTIFICATIONS + QUICK ACTIONS ── --}}
-    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
 
         {{-- Recent Notifications --}}
-        <div class="lg:col-span-2 bg-surface-light rounded-2xl p-6 border border-gray-200 shadow-sm">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="font-display font-bold text-xl text-gray-900">Recent Notifications</h3>
-                <button class="text-sm text-primary hover:text-primary-dark">Mark all read</button>
+        <div class="lg:col-span-2 bg-navy2 rounded-3xl p-6 md:p-8 border border-white/5 shadow-2xl">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-black text-lg text-white uppercase tracking-widest">Recent Notifications</h3>
+                <button class="text-[10px] font-black text-blue hover:text-white uppercase tracking-widest transition-colors">Mark all read</button>
             </div>
-            <div class="space-y-2">
+            <div class="space-y-3">
                 @if ($user->status === 'active')
-                    <div class="flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                    <div class="flex gap-4 p-4 rounded-2xl bg-navy border border-white/5 hover:border-white/10 transition-all">
                         <div
-                            class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
-                            <span class="material-icons-round text-lg">verified</span>
+                            class="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400 shrink-0">
+                            <i class="fas fa-check-circle text-lg"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-medium text-gray-900">Profile Verified</p>
-                            <p class="text-sm text-text-muted-light">Your basic profile details have been verified by the
-                                Admin. You can now accept requests.</p>
-                            <p class="text-xs text-text-muted-light mt-1">{{ $user->updated_at->diffForHumans() }}</p>
+                            <p class="text-sm font-black text-white uppercase tracking-widest">Profile Verified</p>
+                            <p class="text-xs font-bold text-white/60 leading-relaxed mt-1">Your basic profile details have been verified by the Admin. You can now accept requests.</p>
+                            <p class="text-[10px] font-black text-white/30 uppercase tracking-widest mt-2">{{ $user->updated_at->diffForHumans() }}</p>
                         </div>
                     </div>
                 @endif
 
                 @if (!$hasFeedback)
-                    <div class="flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                    <div class="flex gap-4 p-4 rounded-2xl bg-navy border border-white/5 hover:border-white/10 transition-all">
                         <div
-                            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary-dark shrink-0">
-                            <span class="material-icons-round text-lg">star_rate</span>
+                            class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+                            <i class="fas fa-star text-lg"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-medium text-gray-900">Feedback Required</p>
-                            <p class="text-sm text-text-muted-light">Submit compulsory feedback to unlock advocate contacts
-                                and boost profile visibility.</p>
-                            <p class="text-xs text-text-muted-light mt-1">Action required</p>
+                            <p class="text-sm font-black text-white uppercase tracking-widest">Feedback Required</p>
+                            <p class="text-xs font-bold text-white/60 leading-relaxed mt-1">Submit compulsory feedback to unlock advocate contacts and boost profile visibility.</p>
+                            <p class="text-[10px] font-black text-amber-400 uppercase tracking-widest mt-2">Action required</p>
                         </div>
                     </div>
                 @else
-                    <div class="flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                    <div class="flex gap-4 p-4 rounded-2xl bg-navy border border-white/5 hover:border-white/10 transition-all">
                         <div
-                            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary-dark shrink-0">
-                            <span class="material-icons-round text-lg">visibility</span>
+                            class="w-10 h-10 rounded-xl bg-blue/10 border border-blue/20 flex items-center justify-center text-blue shrink-0">
+                            <i class="fas fa-eye text-lg"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-medium text-gray-900">Contacts Unlocked</p>
-                            <p class="text-sm text-text-muted-light">You can now view advocate contact details. Browse and
-                                connect.</p>
+                            <p class="text-sm font-black text-white uppercase tracking-widest">Contacts Unlocked</p>
+                            <p class="text-xs font-bold text-white/60 leading-relaxed mt-1">You can now view advocate contact details. Browse and connect.</p>
                         </div>
                     </div>
                 @endif
 
                 @if ($user->status === 'active' && $hasFeedback)
-                    <div class="py-6 text-center text-text-muted-light text-sm">
-                        <span class="material-icons-round text-2xl block mb-2 text-gray-300">notifications_none</span>
-                        All caught up! No new notifications.
+                    <div class="py-8 text-center">
+                        <i class="far fa-bell text-3xl text-white/20 mb-3 block"></i>
+                        <span class="text-xs font-bold text-white/50 uppercase tracking-widest">All caught up! No new notifications.</span>
                     </div>
                 @endif
             </div>
         </div>
 
         {{-- Quick Actions --}}
-        <div class="bg-surface-light rounded-2xl p-6 border border-gray-200 shadow-sm">
-            <h3 class="font-display font-bold text-xl text-gray-900 mb-4">Quick Actions</h3>
+        <div class="bg-navy2 rounded-3xl p-6 md:p-8 border border-white/5 shadow-2xl">
+            <h3 class="font-black text-lg text-white uppercase tracking-widest mb-6">Quick Actions</h3>
             <div class="space-y-3">
-                <a href="{{ route('clerk.profile') }}" class="w-full flex items-center justify-between p-3 rounded-xl border border-gray-200
-                    hover:border-primary hover:bg-gray-50 transition-all group">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-blue-100 rounded-lg text-blue-600">
-                            <span class="material-icons-round text-lg">edit</span>
+                <a href="{{ route('feedback') }}" class="w-full flex items-center justify-between p-4 rounded-2xl bg-navy border border-white/5
+                    hover:border-blue/50 hover:bg-white/5 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 flex items-center justify-center">
+                            <i class="fas fa-comment-dots text-sm"></i>
                         </div>
-                        <span class="font-medium text-gray-700">Update Profile Bio</span>
+                        <span class="text-xs font-black text-white uppercase tracking-widest">Give Feedback</span>
                     </div>
-                    <span
-                        class="material-icons-round text-gray-400 group-hover:text-primary transition-colors">chevron_right</span>
-                </a>
-                <a href="{{ route('clerk.profile') }}" class="w-full flex items-center justify-between p-3 rounded-xl border border-gray-200
-                    hover:border-primary hover:bg-gray-50 transition-all group">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-blue-100 rounded-lg text-blue-600">
-                            <span class="material-icons-round text-lg">edit</span>
-                        </div>
-                        <span class="font-medium text-gray-700">Update Profile Bio</span>
-                    </div>
-                    <span
-                        class="material-icons-round text-gray-400 group-hover:text-primary transition-colors">chevron_right</span>
-                </a>
-                <a href="{{ route('feedback') }}" class="w-full flex items-center justify-between p-3 rounded-xl border border-gray-200
-                    hover:border-primary hover:bg-gray-50 transition-all group">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-green-100 rounded-lg text-green-600">
-                            <span class="material-icons-round text-lg">contact_support</span>
-                        </div>
-                        <span class="font-medium text-gray-700">Give Feedback</span>
-                    </div>
-                    <span
-                        class="material-icons-round text-gray-400 group-hover:text-primary transition-colors">chevron_right</span>
+                    <i class="fas fa-chevron-right text-white/30 group-hover:text-blue transition-colors text-xs"></i>
                 </a>
             </div>
         </div>
