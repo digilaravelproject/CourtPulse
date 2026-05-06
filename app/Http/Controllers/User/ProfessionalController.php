@@ -103,7 +103,10 @@ class ProfessionalController extends Controller
                 default    => null
             };
 
-            return view('professional.profile', compact('user', 'profile'));
+            // Fetch courts for selection
+            $courts = $this->courtService->getActiveList();
+
+            return view('professional.profile', compact('user', 'profile', 'courts'));
         } catch (\Exception $e) {
             Log::error('Professional Profile View Error: '.$e->getMessage());
             return back()->withErrors(['general' => 'Failed to load profile.']);
@@ -116,56 +119,65 @@ class ProfessionalController extends Controller
         try {
             $user = Auth::user();
 
-            $request->validate([
+            // Validate all required fields
+            $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255|unique:users,email,'.$user->id,
                 'phone_number' => 'required|string|max:20',
+                'court_ids' => 'nullable|array',
+                'court_ids.*' => 'exists:courts,id',
             ]);
 
+            // Update user basic info
             $user->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone_number,
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone_number'],
                 'city' => $request->city,
                 'state' => $request->state,
                 'address' => $request->address,
                 'pincode' => $request->pincode,
+                'court_ids' => $validated['court_ids'] ?? [],
             ]);
 
+            // Update profile details based on role
             if ($user->role === 'advocate') {
                 AdvocateProfile::query()->updateOrCreate(
                     ['user_id' => $user->id],
                     [
-                        'bar_council_number' => $request->membership_number,
-                        'enrollment_number' => $request->enrollment_number,
-                        'enrollment_date' => $request->membership_date,
-                        'experience_years' => $request->experience_years,
-                        'bio' => $request->bio,
-                        'office_address' => $request->office_address,
+                        'bar_council_number' => $request->membership_number ?? null,
+                        'enrollment_number' => $request->enrollment_number ?? $request->membership_number ?? null,
+                        'enrollment_date' => $request->membership_date ?? null,
+                        'experience_years' => $request->experience_years ?? 0,
+                        'bio' => $request->bio ?? null,
+                        'office_address' => $request->office_address ?? null,
                     ]
                 );
             } elseif ($user->role === 'ca_cs') {
                 CaProfile::query()->updateOrCreate(
                     ['user_id' => $user->id],
                     [
-                        'firm_name' => $request->firm_name,
-                        'membership_number' => $request->membership_number,
-                        'icai_region' => $request->icai_region,
-                        'membership_date' => $request->membership_date,
-                        'experience_years' => $request->experience_years,
-                        'bio' => $request->bio,
-                        'office_address' => $request->office_address,
+                        'firm_name' => $request->firm_name ?? null,
+                        'membership_number' => $request->membership_number ?? null,
+                        'icai_region' => $request->icai_region ?? null,
+                        'membership_date' => $request->membership_date ?? null,
+                        'experience_years' => $request->experience_years ?? 0,
+                        'bio' => $request->bio ?? null,
+                        'office_address' => $request->office_address ?? null,
                     ]
                 );
             }
 
             DB::commit();
-            return redirect()->route('professional.profile')->with('success', 'Profile updated successfully!');
+            return redirect()->route('professional.profile')->with('success', 'Profile updated successfully! All changes have been saved.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Professional Profile Update Error: '.$e->getMessage());
+            Log::error('Professional Profile Update Error: '.$e->getMessage(), [
+                'user_id' => Auth::id(),
+                'exception' => $e,
+            ]);
 
-            return back()->withErrors(['general' => 'Failed to update profile.'])->withInput();
+            return back()->withErrors(['general' => 'Failed to update profile: ' . $e->getMessage()])->withInput();
         }
     }
 
