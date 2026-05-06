@@ -66,7 +66,7 @@
 
 @section('content')
     <div class="mb-4 fu">
-        <a href="{{ route('clerk.guests') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"
+        <a href="{{ route('support.guests') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"
             style="color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)"
             onmouseover="this.style.borderColor='rgba(180,180,254,0.4)';this.style.color='#B4B4FE'"
             onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.color='rgba(255,255,255,0.5)'">
@@ -172,7 +172,7 @@
             @endif
 
             <div class="rounded-2xl p-4" style="background:rgba(180,180,254,0.04);border:1px solid rgba(180,180,254,0.12)">
-                <div class="flex gap-3"><i class="fas fa-info-circle text-blue mt-0.5 flex-shrink-0" style="color:#B4B4FE"></i><p class="text-xs text-white/50 leading-relaxed">Guest users browse advocates & clerks on Court Pulse. They give feedback to unlock contact details.</p></div>
+                <div class="flex gap-3"><i class="fas fa-info-circle text-blue mt-0.5 flex-shrink-0" style="color:#B4B4FE"></i><p class="text-xs text-white/50 leading-relaxed">Guests can browse professionals and give feedback.</p></div>
             </div>
         </div>
 

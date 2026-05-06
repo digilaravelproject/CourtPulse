@@ -5,8 +5,8 @@
 @section('content')
 
 <div class="mb-8 space-y-1">
-    <h2 class="text-3xl font-black text-white uppercase tracking-tighter">Network <span class="text-blue">Directory</span></h2>
-    <p class="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">Manage your professional ecosystem</p>
+    <h2 class="text-3xl font-black text-white uppercase tracking-tighter">My <span class="text-blue">Network</span></h2>
+    <p class="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">Manage your professional connections</p>
 </div>
 
 <div class="rounded-2xl bg-navy2 border border-white/5 overflow-hidden shadow-sm">
@@ -23,12 +23,12 @@
                 <div class="h-20 w-20 flex items-center justify-center rounded-3xl bg-white/5 border border-white/10 text-white/20 mb-6 group hover:border-blue/30 transition-all duration-500">
                     <i class="fas fa-users text-3xl group-hover:scale-110 transition-transform"></i>
                 </div>
-                <h4 class="text-xl font-black text-white uppercase tracking-tighter mb-2">Isolated Node</h4>
+                <h4 class="text-xl font-black text-white uppercase tracking-tighter mb-2">No Connections Found</h4>
                 <p class="text-sm font-bold text-white/40 uppercase tracking-widest max-w-xs leading-relaxed">
-                    Start by searching for clerks and sending connection requests to build your hub.
+                    Start by searching for clerks and sending connection requests to grow your network.
                 </p>
                 <a href="{{ route('professional.search.clerks') }}" class="mt-8 px-8 py-4 rounded-xl bg-blue text-navy text-xs font-black uppercase tracking-[0.2em] hover:bg-blue2 hover:shadow-[0_0_30px_rgba(0,210,255,0.2)] transition-all duration-300">
-                    <i class="fas fa-search mr-2"></i> Initialize Search
+                    <i class="fas fa-search mr-2"></i> Search Professionals
                 </a>
             </div>
         @else

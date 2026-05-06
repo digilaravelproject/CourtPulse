@@ -32,7 +32,7 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole(['court_clerk', 'ip_clerk'])) {
-            return redirect()->route('clerk.dashboard');
+            return redirect()->route('support.dashboard');
         }
 
         if ($user->hasRole('guest')) {

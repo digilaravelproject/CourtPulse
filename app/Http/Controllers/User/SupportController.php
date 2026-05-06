@@ -115,9 +115,9 @@ class SupportController extends Controller
                 'clerk_id_number' => 'required|string|max:100',
                 'employee_id' => 'nullable|string|max:100',
                 'court_id' => 'nullable|exists:courts,id',
-                'court_name' => 'required|string|max:255',
-                'court_city' => 'required|string|max:100',
-                'court_state' => 'required|string|max:100',
+                'court_name' => 'nullable|string|max:255',
+                'court_city' => 'nullable|string|max:100',
+                'court_state' => 'nullable|string|max:100',
                 'department' => 'nullable|string|max:200',
                 'designation' => 'nullable|string|max:100',
                 'experience_years' => 'nullable|integer|min:0|max:50',
@@ -186,16 +186,21 @@ class SupportController extends Controller
             $authId = $user->id;
             $hasFeedback = FeedbackController::clerkHasFeedback((int) $authId);
 
-            // Set default category for clerk searching advocates
-            if (!$request->has('category')) {
+            // Set default category - when professional_type is provided, use it, otherwise default to advocate for backward compatibility
+            $professionalType = $request->professional_type;
+            if (!$request->has('category') && !$professionalType) {
                 $request->merge(['category' => 'advocate']);
+            } elseif ($professionalType) {
+                // Pass professional_type to search service for filtering
+                $request->merge(['category' => $professionalType]);
             }
 
             $advocates = $this->searchService->search($request->all());
 
             if ($request->ajax()) {
+                $data = ['professionals' => $advocates, 'hasFeedback' => $hasFeedback, 'authId' => $authId];
                 return response()->json([
-                    'html' => view('support.partials.advocate-list', compact('advocates', 'hasFeedback', 'authId'))->render()
+                    'html' => view('support.partials.professional-list', $data)->render()
                 ]);
             }
 
@@ -205,18 +210,20 @@ class SupportController extends Controller
                 ->where('status', 'pending')
                 ->count();
 
-            return view('support.advocates', compact('advocates', 'hasFeedback', 'authId', 'pendingCount', 'courts'));
+            return view('support.search-professionals', compact('advocates', 'hasFeedback', 'authId', 'pendingCount', 'courts'));
         } catch (\Exception $e) {
             Log::error('Support View Advocates Error: ' . $e->getMessage());
-            return back()->withErrors(['general' => 'Failed to load advocates.']);
+            return back()->withErrors(['general' => 'Failed to load professionals.']);
         }
     }
 
     public function showAdvocate(User $user): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
     {
         try {
-            abort_unless($user->role === 'advocate' && $user->status === 'active', 404);
+            abort_unless(in_array($user->role, ['advocate', 'ca_cs', 'agent']) && $user->status === 'active', 404);
 
+            $user->load(['advocateProfile', 'caProfile', 'court']);
+            
             $me = Auth::user();
             $authId = $me->id;
             $hasFeedback = FeedbackController::clerkHasFeedback((int) $authId);
@@ -228,7 +235,7 @@ class SupportController extends Controller
             })->first();
 
             $connected = ($connectionStatus === 'connected');
-            $profile = $user->advocateProfile;
+            $profile = $user->advocateProfile ?? $user->caProfile;
             $feedbacks = $user->feedbacksReceived()->with('giver')->latest()->take(5)->get();
             $avgRating = (float) $user->feedbacksReceived()->avg('rating');
 
@@ -237,7 +244,7 @@ class SupportController extends Controller
                 ->where('status', 'pending')
                 ->count();
 
-            return view('support.advocate-profile', compact(
+            return view('support.profile-view', compact(
                 'user',
                 'profile',
                 'hasFeedback',
@@ -250,7 +257,7 @@ class SupportController extends Controller
             ));
         } catch (\Exception $e) {
             Log::error('Support Show Advocate Error: ' . $e->getMessage());
-            return back()->withErrors(['general' => 'Failed to load advocate profile.']);
+            return back()->withErrors(['general' => 'Failed to load professional profile.']);
         }
     }
 
@@ -421,6 +428,54 @@ class SupportController extends Controller
             \Illuminate\Support\Facades\DB::rollBack();
             Log::error('Submit Feedback Error: ' . $e->getMessage());
             return back()->withErrors(['general' => 'Failed to submit feedback.']);
+        }
+    }
+
+    public function viewGuests(Request $request): \Illuminate\View\View|\Illuminate\Http\JsonResponse
+    {
+        try {
+            $user = Auth::user();
+            
+            $guests = User::query()
+                ->where('role', 'guest')
+                ->where('status', 'active')
+                ->when($request->search, fn($q) => $q->where('name', 'like', '%' . $request->search . '%'))
+                ->when($request->city, fn($q) => $q->where('city', 'like', '%' . $request->city . '%'))
+                ->latest()
+                ->paginate(12);
+
+            if ($request->ajax()) {
+                return response()->json(['html' => view('support.partials.guest-list', compact('guests'))->render()]);
+            }
+
+            $pendingCount = ConnectionRequest::query()
+                ->where('receiver_id', $user->id)
+                ->where('status', 'pending')
+                ->count();
+
+            return view('support.guests', compact('guests', 'pendingCount'));
+        } catch (\Exception $e) {
+            Log::error('Support View Guests Error: ' . $e->getMessage());
+            return back()->withErrors(['general' => 'Failed to load guests.']);
+        }
+    }
+
+    public function showGuest(User $user): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+    {
+        try {
+            abort_unless($user->role === 'guest' && $user->status === 'active', 404);
+
+            $me = Auth::user();
+            $connectionStatus = ConnectionRequest::getStatus((int) $me->id, (int) $user->id);
+            $pendingCount = ConnectionRequest::query()
+                ->where('receiver_id', $me->id)
+                ->where('status', 'pending')
+                ->count();
+
+            return view('support.guest-profile', compact('user', 'connectionStatus', 'pendingCount'));
+        } catch (\Exception $e) {
+            Log::error('Support Show Guest Error: ' . $e->getMessage());
+            return back()->withErrors(['general' => 'Failed to load guest profile.']);
         }
     }
 }

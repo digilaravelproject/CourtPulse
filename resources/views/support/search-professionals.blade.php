@@ -1,6 +1,6 @@
 @extends('support.layouts.master')
-@section('title', 'Search Advocates')
-@section('page-title', 'Search Advocates')
+@section('title', 'Find Professionals')
+@section('page-title', 'Search Experts')
 
 @section('content')
 
@@ -8,12 +8,21 @@
 <div class="bg-navy2 border border-white/5 rounded-2xl overflow-hidden shadow-sm mb-6">
     <div class="px-6 py-4 border-b border-white/5 bg-white/2">
         <h3 class="text-lg font-bold text-white flex items-center gap-2">
-            <i class="fas fa-search-plus text-blue text-sm"></i>
-            Find Advocates
+            <i class="fas fa-search text-blue text-sm"></i>
+            Search for Professionals
         </h3>
     </div>
     <div class="p-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-5">
+            <div>
+                <label class="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mb-2">Expert Category</label>
+                <select name="professional_type" id="professionalType" class="w-full bg-navy border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-blue/50 focus:ring-0 transition-all outline-none appearance-none cursor-pointer">
+                    <option value="">All Categories</option>
+                    <option value="advocate">Advocates</option>
+                    <option value="ca_cs">CA / CS</option>
+                    <option value="agent">IP Agents</option>
+                </select>
+            </div>
             <div>
                 <label class="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mb-2">Court Name</label>
                 <select name="court_id" id="courtId" class="w-full bg-navy border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-blue/50 focus:ring-0 transition-all outline-none appearance-none cursor-pointer">
@@ -24,7 +33,7 @@
                 </select>
             </div>
             <div>
-                <label class="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mb-2">Court City</label>
+                <label class="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mb-2">City</label>
                 <select name="court_city" id="courtCity" class="w-full bg-navy border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-blue/50 focus:ring-0 transition-all outline-none appearance-none cursor-pointer">
                     <option value="">All Cities</option>
                     @foreach($courts->pluck('city')->unique() as $city)
@@ -35,7 +44,7 @@
                 </select>
             </div>
             <div>
-                <label class="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mb-2">Court Pincode</label>
+                <label class="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mb-2">Pincode</label>
                 <select name="court_pincode" id="courtPincode" class="w-full bg-navy border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-blue/50 focus:ring-0 transition-all outline-none appearance-none cursor-pointer">
                     <option value="">All Pincodes</option>
                     @foreach($courts->pluck('pincode')->unique() as $pincode)
@@ -48,47 +57,29 @@
         </div>
         <div class="relative pt-2">
             <label class="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
-                Advocate Name <span class="text-blue/60 lowercase font-medium tracking-normal">(auto-search after 3 characters)</span>
+                Search by Name <span class="text-blue/60 lowercase font-medium tracking-normal">(enter at least 3 characters)</span>
             </label>
             <div class="relative">
-                <i class="fas fa-user-tie absolute left-4 top-1/2 -translate-y-1/2 text-white/20 text-xs"></i>
-                <input type="text" name="advocate_name" id="advocateName"
+                <i class="fas fa-user-edit absolute left-4 top-1/2 -translate-y-1/2 text-white/20 text-xs"></i>
+                <input type="text" name="professional_name" id="professionalName"
                     class="w-full bg-navy border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:border-blue/50 focus:ring-0 transition-all outline-none placeholder:text-white/10"
-                    placeholder="Type at least 3 characters to search...">
+                    placeholder="Enter name to find experts...">
             </div>
         </div>
     </div>
 </div>
 
-{{-- Locked Banner --}}
-@if (!$hasFeedback)
-    <div class="bg-red-500/10 border border-red-500/20 rounded-2xl p-6 mb-6 flex flex-col md:flex-row items-center justify-between gap-6">
-        <div class="flex items-center gap-4 text-center md:text-left">
-            <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 shrink-0">
-                <i class="fas fa-lock text-xl"></i>
-            </div>
-            <div>
-                <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-1">Contact Intelligence Restricted</h4>
-                <p class="text-white/40 text-xs uppercase tracking-wider">Provide mandatory node feedback to decrypt advocate contact vectors.</p>
-            </div>
-        </div>
-        <a href="{{ route('support.feedback') }}" class="px-8 py-3 rounded-xl bg-red-500 text-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-red-600 transition-all">
-            Unlock Data Access
-        </a>
-    </div>
-@endif
-
 <!-- Results Area -->
-<div id="advocatesResults" class="animate-in fade-in slide-in-from-bottom-4 duration-500">
+<div id="professionalsResults" class="animate-in fade-in slide-in-from-bottom-4 duration-500">
     @if($advocates->isNotEmpty())
-        @include('support.partials.advocate-list', ['advocates' => $advocates, 'hasFeedback' => $hasFeedback, 'authId' => $authId])
+        @include('support.partials.professional-list', ['professionals' => $advocates, 'hasFeedback' => $hasFeedback, 'authId' => $authId])
     @else
         <div class="bg-navy2 border border-white/5 rounded-2xl p-12 text-center">
             <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-white/10 text-2xl mx-auto mb-4">
-                <i class="fas fa-search"></i>
+                <i class="fas fa-search-minus"></i>
             </div>
-            <h4 class="text-white font-semibold mb-1 uppercase tracking-widest text-sm">No advocates detected</h4>
-            <p class="text-white/40 text-[10px] uppercase tracking-wider">Try adjusting your filters or search parameters.</p>
+            <h4 class="text-white font-semibold mb-1 uppercase tracking-widest text-sm">No Results Found</h4>
+            <p class="text-white/40 text-[10px] uppercase tracking-wider">Try changing your filters or checking the spelling.</p>
         </div>
     @endif
 </div>
@@ -103,20 +94,21 @@
 (function() {
     let debounceTimer;
     const minChars = 3;
-    const resultsContainer = document.getElementById('advocatesResults');
+    const resultsContainer = document.getElementById('professionalsResults');
 
-    function searchAdvocates() {
+    function searchProfessionals() {
         resultsContainer.style.opacity = '0.5';
 
         const params = new URLSearchParams({
+            professional_type: document.getElementById('professionalType').value,
             court_id: document.getElementById('courtId').value,
             court_city: document.getElementById('courtCity').value,
             court_pincode: document.getElementById('courtPincode').value,
-            advocate_name: document.getElementById('advocateName').value,
+            advocate_name: document.getElementById('professionalName').value,
             category: 'advocate'
         });
 
-        fetch('{{ route("support.search.advocates") }}?' + params.toString(), {
+        fetch('{{ route("support.search.professionals") }}?' + params.toString(), {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
             .then(res => res.json())
@@ -133,7 +125,7 @@
 
     function debounceSearch() {
         clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(searchAdvocates, 300);
+        debounceTimer = setTimeout(searchProfessionals, 300);
     }
 
     function initConnectionButtons() {
@@ -143,13 +135,13 @@
                 const originalContent = this.innerHTML;
 
                 Swal.fire({
-                    title: 'INITIATE CONNECTION',
-                    text: 'Add an optional handshake protocol note:',
+                    title: 'Send Connection Request',
+                    text: 'Would you like to include a note?',
                     input: 'textarea',
-                    inputPlaceholder: 'Brief introduction...',
+                    inputPlaceholder: 'Write your message here...',
                     showCancelButton: true,
-                    confirmButtonText: 'SEND REQUEST',
-                    cancelButtonText: 'ABORT',
+                    confirmButtonText: 'Send Request',
+                    cancelButtonText: 'Cancel',
                     confirmButtonColor: '#3B82F6',
                     cancelButtonColor: '#1E293B',
                     background: '#0F172A',
@@ -161,7 +153,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         const notes = result.value || '';
-                        
+
                         this.disabled = true;
                         this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
@@ -176,9 +168,11 @@
                         })
                         .then(res => res.json())
                         .then(data => {
+                            const isSuccess = data.message.toLowerCase().includes('success');
                             Swal.fire({
-                                icon: data.message.includes('successfully') ? 'success' : 'error',
-                                title: data.message.toUpperCase(),
+                                icon: isSuccess ? 'success' : 'error',
+                                title: isSuccess ? 'Request Sent' : 'Message',
+                                text: data.message,
                                 toast: true,
                                 position: 'top-end',
                                 showConfirmButton: false,
@@ -186,8 +180,8 @@
                                 background: '#0F172A',
                                 color: '#F1F5F9'
                             });
-                            if (data.message.includes('successfully')) {
-                                searchAdvocates();
+                            if (isSuccess) {
+                                searchProfessionals();
                             } else {
                                 this.disabled = false;
                                 this.innerHTML = originalContent;
@@ -196,7 +190,8 @@
                         .catch(err => {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'TRANSMISSION FAILED',
+                                title: 'Failed',
+                                text: 'Something went wrong. Please try again.',
                                 toast: true,
                                 position: 'top-end',
                                 showConfirmButton: false,
@@ -213,15 +208,15 @@
         });
     }
 
-    ['courtId', 'courtCity', 'courtPincode'].forEach(id => {
-        document.getElementById(id).addEventListener('change', searchAdvocates);
+    ['professionalType', 'courtId', 'courtCity', 'courtPincode'].forEach(id => {
+        document.getElementById(id).addEventListener('change', searchProfessionals);
     });
 
-    document.getElementById('advocateName').addEventListener('input', function() {
+    document.getElementById('professionalName').addEventListener('input', function() {
         if (this.value.length >= minChars) {
             debounceSearch();
         } else if (this.value.length === 0) {
-            searchAdvocates();
+            searchProfessionals();
         }
     });
 

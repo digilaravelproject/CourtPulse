@@ -12,26 +12,35 @@ class SearchService
      */
     public function search(array $filters)
     {
-        $category = $filters['category'] ?? 'court_clerk';
+        $category = $filters['category'] ?? '';
+        $professionalType = $filters['professional_type'] ?? '';
         
         $query = User::query()->where('status', 'active');
 
-        // Category Role Filtering
-        $query->when($category === 'court_clerk', function ($q) {
-            return $q->role('court_clerk');
-        })
-        ->when($category === 'ip_clerk', function ($q) {
-            return $q->role('ip_clerk');
-        })
-        ->when($category === 'ca_cs', function ($q) {
-            return $q->role('ca_cs');
-        })
-        ->when($category === 'agent', function ($q) {
-            return $q->role('agent');
-        })
-        ->when($category === 'advocate', function ($q) {
-            return $q->role('advocate');
-        });
+        // Support Module: Professional Type Filtering (when professional_type is explicitly set)
+        if ($professionalType && in_array($professionalType, ['advocate', 'ca_cs', 'agent'])) {
+            $query->where('role', $professionalType);
+        }
+        // Category Role Filtering (Professional Module)
+        elseif ($category === 'court_clerk') {
+            $query->where('role', 'court_clerk');
+        }
+        elseif ($category === 'ip_clerk') {
+            $query->where('role', 'ip_clerk');
+        }
+        elseif ($category === 'ca_cs') {
+            $query->where('role', 'ca_cs');
+        }
+        elseif ($category === 'agent') {
+            $query->where('role', 'agent');
+        }
+        elseif ($category === 'advocate') {
+            $query->where('role', 'advocate');
+        }
+        else {
+            // Default: Search all professionals (advocate, ca_cs, agent)
+            $query->whereIn('role', ['advocate', 'ca_cs', 'agent']);
+        };
 
         // Global Filters
         $query->when($filters['court_id'] ?? null, function ($q, $courtId) {

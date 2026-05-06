@@ -149,21 +149,39 @@ Route::middleware(['auth', 'account.status'])->group(function () {
     });
     });
 
-    // Support Role (Court Clerk, IP Clerk)
-    Route::middleware(['role:court_clerk|ip_clerk'])->prefix('support')->name('support.')->group(function () {
+     // Support Role (Court Clerk, IP Clerk)
+     Route::middleware(['role:court_clerk|ip_clerk'])->prefix('support')->name('support.')->group(function () {
+         Route::controller(SupportController::class)->group(function () {
+             Route::get('/dashboard', 'dashboard')->name('dashboard');
+             Route::get('/profile', 'profile')->name('profile');
+             Route::post('/profile', 'updateProfile')->name('profile.update');
+             Route::get('/search-professionals', 'viewAdvocates')->name('search.professionals');
+             Route::get('/professionals/{user}', 'showAdvocate')->name('professional.profile');
+             Route::get('/guests', 'viewGuests')->name('guests');
+             Route::get('/guests/{user}', 'showGuest')->name('guest.profile');
+             Route::get('/pending-requests', 'pendingRequests')->name('pending.requests');
+             Route::patch('/requests/{id}/accept', 'acceptRequest')->name('pending.requests.accept');
+             Route::delete('/requests/{id}/reject', 'rejectRequest')->name('pending.requests.reject');
+             Route::get('/connections', 'myConnections')->name('connections');
+             Route::get('/feedback', 'feedback')->name('feedback');
+             Route::post('/feedback', 'submitFeedback')->name('feedback.submit');
+             Route::post('/send-connection', 'sendConnection')->name('connection.send');
+         });
+     });
+
+    // Clerk Role (Legacy/Court Staff)
+    Route::middleware(['role:clerk'])->prefix('clerk')->name('clerk.')->group(function () {
         Route::controller(SupportController::class)->group(function () {
             Route::get('/dashboard', 'dashboard')->name('dashboard');
             Route::get('/profile', 'profile')->name('profile');
             Route::post('/profile', 'updateProfile')->name('profile.update');
-            Route::get('/advocates', 'viewAdvocates')->name('search.advocates');
+            Route::get('/advocates', 'viewAdvocates')->name('advocates');
             Route::get('/advocates/{user}', 'showAdvocate')->name('advocate.profile');
-            Route::get('/pending-requests', 'pendingRequests')->name('pending.requests');
-            Route::patch('/requests/{id}/accept', 'acceptRequest')->name('pending.requests.accept');
-            Route::delete('/requests/{id}/reject', 'rejectRequest')->name('pending.requests.reject');
-            Route::get('/connections', 'myConnections')->name('connections');
+            Route::get('/guests', 'viewGuests')->name('guests');
+            Route::get('/guests/{user}', 'showGuest')->name('guests.show');
             Route::get('/feedback', 'feedback')->name('feedback');
             Route::post('/feedback', 'submitFeedback')->name('feedback.submit');
-            Route::post('/send-connection', 'sendConnection')->name('connection.send');
+            Route::post('/connection/send', 'sendConnection')->name('connection.send');
         });
     });
 

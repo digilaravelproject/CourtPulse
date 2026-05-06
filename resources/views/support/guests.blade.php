@@ -50,7 +50,7 @@
                     <div class="flex items-center gap-2 text-sm text-white/50"><i class="fas fa-calendar text-blue text-xs shrink-0"></i><span x-text="'Joined ' + new Date(guest.created_at).toLocaleDateString('en-IN',{month:'short',year:'numeric'})"></span></div>
                 </div>
                 <div class="mt-auto pt-4 border-t border-white/5 flex gap-2">
-                    <a :href="`{{ route('clerk.guests.show', '') }}/${guest.id}`" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold no-underline transition-all border border-white/10 text-white/60 hover:bg-white/5"><i class="fas fa-user"></i> View</a>
+                    <a :href="`{{ route('support.guest.profile', '') }}/${guest.id}`" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold no-underline transition-all border border-white/10 text-white/60 hover:bg-white/5"><i class="fas fa-user"></i> View</a>
                     <template x-if="guest.connection_status === 'none'"><button @click="sendConnection(guest.id)" class="btn-primary flex-1"><i class="fas fa-user-plus"></i> Connect</button></template>
                     <template x-if="guest.connection_status === 'sent'"><button disabled class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold bg-white/5 border border-white/10 text-white/40 cursor-not-allowed"><i class="fas fa-clock"></i> Pending</button></template>
                     <template x-if="guest.connection_status === 'received'"><button @click="acceptConnection(guest)" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all" style="background:#10b981;color:#ffffff;border:1px solid #059669;"><i class="fas fa-check-circle"></i> Accept</button></template>
@@ -84,7 +84,7 @@ function guestsPage() {
         pageList() { const pages = [], tp = this.totalPages, cp = this.currentPage; if (tp <= 7) { for (let i = 1; i <= tp; i++) pages.push(i); return pages; } pages.push(1); if (cp > 3) pages.push('...'); for (let i = Math.max(2, cp - 1); i <= Math.min(tp - 1, cp + 1); i++) pages.push(i); if (cp < tp - 2) pages.push('...'); pages.push(tp); return pages; },
         async fetchGuests() { this.loading = true; try { const params = new URLSearchParams({ ...this.filters, page: this.currentPage, ajax: 1 }); const res = await fetch(`{{ route('support.guests') }}?${params}`, { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } }); const data = await res.json(); this.guests = data.data; this.total = data.total; this.totalPages = data.last_page; this.currentPage = data.current_page; window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { console.error(e); } finally { this.loading = false; } },
         async sendConnection(userId) { try { const res = await fetch(`{{ route('connections.send') }}`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }, body: JSON.stringify({ receiver_id: userId }) }); if (res.ok) { const guest = this.guests.find(g => g.id === userId); if (guest) guest.connection_status = 'sent'; } } catch (e) { console.error(e); } },
-        async acceptConnection(guest) { if (!guest.connection_req_id) { window.location.href = `{{ route('clerk.guests.show', '') }}/${guest.id}`; return; } try { const res = await fetch(`/connections/${guest.connection_req_id}/accept`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' } }); if (res.ok) { guest.connection_status = 'connected'; } } catch (e) { console.error(e); } }
+        async acceptConnection(guest) { if (!guest.connection_req_id) { window.location.href = `{{ route('support.guest.profile', '') }}/${guest.id}`; return; } try { const res = await fetch(`/connections/${guest.connection_req_id}/accept`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' } }); if (res.ok) { guest.connection_status = 'connected'; } } catch (e) { console.error(e); } }
     }
 }
 </script>
@@ -156,7 +156,7 @@ function guestsPage() {
 
                     {{-- Action Buttons --}}
                     <div class="mt-auto pt-4 border-t border-gray-100 flex gap-2">
-                        <a :href="`{{ route('clerk.guests.show', '') }}/${guest.id}`"
+                        <a :href="`{{ route('support.guest.profile', '') }}/${guest.id}`"
                             class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold no-underline transition-all border border-gray-200 text-gray-600 hover:bg-gray-50">
                             <i class="bi bi-person-lines-fill"></i> View
                         </a>
@@ -299,7 +299,7 @@ function guestsPage() {
                                 page: this.currentPage,
                                 ajax: 1
                             });
-                            const res = await fetch(`{{ route('clerk.guests') }}?${params}`, {
+                            const res = await fetch(`{{ route('support.guests') }}?${params}`, {
                                 headers: {
                                     'X-Requested-With': 'XMLHttpRequest',
                                     'Accept': 'application/json'
@@ -347,7 +347,7 @@ function guestsPage() {
                     // ✅ Accept Received Request
                     async acceptConnection(guest) {
                         if (!guest.connection_req_id) {
-                            window.location.href = `{{ route('clerk.guests.show', '') }}/${guest.id}`;
+                            window.location.href = `{{ route('support.guest.profile', '') }}/${guest.id}`;
                             return;
                         }
                         try {

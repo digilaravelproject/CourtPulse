@@ -69,16 +69,10 @@
                     <span class="text-sm font-semibold">My Connections</span>
                 </a>
 
-                <a href="{{ route('support.search.advocates') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->routeIs('support.search.advocates') ? 'bg-blue/10 text-blue border-l-4 border-blue' : 'text-white/50 hover:bg-white/5 hover:text-white' }}">
+                <a href="{{ route('support.search.professionals') }}"
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->routeIs('support.search.professionals') ? 'bg-blue/10 text-blue border-l-4 border-blue' : 'text-white/50 hover:bg-white/5 hover:text-white' }}">
                     <i class="fas fa-search w-5"></i>
-                    <span class="text-sm font-semibold">Search Advocates</span>
-                </a>
-
-                <a href="{{ route('support.feedback') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->routeIs('support.feedback') ? 'bg-blue/10 text-blue border-l-4 border-blue' : 'text-white/50 hover:bg-white/5 hover:text-white' }}">
-                    <i class="fas fa-star w-5"></i>
-                    <span class="text-sm font-semibold">Feedback</span>
+                    <span class="text-sm font-semibold">Find Professionals</span>
                 </a>
             </div>
 
