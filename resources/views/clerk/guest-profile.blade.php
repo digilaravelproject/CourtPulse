@@ -131,7 +131,7 @@
             @endphp
 
             <div x-data="profileConnection('{{ $connectionStatus }}', {{ $user->id }}, {{ $reqId }})" class="info-card p-5">
-                <div class="info-card-header !p-0 !mb-3"><i class="fas fa-network-wired"></i> Network Status</div>
+                <div class="info-card-header p-0! mb-3!"><i class="fas fa-network-wired"></i> Network Status</div>
                 <template x-if="status === 'none'">
                     <button @click="sendReq()" class="btn-primary w-full justify-center">
                         <i class="fas fa-user-plus"></i> Connect
@@ -162,9 +162,9 @@
                         @for ($star = 5; $star >= 1; $star--)
                             @php $cnt = $ratingCounts[$star] ?? 0; $pct = $total ? round(($cnt / $total) * 100) : 0; @endphp
                             <div class="flex items-center gap-3">
-                                <div class="flex items-center gap-1 w-12 flex-shrink-0"><span class="text-xs font-mono text-white/50">{{ $star }}</span><i class="fas fa-star text-xs" style="color:#B4B4FE"></i></div>
+                                <div class="flex items-center gap-1 w-12 shrink-0"><span class="text-xs font-mono text-white/50">{{ $star }}</span><i class="fas fa-star text-xs" style="color:#B4B4FE"></i></div>
                                 <div class="rating-bar flex-1"><div class="rating-bar-fill" style="width:{{ $pct }}%"></div></div>
-                                <span class="text-xs font-semibold text-white/50 w-6 text-right flex-shrink-0">{{ $cnt }}</span>
+                                <span class="text-xs font-semibold text-white/50 w-6 text-right shrink-0">{{ $cnt }}</span>
                             </div>
                         @endfor
                     </div>
@@ -172,7 +172,7 @@
             @endif
 
             <div class="rounded-2xl p-4" style="background:rgba(180,180,254,0.04);border:1px solid rgba(180,180,254,0.12)">
-                <div class="flex gap-3"><i class="fas fa-info-circle text-blue mt-0.5 flex-shrink-0" style="color:#B4B4FE"></i><p class="text-xs text-white/50 leading-relaxed">Guest users browse advocates & clerks on DockIt. They give feedback to unlock contact details.</p></div>
+                <div class="flex gap-3"><i class="fas fa-info-circle text-blue mt-0.5 shrink-0" style="color:#B4B4FE"></i><p class="text-xs text-white/50 leading-relaxed">Guest users browse advocates & clerks on DockIt. They give feedback to unlock contact details.</p></div>
             </div>
         </div>
 
@@ -202,7 +202,7 @@
                                     <div class="text-xs text-white/40">{{ !$fb->is_anonymous && $fb->giver ? ucfirst($fb->giver->role) : 'DockIt User' }}</div>
                                 </div>
                             </div>
-                            <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                            <div class="flex flex-col items-end gap-1 shrink-0">
                                 <div class="flex gap-0.5">@for ($i = 1; $i <= 5; $i++) <i class="fas fa-star{{ $i <= $fb->rating ? '' : '-empty' }} text-xs" style="color:{{ $i <= $fb->rating ? '#B4B4FE' : 'rgba(255,255,255,0.1)' }}"></i> @endfor</div>
                                 <span class="text-xs text-white/40">{{ $fb->created_at->diffForHumans() }}</span>
                             </div>

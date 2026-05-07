@@ -80,8 +80,28 @@ class AdminManagementController extends Controller
                 'message' => "User verified successfully!"
             ]);
         } catch (\Exception $e) {
-            Log::error('Verify User Error: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Failed to update status.'], 500);
+            Log::error('User Verification Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to process user verification.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get user details for verification modal.
+     */
+    public function showUserDetails(User $user): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $data = $this->service->getShowUserData($user);
+            return response()->json([
+                'success' => true,
+                'user' => $data['user']
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Show User Details Error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to load user details.'], 500);
         }
     }
 

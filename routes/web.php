@@ -207,6 +207,7 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
     Route::prefix('manage')->name('manage.')->controller(AdminManagementController::class)->group(function () {
         Route::get('/users', 'usersIndex')->name('users');
         Route::post('/users/{user}/verify', 'verifyUser')->name('users.verify');
+        Route::get('/users/{user}/details', 'showUserDetails')->name('users.details');
         Route::get('/menus', 'menusIndex')->name('menus');
         Route::patch('/menus/{menu}', 'updateMenu')->name('menus.update');
     });

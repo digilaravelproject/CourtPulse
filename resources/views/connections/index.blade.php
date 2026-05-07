@@ -27,7 +27,7 @@
                 @foreach ($pendingReceived as $req)
                     <div class="bg-white rounded-2xl border border-amber-200 p-5 shadow-sm">
                         <div class="flex items-center gap-3 mb-4">
-                            <div class="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-base flex-shrink-0"
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-base shrink-0"
                                 style="background:linear-gradient(135deg,#0F1A2E,#1a2744);color:#D4AF37">
                                 {{ strtoupper(substr($req->sender->name, 0, 1)) }}
                             </div>
@@ -67,7 +67,7 @@
                 @foreach ($pendingSent as $req)
                     <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
                         <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-base flex-shrink-0"
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-base shrink-0"
                                 style="background:linear-gradient(135deg,#0F1A2E,#1a2744);color:#D4AF37">
                                 {{ strtoupper(substr($req->receiver->name, 0, 1)) }}
                             </div>
@@ -103,7 +103,7 @@
                 @foreach ($connected as $person)
                     <div class="bg-white rounded-2xl border border-green-200 p-5 shadow-sm">
                         <div class="flex items-center gap-3 mb-3">
-                            <div class="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-base flex-shrink-0"
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-base shrink-0"
                                 style="background:linear-gradient(135deg,#D4AF37,#B5952F);color:#0A1120">
                                 {{ strtoupper(substr($person->name, 0, 1)) }}
                             </div>
@@ -111,7 +111,7 @@
                                 <div class="font-semibold text-slate-800 truncate">{{ $person->name }}</div>
                                 <div class="text-xs text-slate-400 capitalize">{{ $person->role }}</div>
                             </div>
-                            <i class="bi bi-patch-check-fill text-green-500 flex-shrink-0"></i>
+                            <i class="bi bi-patch-check-fill text-green-500 shrink-0"></i>
                         </div>
                         <!-- Full details visible since connected -->
                         <div class="space-y-1.5 text-sm text-slate-600">

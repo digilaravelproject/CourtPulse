@@ -100,7 +100,7 @@ class AdminRepository
 
     public function getUserWithRelations(User $user): User
     {
-        return $user->load(['advocateProfile', 'clerkProfile', 'caProfile']);
+        return $user->load(['advocateProfile', 'clerkProfile', 'caProfile', 'documents']);
     }
 
     public function verifyUser(User $user): void
