@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Login - CourtPulse')
+@section('title', 'Login - DockIt')
 
 @section('content')
     <div class="min-h-screen bg-navy flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -80,7 +80,7 @@
 
                 <div class="text-center pt-6 mt-6 border-t border-white/5">
                     <p class="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-widest">
-                        New to CourtPulse?
+                        New to DockIt?
                         <a href="{{ route('register') }}"
                             class="text-blue hover:text-white transition-colors underline decoration-blue/30 underline-offset-4 ml-1">Create
                             an account</a>

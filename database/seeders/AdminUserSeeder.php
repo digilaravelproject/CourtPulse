@@ -15,7 +15,7 @@ class AdminUserSeeder extends Seeder
     {
         // Super Admin
         $superAdmin = User::updateOrCreate(
-            ['email' => 'superadmin@courtpulse.com'],
+            ['email' => 'superadmin@dockit.com'],
             [
                 'name' => 'Super Admin',
                 'password' => Hash::make('12345678'),
@@ -31,7 +31,7 @@ class AdminUserSeeder extends Seeder
 
         // Admin
         $admin = User::updateOrCreate(
-            ['email' => 'admin@courtpulse.com'],
+            ['email' => 'admin@dockit.com'],
             [
                 'name' => 'Admin User',
                 'password' => Hash::make('12345678'),

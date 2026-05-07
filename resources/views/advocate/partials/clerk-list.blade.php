@@ -59,7 +59,7 @@
                     <div class="flex items-center gap-3 text-xs font-bold text-white/60 pt-2 border-t border-white/5">
                         <i class="fas fa-envelope w-4 text-blue/40 shrink-0"></i>
                         <span class="truncate {{ !$connected ? 'blur-[3px] select-none' : '' }}">
-                            {{ $connected ? $clerk->email : 'user@courtpulse.com' }}
+                            {{ $connected ? $clerk->email : 'user@dockit.com' }}
                         </span>
                     </div>
                     @if ($clerk->phone)

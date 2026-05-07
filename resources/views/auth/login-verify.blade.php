@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Verify Login - CourtPulse')
+@section('title', 'Verify Login - DockIt')
 
 @section('content')
     <div class="min-h-screen bg-navy flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">

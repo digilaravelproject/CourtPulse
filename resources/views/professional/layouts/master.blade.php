@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') — CourtPulse Professional</title>
+    <title>@yield('title', 'Dashboard') — DockIt Professional</title>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -29,7 +29,7 @@
                 <i class="fas fa-gavel text-lg"></i>
             </div>
             <div>
-                <div class="text-xl font-extrabold tracking-tight">CourtPulse</div>
+                <div class="text-xl font-extrabold tracking-tight">DockIt</div>
                 <div class="text-[10px] text-blue font-bold tracking-[0.2em] uppercase leading-none">
                     @if(auth()->user()->role === 'advocate')
                         Advocate

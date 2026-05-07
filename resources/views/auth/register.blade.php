@@ -1,6 +1,6 @@
  @extends('layouts.main')
 
-@section('title', 'Register - CourtPulse')
+@section('title', 'Register - DockIt')
 
 @section('content')
     <div class="min-h-screen bg-navy flex flex-col justify-center py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">

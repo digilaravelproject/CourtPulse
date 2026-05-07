@@ -2078,7 +2078,7 @@
                         </div>
                         <div>
                             <div class="ci-label">Inquiries</div>
-                            <div class="ci-val">support@courtpulse.com<br>professionals@courtpulse.com</div>
+                            <div class="ci-val">support@dockit.com<br>professionals@dockit.com</div>
                         </div>
                     </div>
                     <div class="ci-item">

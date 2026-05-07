@@ -135,10 +135,10 @@
         <div class="flex items-center gap-3 px-6 py-5 shrink-0 border-b border-white/5">
             <div
                 class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-blue/10 border border-blue/20 text-blue font-black shadow-[0_0_15px_rgba(180,180,254,0.15)]">
-                CP
+                DI
             </div>
             <div>
-                <div class="font-black text-lg text-white leading-tight uppercase tracking-tight">CourtPulse</div>
+                <div class="font-black text-lg text-white leading-tight uppercase tracking-tight">DockIt</div>
                 <div class="font-bold text-[0.6rem] uppercase tracking-[0.2em] text-blue">Admin Panel</div>
             </div>
         </div>
@@ -270,7 +270,7 @@
 
         <footer
             class="mt-auto px-8 py-6 border-t border-white/5 text-center lg:text-left text-[10px] font-bold text-white/30 uppercase tracking-widest">
-            &copy; {{ date('Y') }} CourtPulse Admin Portal. All Rights Reserved.
+            &copy; {{ date('Y') }} DockIt Admin Portal. All Rights Reserved.
         </footer>
     </main>
 

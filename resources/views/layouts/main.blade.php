@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#050812">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'CourtPulse') — India's Legal Professional Network</title>
+    <title>@yield('title', 'DockIt') — India's Legal Professional Network</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,11 +57,11 @@
             <a href="{{ url('/') }}" class="flex items-center gap-3 group no-underline" aria-label="Homepage">
                 <div
                     class="w-10 h-10 rounded-xl bg-blue flex items-center justify-center text-sm text-navy font-black transition-transform duration-300 group-hover:scale-105 shadow-[0_0_15px_rgba(180,180,254,0.3)] group-hover:shadow-[0_0_25px_rgba(180,180,254,0.5)]">
-                    CP
+                    DI
                 </div>
                 <span
                     class="text-white font-black tracking-tight text-xl sm:text-2xl uppercase transition-colors duration-300 group-hover:text-blue">
-                    CourtPulse
+                    DockIt
                 </span>
             </a>
 
@@ -146,8 +146,8 @@
                 <a href="{{ url('/') }}" class="flex items-center gap-3 no-underline">
                     <div
                         class="w-8 h-8 rounded-lg bg-blue flex items-center justify-center text-xs text-navy font-black">
-                        CP</div>
-                    <span class="text-white font-black tracking-tight text-xl uppercase">CourtPulse</span>
+                        DI</div>
+                    <span class="text-white font-black tracking-tight text-xl uppercase">DockIt</span>
                 </a>
                 <button id="mobile-close"
                     class="text-slate-400 hover:text-white text-2xl p-2 transition-colors focus:outline-none"
@@ -297,8 +297,8 @@
                     <div class="flex items-center gap-3 mb-6">
                         <div
                             class="w-8 h-8 rounded-lg bg-blue flex items-center justify-center text-xs text-navy font-black">
-                            CP</div>
-                        <span class="font-black text-2xl text-white tracking-tight uppercase">CourtPulse</span>
+                            DI</div>
+                        <span class="font-black text-2xl text-white tracking-tight uppercase">DockIt</span>
                     </div>
                     <p class="text-slate-400 text-sm leading-relaxed mb-8 max-w-md font-medium">
                         India's premier digital platform connecting legal professionals. Gain instant access to
@@ -392,7 +392,7 @@
             <div
                 class="py-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
                 <span class="text-slate-500 text-[10px] sm:text-xs font-black uppercase tracking-widest">
-                    &copy; {{ date('Y') }} CourtPulse Network. All Rights Reserved.
+                    &copy; {{ date('Y') }} DockIt Network. All Rights Reserved.
                 </span>
                 <div
                     class="flex items-center gap-6 text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest">

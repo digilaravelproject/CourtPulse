@@ -4,72 +4,38 @@
 
 @section('content')
 
-    {{-- Custom Table Styles for Spacing and Readability --}}
-    <style>
-        .cp-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .cp-table thead th {
-            background-color: rgba(255, 255, 255, 0.02) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.5) !important;
-            font-weight: 900 !important;
-            font-size: 0.75rem !important;
-            letter-spacing: 0.15em !important;
-            padding: 1.25rem 1.5rem !important;
-            text-transform: uppercase;
-        }
-
-        .cp-table tbody td {
-            padding: 1.25rem 1.5rem !important;
-            vertical-align: middle;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .cp-table tbody tr {
-            transition: background-color 0.2s ease;
-        }
-
-        .cp-table tbody tr:hover {
-            background-color: rgba(255, 255, 255, 0.03);
-        }
-    </style>
-
     <div x-data="filterTable('{{ route('admin.feedback') }}', 'fb-tbl', { rating: '' })" x-init="init()">
 
         {{-- Filter Bar --}}
-        <div
-            class="bg-navy2 rounded-3xl border border-white/5 shadow-2xl p-8 mb-10 flex flex-col md:flex-row flex-wrap items-end gap-6 transition-all">
+        <div class="bg-navy2 rounded-3xl border border-white/5 shadow-2xl p-8 mb-8 flex flex-col md:flex-row flex-wrap items-end gap-6 transition-all">
 
             {{-- Rating Filter --}}
-            <div class="flex flex-col gap-3 w-full sm:w-64 flex-grow md:flex-grow-0">
-                <label class="font-black text-xs uppercase tracking-widest text-white/50 pl-1">Filter by Rating</label>
+            <div class="flex flex-col w-full md:w-72 flex-grow md:flex-grow-0">
+                <label class="block text-[10px] font-black text-white/70 uppercase tracking-widest mb-2 pl-1">Filter by Rating</label>
                 <div class="relative">
+                    <i class="fas fa-star absolute left-4 top-1/2 -translate-y-1/2 text-white/30 z-10"></i>
                     <select x-model="f.rating" @change="load()"
-                        class="w-full pl-5 pr-12 py-4 text-sm border border-white/10 rounded-2xl bg-navy text-white focus:outline-none focus:border-blue focus:ring-1 focus:ring-blue transition-colors appearance-none shadow-inner cursor-pointer">
+                        class="w-full pl-11 pr-10 py-3.5 bg-navy border border-white/10 rounded-xl text-white text-sm font-bold appearance-none focus:outline-none focus:border-blue focus:ring-1 focus:ring-blue transition-colors shadow-inner relative z-0 cursor-pointer">
                         <option value="">All Ratings</option>
                         @for ($i = 5; $i >= 1; $i--)
                             <option value="{{ $i }}">{{ $i }} Star{{ $i > 1 ? 's' : '' }}</option>
                         @endfor
                     </select>
-                    <i
-                        class="fas fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-white/30 text-sm pointer-events-none"></i>
+                    <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-white/30 text-xs pointer-events-none z-10"></i>
                 </div>
             </div>
 
             {{-- Actions (Reset & Loader) --}}
-            <div class="flex items-center gap-6 ml-auto w-full md:w-auto justify-between md:justify-end">
+            <div class="flex items-center gap-6 ml-auto w-full md:w-auto justify-between md:justify-end mt-4 md:mt-0">
                 {{-- Loading indicator --}}
                 <div x-show="loading" x-cloak
-                    class="flex items-center gap-3 text-sm font-black uppercase tracking-widest text-blue">
+                    class="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-blue">
                     <i class="fas fa-spinner fa-spin text-lg"></i> Loading...
                 </div>
 
                 {{-- Reset --}}
                 <button @click="reset()"
-                    class="flex items-center justify-center gap-2 px-8 py-4 text-xs font-black uppercase tracking-widest border border-white/10 rounded-2xl hover:bg-white/5 text-white/70 hover:text-white transition-all shadow-lg ml-auto focus:outline-none">
+                    class="flex items-center justify-center gap-2 px-8 py-3.5 text-xs font-black uppercase tracking-widest border border-white/10 rounded-xl hover:bg-white/5 text-white/70 hover:text-white transition-all shadow-lg ml-auto focus:outline-none">
                     <i class="fas fa-undo text-sm"></i> Reset Filters
                 </button>
             </div>
@@ -82,10 +48,11 @@
             </div>
 
             <div id="fb-tbl" class="overflow-x-auto min-h-[400px]">
-                {{-- The partial included here should ideally use the .cp-table class structure to match the styling --}}
+                {{-- The partial included here should use Tailwind utility classes directly on table elements --}}
                 @include('admin.partials.feedback-table', ['feedbacks' => $feedbacks])
             </div>
         </div>
+
     </div>
 
 @endsection
