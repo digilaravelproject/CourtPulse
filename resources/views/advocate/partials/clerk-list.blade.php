@@ -121,7 +121,7 @@
     @endif
 @else
     <div class="bg-navy2 border border-white/5 rounded-3xl py-20 px-8 text-center relative overflow-hidden shadow-2xl">
-        <div class="absolute inset-0 bg-gradient-to-b from-blue/5 to-transparent pointer-events-none"></div>
+        <div class="absolute inset-0 bg-linear-to-b from-blue/5 to-transparent pointer-events-none"></div>
         <div class="relative">
             <div class="w-20 h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
                 <i class="fas fa-user-secret text-4xl text-white/10"></i>
@@ -188,9 +188,6 @@
             .catch(() => {
                 btn.disabled = false;
                 btn.innerHTML = originalHtml;
-            });
-    }
-</script>() => location.reload(), 800);
             });
     }
 </script>

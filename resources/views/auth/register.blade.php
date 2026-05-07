@@ -202,16 +202,20 @@
                                         placeholder="Type to search courts...">
                                 </div>
                                 <div class="max-h-52 overflow-y-auto p-2" id="court-options-list">
-                                    @foreach($courts ?? [] as $court)
-                                        <label
-                                            class="flex items-center px-3 py-2 hover:bg-white/5 cursor-pointer rounded-lg transition-colors">
-                                            <input type="checkbox" value="{{ $court?->id }}" data-name="{{ $court?->name }}"
-                                                class="court-checkbox w-4 h-4 rounded border-white/20 bg-navy2 text-blue focus:ring-blue focus:ring-offset-navy transition-colors">
-                                            <span
-                                                class="ml-3 text-[11px] font-bold text-white/80 court-option-label">{{ $court?->name }}
-                                                ({{ $court?->city }})</span>
-                                        </label>
-                                    @endforeach
+                                    @forelse($courts ?? [] as $court)
+                                        @if(is_object($court))
+                                            <label
+                                                class="flex items-center px-3 py-2 hover:bg-white/5 cursor-pointer rounded-lg transition-colors">
+                                                <input type="checkbox" value="{{ $court->id }}" data-name="{{ $court->name }}"
+                                                    class="court-checkbox w-4 h-4 rounded border-white/20 bg-navy2 text-blue focus:ring-blue focus:ring-offset-navy transition-colors">
+                                                <span
+                                                    class="ml-3 text-[11px] font-bold text-white/80 court-option-label">{{ $court->name }}
+                                                    ({{ $court->city }})</span>
+                                            </label>
+                                        @endif
+                                    @empty
+                                        <div class="p-3 text-center text-xs text-white/40 font-bold">No courts available.</div>
+                                    @endforelse
                                     <div id="no-courts-found"
                                         class="hidden p-3 text-center text-xs text-white/40 font-bold">No courts found.
                                     </div>
@@ -221,7 +225,9 @@
                             <!-- Hidden Select For Standard Form Submission -->
                             <select name="court_ids[]" id="court_ids" multiple class="hidden">
                                 @foreach($courts ?? [] as $court)
-                                    <option value="{{ $court?->id }}">{{ $court?->name }} ({{ $court?->city }})</option>
+                                    @if(is_object($court))
+                                        <option value="{{ $court->id }}">{{ $court->name }} ({{ $court->city }})</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>

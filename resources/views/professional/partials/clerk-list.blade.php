@@ -9,7 +9,7 @@
 @else
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach($clerks as $clerk)
-            <div class="group bg-navy2 border border-white/5 rounded-2xl p-6 hover:border-blue/30 hover:bg-white/[0.02] transition-all duration-300">
+            <div class="group bg-navy2 border border-white/5 rounded-2xl p-6 hover:border-blue/30 hover:bg-white/2 transition-all duration-300">
                 <!-- Header: Avatar & Name -->
                 <div class="flex items-center gap-4 mb-6">
                     <div class="h-14 w-14 flex items-center justify-center rounded-xl bg-blue/10 text-blue text-xl font-black border border-blue/10 group-hover:scale-105 transition-transform duration-500">
@@ -42,7 +42,7 @@
                                 <i class="fas fa-landmark"></i>
                             </div>
                             <span class="text-[11px] font-bold text-blue truncate">
-                                {{ $clerk->court->name }}
+                                {{ $clerk->court?->name }}
                             </span>
                         </div>
                     @endif
