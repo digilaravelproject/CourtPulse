@@ -6,7 +6,7 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
         <div>
             <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Browse Guests</h1>
-            <p class="text-sm text-white/50">View guest profiles registered on Court Pulse.</p>
+            <p class="text-sm text-white/50">View guest profiles registered on DockIt.</p>
         </div>
         <span class="text-sm font-semibold text-white/60 bg-navy3 border border-white/5 px-4 py-2 rounded-full">{{ $guests->total() }} guests found</span>
     </div>
@@ -40,7 +40,7 @@
                     <div class="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg shrink-0" style="background:linear-gradient(135deg,#B4B4FE,#9999f0);color:#050812" x-text="guest.name.charAt(0).toUpperCase()"></div>
                     <div class="flex-1 min-w-0">
                         <div class="font-semibold text-white truncate" x-text="guest.name"></div>
-                        <div class="font-mono text-[0.6rem] tracking-widest uppercase text-blue">Guest User</div>
+                        <div class="font-mono text-[0.6rem] tracking-widest uppercase text-blue">DockIt User</div>
                     </div>
                     <span class="flex items-center gap-1 text-[0.6rem] font-semibold px-2 py-1 rounded-full bg-green-500/10 text-green-400 border border-green-500/20"><span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> Active</span>
                 </div>

@@ -5,7 +5,7 @@
 
     <div class="mb-6">
         <h2 class="font-display font-bold text-slate-800 text-2xl">My Connections</h2>
-        <p class="text-slate-400 text-sm mt-1">Manage your professional network on Court Pulse.</p>
+        <p class="text-slate-400 text-sm mt-1">Manage your professional network on DockIt.</p>
     </div>
 
     @if (session('success'))

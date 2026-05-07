@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Court Pulse</title>
+    <title>Welcome to DockIt</title>
     <style>
         * {
             margin: 0;
@@ -107,7 +107,7 @@
 <body>
     <div class="wrapper">
         <div class="header">
-            <h1>⚖️ Court Pulse</h1>
+            <h1>⚖️ DockIt</h1>
             <p>Legal Professional Network</p>
         </div>
 
@@ -115,7 +115,7 @@
             <p class="greeting">Hello <strong>{{ $user->name }}</strong>,</p>
 
             <p class="message">
-                Welcome to Court Pulse! We are thrilled to have you join our legal professional network. You have
+                Welcome to DockIt! We are thrilled to have you join our legal professional network. You have
                 registered as a <strong>{{ ucfirst($user->role) }}</strong>.
             </p>
 
@@ -130,13 +130,13 @@
                 @endif
             </div>
 
-            <a href="{{ url('/login') }}" class="btn">Log In to Court Pulse</a>
+            <a href="{{ url('/login') }}" class="btn">Log In to DockIt</a>
         </div>
 
         <div class="footer">
             <p>
-                This email was sent by Court Pulse.<br>
-                &copy; {{ date('Y') }} Court Pulse. All rights reserved.
+                This email was sent by DockIt.<br>
+                &copy; {{ date('Y') }} DockIt. All rights reserved.
             </p>
         </div>
     </div>

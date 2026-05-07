@@ -1630,7 +1630,7 @@
     <nav class="nav" id="nav">
         <div class="nav-inner">
             <a href="#" class="nav-logo d-flex align-items-center">
-                <img src="{{ asset('images/logo.jpeg') }}" alt="Court Pulse Logo"
+                <img src="{{ asset('images/logo.jpeg') }}" alt="DockIt Logo"
                     style="height:40px; width:auto; margin-right:8px;">
                 DockIt
             </a>
@@ -2094,7 +2094,7 @@
                         </div>
                     </div>
                     <div class="ci-socials">
-                        <div class="ci-socials-label">Follow Court Pulse</div>
+                        <div class="ci-socials-label">Follow DockIt</div>
                         <div class="socials-row">
                             <a href="#" class="social-btn"><svg width="14" height="14" fill="currentColor"
                                     viewBox="0 0 24 24">
@@ -2124,7 +2124,7 @@
         <div class="footer-bar">
             <a href="#" class="footer-logo">
                 <div class="logo-box">CP</div>
-                Court Pulse
+                DockIt
             </a>
             <ul class="footer-nav">
                 <li><a href="#">Privacy Policy</a></li>

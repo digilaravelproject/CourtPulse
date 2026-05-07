@@ -289,7 +289,7 @@
                 <div class="flex gap-3">
                     <i class="fas fa-shield-alt mt-0.5 shrink-0" style="color:#B4B4FE"></i>
                     <p class="text-xs leading-relaxed" style="color:rgba(255,255,255,0.5)">
-                        Guest users browse advocates & clerks on Court Pulse. They give feedback to unlock contact details.
+                        Guest users browse advocates & clerks on DockIt. They give feedback to unlock contact details.
                     </p>
                 </div>
             </div>
@@ -329,7 +329,7 @@
                                         @if (!$fb->is_anonymous && $fb->giver)
                                             {{ ucfirst($fb->giver->role) }}
                                         @else
-                                            Court Pulse User
+                                            DockIt User
                                         @endif
                                     </div>
                                 </div>

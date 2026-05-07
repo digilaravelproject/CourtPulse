@@ -116,7 +116,7 @@
 <body>
     <div class="wrapper">
         <div class="header">
-            <h1>⚖️ Court Pulse</h1>
+            <h1>⚖️ DockIt</h1>
             <p>Legal Professional Network</p>
         </div>
 
@@ -129,7 +129,7 @@
             </div>
 
             <p class="message">
-                Great news! Our administration team has reviewed your details and verified your account on Court Pulse.
+                Great news! Our administration team has reviewed your details and verified your account on DockIt.
                 You can now access all the features available for a <strong>{{ ucfirst($user->role) }}</strong>.
             </p>
 
@@ -142,8 +142,8 @@
 
         <div class="footer">
             <p>
-                This email was sent by Court Pulse.<br>
-                &copy; {{ date('Y') }} Court Pulse. All rights reserved.
+                This email was sent by DockIt.<br>
+                &copy; {{ date('Y') }} DockIt. All rights reserved.
             </p>
         </div>
     </div>

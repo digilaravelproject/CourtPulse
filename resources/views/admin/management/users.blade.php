@@ -4,152 +4,125 @@
 
 @section('content')
 
-    <div class="mb-10 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-8">
+    <div class="mb-6 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-4">
         {{-- Header & Tabs --}}
         <div>
-            <h2 class="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter leading-none mb-3">User Directory</h2>
-            <p class="text-[0.7rem] font-bold text-white/50 uppercase tracking-widest">Manage and verify network participants</p>
+            <h2 class="text-2xl font-bold text-white tracking-tight mb-1">User Directory</h2>
+            <p class="text-[0.65rem] font-semibold text-white/40 uppercase tracking-wider">Manage and verify network participants</p>
 
-            <div class="flex flex-wrap gap-4 mt-6">
+            <div class="flex gap-2 mt-4">
                 @php $status = request('status', 'pending'); @endphp
                 <a href="?status=pending"
-                    class="flex items-center gap-2 px-6 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg {{ $status === 'pending' ? 'bg-blue text-navy shadow-[0_0_20px_rgba(180,180,254,0.3)]' : 'bg-white/5 text-white/50 border border-white/10 hover:border-white/30 hover:text-white' }}">
-                    <i class="fas fa-hourglass-half {{ $status === 'pending' ? 'text-navy' : '' }}"></i> Pending Review
+                    class="flex items-center gap-2 px-4 py-2 rounded-lg text-[0.7rem] font-bold uppercase tracking-wider transition-all {{ $status === 'pending' ? 'bg-blue text-navy shadow-md' : 'bg-white/5 text-white/50 border border-white/10 hover:bg-white/10' }}">
+                    <i class="fas fa-hourglass-half text-[0.8rem]"></i> Pending Review
                 </a>
                 <a href="?status=active"
-                    class="flex items-center gap-2 px-6 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg {{ $status === 'active' ? 'bg-blue text-navy shadow-[0_0_20px_rgba(180,180,254,0.3)]' : 'bg-white/5 text-white/50 border border-white/10 hover:border-white/30 hover:text-white' }}">
-                    <i class="fas fa-user-check {{ $status === 'active' ? 'text-navy' : '' }}"></i> Active Users
+                    class="flex items-center gap-2 px-4 py-2 rounded-lg text-[0.7rem] font-bold uppercase tracking-wider transition-all {{ $status === 'active' ? 'bg-blue text-navy shadow-md' : 'bg-white/5 text-white/50 border border-white/10 hover:bg-white/10' }}">
+                    <i class="fas fa-user-check text-[0.8rem]"></i> Active Users
                 </a>
             </div>
         </div>
 
         {{-- Search Form --}}
         <form method="GET" action="{{ url()->current() }}"
-            class="bg-navy2 p-3 rounded-3xl border border-white/5 flex flex-col sm:flex-row items-center gap-3 shadow-2xl w-full xl:w-auto">
+            class="flex items-center gap-2 w-full lg:w-auto">
             <input type="hidden" name="status" value="{{ $status }}">
 
-            <div class="relative w-full xl:w-80">
-                <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-white/30 text-sm"></i>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or email..."
-                    class="w-full pl-12 pr-5 py-4 bg-navy border border-white/10 rounded-2xl text-white text-sm font-bold placeholder-white/20 focus:outline-none focus:border-blue focus:ring-1 focus:ring-blue transition-colors shadow-inner">
+            <div class="relative flex-grow lg:w-64">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-white/20 text-xs"></i>
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search name or email..."
+                    class="w-full pl-9 pr-4 py-2 bg-navy2 border border-white/10 rounded-lg text-white text-sm placeholder-white/20 focus:outline-none focus:border-blue transition-colors">
             </div>
 
             <button type="submit"
-                class="w-full sm:w-auto flex justify-center items-center gap-2 px-8 py-4 bg-blue hover:bg-white text-navy rounded-2xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-[0_5px_15px_rgba(180,180,254,0.2)] font-black text-xs uppercase tracking-widest">
+                class="flex items-center gap-2 px-5 py-2 bg-blue hover:bg-blue/90 text-navy rounded-lg transition-all font-bold text-[0.7rem] uppercase tracking-wider">
                 <span>Search</span>
-                <i class="fas fa-arrow-right"></i>
             </button>
         </form>
     </div>
 
     {{-- Main Table Container --}}
-    <div class="bg-navy2 rounded-3xl border border-white/5 shadow-2xl overflow-hidden flex flex-col">
-        <div class="p-8 border-b border-white/5 bg-white/5 flex items-center justify-between">
-            <h3 class="font-black text-base text-white uppercase tracking-widest">
+    <div class="bg-navy2 rounded-xl border border-white/5 shadow-xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-white/5 bg-white/[0.02]">
+            <h3 class="font-bold text-xs text-white/70 uppercase tracking-widest">
                 {{ $status === 'pending' ? 'Verification Queue' : 'Active Network Members' }}
             </h3>
         </div>
 
-        <div class="overflow-x-auto min-h-[400px]">
+        <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
-                    <tr class="bg-white/5 border-b border-white/5">
-                        <th class="px-8 py-6 font-black text-white/50 text-[0.65rem] tracking-[0.2em] uppercase">User Identity</th>
-                        <th class="px-8 py-6 font-black text-white/50 text-[0.65rem] tracking-[0.2em] uppercase">Professional Role</th>
-                        <th class="px-8 py-6 font-black text-white/50 text-[0.65rem] tracking-[0.2em] uppercase">Primary Association</th>
-                        <th class="px-8 py-6 font-black text-white/50 text-[0.65rem] tracking-[0.2em] uppercase">Registration Date</th>
-                        <th class="px-8 py-6 font-black text-white/50 text-[0.65rem] tracking-[0.2em] uppercase text-right">Verification</th>
+                    <tr class="bg-white/[0.03] border-b border-white/5">
+                        <th class="px-6 py-3 font-bold text-white/30 text-[0.6rem] tracking-widest uppercase">User Identity</th>
+                        <th class="px-6 py-3 font-bold text-white/30 text-[0.6rem] tracking-widest uppercase">Role</th>
+                        <th class="px-6 py-3 font-bold text-white/30 text-[0.6rem] tracking-widest uppercase">Association</th>
+                        <th class="px-6 py-3 font-bold text-white/30 text-[0.6rem] tracking-widest uppercase">Joined</th>
+                        <th class="px-6 py-3 font-bold text-white/30 text-[0.6rem] tracking-widest uppercase text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-white/5">
                     @forelse($users as $user)
                         @php
                             $roleClass = match ($user->role) {
-                                'advocate' => 'bg-blue/10 text-blue border-blue/20 shadow-[0_0_15px_rgba(180,180,254,0.15)]',
-                                'court_clerk', 'ip_clerk' => 'bg-purple-500/10 text-purple-400 border-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.15)]',
-                                'ca_cs', 'agent' => 'bg-amber-500/10 text-amber-400 border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.15)]',
+                                'advocate' => 'bg-blue/10 text-blue border-blue/20',
+                                'court_clerk', 'ip_clerk' => 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+                                'ca_cs', 'agent' => 'bg-amber-500/10 text-amber-400 border-amber-500/20',
                                 default => 'bg-white/5 text-white/50 border-white/10'
                             };
                             $initials = strtoupper(substr($user->name, 0, 1)) . (strtoupper(substr(strrchr($user->name, " "), 1, 1)) ?: '');
                         @endphp
-                        <tr class="hover:bg-white/5 transition-colors duration-300 group" data-uid="{{ $user->id }}">
-
-                            {{-- User Identity --}}
-                            <td class="px-8 py-6 align-middle">
-                                <div class="flex items-center gap-5">
-                                    <div class="w-12 h-12 rounded-xl {{ $roleClass }} border flex items-center justify-center font-black text-sm group-hover:scale-105 transition-transform">
+                        <tr class="hover:bg-white/[0.02] transition-colors group">
+                            <td class="px-6 py-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-lg {{ $roleClass }} border flex items-center justify-center font-bold text-[0.7rem]">
                                         {{ $initials }}
                                     </div>
                                     <div>
-                                        <div class="text-sm font-black text-white uppercase tracking-tight mb-1 group-hover:text-blue transition-colors">
+                                        <div class="text-[0.8rem] font-bold text-white group-hover:text-blue transition-colors">
                                             {{ $user->name }}
                                         </div>
-                                        <div class="text-[0.65rem] text-white/50 font-bold uppercase tracking-widest font-mono">
+                                        <div class="text-[0.6rem] text-white/30 font-medium">
                                             {{ $user->email }}
                                         </div>
                                     </div>
                                 </div>
                             </td>
 
-                            {{-- Professional Role --}}
-                            <td class="px-8 py-6 align-middle">
-                                <div class="flex flex-col items-start gap-2">
-                                    <span class="inline-flex text-[0.6rem] font-black uppercase tracking-widest {{ $roleClass }} border px-3 py-1.5 rounded-lg">
-                                        {{ str_replace('_', ' ', $user->role) }}
-                                    </span>
-                                    @if($user->sub_role)
-                                        <span class="text-[0.6rem] font-bold uppercase tracking-widest text-white/40 mt-1">
-                                            Spec: <span class="text-white/70">{{ str_replace('_', ' ', $user->sub_role) }}</span>
-                                        </span>
-                                    @endif
-                                </div>
+                            <td class="px-6 py-3">
+                                <span class="inline-block text-[0.55rem] font-bold uppercase tracking-tighter {{ $roleClass }} border px-2 py-0.5 rounded-md">
+                                    {{ str_replace('_', ' ', $user->role) }}
+                                </span>
                             </td>
 
-                            {{-- Primary Association --}}
-                            <td class="px-8 py-6 align-middle">
-                                <div class="text-xs font-black text-white uppercase tracking-tight mb-1.5">
-                                    {{ $user->court->name ?? 'Direct Network' }}
-                                </div>
-                                <div class="text-[0.65rem] text-white/40 uppercase tracking-widest font-bold">
-                                    <i class="fas fa-map-marker-alt mr-1"></i> {{ $user->court->city ?? 'All India' }}
-                                </div>
+                            <td class="px-6 py-3">
+                                <div class="text-[0.7rem] font-bold text-white/80">{{ $user->court->name ?? 'Direct Network' }}</div>
+                                <div class="text-[0.6rem] text-white/30 uppercase"><i class="fas fa-map-marker-alt text-[0.5rem] mr-1"></i> {{ $user->court->city ?? 'All India' }}</div>
                             </td>
 
-                            {{-- Registration Date --}}
-                            <td class="px-8 py-6 align-middle">
-                                <div class="text-xs font-bold text-white mb-1.5">{{ $user->created_at->format('d M, Y') }}</div>
-                                <div class="text-[0.65rem] text-white/40 font-black uppercase tracking-widest">
-                                    <i class="far fa-clock mr-1"></i> {{ $user->created_at->diffForHumans() }}
-                                </div>
+                            <td class="px-6 py-3">
+                                <div class="text-[0.7rem] text-white/80 font-medium">{{ $user->created_at->format('d M, Y') }}</div>
+                                <div class="text-[0.55rem] text-white/30 uppercase">{{ $user->created_at->diffForHumans() }}</div>
                             </td>
 
-                            {{-- Verification Actions --}}
-                            <td class="px-8 py-6 align-middle text-right">
+                            <td class="px-6 py-3 text-right">
                                 @if($user->status === 'active')
                                     <button onclick="openReject('{{ $user->id }}', '{{ addslashes($user->name) }}')"
-                                        class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-[0.65rem] font-black uppercase tracking-widest transition-all bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white hover:shadow-[0_5px_15px_rgba(239,68,68,0.2)]">
-                                        <i class="fas fa-ban text-sm"></i> Deactivate
+                                        class="px-3 py-1.5 rounded-md text-[0.6rem] font-bold uppercase bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white transition-all">
+                                        Deactivate
                                     </button>
                                 @else
                                     <button onclick="openVerify('{{ $user->id }}', '{{ addslashes($user->name) }}', '{{ $user->role }}', '{{ $user->email }}', '{{ $user->phone ?? '' }}', '{{ addslashes($user->court->name ?? 'Direct Network') }}', '{{ addslashes($user->court->city ?? 'All India') }}')"
-                                        class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-[0.65rem] font-black uppercase tracking-widest transition-all bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500 hover:text-white hover:shadow-[0_5px_15px_rgba(34,197,94,0.2)]">
-                                        <i class="fas fa-check-circle text-sm"></i> Review & Verify
+                                        class="px-3 py-1.5 rounded-md text-[0.6rem] font-bold uppercase bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500 hover:text-white transition-all">
+                                        Review
                                     </button>
                                 @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="py-24 text-center">
-                                <div class="flex flex-col items-center justify-center">
-                                    <div class="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/30 text-3xl mb-5">
-                                        <i class="fas fa-users-slash"></i>
-                                    </div>
-                                    <p class="text-white font-black uppercase tracking-[0.25em] text-sm mb-2">No users found</p>
-                                    <p class="text-white/40 font-bold text-[0.7rem] uppercase tracking-widest">
-                                        Try adjusting your search or filters.
-                                    </p>
-                                </div>
+                            <td colspan="5" class="py-16 text-center">
+                                <i class="fas fa-users-slash text-white/10 text-2xl mb-3 block"></i>
+                                <p class="text-white/40 font-bold uppercase tracking-widest text-[0.65rem]">No users found</p>
                             </td>
                         </tr>
                     @endforelse
@@ -157,9 +130,8 @@
             </table>
         </div>
 
-        {{-- Pagination --}}
         @if(isset($users) && method_exists($users, 'hasPages') && $users->hasPages())
-            <div class="px-8 py-6 bg-navy/50 border-t border-white/5">
+            <div class="px-6 py-3 bg-white/[0.01] border-t border-white/5 text-xs">
                 {{ $users->appends(request()->query())->links() }}
             </div>
         @endif

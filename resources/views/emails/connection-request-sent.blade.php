@@ -142,7 +142,7 @@
 
         {{-- Header --}}
         <div class="header">
-            <h1>⚖️ Court Pulse</h1>
+            <h1>⚖️ DockIt</h1>
             <p>Legal Professional Network</p>
         </div>
 
@@ -156,13 +156,13 @@
                 <div class="avatar">{{ strtoupper(substr($sender->name, 0, 1)) }}</div>
                 <div class="sender-info">
                     <h2>{{ $sender->name }}</h2>
-                    <span>{{ $sender->role }} • {{ $sender->city ?? 'Court Pulse Member' }}</span>
+                    <span>{{ $sender->role }} • {{ $sender->city ?? 'DockIt Member' }}</span>
                 </div>
             </div>
 
             <p class="message">
-                <strong>{{ $sender->name }}</strong> has sent you a connection request on Court Pulse.<br><br>
-                Professionals on Court Pulse connect with each other to expand their legal network.
+                <strong>{{ $sender->name }}</strong> has sent you a connection request on DockIt.<br><br>
+                Professionals on DockIt connect with each other to expand their legal network.
                 If you are interested, you can view and accept the request by clicking the button below.
             </p>
 
@@ -178,8 +178,8 @@
         {{-- Footer --}}
         <div class="footer">
             <p>
-                This email was sent by Court Pulse.<br>
-                &copy; {{ date('Y') }} Court Pulse. All rights reserved.
+                This email was sent by DockIt.<br>
+                &copy; {{ date('Y') }} DockIt. All rights reserved.
             </p>
         </div>
 

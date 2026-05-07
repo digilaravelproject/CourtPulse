@@ -23,7 +23,7 @@ class UserVerifiedEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Account Verified 🎉 — Court Pulse',
+            subject: 'Account Verified 🎉 — DockIt',
         );
     }
 

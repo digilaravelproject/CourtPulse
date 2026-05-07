@@ -199,7 +199,7 @@
                                 </div>
                                 <div>
                                     <div class="font-semibold text-white text-sm">{{ $fb->is_anonymous ? 'Anonymous' : $fb->giver->name ?? 'Unknown' }}</div>
-                                    <div class="text-xs text-white/40">{{ !$fb->is_anonymous && $fb->giver ? ucfirst($fb->giver->role) : 'Court Pulse User' }}</div>
+                                    <div class="text-xs text-white/40">{{ !$fb->is_anonymous && $fb->giver ? ucfirst($fb->giver->role) : 'DockIt User' }}</div>
                                 </div>
                             </div>
                             <div class="flex flex-col items-end gap-1 flex-shrink-0">

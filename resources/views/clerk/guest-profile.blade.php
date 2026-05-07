@@ -172,7 +172,7 @@
             @endif
 
             <div class="rounded-2xl p-4" style="background:rgba(180,180,254,0.04);border:1px solid rgba(180,180,254,0.12)">
-                <div class="flex gap-3"><i class="fas fa-info-circle text-blue mt-0.5 flex-shrink-0" style="color:#B4B4FE"></i><p class="text-xs text-white/50 leading-relaxed">Guest users browse advocates & clerks on Court Pulse. They give feedback to unlock contact details.</p></div>
+                <div class="flex gap-3"><i class="fas fa-info-circle text-blue mt-0.5 flex-shrink-0" style="color:#B4B4FE"></i><p class="text-xs text-white/50 leading-relaxed">Guest users browse advocates & clerks on DockIt. They give feedback to unlock contact details.</p></div>
             </div>
         </div>
 
@@ -199,7 +199,7 @@
                                 </div>
                                 <div>
                                     <div class="font-semibold text-white text-sm">{{ $fb->is_anonymous ? 'Anonymous' : $fb->giver->name ?? 'Unknown' }}</div>
-                                    <div class="text-xs text-white/40">{{ !$fb->is_anonymous && $fb->giver ? ucfirst($fb->giver->role) : 'Court Pulse User' }}</div>
+                                    <div class="text-xs text-white/40">{{ !$fb->is_anonymous && $fb->giver ? ucfirst($fb->giver->role) : 'DockIt User' }}</div>
                                 </div>
                             </div>
                             <div class="flex flex-col items-end gap-1 flex-shrink-0">

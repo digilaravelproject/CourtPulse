@@ -7,7 +7,7 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
         <div>
             <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Browse Guests</h1>
-            <p class="text-sm text-white/50">View guest profiles registered on Court Pulse.</p>
+            <p class="text-sm text-white/50">View guest profiles registered on DockIt.</p>
         </div>
         <span class="text-sm font-semibold text-white/60 bg-navy3 border border-white/5 px-4 py-2 rounded-full">{{ $guests->total() }} guests found</span>
     </div>
