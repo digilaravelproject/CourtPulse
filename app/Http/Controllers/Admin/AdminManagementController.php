@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\NavigationMenu;
+use App\Models\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -136,6 +137,26 @@ class AdminManagementController extends Controller
             return $request->ajax()
                 ? response()->json(['error' => 'Failed to load feedback.'], 500)
                 : back()->withErrors(['general' => 'Failed to load feedback.']);
+        }
+    }
+
+     /**
+      * Delete feedback record.
+      */
+    public function destroyFeedback(Feedback $feedback): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $feedback->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Feedback deleted successfully.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Admin Feedback Delete Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete feedback.'
+            ], 500);
         }
     }
 }

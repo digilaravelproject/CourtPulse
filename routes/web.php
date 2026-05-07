@@ -225,6 +225,7 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
 
     // Feedback Management
     Route::get('/feedback', [AdminManagementController::class, 'feedback'])->name('feedback');
+    Route::delete('/feedback/{feedback}', [AdminManagementController::class, 'destroyFeedback'])->name('feedback.destroy');
 });
 
 
