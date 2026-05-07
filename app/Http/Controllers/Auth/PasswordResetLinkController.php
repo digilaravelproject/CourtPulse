@@ -3,14 +3,22 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\EmailService;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PasswordResetLinkController extends Controller
 {
+    protected EmailService $emailService;
+
+    public function __construct(EmailService $emailService)
+    {
+        $this->emailService = $emailService;
+    }
+
     /**
      * Show the forgot password form.
      */
@@ -28,19 +36,19 @@ class PasswordResetLinkController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        // Laravel will handle token creation, DB storage, and email sending
-        $status = DB::transaction(function() use ($request) {
-            return Password::sendResetLink(
-                $request->only('email')
-            );
-        });
+        $user = User::query()->where('email', '=', $request->email)->first();
 
-        if ($status === Password::RESET_LINK_SENT) {
-            return back()->with('status', __($status));
+        if (!$user) {
+            return back()->withErrors(['email' => 'User not found.']);
         }
 
-        return back()
-            ->withInput($request->only('email'))
-            ->withErrors(['email' => __($status)]);
+        // Generate token using Laravel's password broker
+        $token = Password::createToken($user);
+        $url = route('password.reset', ['token' => $token, 'email' => $user->email]);
+
+        // Send email via centralized EmailService
+        $this->emailService->sendForgotPasswordEmail($user->email, $url);
+
+        return back()->with('status', 'We have emailed your password reset link.');
     }
 }

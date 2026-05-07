@@ -5,22 +5,27 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\ConnectionRequest;
 use App\Models\User;
-use App\Mail\ConnectionRequestSent;
-use App\Mail\ConnectionRequestAccepted;
+use App\Services\EmailService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class ConnectionController extends Controller
 {
+    protected EmailService $emailService;
+
+    public function __construct(EmailService $emailService)
+    {
+        $this->emailService = $emailService;
+    }
+
     public function send(Request $request)
     {
         try {
             $sender = Auth::user();
-            $receiver = User::findOrFail($request->receiver_id);
+            $receiver = User::query()->findOrFail($request->receiver_id);
 
-            $alreadyExists = ConnectionRequest::where(function ($q) use ($sender, $receiver) {
+            $alreadyExists = ConnectionRequest::query()->where(function ($q) use ($sender, $receiver) {
                 $q->where('sender_id', $sender->id)->where('receiver_id', $receiver->id);
             })->orWhere(function ($q) use ($sender, $receiver) {
                 $q->where('sender_id', $receiver->id)->where('receiver_id', $sender->id);
@@ -33,13 +38,14 @@ class ConnectionController extends Controller
                 return back()->with('info', 'Request already sent or already connected.');
             }
 
-            ConnectionRequest::create([
+            ConnectionRequest::query()->create([
                 'sender_id'   => $sender->id,
                 'receiver_id' => $receiver->id,
                 'status'      => 'pending',
             ]);
 
-            Mail::to($receiver->email)->send(new ConnectionRequestSent($sender, $receiver));
+            // Use centralized EmailService
+            $this->emailService->sendConnectionRequestEmail($sender, $receiver);
 
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json(['message' => 'Connection request sent successfully!', 'status' => 'sent']);
@@ -47,7 +53,7 @@ class ConnectionController extends Controller
             return back()->with('success', 'Connection request sent successfully!');
         } catch (\Exception $e) {
             Log::error('Connection Send Error: ' . $e->getMessage());
-            return $request->ajax() 
+            return $request->ajax()
                 ? response()->json(['message' => 'Failed to send request.'], 500)
                 : back()->withErrors(['general' => 'Failed to send request.']);
         }
@@ -61,9 +67,10 @@ class ConnectionController extends Controller
 
             abort_unless($connectionRequest->receiver_id === $acceptor->id, 403);
 
-            $connectionRequest->update(['status' => 'accepted']);
+            ConnectionRequest::query()->where('id', '=', $connectionRequest->id)->update(['status' => 'accepted']);
 
-            Mail::to($requester->email)->send(new ConnectionRequestAccepted($acceptor, $requester));
+            // Use centralized EmailService
+            $this->emailService->sendConnectionAcceptedEmail($acceptor, $requester);
 
             if (request()->ajax() || request()->wantsJson()) {
                 return response()->json(['message' => 'Connection accepted!', 'status' => 'connected']);
@@ -84,7 +91,7 @@ class ConnectionController extends Controller
                 403
             );
 
-            $connectionRequest->delete();
+            ConnectionRequest::query()->where('id', $connectionRequest->id)->delete();
 
             if (request()->ajax() || request()->wantsJson()) {
                 return response()->json(['message' => 'Connection rejected.', 'status' => 'rejected']);
@@ -102,7 +109,7 @@ class ConnectionController extends Controller
             $authId = Auth::id();
             $user = Auth::user();
 
-            $connected = ConnectionRequest::where('status', 'accepted')
+            $connected = ConnectionRequest::query()->where('status', 'accepted')
                 ->where(function ($q) use ($authId) {
                     $q->where('sender_id', $authId)->orWhere('receiver_id', $authId);
                 })
@@ -111,13 +118,13 @@ class ConnectionController extends Controller
                 ->get()
                 ->map(fn($r) => $r->sender_id === $authId ? $r->receiver : $r->sender);
 
-            $pendingReceived = ConnectionRequest::where('receiver_id', $authId)
+            $pendingReceived = ConnectionRequest::query()->where('receiver_id', $authId)
                 ->where('status', 'pending')
                 ->with('sender')
                 ->latest()
                 ->get();
 
-            $pendingSent = ConnectionRequest::where('sender_id', $authId)
+            $pendingSent = ConnectionRequest::query()->where('sender_id', $authId)
                 ->where('status', 'pending')
                 ->with('receiver')
                 ->latest()

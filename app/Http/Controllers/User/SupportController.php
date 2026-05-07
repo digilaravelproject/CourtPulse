@@ -295,7 +295,7 @@ class SupportController extends Controller
     {
         \Illuminate\Support\Facades\DB::beginTransaction();
         try {
-            $connectionRequest = ConnectionRequest::findOrFail($id);
+            $connectionRequest = ConnectionRequest::query()->findOrFail($id);
             $user = Auth::user();
 
             if ($connectionRequest->receiver_id !== $user->id) {
@@ -317,14 +317,14 @@ class SupportController extends Controller
     {
         \Illuminate\Support\Facades\DB::beginTransaction();
         try {
-            $connectionRequest = ConnectionRequest::findOrFail($id);
+            $connectionRequest = ConnectionRequest::query()->findOrFail($id);
             $user = Auth::user();
 
             if ($connectionRequest->receiver_id !== $user->id && $connectionRequest->sender_id !== $user->id) {
                 return back()->withErrors(['general' => 'Unauthorized access.']);
             }
 
-            $connectionRequest->delete();
+            ConnectionRequest::query()->where('id', $connectionRequest->id)->delete();
 
             \Illuminate\Support\Facades\DB::commit();
             return back()->with('success', 'Connection request removed successfully.');
@@ -431,7 +431,7 @@ class SupportController extends Controller
         }
     }
 
-    public function viewGuests(Request $request): \Illuminate\View\View|\Illuminate\Http\JsonResponse
+    public function viewGuests(Request $request): \Illuminate\View\View|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
     {
         try {
             $user = Auth::user();
@@ -445,7 +445,7 @@ class SupportController extends Controller
                 ->paginate(12);
 
             if ($request->ajax()) {
-                return response()->json(['html' => view('support.partials.guest-list', compact('guests'))->render()]);
+                return response()->json($guests);
             }
 
             $pendingCount = ConnectionRequest::query()

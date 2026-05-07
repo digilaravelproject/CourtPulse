@@ -8,9 +8,10 @@ use App\Models\CaProfile;
 use App\Models\ConnectionRequest;
 use App\Models\Feedback;
 use App\Models\User;
-use App\Services\CourtService;
+use App\Services\EmailService;
 use App\Services\SearchService;
 use App\Services\UserService;
+use App\Services\CourtService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,20 +19,22 @@ use Illuminate\Support\Facades\Log;
 
 class ProfessionalController extends Controller
 {
+
     protected UserService $userService;
-
     protected SearchService $searchService;
-
     protected CourtService $courtService;
+    protected EmailService $emailService;
 
     public function __construct(
         UserService $userService,
         SearchService $searchService,
-        CourtService $courtService
+        CourtService $courtService,
+        EmailService $emailService
     ) {
         $this->userService = $userService;
         $this->searchService = $searchService;
         $this->courtService = $courtService;
+        $this->emailService = $emailService;
     }
 
     public function dashboard()
@@ -217,7 +220,7 @@ class ProfessionalController extends Controller
     {
         DB::beginTransaction();
         try {
-            $connectionRequest = ConnectionRequest::findOrFail($id);
+            $connectionRequest = ConnectionRequest::query()->findOrFail($id);
             $user = Auth::user();
 
             if ($connectionRequest->receiver_id !== $user->id) {
@@ -225,6 +228,9 @@ class ProfessionalController extends Controller
             }
 
             $connectionRequest->update(['status' => 'accepted']);
+
+            // Send Email Notification
+            $this->emailService->sendConnectionAcceptedEmail($user, $connectionRequest->sender);
 
             DB::commit();
             return back()->with('success', 'Connection request accepted!');
@@ -239,7 +245,7 @@ class ProfessionalController extends Controller
     {
         DB::beginTransaction();
         try {
-            $connectionRequest = ConnectionRequest::findOrFail($id);
+            $connectionRequest = ConnectionRequest::query()->findOrFail($id);
             $user = Auth::user();
 
             // Authorization check: either sender or receiver can retract/reject
@@ -247,7 +253,7 @@ class ProfessionalController extends Controller
                 return back()->withErrors(['general' => 'Unauthorized access.']);
             }
 
-            $connectionRequest->delete();
+            ConnectionRequest::query()->where('id', $connectionRequest->id)->delete();
 
             DB::commit();
             return back()->with('success', 'Connection request removed successfully.');
@@ -443,6 +449,9 @@ class ProfessionalController extends Controller
                 'status' => 'pending',
                 'notes' => $request->notes,
             ]);
+
+            // Send Email Notification
+            $this->emailService->sendConnectionRequestEmail($sender, $receiver);
 
             DB::commit();
             return response()->json(['message' => 'Connection request sent successfully!']);

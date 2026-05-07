@@ -3,9 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Mail\OtpMail;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -14,12 +12,20 @@ use Carbon\Carbon;
 
 class AuthService
 {
+    protected EmailService $emailService;
+
+    public function __construct(EmailService $emailService)
+    {
+        $this->emailService = $emailService;
+    }
+
     /**
      * Generate and send OTP for login.
      */
-    public function sendLoginOtp(string $email)
+    public function sendLoginOtp(string $email): User
     {
         return DB::transaction(function () use ($email) {
+            /** @var User $user */
             $user = User::query()
                 ->where('email', '=', $email)
                 ->lockForUpdate()
@@ -35,7 +41,8 @@ class AuthService
                 'otp_expires_at' => Carbon::now()->addMinutes(10),
             ]);
 
-            Mail::to($user->email)->send(new OtpMail($user->name, $otp));
+            // Use centralized EmailService
+            $this->emailService->sendLoginOtp($user, $otp);
 
             return $user;
         });
@@ -44,9 +51,10 @@ class AuthService
     /**
      * Verify OTP and login user.
      */
-    public function verifyLoginOtp(string $email, string $otp)
+    public function verifyLoginOtp(string $email, string $otp): User
     {
         return DB::transaction(function () use ($email, $otp) {
+            /** @var User $user */
             $user = User::query()
                 ->where('email', '=', $email)
                 ->lockForUpdate()
@@ -74,7 +82,7 @@ class AuthService
     /**
      * Complete Unified Registration: Create user and send OTP.
      */
-    public function registerUser(array $data)
+    public function registerUser(array $data): User
     {
         return DB::transaction(function () use ($data) {
             $otp = rand(100000, 999999);
@@ -113,8 +121,8 @@ class AuthService
             // Assign Spatie Role
             $user->assignRole($user->role);
 
-            // Send OTP Email
-            Mail::to($user->email)->send(new OtpMail($user->name, $otp));
+            // Send OTP Email via EmailService
+            $this->emailService->sendSignupOtp($user, $otp);
 
             // Log user in to complete verification process
             Auth::login($user);
@@ -126,10 +134,11 @@ class AuthService
     /**
      * Verify registration OTP.
      */
-    public function verifyRegistrationOtp(User $user, string $otp)
+    public function verifyRegistrationOtp(User $user, string $otp): bool
     {
         return DB::transaction(function () use ($user, $otp) {
             // Re-fetch with lock
+            /** @var User $dbUser */
             $dbUser = User::query()->where('id', $user->id)->lockForUpdate()->first();
 
             // --- MASTER OTP FOR TESTING ---
@@ -153,9 +162,10 @@ class AuthService
     /**
      * Reset user password with transaction and lock.
      */
-    public function resetUserPassword(User $user, string $password)
+    public function resetUserPassword(User $user, string $password): void
     {
         DB::transaction(function () use ($user, $password) {
+            /** @var User $dbUser */
             $dbUser = User::query()
                 ->where('id', '=', $user->id)
                 ->lockForUpdate()
