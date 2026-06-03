@@ -131,7 +131,7 @@
                 </div>
 
                 {{-- Direct Permissions --}}
-                <div class="space-y-2">
+                <div class="space-y-2 hidden">
                     <label class="text-[0.6rem] font-black uppercase tracking-wider text-white/50 block">Direct Account Permissions</label>
                     <p class="text-[0.55rem] text-white/40 font-bold uppercase tracking-wide">Grant custom permissions directly to this user account (in addition to role defaults).</p>
 

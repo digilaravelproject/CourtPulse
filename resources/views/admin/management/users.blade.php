@@ -12,11 +12,15 @@
 
             <div class="flex flex-wrap gap-2 mt-4">
                 @php 
-                    $status = request('status', 'pending'); 
+                    $status = request('status'); 
                     $roleCategory = request('role_category');
                     $search = request('search');
                     $queryStr = ($roleCategory ? '&role_category='.$roleCategory : '') . ($search ? '&search='.$search : '');
                 @endphp
+                <a href="?{{ $roleCategory ? 'role_category='.$roleCategory : '' }}{{ $search ? '&search='.$search : '' }}"
+                    class="flex items-center gap-2 px-4 py-2 rounded-lg text-[0.7rem] font-bold uppercase tracking-wider transition-all {{ is_null($status) ? 'bg-blue text-navy shadow-md' : 'bg-white/5 text-white/50 border border-white/10 hover:bg-white/10' }}">
+                    <i class="fas fa-users text-[0.8rem]"></i> All Status
+                </a>
                 <a href="?status=pending{{ $queryStr }}"
                     class="flex items-center gap-2 px-4 py-2 rounded-lg text-[0.7rem] font-bold uppercase tracking-wider transition-all {{ $status === 'pending' ? 'bg-blue text-navy shadow-md' : 'bg-white/5 text-white/50 border border-white/10 hover:bg-white/10' }}">
                     <i class="fas fa-hourglass-half text-[0.8rem]"></i> Pending Review
@@ -68,7 +72,9 @@
                 @if($roleCategory)
                     {{ ucfirst($roleCategory) }} Directory - 
                 @endif
-                @if($status === 'pending')
+                @if(is_null($status))
+                    All Members
+                @elseif($status === 'pending')
                     Verification Queue
                 @elseif($status === 'active')
                     Active Members

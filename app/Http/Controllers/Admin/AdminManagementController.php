@@ -41,7 +41,7 @@ class AdminManagementController extends Controller
     {
         try {
             $data = $this->service->getUsersData($request);
-            $status = (string) $request->query('status', 'pending');
+            $status = $request->query('status');
             $data['status'] = $status;
 
             if ($request->ajax()) {

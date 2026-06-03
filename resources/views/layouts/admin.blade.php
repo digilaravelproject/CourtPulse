@@ -169,7 +169,6 @@
             {!! navLink('admin.manage.users', 'bi-shield-check', 'Support Staff', null, ['role_category' => 'support']) !!}
             {!! navLink('admin.manage.users', 'bi-briefcase-fill', 'Professionals', null, ['role_category' => 'professional']) !!}
             {!! navLink('admin.manage.users', 'bi-people-fill', 'Guest Users', null, ['role_category' => 'guest']) !!}
-            {!! navLink('admin.manage.users', 'bi-person-gear', 'Administrators', null, ['role_category' => 'admin']) !!}
 
             <div class="px-6 pt-6 pb-2 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/30">System</div>
             {!! navLink('admin.courts.index', 'bi-buildings-fill', 'Courts Data') !!}
