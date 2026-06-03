@@ -216,7 +216,7 @@
 
                         <p
                             class="text-white/60 text-sm md:text-base uppercase tracking-[0.15em] font-bold max-w-md leading-relaxed">
-                            Because you have to start before the gate, not after it.
+                            Because you have to start before the gate.
                         </p>
 
                         <a href="{{ route('court-maps.index') }}"
