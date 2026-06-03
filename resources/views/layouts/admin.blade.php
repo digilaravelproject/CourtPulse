@@ -172,6 +172,7 @@
 
             <div class="px-6 pt-6 pb-2 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/30">System</div>
             {!! navLink('admin.courts.index', 'bi-buildings-fill', 'Courts Data') !!}
+            {!! navLink('admin.court-maps.index', 'bi-map-fill', 'Court Maps') !!}
             {!! navLink('admin.manage.menus', 'bi-list-ul', 'Menu Management') !!}
             {!! navLink('admin.feedback', 'bi-star-fill', 'Feedback') !!}
 

@@ -15,5 +15,6 @@ class Court extends Model
         'city',
         'area',
         'pincode',
+        'map_path',
     ];
 }

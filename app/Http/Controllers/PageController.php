@@ -21,6 +21,22 @@ class PageController extends Controller
         return view('pages.updates');
     }
 
+    public function courtMaps(Request $request)
+    {
+        $search = $request->input('search');
+        $courts = \App\Models\Court::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%")
+                    ->orWhere('area', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(12)
+            ->withQueryString();
+
+        return view('pages.court-maps', compact('courts'));
+    }
+
     public function contact()
     {
         // For now, redirect to home with contact section

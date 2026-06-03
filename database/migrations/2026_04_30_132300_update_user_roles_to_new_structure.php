@@ -11,7 +11,9 @@ return new class extends Migration
     public function up(): void
     {
         // Change to string temporarily to avoid ENUM truncation during update
-        DB::statement("ALTER TABLE users MODIFY COLUMN role VARCHAR(255)");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role VARCHAR(255)");
+        }
 
         // Map existing roles to new ones
         DB::table('users')->where('role', 'clerk')->update(['role' => 'court_clerk']);
@@ -19,7 +21,9 @@ return new class extends Migration
         DB::table('users')->where('role', 'ip_attorney')->update(['role' => 'agent']);
 
         // MySQL Enum modification with new structure
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'admin', 'guest', 'court_clerk', 'ip_clerk', 'advocate', 'ca_cs', 'agent') DEFAULT 'guest'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'admin', 'guest', 'court_clerk', 'ip_clerk', 'advocate', 'ca_cs', 'agent') DEFAULT 'guest'");
+        }
     }
 
     /**
@@ -27,6 +31,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'admin', 'advocate', 'clerk', 'guest', 'ca', 'cs', 'ip_attorney') DEFAULT 'guest'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'admin', 'advocate', 'clerk', 'guest', 'ca', 'cs', 'ip_attorney') DEFAULT 'guest'");
+        }
     }
 };

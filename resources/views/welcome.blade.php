@@ -219,7 +219,7 @@
                             Because you have to start before the gate, not after it.
                         </p>
 
-                        <a href="#"
+                        <a href="{{ route('court-maps.index') }}"
                             class="bg-blue text-navy font-black px-6 md:px-8 py-4 rounded-xl transition-all duration-300 uppercase text-xs tracking-widest hover:bg-white hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(59,130,246,0.3)] no-underline inline-flex items-center gap-4 mt-4 w-full sm:w-auto justify-center">
                             Find Court Maps
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none"

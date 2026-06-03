@@ -32,6 +32,7 @@ Route::get('/begin-find', [SearchController::class, 'index'])->name('find');
 Route::controller(PageController::class)->group(function () {
     Route::get('/blogs', 'blogs')->name('blogs');
     Route::get('/latest-updates', 'updates')->name('updates');
+    Route::get('/court-maps', 'courtMaps')->name('court-maps.index');
     Route::get('/contact-us', 'contact')->name('contact');
     Route::get('/careers', 'careers')->name('careers');
 });
@@ -229,6 +230,11 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
         Route::delete('/{court}', 'destroy')->name('destroy');
     });
 
+    // Court Maps Management (CourtMapController)
+    Route::prefix('court-maps')->name('court-maps.')->controller(\App\Http\Controllers\Admin\CourtMapController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/{court}/upload', 'upload')->name('upload');
+    });
 
     // Feedback Management
     Route::get('/feedback', [AdminManagementController::class, 'feedback'])->name('feedback');
