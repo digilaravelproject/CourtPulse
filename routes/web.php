@@ -206,8 +206,14 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
     // System Management (Verification, Menus)
     Route::prefix('manage')->name('manage.')->controller(AdminManagementController::class)->group(function () {
         Route::get('/users', 'usersIndex')->name('users');
+        Route::post('/users', 'storeUser')->name('users.store');
+        Route::get('/users/create-data', 'createUserData')->name('users.create-data');
+        Route::get('/users/{user}/edit-data', 'editUserData')->name('users.edit-data');
+        Route::put('/users/{user}', 'updateUser')->name('users.update');
+        Route::delete('/users/{user}', 'destroyUser')->name('users.destroy');
         Route::post('/users/{user}/verify', 'verifyUser')->name('users.verify');
         Route::get('/users/{user}/details', 'showUserDetails')->name('users.details');
+        Route::patch('/users/{user}/toggle-status', 'toggleUserStatus')->name('users.toggle-status');
         Route::get('/menus', 'menusIndex')->name('menus');
         Route::patch('/menus/{menu}', 'updateMenu')->name('menus.update');
     });

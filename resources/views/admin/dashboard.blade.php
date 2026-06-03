@@ -230,7 +230,7 @@
         @endif
     </div>
 
-    @include('admin.partials.verification-modals')
+    @include('admin.partials.user-management-modals')
 
 @endsection
 

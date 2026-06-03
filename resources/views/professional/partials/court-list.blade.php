@@ -48,7 +48,7 @@
         <div class="mt-8">
             {{-- Custom styled pagination for the dark theme --}}
             <div class="flex justify-center">
-                {{ $courts->links('vendor.pagination.tailwind') }}
+                {{ $courts->links('vendor.pagination.tailwind-dark') }}
             </div>
         </div>
     @endif

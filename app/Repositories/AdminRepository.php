@@ -77,22 +77,24 @@ class AdminRepository
     public function getFilteredUsers(Request $request, int $perPage = 20)
     {
         return User::query()
-            ->whereNotIn('role', ['super_admin', 'admin'], 'and')
             ->with(['advocateProfile', 'clerkProfile', 'caProfile'])
             ->when($request->role,   fn($q) => $q->where('role', '=', $request->role))
             ->when($request->role_category, function ($q) use ($request) {
                 if ($request->role_category === 'support') {
                     $q->whereIn('role', ['court_clerk', 'ip_clerk'], 'and', false);
                 } elseif ($request->role_category === 'professional') {
-                    $q->whereIn('role', ['ca', 'cs', 'agent', 'advocate'], 'and', false);
+                    $q->whereIn('role', ['ca_cs', 'agent', 'advocate'], 'and', false);
                 } elseif ($request->role_category === 'guest') {
                     $q->where('role', '=', 'guest');
+                } elseif ($request->role_category === 'admin') {
+                    $q->whereIn('role', ['admin', 'super_admin'], 'and', false);
                 }
             })
             ->when($request->status, fn($q) => $q->where('status', '=', $request->status))
             ->when($request->search, fn($q) => $q->where(function ($sq) use ($request) {
                 $sq->where('name',  'like', '%' . $request->search . '%')
-                    ->orWhere('email', 'like', '%' . $request->search . '%');
+                    ->orWhere('email', 'like', '%' . $request->search . '%')
+                    ->orWhere('phone', 'like', '%' . $request->search . '%');
             }))
             ->latest()
             ->paginate($perPage);
