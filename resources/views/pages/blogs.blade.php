@@ -3,21 +3,25 @@
 @section('title', 'Legal & Procedural Insights - DockIt')
 
 @section('content')
-<section class="py-24 bg-[#050812]">
+<section class="py-12 md:py-16 bg-[#050812]">
     <div class="max-w-[1500px] mx-auto px-6">
-        <div class="max-w-3xl mb-24">
-            <span class="section-label">EDITORIAL BITS</span>
-            <h1 class="text-7xl font-black text-white leading-[0.9] uppercase tracking-tighter mb-8">
-                THE DOCKIT <br> <span class="text-[#B4B4FE]">JOURNAL.</span>
-            </h1>
-            <p class="text-xl text-slate-500 leading-relaxed">Deep dives into Indian procedural law, registry updates, and the evolving landscape of legal tech.</p>
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 border-b border-white/5 pb-6">
+            <div class="max-w-xl">
+                <span class="text-blue text-[10px] font-black uppercase tracking-[0.2em] mb-2 block">EDITORIAL BITS</span>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none mb-1">
+                    The DockIt <span class="text-[#B4B4FE]">Journal</span>
+                </h1>
+            </div>
+            <p class="max-w-md text-xs sm:text-sm text-slate-400 font-medium leading-relaxed md:text-right">
+                Deep dives into Indian procedural law, registry updates, and the evolving landscape of legal tech.
+            </p>
         </div>
 
         @if($blogs->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
                 @foreach($blogs as $blog)
                 <article class="group">
-                    <div class="aspect-16/10 bg-[#0e1526] border border-white/5 mb-10 overflow-hidden rounded-2xl relative">
+                    <div class="aspect-16/10 bg-[#0e1526] border border-white/5 mb-6 overflow-hidden rounded-2xl relative">
                         @if($blog->image_path)
                             <img src="{{ $blog->image_url }}" alt="Blog Thumb" 
                                  class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
@@ -31,15 +35,15 @@
                         </div>
                     </div>
                     <div>
-                        <div class="flex items-center gap-3 text-[0.65rem] font-bold text-[#B4B4FE] uppercase tracking-widest mb-4">
+                        <div class="flex items-center gap-3 text-[0.65rem] font-bold text-[#B4B4FE] uppercase tracking-widest mb-3">
                             <i class="bi bi-clock"></i> {{ $blog->read_time }} • {{ $blog->created_at->format('F d, Y') }}
                         </div>
-                        <h3 class="text-3xl font-black text-white leading-tight uppercase tracking-tight group-hover:text-[#B4B4FE] transition-colors mb-4">
+                        <h3 class="text-xl sm:text-2xl font-black text-white leading-tight uppercase tracking-tight group-hover:text-[#B4B4FE] transition-colors mb-3">
                             <a href="{{ route('blogs.show', $blog->slug) }}" class="hover:text-[#B4B4FE] transition-colors no-underline">
                                 {{ $blog->title }}
                             </a>
                         </h3>
-                        <p class="text-slate-500 line-clamp-2 leading-relaxed mb-8">
+                        <p class="text-slate-500 line-clamp-2 leading-relaxed mb-6 text-sm">
                             {{ Str::limit(strip_tags($blog->content), 150) }}
                         </p>
                         <a href="{{ route('blogs.show', $blog->slug) }}" class="inline-flex items-center gap-2 text-xs font-black text-white uppercase tracking-widest group-hover:gap-4 transition-all no-underline">

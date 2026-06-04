@@ -69,7 +69,7 @@
         @endif
 
         {{-- Form --}}
-        <form action="{{ route('admin.blogs.update', $blog->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form id="blog-form" action="{{ route('admin.blogs.update', $blog->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
             {{-- Title --}}
@@ -154,18 +154,22 @@
                         ['blockquote', 'code-block'],
                         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                         [{ 'align': [] }],
-                        ['link', 'clean']
+                        ['link', 'image', 'clean']
                     ]
                 }
             });
 
+            const contentInput = document.getElementById('content-input');
+
+            // Sync editor text to hidden input on change
+            quill.on('text-change', () => {
+                contentInput.value = quill.root.innerHTML;
+            });
+
             // Set up form submission handler
-            const form = document.querySelector('form');
+            const form = document.getElementById('blog-form');
             form.addEventListener('submit', (e) => {
-                const contentInput = document.getElementById('content-input');
                 const html = quill.root.innerHTML;
-                
-                // Set the hidden input value
                 contentInput.value = html;
 
                 // Validate content presence (Quill blank state usually is '<p><br></p>')
