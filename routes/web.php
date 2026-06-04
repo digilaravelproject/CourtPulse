@@ -236,6 +236,15 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
         Route::post('/{court}/upload', 'upload')->name('upload');
     });
 
+    // Notices & Circulars Management (NoticeController)
+    Route::prefix('notices')->name('notices.')->controller(\App\Http\Controllers\Admin\NoticeController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{notice}', 'show')->name('show');
+        Route::post('/{notice}/update', 'update')->name('update');
+        Route::delete('/{notice}', 'destroy')->name('destroy');
+    });
+
     // Feedback Management
     Route::get('/feedback', [AdminManagementController::class, 'feedback'])->name('feedback');
     Route::delete('/feedback/{feedback}', [AdminManagementController::class, 'destroyFeedback'])->name('feedback.destroy');

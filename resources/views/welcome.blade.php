@@ -55,9 +55,9 @@
                         <span class="inline-block px-12 text-white text-[1.1rem] font-black tracking-normal">Delegate court
                             appearances & routine filings to verified professionals</span>
                         <span class="inline-block px-12 text-blue text-[1.1rem] font-black tracking-normal">Connect with
-                            verified filing professionals across Tribunals & ROC offices.</span>
+                            verified filing professionals across Tribunals & RoC offices.</span>
                         <span class="inline-block px-12 text-white text-[1.1rem] font-black tracking-normal">Ideas move
-                            fast. Your filings should too.</span>
+                            fast. Your IP filings should too.</span>
                     </div>
                 </div>
             </div>
@@ -83,7 +83,7 @@
                     <div class="pt-4 sm:pt-0 px-4 group">
                         <p
                             class="text-white text-base md:text-lg font-bold tracking-wide leading-relaxed group-hover:text-blue transition-colors duration-300">
-                            Connect With Verified Filing Professionals Across Tribunals & ROC.
+                            Connect With Verified Filing Professionals Across Tribunals & RoC.
                         </p>
                     </div>
                     <div class="pt-4 sm:pt-0 px-4 group">
@@ -253,7 +253,7 @@
                             professionals.
                         </p>
 
-                        <a href="#"
+                        <a href="{{ route('updates') }}"
                             class="text-white border border-white/20 px-6 md:px-8 py-4 rounded-xl text-xs font-black transition-all duration-300 hover:bg-white/10 hover:border-white/40 no-underline uppercase tracking-widest inline-flex items-center gap-4 mt-4 w-full sm:w-auto justify-center">
                             Find Notices & Circulars
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none"

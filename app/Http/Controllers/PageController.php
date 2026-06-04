@@ -16,9 +16,12 @@ class PageController extends Controller
         return view('pages.blogs');
     }
 
-    public function updates()
+    public function updates(Request $request, \App\Services\NoticeService $service)
     {
-        return view('pages.updates');
+        $search = $request->input('search');
+        $notices = $service->getPaginatedNotices(10, $search);
+
+        return view('pages.updates', compact('notices'));
     }
 
     public function courtMaps(Request $request)

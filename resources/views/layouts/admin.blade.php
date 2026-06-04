@@ -146,19 +146,21 @@
         {{-- Nav --}}
         <nav class="flex-1 overflow-y-auto py-4 space-y-1">
             @php
-                function navLink($route, $icon, $label, $badge = null, $urlParams = [])
-                {
-                    $active = request()->routeIs($route . '*') && empty(array_diff_assoc($urlParams, request()->all()));
-                    if (empty($urlParams) && !empty(request()->query('role_category'))) {
-                        $active = false;
+                if (!function_exists('navLink')) {
+                    function navLink($route, $icon, $label, $badge = null, $urlParams = [])
+                    {
+                        $active = request()->routeIs($route . '*') && empty(array_diff_assoc($urlParams, request()->all()));
+                        if (empty($urlParams) && !empty(request()->query('role_category'))) {
+                            $active = false;
+                        }
+                        $cls = $active ? 'nav-active' : 'text-white/50 hover:bg-white/5 hover:text-white border-left border-transparent';
+                        $b = $badge
+                            ? "<span class='ml-auto text-[0.6rem] font-bold px-2 py-0.5 rounded-full bg-blue text-navy'>{$badge}</span>"
+                            : '';
+                        return "<a href='" . route($route, $urlParams) . "' class='flex items-center gap-3 px-6 py-3.5 text-[0.8rem] font-bold uppercase tracking-widest transition-all duration-300 {$cls}'>
+                                                                                                                    <i class='bi {$icon} text-lg w-5 shrink-0'></i> {$label} {$b}
+                                                                                                                </a>";
                     }
-                    $cls = $active ? 'nav-active' : 'text-white/50 hover:bg-white/5 hover:text-white border-left border-transparent';
-                    $b = $badge
-                        ? "<span class='ml-auto text-[0.6rem] font-bold px-2 py-0.5 rounded-full bg-blue text-navy'>{$badge}</span>"
-                        : '';
-                    return "<a href='" . route($route, $urlParams) . "' class='flex items-center gap-3 px-6 py-3.5 text-[0.8rem] font-bold uppercase tracking-widest transition-all duration-300 {$cls}'>
-                                                                                                                <i class='bi {$icon} text-lg w-5 shrink-0'></i> {$label} {$b}
-                                                                                                            </a>";
                 }
             @endphp
 
@@ -173,6 +175,7 @@
             <div class="px-6 pt-6 pb-2 font-black text-[0.6rem] tracking-[0.2em] uppercase text-white/30">System</div>
             {!! navLink('admin.courts.index', 'bi-buildings-fill', 'Courts Data') !!}
             {!! navLink('admin.court-maps.index', 'bi-map-fill', 'Court Maps') !!}
+            {!! navLink('admin.notices.index', 'bi-megaphone-fill', 'Notices') !!}
             {!! navLink('admin.manage.menus', 'bi-list-ul', 'Menu Management') !!}
             {!! navLink('admin.feedback', 'bi-star-fill', 'Feedback') !!}
 
