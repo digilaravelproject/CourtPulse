@@ -12,7 +12,7 @@ class MenuRepository
      */
     public function getAll(): Collection
     {
-        return NavigationMenu::query()->orderBy('order', 'asc')->get();
+        return NavigationMenu::query()->where('type', 'public')->orderBy('order', 'asc')->get();
     }
 
     /**
