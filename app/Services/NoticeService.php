@@ -23,7 +23,8 @@ class NoticeService
                     });
             })
             ->latest()
-            ->paginate($perPage);
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
     /**
