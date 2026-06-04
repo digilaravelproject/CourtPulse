@@ -166,7 +166,7 @@
 
             btn.disabled = true;
             const orig = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin text-xs"></i>';
+            btn.innerHTML = '<i class=\'fas fa-spinner fa-spin text-xs\'></i>';
 
             fetch('/admin/notices/' + id, {
                 method: 'DELETE',
