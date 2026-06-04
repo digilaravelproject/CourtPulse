@@ -2127,8 +2127,6 @@
                 DockIt
             </a>
             <ul class="footer-nav">
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Terms of Service</a></li>
                 <li><a href="#contact">Contact Us</a></li>
                 <li><a href="#">Careers</a></li>
             </ul>

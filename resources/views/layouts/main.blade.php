@@ -394,12 +394,12 @@
                 <span class="text-slate-500 text-[10px] sm:text-xs font-black uppercase tracking-widest">
                     &copy; {{ date('Y') }} DockIt Network. All Rights Reserved.
                 </span>
-                <div
+                <!-- <div
                     class="flex items-center gap-6 text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest">
                     <a href="#" class="hover:text-white transition-colors no-underline">Privacy Policy</a>
                     <span class="w-1 h-1 bg-white/20 rounded-full"></span>
                     <a href="#" class="hover:text-white transition-colors no-underline">Terms of Service</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </footer>
