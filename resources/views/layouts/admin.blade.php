@@ -133,10 +133,6 @@
 
         {{-- Logo --}}
         <div class="flex items-center gap-3 px-6 py-5 shrink-0 border-b border-white/5">
-            <div
-                class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-blue/10 border border-blue/20 text-blue font-black shadow-[0_0_15px_rgba(180,180,254,0.15)]">
-                DI
-            </div>
             <div>
                 <div class="font-black text-lg text-white leading-tight uppercase tracking-tight">DockIt</div>
                 <div class="font-bold text-[0.6rem] uppercase tracking-[0.2em] text-blue">Admin Panel</div>
@@ -178,6 +174,7 @@
             {!! navLink('admin.notices.index', 'bi-megaphone-fill', 'Notices') !!}
             {!! navLink('admin.blogs.index', 'bi-journal-text', 'Blogs') !!}
             {!! navLink('admin.manage.menus', 'bi-list-ul', 'Menu Management') !!}
+            {!! navLink('admin.contact-settings.index', 'bi-telephone-fill', 'Contact Settings') !!}
             {!! navLink('admin.feedback', 'bi-star-fill', 'Feedback') !!}
 
             @php

@@ -309,25 +309,24 @@
                 <!-- Left Details -->
                 <div class="p-8 md:p-16 lg:p-20 space-y-12 bg-navy/50 relative">
                     <div class="relative h-64 md:h-80 mb-12 rounded-2xl overflow-hidden border border-white/5">
-                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1000"
+                        <img src="{{ $contactSettings->image_url }}"
                             class="w-full h-full object-cover grayscale opacity-40 mix-blend-luminosity hover:opacity-60 hover:scale-105 transition-all duration-700"
-                            alt="DockIt Office HQ">
+                            alt="{{ $contactSettings->office_title }}">
                         <div class="absolute inset-0 bg-gradient-to-t from-navy to-transparent opacity-60"></div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
                         <div>
-                            <h3 class="text-xs font-black text-blue uppercase tracking-[0.2em] mb-3">Headquarters</h3>
+                            <h3 class="text-xs font-black text-blue uppercase tracking-[0.2em] mb-3">{{ $contactSettings->address_title }}</h3>
                             <p class="text-xl md:text-2xl font-black text-white uppercase tracking-tight leading-tight">
-                                Complete Address<br>To Be Provided Here.
+                                {!! nl2br(e($contactSettings->address_content)) !!}
                             </p>
                         </div>
                         <div>
-                            <h3 class="text-xs font-black text-blue uppercase tracking-[0.2em] mb-3">Direct Line</h3>
+                            <h3 class="text-xs font-black text-blue uppercase tracking-[0.2em] mb-3">{{ $contactSettings->phone_title }}</h3>
                             <p class="text-xl md:text-2xl font-black text-white uppercase tracking-tight leading-tight">
-                                +91 00000 00000<br>
-                                <span class="text-white/50 text-sm tracking-normal font-medium mt-1 block">Mon - Fri, 9AM -
-                                    6PM</span>
+                                {{ $contactSettings->phone_number }}<br>
+                                <span class="text-white/50 text-sm tracking-normal font-medium mt-1 block">{{ $contactSettings->phone_hours }}</span>
                             </p>
                         </div>
                     </div>
@@ -337,16 +336,19 @@
                 <div
                     class="p-8 md:p-16 lg:p-20 flex flex-col justify-center bg-navy border-t lg:border-t-0 lg:border-l border-white/10">
                     <div>
-                        <h3 class="text-xs font-black text-blue uppercase tracking-[0.2em] mb-6">General Inquiries</h3>
+                        <h3 class="text-xs font-black text-blue uppercase tracking-[0.2em] mb-6">{{ $contactSettings->email_title }}</h3>
                         <div class="space-y-6">
                             <p
                                 class="text-2xl md:text-4xl font-black text-white uppercase tracking-tight leading-tight break-words">
-                                support@dockit.in<br>
-                                info@dockit.in
+                                @if($contactSettings->email_support)
+                                    {{ $contactSettings->email_support }}<br>
+                                @endif
+                                @if($contactSettings->email_info)
+                                    {{ $contactSettings->email_info }}
+                                @endif
                             </p>
                             <p class="text-white/60 text-base max-w-md leading-relaxed font-medium">
-                                Our support channel is monitored 24/7 for critical procedural inquiries and professional
-                                onboarding assistance across India.
+                                {!! nl2br(e($contactSettings->support_text)) !!}
                             </p>
                         </div>
                     </div>
@@ -359,7 +361,7 @@
                             </svg>
                         </div>
                         <span class="text-white/40 text-xs font-black uppercase tracking-[0.2em] leading-relaxed">
-                            DockIt Operations Network<br>Grounded In Excellence
+                            {!! nl2br(e($contactSettings->footer_badge)) !!}
                         </span>
                     </div>
                 </div>

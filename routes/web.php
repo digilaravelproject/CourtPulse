@@ -259,6 +259,10 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
     // Feedback Management
     Route::get('/feedback', [AdminManagementController::class, 'feedback'])->name('feedback');
     Route::delete('/feedback/{feedback}', [AdminManagementController::class, 'destroyFeedback'])->name('feedback.destroy');
+
+    // Contact Settings Management
+    Route::get('/contact-settings', [AdminManagementController::class, 'contactSettingsIndex'])->name('contact-settings.index');
+    Route::post('/contact-settings', [AdminManagementController::class, 'contactSettingsUpdate'])->name('contact-settings.update');
 });
 
 

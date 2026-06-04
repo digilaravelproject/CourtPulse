@@ -29,9 +29,12 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-        // Share navigation menus to the layouts
-        View::composer(['layouts.main', 'layouts.admin'], function ($view) {
-            $view->with('navMenus', NavigationMenu::query()->orderBy('order', 'asc')->get()->keyBy('key'));
+        // Share navigation menus and contact settings to the layouts and pages
+        View::composer(['layouts.main', 'layouts.admin', 'welcome'], function ($view) {
+            $view->with([
+                'navMenus' => NavigationMenu::query()->orderBy('order', 'asc')->get()->keyBy('key'),
+                'contactSettings' => \App\Models\ContactSetting::first() ?? new \App\Models\ContactSetting(),
+            ]);
         });
 
         // Share pending count to Professional views

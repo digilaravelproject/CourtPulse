@@ -449,5 +449,65 @@ class AdminManagementController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Display contact settings.
+     */
+    public function contactSettingsIndex(): \Illuminate\View\View
+    {
+        $settings = \App\Models\ContactSetting::first() ?? new \App\Models\ContactSetting();
+        return view('admin.management.contact', compact('settings'));
+    }
+
+    /**
+     * Update contact settings.
+     */
+    public function contactSettingsUpdate(\Illuminate\Http\Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $validated = $request->validate([
+            'office_title' => 'required|string|max:255',
+            'address_title' => 'required|string|max:255',
+            'address_content' => 'required|string',
+            'phone_title' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:255',
+            'phone_hours' => 'required|string|max:255',
+            'email_title' => 'required|string|max:255',
+            'email_support' => 'nullable|email|max:255',
+            'email_info' => 'nullable|email|max:255',
+            'support_text' => 'required|string',
+            'footer_badge' => 'required|string|max:255',
+            'office_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+
+        $settings = \App\Models\ContactSetting::first();
+        if (!$settings) {
+            $settings = new \App\Models\ContactSetting();
+        }
+
+        if ($request->hasFile('office_image')) {
+            if ($settings->office_image) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($settings->office_image);
+            }
+            $settings->office_image = $request->file('office_image')->store('settings', 'public');
+        }
+
+        $settings->fill($request->only([
+            'office_title',
+            'address_title',
+            'address_content',
+            'phone_title',
+            'phone_number',
+            'phone_hours',
+            'email_title',
+            'email_support',
+            'email_info',
+            'support_text',
+            'footer_badge',
+        ]));
+
+        $settings->save();
+
+        return redirect()->back()->with('success', 'Contact settings updated successfully!');
+    }
 }
 
