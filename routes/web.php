@@ -31,6 +31,7 @@ Route::get('/begin-find', [SearchController::class, 'index'])->name('find');
 
 Route::controller(PageController::class)->group(function () {
     Route::get('/blogs', 'blogs')->name('blogs');
+    Route::get('/blogs/{slug}', 'showBlog')->name('blogs.show');
     Route::get('/latest-updates', 'updates')->name('updates');
     Route::get('/court-maps', 'courtMaps')->name('court-maps.index');
     Route::get('/contact-us', 'contact')->name('contact');
@@ -243,6 +244,16 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
         Route::get('/{notice}', 'show')->name('show');
         Route::post('/{notice}/update', 'update')->name('update');
         Route::delete('/{notice}', 'destroy')->name('destroy');
+    });
+
+    // Blogs Management (BlogController)
+    Route::prefix('blogs')->name('blogs.')->controller(\App\Http\Controllers\Admin\BlogController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{blog}/edit', 'edit')->name('edit');
+        Route::post('/{blog}/update', 'update')->name('update');
+        Route::delete('/{blog}', 'destroy')->name('destroy');
     });
 
     // Feedback Management

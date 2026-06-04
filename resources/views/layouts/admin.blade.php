@@ -176,6 +176,7 @@
             {!! navLink('admin.courts.index', 'bi-buildings-fill', 'Courts Data') !!}
             {!! navLink('admin.court-maps.index', 'bi-map-fill', 'Court Maps') !!}
             {!! navLink('admin.notices.index', 'bi-megaphone-fill', 'Notices') !!}
+            {!! navLink('admin.blogs.index', 'bi-journal-text', 'Blogs') !!}
             {!! navLink('admin.manage.menus', 'bi-list-ul', 'Menu Management') !!}
             {!! navLink('admin.feedback', 'bi-star-fill', 'Feedback') !!}
 

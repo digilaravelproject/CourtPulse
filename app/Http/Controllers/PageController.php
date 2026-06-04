@@ -11,9 +11,21 @@ class PageController extends Controller
         return view('pages.find');
     }
 
-    public function blogs()
+    public function blogs(Request $request, \App\Services\BlogService $service)
     {
-        return view('pages.blogs');
+        $blogs = $service->getPaginatedBlogs(9);
+        return view('pages.blogs', compact('blogs'));
+    }
+
+    public function showBlog(string $slug)
+    {
+        $blog = \App\Models\Blog::where('slug', $slug)->firstOrFail();
+        $recentBlogs = \App\Models\Blog::where('id', '!=', $blog->id)
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('pages.blog-detail', compact('blog', 'recentBlogs'));
     }
 
     public function updates(Request $request, \App\Services\NoticeService $service)
