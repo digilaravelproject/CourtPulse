@@ -89,7 +89,7 @@
                     <div class="pt-4 sm:pt-0 px-4 group">
                         <p
                             class="text-white/80 text-base md:text-lg font-medium tracking-wide leading-relaxed group-hover:text-white transition-colors duration-300">
-                            Ideas Move Fast.<br>Your Filings Should Too.
+                            Ideas Move Fast.<br>Your IP Filings Should Too.
                         </p>
                     </div>
                 </div>
