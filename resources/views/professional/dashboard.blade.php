@@ -216,7 +216,7 @@
             </div>
 
             {{-- Resource Stats --}}
-            <div class="p-10 rounded-[3rem] bg-white/5 border border-white/10 backdrop-blur-2xl">
+            {{-- <div class="p-10 rounded-[3rem] bg-white/5 border border-white/10 backdrop-blur-2xl">
                 <h3 class="text-xs font-black text-white uppercase tracking-[0.4em] mb-10 opacity-40">Profile Status</h3>
 
                 <div class="space-y-8">
@@ -246,7 +246,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 

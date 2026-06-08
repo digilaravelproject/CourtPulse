@@ -4,69 +4,74 @@
 
 @section('content')
 
-<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
-    <div class="space-y-1">
-        <h2 class="text-4xl font-black text-white uppercase tracking-tighter leading-tight">Support <span class="text-blue-500">Dashboard</span></h2>
-        <p class="text-xs font-bold text-white/30 uppercase tracking-[0.2em]">Overview of your recent activity</p>
-    </div>
+    <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div class="space-y-1">
+            <h2 class="text-4xl font-black text-white uppercase tracking-tighter leading-tight">Support <span
+                    class="text-blue-500">Dashboard</span></h2>
+            <p class="text-xs font-bold text-white/30 uppercase tracking-[0.2em]">Overview of your recent activity</p>
+        </div>
 
-    <div class="flex items-center gap-3">
-        <div class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3 backdrop-blur-md">
-            <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
-            <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">System Online</span>
-        </div>
-        <div class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black text-white/60 uppercase tracking-widest backdrop-blur-md">
-            {{ now()->format('d M Y') }}
-        </div>
-    </div>
-</div>
-
-{{-- Metric Hub --}}
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-    {{-- Total Connections --}}
-    <div class="group relative p-8 rounded-4xl bg-white/5 border border-white/10 hover:border-blue-500/30 transition-all duration-500 overflow-hidden backdrop-blur-xl">
-        <div class="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
-            <i class="fas fa-network-wired text-7xl text-white"></i>
-        </div>
-        <div class="relative z-10">
-            <div class="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Total Connections</div>
-            <div class="flex items-baseline gap-2">
-                <span class="text-4xl font-black text-white tracking-tighter">{{ $totalConnections ?? 0 }}</span>
-                <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Active</span>
+        <div class="flex items-center gap-3">
+            <div class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3 backdrop-blur-md">
+                <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">System Online</span>
+            </div>
+            <div
+                class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black text-white/60 uppercase tracking-widest backdrop-blur-md">
+                {{ now()->format('d M Y') }}
             </div>
         </div>
     </div>
 
-    {{-- Pending Requests --}}
-    <a href="{{ route('support.pending.requests') }}" class="group relative p-8 rounded-4xl bg-white/5 border border-white/10 hover:border-amber-500/30 transition-all duration-500 overflow-hidden backdrop-blur-xl">
-        <div class="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
-            <i class="fas fa-clock text-7xl text-white"></i>
-        </div>
-        <div class="relative z-10">
-            <div class="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Pending Requests</div>
-            <div class="flex items-baseline gap-2">
-                <span class="text-4xl font-black text-white tracking-tighter">{{ $pendingRequests ?? 0 }}</span>
-                <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">New</span>
+    {{-- Metric Hub --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        {{-- Total Connections --}}
+        <div
+            class="group relative p-8 rounded-4xl bg-white/5 border border-white/10 hover:border-blue-500/30 transition-all duration-500 overflow-hidden backdrop-blur-xl">
+            <div class="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
+                <i class="fas fa-network-wired text-7xl text-white"></i>
+            </div>
+            <div class="relative z-10">
+                <div class="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Total Connections</div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-4xl font-black text-white tracking-tighter">{{ $totalConnections ?? 0 }}</span>
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Active</span>
+                </div>
             </div>
         </div>
-    </a>
 
-    {{-- Professionals Connected --}}
-    <div class="group relative p-8 rounded-4xl bg-white/5 border border-white/10 hover:border-indigo-500/30 transition-all duration-500 overflow-hidden backdrop-blur-xl">
-        <div class="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
-            <i class="fas fa-user-tie text-7xl text-white"></i>
-        </div>
-        <div class="relative z-10">
-            <div class="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Advocates</div>
-            <div class="flex items-baseline gap-2">
-                <span class="text-4xl font-black text-white tracking-tighter">{{ $advocatesConnected ?? 0 }}</span>
-                <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Joined</span>
+        {{-- Pending Requests --}}
+        <a href="{{ route('support.pending.requests') }}"
+            class="group relative p-8 rounded-4xl bg-white/5 border border-white/10 hover:border-amber-500/30 transition-all duration-500 overflow-hidden backdrop-blur-xl">
+            <div class="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
+                <i class="fas fa-clock text-7xl text-white"></i>
+            </div>
+            <div class="relative z-10">
+                <div class="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Pending Requests</div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-4xl font-black text-white tracking-tighter">{{ $pendingRequests ?? 0 }}</span>
+                    <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">New</span>
+                </div>
+            </div>
+        </a>
+
+        {{-- Professionals Connected --}}
+        <div
+            class="group relative p-8 rounded-4xl bg-white/5 border border-white/10 hover:border-indigo-500/30 transition-all duration-500 overflow-hidden backdrop-blur-xl">
+            <div class="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
+                <i class="fas fa-user-tie text-7xl text-white"></i>
+            </div>
+            <div class="relative z-10">
+                <div class="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Advocates</div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-4xl font-black text-white tracking-tighter">{{ $advocatesConnected ?? 0 }}</span>
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Joined</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    {{-- Feedback Rating --}}
-    {{-- <div class="group relative p-8 rounded-4xl bg-white/5 border border-white/10 hover:border-fuchsia-500/30 transition-all duration-500 overflow-hidden backdrop-blur-xl">
+        {{-- Feedback Rating --}}
+        {{-- <div class="group relative p-8 rounded-4xl bg-white/5 border border-white/10 hover:border-fuchsia-500/30 transition-all duration-500 overflow-hidden backdrop-blur-xl">
         <div class="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
             <i class="fas fa-star text-7xl text-white"></i>
         </div>
@@ -78,104 +83,121 @@
             </div>
         </div>
     </div> --}}
-</div>
-
-{{-- Strategic Modules --}}
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-    {{-- Profile Card --}}
-    <div class="lg:col-span-8 space-y-8">
-        <div class="p-10 rounded-[3rem] bg-white/5 border border-white/10 backdrop-blur-3xl relative overflow-hidden">
-            <div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full"></div>
-
-            <div class="relative z-10 flex flex-col md:flex-row items-center gap-10">
-                <div class="h-40 w-40 rounded-[2.5rem] bg-linear-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-5xl font-black text-white shadow-[0_30px_60px_rgba(37,99,235,0.3)] border border-white/20">
-                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                </div>
-
-                <div class="flex-1 text-center md:text-left">
-                    <h3 class="text-4xl font-black text-white uppercase tracking-tighter mb-3">{{ Auth::user()->name }}</h3>
-                    <div class="flex flex-wrap justify-center md:justify-start gap-3 mb-6">
-                        <span class="px-4 py-1.5 rounded-xl bg-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-widest border border-blue-500/20">
-                            {{ strtoupper(str_replace('_', ' ', Auth::user()->role)) }}
-                        </span>
-                        <span class="px-4 py-1.5 rounded-xl bg-white/5 text-white/40 text-[10px] font-black uppercase tracking-widest border border-white/5">
-                            Member Since {{ Auth::user()->created_at->format('Y') }}
-                        </span>
-                    </div>
-                    <p class="text-base font-medium text-white/50 leading-relaxed max-w-xl italic">
-                        "{{ $profile->bio ?? 'Your profile is incomplete. Please complete it so others can find you easily.' }}"
-                    </p>
-                </div>
-
-                <div class="flex flex-col gap-4 min-w-[180px] w-full md:w-auto">
-                    <a href="{{ route('support.profile') }}" class="w-full py-5 rounded-2xl bg-blue-600 text-white text-xs font-black uppercase tracking-widest text-center hover:bg-blue-700 hover:shadow-[0_0_40px_rgba(37,99,235,0.4)] transition-all duration-300">
-                        Edit Profile
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        {{-- Navigation Actions --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <a href="{{ route('support.search.professionals') }}" class="group p-8 rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-indigo-500/30 transition-all duration-500 backdrop-blur-xl">
-                <div class="h-16 w-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/10 flex items-center justify-center text-indigo-400 mb-8 group-hover:scale-110 group-hover:bg-indigo-500/20 transition-all duration-500">
-                    <i class="fas fa-search text-2xl"></i>
-                </div>
-                <h4 class="text-base font-black text-white uppercase tracking-widest mb-2">Find Professionals</h4>
-                <p class="text-[10px] font-bold text-white/30 uppercase tracking-widest">Browse professional network</p>
-            </a>
-
-            <a href="{{ route('support.connections') }}" class="group p-8 rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-blue-500/30 transition-all duration-500 backdrop-blur-xl">
-                <div class="h-16 w-16 rounded-2xl bg-blue-500/10 border border-blue-500/10 flex items-center justify-center text-blue-400 mb-8 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all duration-500">
-                    <i class="fas fa-users text-2xl"></i>
-                </div>
-                <h4 class="text-base font-black text-white uppercase tracking-widest mb-2">My Network</h4>
-                <p class="text-[10px] font-bold text-white/30 uppercase tracking-widest">Manage your connections</p>
-            </a>
-        </div>
     </div>
 
-    {{-- Side Panel --}}
-    <div class="lg:col-span-4 space-y-8">
-        {{-- Quick Actions --}}
-        <div class="p-10 rounded-[3rem] bg-white/5 border border-white/10 backdrop-blur-2xl">
-            <h3 class="text-xs font-black text-white uppercase tracking-[0.4em] mb-10 opacity-40">Quick Actions</h3>
+    {{-- Strategic Modules --}}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-            <div class="space-y-5">
-                <a href="{{ route('support.pending.requests') }}" class="flex items-center justify-between p-5 rounded-2xl bg-white/2 border border-white/5 hover:bg-white/5 hover:border-amber-500/20 transition-all group">
-                    <div class="flex items-center gap-5">
-                        <div class="h-12 w-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-user-clock"></i>
-                        </div>
-                        <span class="text-xs font-black text-white/70 uppercase tracking-widest">Pending Requests</span>
+        {{-- Profile Card --}}
+        <div class="lg:col-span-8 space-y-8">
+            <div class="p-10 rounded-[3rem] bg-white/5 border border-white/10 backdrop-blur-3xl relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full"></div>
+
+                <div class="relative z-10 flex flex-col md:flex-row items-center gap-10">
+                    <div
+                        class="h-40 w-40 rounded-[2.5rem] bg-linear-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-5xl font-black text-white shadow-[0_30px_60px_rgba(37,99,235,0.3)] border border-white/20">
+                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                     </div>
-                    <i class="fas fa-chevron-right text-[10px] text-white/20 group-hover:text-amber-500 group-hover:translate-x-1 transition-all"></i>
-                </a>
 
-                <a href="{{ route('support.feedback') }}" class="flex items-center justify-between p-5 rounded-2xl bg-white/2 border border-white/5 hover:bg-white/5 hover:border-fuchsia-500/20 transition-all group">
-                    <div class="flex items-center gap-5">
-                        <div class="h-12 w-12 rounded-xl bg-fuchsia-500/10 flex items-center justify-center text-fuchsia-400 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-comment-dots"></i>
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="text-4xl font-black text-white uppercase tracking-tighter mb-3">{{ Auth::user()->name }}
+                        </h3>
+                        <div class="flex flex-wrap justify-center md:justify-start gap-3 mb-6">
+                            <span
+                                class="px-4 py-1.5 rounded-xl bg-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-widest border border-blue-500/20">
+                                {{ strtoupper(str_replace('_', ' ', Auth::user()->role)) }}
+                            </span>
+                            <span
+                                class="px-4 py-1.5 rounded-xl bg-white/5 text-white/40 text-[10px] font-black uppercase tracking-widest border border-white/5">
+                                Member Since {{ Auth::user()->created_at->format('Y') }}
+                            </span>
                         </div>
-                        <span class="text-xs font-black text-white/70 uppercase tracking-widest">View Feedback</span>
-                    </div>
-                    <i class="fas fa-chevron-right text-[10px] text-white/20 group-hover:text-fuchsia-500 group-hover:translate-x-1 transition-all"></i>
-                </a>
-
-                <div class="pt-8 mt-4 border-t border-white/5">
-                    <div class="p-8 rounded-4xl bg-linear-to-br from-blue-600/10 to-indigo-600/10 border border-blue-500/20 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 blur-2xl rounded-full"></div>
-                        <div class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-4">Guidelines</div>
-                        <p class="text-[11px] font-bold text-white/60 leading-relaxed uppercase tracking-wider mb-0">
-                            Respond promptly to connection requests to maintain a high response rate.
+                        <p class="text-base font-medium text-white/50 leading-relaxed max-w-xl italic">
+                            "{{ $profile->bio ?? 'Your profile is incomplete. Please complete it so others can find you easily.' }}"
                         </p>
+                    </div>
+
+                    <div class="flex flex-col gap-4 min-w-[180px] w-full md:w-auto">
+                        <a href="{{ route('support.profile') }}"
+                            class="w-full py-5 rounded-2xl bg-blue-600 text-white text-xs font-black uppercase tracking-widest text-center hover:bg-blue-700 hover:shadow-[0_0_40px_rgba(37,99,235,0.4)] transition-all duration-300">
+                            Edit Profile
+                        </a>
                     </div>
                 </div>
             </div>
+
+            {{-- Navigation Actions --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <a href="{{ route('support.search.professionals') }}"
+                    class="group p-8 rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-indigo-500/30 transition-all duration-500 backdrop-blur-xl">
+                    <div
+                        class="h-16 w-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/10 flex items-center justify-center text-indigo-400 mb-8 group-hover:scale-110 group-hover:bg-indigo-500/20 transition-all duration-500">
+                        <i class="fas fa-search text-2xl"></i>
+                    </div>
+                    <h4 class="text-base font-black text-white uppercase tracking-widest mb-2">Find Professionals</h4>
+                    <p class="text-[10px] font-bold text-white/30 uppercase tracking-widest">Browse professional network</p>
+                </a>
+
+                <a href="{{ route('support.connections') }}"
+                    class="group p-8 rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-blue-500/30 transition-all duration-500 backdrop-blur-xl">
+                    <div
+                        class="h-16 w-16 rounded-2xl bg-blue-500/10 border border-blue-500/10 flex items-center justify-center text-blue-400 mb-8 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all duration-500">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <h4 class="text-base font-black text-white uppercase tracking-widest mb-2">My Network</h4>
+                    <p class="text-[10px] font-bold text-white/30 uppercase tracking-widest">Manage your connections</p>
+                </a>
+            </div>
         </div>
 
-        {{-- Progress Stats --}}
+        {{-- Side Panel --}}
+        <div class="lg:col-span-4 space-y-8">
+            {{-- Quick Actions --}}
+            <div class="p-10 rounded-[3rem] bg-white/5 border border-white/10 backdrop-blur-2xl">
+                <h3 class="text-xs font-black text-white uppercase tracking-[0.4em] mb-10 opacity-40">Quick Actions</h3>
+
+                <div class="space-y-5">
+                    <a href="{{ route('support.pending.requests') }}"
+                        class="flex items-center justify-between p-5 rounded-2xl bg-white/2 border border-white/5 hover:bg-white/5 hover:border-amber-500/20 transition-all group">
+                        <div class="flex items-center gap-5">
+                            <div
+                                class="h-12 w-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-user-clock"></i>
+                            </div>
+                            <span class="text-xs font-black text-white/70 uppercase tracking-widest">Pending Requests</span>
+                        </div>
+                        <i
+                            class="fas fa-chevron-right text-[10px] text-white/20 group-hover:text-amber-500 group-hover:translate-x-1 transition-all"></i>
+                    </a>
+
+                    <a href="{{ route('support.feedback') }}"
+                        class="flex items-center justify-between p-5 rounded-2xl bg-white/2 border border-white/5 hover:bg-white/5 hover:border-fuchsia-500/20 transition-all group">
+                        <div class="flex items-center gap-5">
+                            <div
+                                class="h-12 w-12 rounded-xl bg-fuchsia-500/10 flex items-center justify-center text-fuchsia-400 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-comment-dots"></i>
+                            </div>
+                            <span class="text-xs font-black text-white/70 uppercase tracking-widest">View Feedback</span>
+                        </div>
+                        <i
+                            class="fas fa-chevron-right text-[10px] text-white/20 group-hover:text-fuchsia-500 group-hover:translate-x-1 transition-all"></i>
+                    </a>
+
+                    <div class="pt-8 mt-4 border-t border-white/5">
+                        <div
+                            class="p-8 rounded-4xl bg-linear-to-br from-blue-600/10 to-indigo-600/10 border border-blue-500/20 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 blur-2xl rounded-full"></div>
+                            <div class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-4">Guidelines
+                            </div>
+                            <p class="text-[11px] font-bold text-white/60 leading-relaxed uppercase tracking-wider mb-0">
+                                Respond promptly to connection requests to maintain a high response rate.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Progress Stats
         <div class="p-10 rounded-[3rem] bg-white/5 border border-white/10 backdrop-blur-2xl">
             <h3 class="text-xs font-black text-white uppercase tracking-[0.4em] mb-10 opacity-40">Profile Status</h3>
 
@@ -200,8 +222,8 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
         </div>
     </div>
-</div>
 
 @endsection
