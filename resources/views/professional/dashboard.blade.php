@@ -202,7 +202,7 @@
                             class="fas fa-chevron-right text-[10px] text-white/20 group-hover:text-fuchsia-500 group-hover:translate-x-1 transition-all"></i>
                     </a>
 
-                    <div class="pt-8 mt-4 border-t border-white/5">
+                    {{-- <div class="pt-8 mt-4 border-t border-white/5">
                         <div
                             class="p-8 rounded-4xl bg-linear-to-br from-blue-600/10 to-indigo-600/10 border border-blue-500/20 relative overflow-hidden">
                             <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 blur-2xl rounded-full"></div>
@@ -211,7 +211,7 @@
                                 Keep your profile updated to increase your priority in local court searches.
                             </p>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 
