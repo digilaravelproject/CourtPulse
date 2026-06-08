@@ -66,7 +66,7 @@
     </div>
 
     {{-- Feedback Rating --}}
-    <div class="group relative p-8 rounded-4xl bg-white/5 border border-white/10 hover:border-fuchsia-500/30 transition-all duration-500 overflow-hidden backdrop-blur-xl">
+    {{-- <div class="group relative p-8 rounded-4xl bg-white/5 border border-white/10 hover:border-fuchsia-500/30 transition-all duration-500 overflow-hidden backdrop-blur-xl">
         <div class="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
             <i class="fas fa-star text-7xl text-white"></i>
         </div>
@@ -77,7 +77,7 @@
                 <span class="text-xs font-bold text-fuchsia-400 uppercase tracking-widest">{{ $feedbacksReceived ?? 0 }} Reviews</span>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 
 {{-- Strategic Modules --}}
